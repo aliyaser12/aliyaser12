@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback | VANTA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>VANTA</h1>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="learn.html">Learn</a>
+        <a href="labs.html">Labs</a>
+        <a href="ctf.html">CTF</a>
+        <a href="tools.html">Tools</a>
+    </nav>
+</header>
+
+<main>
+
+<section class="page-hero">
+    <p class="eyebrow">VANTA FEEDBACK</p>
+    <h2>Help Improve VANTA</h2>
+    <p>
+        Report problems, suggest features, or share
+        ideas for improving the platform.
+    </p>
+</section>
+
+<section class="dashboard-panel">
+
+    <form id="feedbackForm">
+
+        <label for="feedbackName">Name</label>
+        <input
+            type="text"
+            id="feedbackName"
+            placeholder="Your name">
+
+        <label for="feedbackType">Feedback Type</label>
+
+        <select id="feedbackType">
+            <option>Suggestion</option>
+            <option>Bug Report</option>
+            <option>Content Feedback</option>
+            <option>General Feedback</option>
+        </select>
+
+        <label for="feedbackMessage">Message</label>
+
+        <textarea
+            id="feedbackMessage"
+            rows="8"
+            placeholder="Write your feedback..."></textarea>
+
+        <button class="primary-button" type="submit">
+            Send Feedback
+        </button>
+
+    </form>
+
+</section>
+
+</main>
+
+<footer>
+    <p>VANTA — Cybersecurity • Education • Research</p>
+</footer>
+
+<script src="app.js"></script>
+
+</body>
+</html>
