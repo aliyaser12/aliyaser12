@@ -14,47 +14,136 @@ function initSupabase() {
 
     supabaseClient = window.supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+            auth: {
+                persistSession: true,
+                autoRefreshToken: true,
+                detectSessionInUrl: true
+            }
+        }
     );
 
     return true;
 }
 
-async function registerUser(email, password, username = "") {
+function setStatus(message) {
+    const status = document.getElementById("status");
+
+    if (status) {
+        status.textContent = message;
+    }
+}
+
+function getValues() {
+    return {
+        email: document.getElementById("email")?.value.trim() || "",
+        password: document.getElementById("password")?.value || "",
+        username: document.getElementById("username")?.value.trim() || ""
+    };
+}
+
+async function registerUserUI() {
     if (!supabaseClient) {
-        return { error: { message: "Supabase غير متصل" } };
+        setStatus("Supabase غير متصل.");
+        return;
     }
 
-    return await supabaseClient.auth.signUp({
+    const { email, password, username } = getValues();
+
+    if (!email || !password) {
+        setStatus("أدخل البريد الإلكتروني وكلمة المرور.");
+        return;
+    }
+
+    if (password.length < 6) {
+        setStatus("كلمة المرور يجب أن تكون 6 أحرف على الأقل.");
+        return;
+    }
+
+    setStatus("جاري إنشاء الحساب...");
+
+    const { data, error } = await supabaseClient.auth.signUp({
         email,
         password,
         options: {
             data: {
-                username: username.trim()
+                username
             }
         }
     });
-}
 
-async function loginUser(email, password) {
-    if (!supabaseClient) {
-        return { error: { message: "Supabase غير متصل" } };
+    if (error) {
+        setStatus("فشل إنشاء الحساب: " + error.message);
+        return;
     }
 
-    return await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-    });
+    if (data.session) {
+        setStatus("تم إنشاء الحساب وتسجيل الدخول.");
+        await updateAuthUI();
+        return;
+    }
+
+    setStatus(
+        "تم إنشاء الحساب. افتح رسالة التأكيد في بريدك الإلكتروني ثم ارجع إلى VANTA."
+    );
 }
 
-async function logoutUser() {
+async function loginUserUI() {
+    if (!supabaseClient) {
+        setStatus("Supabase غير متصل.");
+        return;
+    }
+
+    const { email, password } = getValues();
+
+    if (!email || !password) {
+        setStatus("أدخل البريد الإلكتروني وكلمة المرور.");
+        return;
+    }
+
+    setStatus("جاري التحقق من بيانات الدخول...");
+
+    const { data, error } =
+        await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+        });
+
+    if (error) {
+        setStatus("بيانات الدخول غير صحيحة أو الحساب غير مؤكد.");
+        console.error("VANTA login:", error.message);
+        return;
+    }
+
+    if (!data.session) {
+        setStatus("لم يتم إنشاء جلسة دخول.");
+        return;
+    }
+
+    setStatus("تم تسجيل الدخول بنجاح.");
+    await updateAuthUI();
+}
+
+async function logoutUserUI() {
     if (!supabaseClient) return;
 
     const { error } = await supabaseClient.auth.signOut();
 
     if (error) {
-        console.error("VANTA logout error:", error);
+        setStatus("تعذر تسجيل الخروج.");
+        console.error("VANTA logout:", error.message);
+        return;
     }
+
+    document.getElementById("authPanel").style.display = "block";
+    document.getElementById("userPanel").style.display = "none";
+
+    document.getElementById("email").value = "";
+    document.getElementById("password").value = "";
+    document.getElementById("username").value = "";
+
+    setStatus("تم تسجيل الخروج.");
 }
 
 async function getCurrentUser() {
@@ -66,93 +155,11 @@ async function getCurrentUser() {
     } = await supabaseClient.auth.getUser();
 
     if (error) {
-        console.error("VANTA user error:", error);
+        console.error("VANTA user:", error.message);
         return null;
     }
 
     return user;
-}
-
-function setStatus(message) {
-    const status = document.getElementById("status");
-
-    if (status) {
-        status.textContent = message;
-    }
-}
-
-function getAuthValues() {
-    return {
-        email: document.getElementById("email")?.value.trim() || "",
-        password: document.getElementById("password")?.value || "",
-        username: document.getElementById("username")?.value.trim() || ""
-    };
-}
-
-async function registerUserUI() {
-    const { email, password, username } = getAuthValues();
-
-    if (!email || !password) {
-        setStatus("أدخل البريد الإلكتروني وكلمة المرور.");
-        return;
-    }
-
-    setStatus("جاري إنشاء الحساب...");
-
-    const { data, error } = await registerUser(
-        email,
-        password,
-        username
-    );
-
-    if (error) {
-        setStatus("فشل إنشاء الحساب: " + error.message);
-        return;
-    }
-
-    if (data.session) {
-        setStatus("تم إنشاء الحساب وتسجيل الدخول.");
-        await updateAuthUI();
-    } else {
-        setStatus(
-            "تم إنشاء الحساب. تحقق من بريدك الإلكتروني لتأكيد الحساب."
-        );
-    }
-}
-
-async function loginUserUI() {
-    const { email, password } = getAuthValues();
-
-    if (!email || !password) {
-        setStatus("أدخل البريد الإلكتروني وكلمة المرور.");
-        return;
-    }
-
-    setStatus("جاري تسجيل الدخول...");
-
-    const { data, error } = await loginUser(
-        email,
-        password
-    );
-
-    if (error) {
-        setStatus("فشل تسجيل الدخول: " + error.message);
-        return;
-    }
-
-    if (data.user) {
-        setStatus("تم تسجيل الدخول بنجاح.");
-        await updateAuthUI();
-    }
-}
-
-async function logoutUserUI() {
-    await logoutUser();
-
-    document.getElementById("authPanel").style.display = "block";
-    document.getElementById("userPanel").style.display = "none";
-
-    setStatus("تم تسجيل الخروج.");
 }
 
 async function updateAuthUI() {
@@ -177,16 +184,48 @@ async function updateAuthUI() {
     }
 }
 
+function handleEmailConfirmation() {
+    const hash = window.location.hash;
+
+    if (!hash.includes("access_token=")) {
+        return false;
+    }
+
+    setStatus("تم تأكيد البريد الإلكتروني. جاري فتح حسابك...");
+
+    window.history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
+
+    return true;
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
     if (!initSupabase()) {
-        setStatus("تعذر الاتصال بـ Supabase.");
+        setStatus("تعذر تحميل نظام المصادقة.");
         return;
     }
 
-    await updateAuthUI();
+    const confirmationLink = handleEmailConfirmation();
 
-    supabaseClient.auth.onAuthStateChange(() => {
-        updateAuthUI();
+    if (confirmationLink) {
+        setTimeout(async () => {
+            await updateAuthUI();
+        }, 500);
+    } else {
+        await updateAuthUI();
+    }
+
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+        console.log("VANTA Auth:", event);
+
+        if (session) {
+            updateAuthUI();
+        } else {
+            updateAuthUI();
+        }
     });
 
     console.log(
@@ -194,7 +233,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         "color:#00ff9d;font-size:24px;font-weight:bold"
     );
 
-    console.log(
-        "Cybersecurity • Education • Research"
-    );
+    console.log("Cybersecurity • Education • Research");
 });
