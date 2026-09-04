@@ -3,219 +3,1320 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>VANTA | Cybersecurity Education</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="supabase-config.js"></script>
-
+    <title>VANTA — Cybersecurity Simulation & Learning Platform</title>
     <style>
+        /* ==========================================================================
+           VANTA CORE STYLES (PURE CSS - OFFLINE OPTIMIZED & HIGH PERFORMANCE)
+           Creator: Ali Yaser | @ali_yr_1
+           ========================================================================== */
+
+        :root {
+            --bg-base: #030712;
+            --bg-surface: #0b0f19;
+            --bg-card: rgba(15, 23, 42, 0.7);
+            --bg-card-hover: rgba(30, 41, 59, 0.85);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(139, 92, 246, 0.35);
+
+            --primary: #8b5cf6;
+            --primary-glow: #a78bfa;
+            --secondary: #06b6d4;
+            --secondary-glow: #22d3ee;
+            --accent: #3b82f6;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --text-dark: #64748b;
+
+            --sidebar-width: 270px;
+            --transition-fast: 0.2s ease;
+            --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Light Theme Overrides */
+        body.theme-light {
+            --bg-base: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card-hover: rgba(241, 245, 249, 0.95);
+            --border-subtle: rgba(0, 0, 0, 0.1);
+            --border-glow: rgba(139, 92, 246, 0.5);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-dark: #94a3b8;
+        }
+
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            margin: 0;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            overflow-x: hidden;
             min-height: 100vh;
-            background: #05070b;
-            color: #eafff7;
-            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            transition: background-color var(--transition-fast), color var(--transition-fast);
         }
 
-        header {
+        /* Ambient Cyber Grid Background */
+        .cyber-grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background-image: 
+                linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        .cyber-grid-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(139, 92, 246, 0.15) 0%, rgba(6, 182, 212, 0.05) 50%, var(--bg-base) 100%);
+        }
+
+        /* Ambient Glowing Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.35;
+            animation: orbFloat 14s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+        .orb-1 { top: 10%; right: 15%; width: 320px; height: 320px; background: var(--primary); }
+        .orb-2 { bottom: 15%; left: 10%; width: 380px; height: 380px; background: var(--secondary); }
+
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 50px) scale(1.1); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* --- BOOT SCREEN --- */
+        #boot-screen {
+            position: fixed;
+            inset: 0;
+            background: #030712;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: monospace;
+            transition: opacity 0.6s ease, visibility 0.6s;
+        }
+
+        .boot-card {
+            width: 100%;
+            max-width: 550px;
+            background: rgba(11, 15, 25, 0.95);
+            border: 1px solid var(--border-glow);
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 0 35px rgba(139, 92, 246, 0.25);
+        }
+
+        .boot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 12px;
+        }
+
+        .boot-title {
+            color: var(--primary-glow);
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 1.1rem;
+        }
+
+        .boot-logs {
+            height: 200px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            direction: ltr;
+        }
+
+        .boot-log-line { display: flex; gap: 10px; }
+        .boot-log-line .ok { color: var(--success); font-weight: bold; }
+
+        .progress-bar-wrap {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transition: width 0.1s linear;
+        }
+
+        /* --- LAYOUT --- */
+        #app-container {
+            display: flex;
+            min-height: 100vh;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #app-container.visible { opacity: 1; }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            border-left: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 100;
+            transition: transform var(--transition-smooth);
+        }
+
+        .sidebar-brand {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .brand-logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #fff, var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-sub {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            margin-top: 4px;
+        }
+
+        .nav-list {
+            list-style: none;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .nav-item button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-align: right;
+        }
+
+        .nav-item button:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-main);
+        }
+
+        .nav-item.active button {
+            background: linear-gradient(90deg, rgba(139, 92, 246, 0.2), transparent);
+            color: #fff;
+            border-right: 3px solid var(--primary);
+        }
+
+        .sidebar-creator {
+            padding: 16px;
+            border-top: 1px solid var(--border-subtle);
+            background: rgba(0,0,0,0.2);
+            font-size: 0.8rem;
+        }
+
+        .creator-title { color: var(--text-dark); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; }
+        .creator-name { color: var(--text-main); font-weight: bold; margin-top: 2px; }
+        .instagram-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--secondary-glow);
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-top: 6px;
+            transition: color var(--transition-fast);
+        }
+        .instagram-link:hover { color: #fff; }
+
+        /* Main Content Wrapper */
+        .main-wrapper {
+            margin-right: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .top-header {
+            height: 70px;
+            border-bottom: 1px solid var(--border-subtle);
+            background: rgba(11, 15, 25, 0.6);
+            backdrop-filter: blur(12px);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 22px 7%;
-            border-bottom: 1px solid rgba(0,255,157,.15);
-            background: rgba(5,7,11,.95);
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 90;
         }
 
-        .brand {
-            color: #00ff9d;
-            font-size: 24px;
-            font-weight: bold;
+        .top-status { display: flex; align-items: center; gap: 16px; }
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
-        .brand span {
-            color: #eafff7;
-            font-size: 15px;
-            margin-right: 8px;
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success);
+            animation: pulse 2s infinite;
         }
 
-        main {
-            width: min(1100px, 90%);
-            margin: auto;
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .user-stats { display: flex; gap: 24px; }
+        .stat-item { text-align: left; }
+        .stat-val { font-weight: bold; color: var(--secondary-glow); font-size: 0.95rem; }
+        .stat-lbl { font-size: 0.75rem; color: var(--text-muted); }
+
+        .content-body {
+            padding: 32px;
+            flex: 1;
         }
 
-        .hero {
-            padding: 90px 0 50px;
-            text-align: center;
+        /* Glass Cards & 3D Tilt Panels */
+        .glass-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 24px;
+            transition: transform var(--transition-smooth), border-color var(--transition-fast), box-shadow var(--transition-fast);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform-style: preserve-3d;
         }
 
-        .hero h1 {
-            font-size: clamp(50px, 10vw, 100px);
-            margin: 0;
-            color: #00ff9d;
-            text-shadow: 0 0 30px rgba(0,255,157,.25);
+        .glass-panel:hover {
+            border-color: var(--border-glow);
+            transform: translateY(-4px) rotateX(2deg);
+            box-shadow: 0 15px 35px rgba(139, 92, 246, 0.15);
         }
 
-        .hero p {
-            color: #9aa8a2;
-            font-size: 18px;
-        }
-
-        .auth {
-            width: min(430px, 100%);
-            margin: 30px auto 80px;
-            padding: 30px;
-            background: #0b1118;
-            border: 1px solid rgba(0,255,157,.2);
-            border-radius: 16px;
-            box-shadow: 0 0 40px rgba(0,0,0,.35);
-        }
-
-        .auth h2 {
-            margin-top: 0;
-            color: #00ff9d;
-        }
-
-        input {
-            width: 100%;
-            padding: 13px;
-            margin: 7px 0;
-            border: 1px solid #26343d;
+        /* Buttons */
+        .vanta-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
             border-radius: 8px;
-            background: #05070b;
-            color: white;
-            outline: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: none;
+            text-decoration: none;
         }
 
-        input:focus {
-            border-color: #00ff9d;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #6d28d9);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(139, 92, 246, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
         }
 
-        button {
-            width: 100%;
-            padding: 13px;
-            margin-top: 10px;
-            border: 0;
+        .btn-secondary {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .btn-instagram {
+            background: linear-gradient(135deg, #e1306c, #c13584);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(225, 48, 108, 0.3);
+        }
+        .btn-instagram:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(225, 48, 108, 0.5);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 28px;
+            margin-bottom: 32px;
+            align-items: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff 40%, var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            color: var(--secondary-glow);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: 2px;
+        }
+
+        .hero-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+        /* 3D Visual Sphere Engine */
+        .visual-container {
+            position: relative;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cyber-core {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px dashed var(--primary-glow);
+            position: relative;
+            animation: rotateCore 20s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .cyber-core-inner {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary);
+            animation: rotateCoreRev 10s linear infinite;
+        }
+
+        @keyframes rotateCore { 100% { transform: rotate(360deg); } }
+        @keyframes rotateCoreRev { 100% { transform: rotate(-360deg); } }
+
+        /* --- GRID & CARD LAYOUTS --- */
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        /* Learning Academy Cards */
+        .path-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .path-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-glow);
+            background: var(--bg-card-hover);
+        }
+
+        .path-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: rgba(139, 92, 246, 0.15);
+            color: var(--primary-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 14px;
+        }
+
+        .path-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 6px; }
+        .path-meta { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* --- SOC & TERMINAL LAYOUTS --- */
+        .soc-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 20px;
+            min-height: 550px;
+        }
+
+        .soc-sidebar {
+            border-left: 1px solid var(--border-subtle);
+            padding-left: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .alert-item {
+            padding: 14px;
+            background: rgba(255,255,255,0.03);
             border-radius: 8px;
-            background: #00ff9d;
-            color: #03120c;
-            font-weight: bold;
+            border-right: 4px solid var(--warning);
+            cursor: pointer;
+            transition: background var(--transition-fast);
+        }
+
+        .alert-item.active { background: rgba(139, 92, 246, 0.15); border-right-color: var(--primary); }
+
+        .terminal-box {
+            background: #000;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #10b981;
+            min-height: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+            direction: ltr;
+            text-align: left;
+        }
+
+        /* --- TIMELINE ANIMATION --- */
+        .timeline-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+            margin: 20px 0;
+            padding-right: 20px;
+            border-right: 2px solid var(--border-glow);
+        }
+
+        .timeline-step {
+            position: relative;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .timeline-step::before {
+            content: '';
+            position: absolute;
+            right: -27px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* --- FOOTER --- */
+        .main-footer {
+            margin-top: auto;
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-subtle);
+            background: rgba(5, 8, 15, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+        }
+
+        .footer-brand { color: var(--text-muted); font-weight: 600; }
+
+        /* --- RESPONSIVE & MOBILE --- */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
             cursor: pointer;
         }
 
-        button:hover {
-            filter: brightness(1.1);
+        @media (max-width: 900px) {
+            .hero-section { grid-template-columns: 1fr; }
+            .sidebar { transform: translateX(100%); }
+            .sidebar.mobile-open { transform: translateX(0); }
+            .main-wrapper { margin-right: 0; }
+            .mobile-menu-btn { display: block; }
+            .soc-layout { grid-template-columns: 1fr; }
+            .soc-sidebar { border-left: none; border-bottom: 1px solid var(--border-subtle); padding-left: 0; padding-bottom: 16px; }
         }
 
-        #userPanel {
-            display: none;
-            text-align: center;
-        }
-
-        #userEmail {
-            color: #00ff9d;
-            margin: 15px 0;
-        }
-
-        #status {
-            min-height: 22px;
-            margin-top: 15px;
-            color: #9aa8a2;
-        }
-
-        footer {
-            padding: 30px;
-            text-align: center;
-            color: #68756f;
-            border-top: 1px solid rgba(0,255,157,.1);
+        /* Reduced Motion Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, ::before, ::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
-
 <body>
 
-<header>
-    <div class="brand">
-        VANTA
-        <span>× ALI YASER</span>
+    <!-- Cyber Background Elements -->
+    <div class="cyber-grid-bg"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- BOOT SCREEN -->
+    <div id="boot-screen" role="dialog" aria-label="System Boot Screen">
+        <div class="boot-card">
+            <div class="boot-header">
+                <span class="boot-title">VANTA CORE OS v2.6</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">INITIALIZING ENGINES</span>
+            </div>
+            <div class="boot-logs" id="boot-logs"></div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="boot-progress"></div>
+            </div>
+        </div>
     </div>
-</header>
 
-<main>
+    <!-- APP CONTAINER -->
+    <div id="app-container">
 
-    <section class="hero">
-        <h1>VANTA</h1>
-        <p>Cybersecurity • Education • Research</p>
-        <p>منصة تعليمية للأمن السيبراني والتدريب العملي الآمن.</p>
-    </section>
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo">VANTA</div>
+                <div class="brand-sub">CYBERSECURITY PLATFORM</div>
+            </div>
 
-    <section class="auth">
+            <ul class="nav-list">
+                <li class="nav-item active" data-target="dashboard"><button>📊 الصفحة الرئيسية</button></li>
+                <li class="nav-item" data-target="academy"><button>🎓 الأكاديمية والمسارات</button></li>
+                <li class="nav-item" data-target="soc"><button>🛡️ محاكي SOC</button></li>
+                <li class="nav-item" data-target="dfIR"><button>🔍 التحقيق الرقمي DFIR</button></li>
+                <li class="nav-item" data-target="ctf"><button>🚩 ساحة CTF</button></li>
+                <li class="nav-item" data-target="skills"><button>🌳 شجرة المهارات</button></li>
+                <li class="nav-item" data-target="ai"><button>🤖 VANTA AI Mentor</button></li>
+                <li class="nav-item" data-target="story"><button>📖 قصة VANTA</button></li>
+                <li class="nav-item" data-target="creator"><button>👤 المطور Ali Yaser</button></li>
+                <li class="nav-item" data-target="settings"><button>⚙️ الإعدادات</button></li>
+            </ul>
 
-        <div id="authPanel">
+            <div class="sidebar-creator">
+                <div class="creator-title">FOUNDER / ARCHITECT</div>
+                <div class="creator-name">ALI YASER</div>
+                <a href="https://instagram.com/ali_yr_1" target="_blank" rel="noopener noreferrer" class="instagram-link">
+                    <span>📷 @ali_yr_1</span>
+                </a>
+            </div>
+        </aside>
 
-            <h2>إنشاء حساب / تسجيل الدخول</h2>
+        <!-- MAIN CONTENT WRAPPER -->
+        <div class="main-wrapper">
 
-            <input
-                id="email"
-                type="email"
-                placeholder="البريد الإلكتروني"
-                autocomplete="email"
-            >
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <button class="mobile-menu-btn" id="mobile-toggle" aria-label="Open Sidebar Menu">☰</button>
+                <div class="top-status">
+                    <div class="status-badge">
+                        <span class="status-dot"></span>
+                        VANTA SYSTEM ONLINE
+                    </div>
+                </div>
+                <div class="user-stats">
+                    <div class="stat-item">
+                        <div class="stat-lbl">النقاط XP</div>
+                        <div class="stat-val" id="user-xp">1,250</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-lbl">المستوى</div>
+                        <div class="stat-val" id="user-level">03</div>
+                    </div>
+                </div>
+            </header>
 
-            <input
-                id="password"
-                type="password"
-                placeholder="كلمة المرور"
-                autocomplete="current-password"
-            >
+            <!-- DYNAMIC VIEWS -->
+            <main class="content-body">
 
-            <input
-                id="username"
-                type="text"
-                placeholder="اسم المستخدم عند التسجيل"
-                autocomplete="nickname"
-            >
+                <!-- 1. DASHBOARD VIEW -->
+                <section id="view-dashboard" class="app-view">
+                    <div class="hero-section glass-panel">
+                        <div>
+                            <div class="hero-subtitle">CYBERSECURITY SIMULATION & LEARNING PLATFORM</div>
+                            <h1 class="hero-title">ENTER THE SHADOW.</h1>
+                            <p class="hero-desc">
+                                VANTA — منصة محاكاة وتعليم الأمن السيبراني المتقدمة. TRAIN. INVESTIGATE. OPERATE. تم تصميمها بواسطة Ali Yaser لتوفير بيئة واقعية تفاعلية لتحليل التهديدات وتتبع الحوادث الجنائية.
+                            </p>
+                            <div class="hero-actions">
+                                <button class="vanta-btn btn-primary" onclick="switchView('academy')">ابدأ التدريب الآن</button>
+                                <button class="vanta-btn btn-secondary" onclick="switchView('soc')">دخول مركز SOC</button>
+                                <a href="https://instagram.com/ali_yr_1" target="_blank" rel="noopener noreferrer" class="vanta-btn btn-instagram">متابعة Ali Yaser</a>
+                            </div>
+                        </div>
+                        <div class="visual-container">
+                            <div class="cyber-core">
+                                <div class="cyber-core-inner"></div>
+                            </div>
+                        </div>
+                    </div>
 
-            <button onclick="registerUserUI()">
-                إنشاء حساب
-            </button>
+                    <h2 class="section-title">⚡ المراكز والعمليات المتاحة</h2>
+                    <div class="grid-cards">
+                        <div class="glass-panel">
+                            <h3 style="margin-bottom: 8px;">🎓 الأكاديمية الشاملة</h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">20 مساراً تعليمياً متكاملاً يتضمن الدروس النظرية والاختبارات التفاعلية والفيديوهات.</p>
+                            <button class="vanta-btn btn-secondary" style="width: 100%;" onclick="switchView('academy')">فتح الأكاديمية</button>
+                        </div>
+                        <div class="glass-panel">
+                            <h3 style="margin-bottom: 8px;">🛡️ محاكي SOC</h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">تحليل الهجمات المباشرة، فحص سجلات أحداث النظام وتحديد القرار المناسب الاستجابة.</p>
+                            <button class="vanta-btn btn-secondary" style="width: 100%;" onclick="switchView('soc')">بدء التحليل</button>
+                        </div>
+                        <div class="glass-panel">
+                            <h3 style="margin-bottom: 8px;">🚩 ساحة CTF</h3>
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">تحديات التشفير وفحص الشبكات والهندسة العكسية لاستخراج الأعلام.</p>
+                            <button class="vanta-btn btn-secondary" style="width: 100%;" onclick="switchView('ctf')">دخول CTF</button>
+                        </div>
+                    </div>
+                </section>
 
-            <button onclick="loginUserUI()">
-                تسجيل الدخول
-            </button>
+                <!-- 2. ACADEMY VIEW -->
+                <section id="view-academy" class="app-view" style="display: none;">
+                    <div style="margin-bottom: 24px;">
+                        <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">🎓 أكاديمية VANTA التعليمية</h1>
+                        <p style="color: var(--text-muted);">20 مساراً تعليمياً مهيكلاً لإتقان كافة مفاهيم وتخصصات الأمن السيبراني.</p>
+                    </div>
+                    <div class="grid-cards" id="paths-container"></div>
+                </section>
 
-            <div id="status"></div>
+                <!-- LESSON DETAIL VIEW -->
+                <section id="view-lesson" class="app-view" style="display: none;">
+                    <button class="vanta-btn btn-secondary" onclick="switchView('academy')" style="margin-bottom: 20px;">➔ العودة للمسارات</button>
+                    <div class="glass-panel" id="lesson-content"></div>
+                </section>
+
+                <!-- 3. SOC SIMULATOR VIEW -->
+                <section id="view-soc" class="app-view" style="display: none;">
+                    <div style="margin-bottom: 20px;">
+                        <h2>🛡️ SOC Incident Response Center</h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">بيئة محاكاة مراقبة الأمن والتعامل مع الحوادث السيبرانية.</p>
+                    </div>
+                    <div class="soc-layout glass-panel">
+                        <div class="soc-sidebar">
+                            <h4>التنبيهات (Alert Queue)</h4>
+                            <div class="alert-item active">
+                                <strong style="display: block; color: var(--danger);">SOC-001: Auth Anomaly</strong>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">Source: 192.168.10.42</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="margin-bottom: 12px;">سجل الأحداث المباشر (Logs & Timeline)</h3>
+                            <div class="terminal-box" id="soc-logs">
+                                [09:34:21] AUTH_FAIL: user admin from 192.168.10.42<br>
+                                [09:34:25] AUTH_FAIL: user admin from 192.168.10.42<br>
+                                [09:34:31] AUTH_SUCCESS: user admin from 192.168.10.42<br>
+                                [09:35:02] PROCESS EXEC: suspicious.sh (PID: 4091)<br>
+                                [09:35:11] NETWORK CONN: Outbound 10.10.20.15:443<br>
+                                [09:36:17] FILE CREATED: /tmp/update.sh<br>
+                                [09:37:04] PERSISTENCE: Cron entry created
+                            </div>
+                            <div style="margin-top: 20px;">
+                                <h4>قرار المحلل (Analyst Verdict):</h4>
+                                <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                                    <button class="vanta-btn btn-primary" onclick="resolveSOC('TRUE_POSITIVE')">TRUE POSITIVE</button>
+                                    <button class="vanta-btn btn-secondary" onclick="resolveSOC('FALSE_POSITIVE')">FALSE POSITIVE</button>
+                                    <button class="vanta-btn btn-secondary" onclick="resolveSOC('INSUFFICIENT')">INSUFFICIENT EVIDENCE</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. DFIR VIEW -->
+                <section id="view-dfIR" class="app-view" style="display: none;">
+                    <div class="glass-panel">
+                        <h2>🔍 Digital Forensics & Incident Response (DFIR)</h2>
+                        <p style="color: var(--text-muted); margin-top: 8px; margin-bottom: 20px;">تسلسل أدلة التحقيق الجنائي الرقمي (Investigation Chain):</p>
+                        
+                        <div class="timeline-container">
+                            <div class="timeline-step">
+                                <strong>1. Successful Login</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">تسجيل دخول ناجح بعد محاولات فاشلة متكررة.</p>
+                            </div>
+                            <div class="timeline-step">
+                                <strong>2. Suspicious Process Execution</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">تشغيل سكريبت غير موثوق PID 4091.</p>
+                            </div>
+                            <div class="timeline-step">
+                                <strong>3. Suspicious File Dropped</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">إنشاء ملف /tmp/update.sh داخل المجلد المؤقت.</p>
+                            </div>
+                            <div class="timeline-step">
+                                <strong>4. Outbound C2 Connection</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">اتصال للخارج باتجاه IP 10.10.20.15 عبر الميناء 443.</p>
+                            </div>
+                            <div class="timeline-step">
+                                <strong>5. Persistence Created</strong>
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">إنشاء مهمة Cron لضمان البقاء في النظام.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. CTF ARENA VIEW -->
+                <section id="view-ctf" class="app-view" style="display: none;">
+                    <div style="margin-bottom: 20px;">
+                        <h2>🚩 VANTA CTF Arena</h2>
+                        <p style="color: var(--text-muted);">تحديات الأعلام الأمنية واختبار المهارات الهجومية والتشفير.</p>
+                    </div>
+                    <div class="grid-cards">
+                        <div class="glass-panel">
+                            <span style="font-size: 0.75rem; color: var(--secondary-glow);">MISC / CRYPTO</span>
+                            <h3 style="margin: 8px 0;">BLACK MIRROR</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">فك التشفير التالي للحصول على العلم: <code>VkFOVEF7YWxpX3lyXzFfY3RmX3dpbn0=</code></p>
+                            <input type="text" id="ctf-input-1" placeholder="VANTA{...}" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); color: #fff; border-radius: 6px; margin-bottom: 12px;">
+                            <button class="vanta-btn btn-primary" style="width: 100%;" onclick="checkCTF('ctf-input-1', 'VANTA{ali_yr_1_ctf_win}')">إرسال العلم</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. SKILL TREE VIEW -->
+                <section id="view-skills" class="app-view" style="display: none;">
+                    <div class="glass-panel">
+                        <h2>🌳 شجرة المهارات (Skill Matrix)</h2>
+                        <p style="color: var(--text-muted); margin-top: 8px; margin-bottom: 20px;">متابعة تقدمك الميداني والمهاري داخل منصة VANTA.</p>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <div style="padding: 12px 20px; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--primary); border-radius: 8px;">Network Fundamentals (Unlocked)</div>
+                            <div style="padding: 12px 20px; background: rgba(139, 92, 246, 0.2); border: 1px solid var(--primary); border-radius: 8px;">Linux Basics (Unlocked)</div>
+                            <div style="padding: 12px 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-subtle); border-radius: 8px; color: var(--text-muted);">SOC Triage (Locked)</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 7. AI MENTOR VIEW -->
+                <section id="view-ai" class="app-view" style="display: none;">
+                    <div class="glass-panel" style="max-width: 750px; margin: 0 auto;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                            <h2>🤖 VANTA Local AI Mentor</h2>
+                            <span style="font-size: 0.75rem; background: rgba(6, 182, 212, 0.15); color: var(--secondary-glow); padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(6, 182, 212, 0.3);">LOCAL AI SIMULATION</span>
+                        </div>
+                        
+                        <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                            <button class="vanta-btn btn-secondary" onclick="setAIMode('TUTOR')">🎓 TUTOR</button>
+                            <button class="vanta-btn btn-secondary" onclick="setAIMode('MENTOR')">💡 MENTOR</button>
+                            <button class="vanta-btn btn-secondary" onclick="setAIMode('ANALYST')">🔍 ANALYST</button>
+                        </div>
+
+                        <div class="terminal-box" id="ai-chat-box" style="height: 280px; margin-bottom: 16px;">
+                            [VANTA AI]: أهلاً بك! أنا مرشدك الذكي المحلي للتعليم السيبراني داخل VANTA. كيف يمكنني مساعدتك الآن؟
+                        </div>
+
+                        <div style="display: flex; gap: 10px;">
+                            <input type="text" id="ai-input" placeholder="اسأل VANTA AI عن شبكات، لينكس، ثغرات الويب..." style="flex: 1; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-subtle); color: #fff; border-radius: 8px;">
+                            <button class="vanta-btn btn-primary" onclick="sendAIMessage()">إرسال</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 8. STORY VIEW -->
+                <section id="view-story" class="app-view" style="display: none;">
+                    <div class="glass-panel" style="max-width: 800px; margin: 0 auto;">
+                        <span style="color: var(--secondary-glow); font-size: 0.8rem; font-weight: bold; letter-spacing: 2px;">THE ORIGIN</span>
+                        <h1 style="font-size: 2.2rem; font-weight: 900; margin: 8px 0 16px 0;">THE STORY OF VANTA</h1>
+                        <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 24px;">
+                            بدأت فكرة منصة VANTA برؤية من المطور **Ali Yaser** لبناء منصة تعليمية ومحاكاة سيبرانية متكاملة تجمع بين الجانب الأكاديمي والتحقيق الميداني العملي في واجهة واحدة متماسكة وعصرية.
+                        </p>
+
+                        <div class="timeline-container">
+                            <div class="timeline-step">
+                                <strong>IDEA & VISION</strong>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">إرساء المفهوم الأولي لمنصة محاكاة مستقلة.</p>
+                            </div>
+                            <div class="timeline-step">
+                                <strong>ARCHITECTURE & ENGINE</strong>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">تصميم المحركات المحلية ومحاكي SOC والتحقيق الرقمي.</p>
+                            </div>
+                            <div class="timeline-step">
+                                <strong>VANTA PLATFORM RELEASE</strong>
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">إطلاق البيئة الكاملة المخصصة للتطبيق والتدريب السيبراني.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 9. CREATOR VIEW -->
+                <section id="view-creator" class="app-view" style="display: none;">
+                    <div class="glass-panel" style="max-width: 800px; margin: 0 auto;">
+                        <span style="color: var(--secondary-glow); font-size: 0.8rem; font-weight: bold; letter-spacing: 2px;">FOUNDER / CREATOR / ARCHITECT</span>
+                        <h1 style="font-size: 2.8rem; font-weight: 900; margin: 8px 0 16px 0;">ALI YASER</h1>
+                        <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 24px;">
+                            Ali Yaser is the founder, creator and architect of VANTA, an original cybersecurity learning and simulation platform.
+                            <br><br>
+                            تم إنشاء وتطوير VANTA كمنصة سيبرانية أصيلة تهدف إلى تقديم تجربة عملية تفاعلية تجمع بين الأكاديمية ومختبرات المحاكاة للجيل القادم من خبراء الأمن السيبراني.
+                        </p>
+                        
+                        <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 8px; border-right: 3px solid var(--primary); margin-bottom: 24px;">
+                            <strong>VANTA Philosophy:</strong>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">Simulation First — Understand the System — Investigate the Evidence — Master the Defense.</p>
+                        </div>
+
+                        <a href="https://instagram.com/ali_yr_1" target="_blank" rel="noopener noreferrer" class="vanta-btn btn-instagram">
+                            📷 متابعة Ali Yaser على Instagram (@ali_yr_1)
+                        </a>
+                    </div>
+                </section>
+
+                <!-- 10. SETTINGS VIEW -->
+                <section id="view-settings" class="app-view" style="display: none;">
+                    <div class="glass-panel" style="max-width: 700px; margin: 0 auto;">
+                        <h2>⚙️ إعدادات المنصة (Settings)</h2>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 24px;">تخصيص الواجهة والصوت وأداء الحركة.</p>
+
+                        <div style="display: flex; flex-direction: column; gap: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>المظهر (Theme)</strong>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted);">التنقل بين وضع VANTA المظلم والوضع الفاتح.</p>
+                                </div>
+                                <button class="vanta-btn btn-secondary" onclick="toggleTheme()">تغيير المظهر</button>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <strong>التأثيرات الصوتية (Sound FX)</strong>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted);">تفعيل أصوات التفاعل بالنظام (Web Audio API).</p>
+                                </div>
+                                <button class="vanta-btn btn-secondary" onclick="toggleSound()">تشغيل / إيقاف</button>
+                            </div>
+
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+                                <div>
+                                    <strong style="color: var(--danger);">إعادة ضبط التقدّم</strong>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted);">مسح بيانات التقدم المخزنة محلياً.</p>
+                                </div>
+                                <button class="vanta-btn btn-secondary" style="border-color: var(--danger); color: var(--danger);" onclick="resetProgress()">إعادة ضبط</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="main-footer">
+                <div>
+                    <span class="footer-brand">VANTA</span> — Cybersecurity Simulation & Learning Platform
+                </div>
+                <div>
+                    © 2026 VANTA — Created by <strong>Ali Yaser</strong> — All Rights Reserved.
+                </div>
+            </footer>
 
         </div>
+    </div>
 
-        <div id="userPanel">
+    <!-- ==========================================================================
+         VANTA JAVASCRIPT ENGINES (DATA-DRIVEN & OFFLINE ARCHITECTURE)
+         ========================================================================== -->
+    <script>
+        /* --- STORAGE ENGINE & CONFIG --- */
+        const STORAGE_KEY = 'vanta_local_state_v1';
 
-            <h2>مرحبًا بك في VANTA</h2>
+        const defaultState = {
+            xp: 1250,
+            level: 3,
+            completedLessons: [],
+            soundEnabled: true,
+            theme: 'dark'
+        };
 
-            <div id="userEmail"></div>
+        function loadState() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : defaultState;
+            } catch (e) {
+                return defaultState;
+            }
+        }
 
-            <button onclick="logoutUserUI()">
-                تسجيل الخروج
-            </button>
+        function saveState(state) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            } catch (e) {}
+        }
 
-        </div>
+        let appState = loadState();
 
-    </section>
+        /* --- AUDIO ENGINE (WEB AUDIO API - NO EXTERNAL FILES) --- */
+        function playBeep(freq = 440, type = 'sine', duration = 0.1) {
+            if (!appState.soundEnabled) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = type;
+                osc.frequency.value = freq;
+                gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch (e) {}
+        }
 
-</main>
+        /* --- ACADEMY DATA (20 PATHS FULL STRUCTURE) --- */
+        const ACADEMY_PATHS = [
+            { id: 'p1', title: '1. Computer Fundamentals', icon: '💻', desc: 'أساسيات الحوسبة ومعمارية المعالجات والذاكرة.' },
+            { id: 'p2', title: '2. Networking Fundamentals', icon: '🌐', desc: 'نموذج OSI وبروتوكولات TCP/IP وفحص الحزم.' },
+            { id: 'p3', title: '3. Linux Fundamentals', icon: '🐧', desc: 'أوامر لينكس، إدارة الصلاحيات، والسكريبتات.' },
+            { id: 'p4', title: '4. Windows Fundamentals', icon: '🪟', desc: 'إدارة ويندوز، Regedit، ونظام Active Directory.' },
+            { id: 'p5', title: '5. Internet Fundamentals', icon: '🌍', desc: 'بروتوكولات الويب HTTP/HTTPS، DNS، والشهادات.' },
+            { id: 'p6', title: '6. Web Security', icon: '🛡️', desc: 'ثغرات OWASP Top 10 والتعامل مع SQLi وXSS.' },
+            { id: 'p7', title: '7. Network Security', icon: '🔒', desc: 'الجدران النارية IDS/IPS، والتشفير الشبكي.' },
+            { id: 'p8', title: '8. SOC Analyst', icon: '👁️', desc: 'تحليل السجلات الكشف عن التهديدات وإدارة الحوادث.' },
+            { id: 'p9', title: '9. Incident Response', icon: '🚨', desc: 'احتواء الهجمات واستعادة الأنظمة المتضررة.' },
+            { id: 'p10', title: '10. Digital Forensics', icon: '🔍', desc: 'جمع الأدلة الجنائية وتحليل الذاكرة العشوائية.' },
+            { id: 'p11', title: '11. Threat Hunting', icon: '🎯', desc: 'البحث الاستباقي عن التهديدات المتقدمة المخفية.' },
+            { id: 'p12', title: '12. Defensive Security', icon: '🛡️', desc: 'تحصين الأنظمة وتطبيق سياسات الأمان الصارمة.' },
+            { id: 'p13', title: '13. Ethical Red Teaming', icon: '⚔️', desc: 'محاكاة الهجمات المتقدمة واختبار الجاهزية.' },
+            { id: 'p14', title: '14. Penetration Testing', icon: '🎯', desc: 'منهجيات اختبار الاختراق وتقييم الثغرات.' },
+            { id: 'p15', title: '15. Cryptography', icon: '🔑', desc: 'خوارزميات التشفير المتناظر وغير المتناظر والتجزئة.' },
+            { id: 'p16', title: '16. Malware Analysis', icon: 'البرمجيات الخبيثة', icon: '🦠', desc: 'تحليل البرمجيات الخبيثة الساكن والحيوي.' },
+            { id: 'p17', title: '17. Security Engineering', icon: '🏗️', desc: 'بناء الهندسة الأمنية وتصميم البنى التحتية.' },
+            { id: 'p18', title: '18. Cloud Security', icon: '☁️', desc: 'حماية البيئات السحابية ومصادقة IAM.' },
+            { id: 'p19', title: '19. AI Security', icon: '🤖', desc: 'تأمين نماذج الذكاء الاصطناعي ضد Prompt Injection.' },
+            { id: 'p20', title: '20. OSINT', icon: '🔎', desc: 'جمع المعلومات من المصادر المفتوحة والاستخبارات.' }
+        ];
 
-<footer>
-    <b style="color:#00ff9d;">VANTA v92.61</b><br>
-    Cybersecurity • Education • Research<br>
-    Built by Ali Yaser<br>
-    © 2026 Ali Yaser
-</footer>
+        /* --- BOOT & INITIALIZATION --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            runBootSequence();
+            initAcademy();
+            initNavigation();
+            updateUIStats();
+        });
 
-<script src="app.js"></script>
+        function runBootSequence() {
+            const logsContainer = document.getElementById('boot-logs');
+            const progressBar = document.getElementById('boot-progress');
+            const bootScreen = document.getElementById('boot-screen');
+            const appContainer = document.getElementById('app-container');
 
+            const logs = [
+                'VANTA CORE INITIALIZING...',
+                'Loading Learning Engine...',
+                'Loading Cyber Range Engine...',
+                'Loading SOC & DFIR Engine...',
+                'Loading Creator Identity [Ali Yaser / @ali_yr_1]...',
+                'System Integrity Check... OK',
+                'SYSTEM READY'
+            ];
+
+            let step = 0;
+            const interval = setInterval(() => {
+                if (step < logs.length) {
+                    const line = document.createElement('div');
+                    line.className = 'boot-log-line';
+                    line.innerHTML = `<span class="ok">[OK]</span> <span>${logs[step]}</span>`;
+                    logsContainer.appendChild(line);
+                    logsContainer.scrollTop = logsContainer.scrollHeight;
+                    playBeep(600 + step * 50, 'sine', 0.05);
+
+                    step++;
+                    progressBar.style.width = `${(step / logs.length) * 100}%`;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        bootScreen.style.opacity = '0';
+                        bootScreen.style.visibility = 'hidden';
+                        appContainer.classList.add('visible');
+                    }, 300);
+                }
+            }, 160);
+        }
+
+        /* --- NAVIGATION SYSTEM --- */
+        function initNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    playBeep(500, 'sine', 0.05);
+                    navItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    const target = item.getAttribute('data-target');
+                    switchView(target);
+                });
+            });
+
+            document.getElementById('mobile-toggle').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('mobile-open');
+            });
+        }
+
+        function switchView(viewId) {
+            const views = document.querySelectorAll('.app-view');
+            views.forEach(v => v.style.display = 'none');
+
+            const target = document.getElementById(`view-${viewId}`);
+            if (target) target.style.display = 'block';
+
+            document.getElementById('sidebar').classList.remove('mobile-open');
+        }
+
+        /* --- ACADEMY & LESSONS --- */
+        function initAcademy() {
+            const container = document.getElementById('paths-container');
+            container.innerHTML = '';
+
+            ACADEMY_PATHS.forEach(path => {
+                const card = document.createElement('div');
+                card.className = 'path-card';
+                card.innerHTML = `
+                    <div class="path-icon">${path.icon}</div>
+                    <div class="path-title">${path.title}</div>
+                    <div class="path-meta">${path.desc}</div>
+                `;
+                card.onclick = () => openLesson(path);
+                container.appendChild(card);
+            });
+        }
+
+        function openLesson(path) {
+            playBeep(700, 'sine', 0.08);
+            const contentBox = document.getElementById('lesson-content');
+
+            contentBox.innerHTML = `
+                <span style="color: var(--primary-glow); font-size: 0.85rem; font-weight: bold;">${path.title}</span>
+                <h1 style="margin: 8px 0 16px 0;">درس تفاعلي: ${path.title}</h1>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">${path.desc}</p>
+
+                <div style="background: rgba(0,0,0,0.3); border-right: 3px solid var(--secondary); padding: 16px; border-radius: 6px; margin-bottom: 24px;">
+                    <h4>المفهوم الشامل (Key Concept):</h4>
+                    <p style="color: var(--text-main); font-size: 0.95rem; margin-top: 6px;">يتضمن هذا المسار التدريب على المفاهيم الأساسية والتطبيق العملي لحماية الأنظمة الشبكية وتحليل الثغرات.</p>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <h4>🎥 الشروحات المصورة (Video Resources):</h4>
+                    <div style="display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap;">
+                        <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(path.title + ' شرح عربي cybersecurity')}" target="_blank" rel="noopener noreferrer" class="vanta-btn btn-secondary">
+                            🎥 البحث عن شرح عربي
+                        </a>
+                        <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(path.title + ' tutorial cybersecurity')}" target="_blank" rel="noopener noreferrer" class="vanta-btn btn-secondary">
+                            🎥 Search English Tutorial
+                        </a>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+                    <h4>🧠 اختبر معلوماتك (Quiz):</h4>
+                    <p style="margin: 10px 0;">ما المبدأ الأساسي للتعامل مع المفاهيم الأمنية في هذا المسار؟</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <button class="vanta-btn btn-secondary" style="justify-content: flex-start;" onclick="answerQuiz(true)">أ) فهم النظام وتطبيق الدفاع القائم على التحقيق الجنائي (+50 XP)</button>
+                        <button class="vanta-btn btn-secondary" style="justify-content: flex-start;" onclick="answerQuiz(false)">ب) الاتكال على الإعدادات التلقائية دون فحص</button>
+                    </div>
+                    <div id="quiz-status" style="margin-top: 12px; font-weight: bold;"></div>
+                </div>
+            `;
+
+            switchView('lesson');
+        }
+
+        function answerQuiz(isCorrect) {
+            const status = document.getElementById('quiz-status');
+            if (isCorrect) {
+                status.style.color = 'var(--success)';
+                status.innerText = '✓ إجابة صحيحة! أحسنت العمل (+50 XP)';
+                playBeep(900, 'triangle', 0.15);
+                addXP(50);
+            } else {
+                status.style.color = 'var(--danger)';
+                status.innerText = '✗ إجابة غير صحيحة، حاول مجدداً.';
+                playBeep(200, 'sawtooth', 0.15);
+            }
+        }
+
+        /* --- STATS & XP ENGINE --- */
+        function addXP(amount) {
+            appState.xp += amount;
+            appState.level = Math.floor(appState.xp / 500) + 1;
+            saveState(appState);
+            updateUIStats();
+        }
+
+        function updateUIStats() {
+            document.getElementById('user-xp').innerText = appState.xp.toLocaleString();
+            document.getElementById('user-level').innerText = String(appState.level).padStart(2, '0');
+        }
+
+        /* --- SOC ENGINE --- */
+        function resolveSOC(verdict) {
+            if (verdict === 'TRUE_POSITIVE') {
+                playBeep(800, 'sine', 0.2);
+                alert('✓ قرار صحيح! التنبيه يمثل هجوم Brute Force متبوعاً بـ Persistence. تم إغلاق الحادثة (+100 XP).');
+                addXP(100);
+            } else {
+                playBeep(250, 'sawtooth', 0.2);
+                alert('✗ قرار خاطئ. السجلات تظهر نمط هجوم حقيقي واضح.');
+            }
+        }
+
+        /* --- CTF ENGINE --- */
+        function checkCTF(inputId, correctFlag) {
+            const val = document.getElementById(inputId).value.trim();
+            if (val === correctFlag) {
+                playBeep(1000, 'triangle', 0.2);
+                alert('🎉 إجابة صحيحة! تم استخراج العلم بنجاح (+150 XP)');
+                addXP(150);
+            } else {
+                playBeep(200, 'sawtooth', 0.2);
+                alert('❌ علم غير صحيح، حاول مجدداً.');
+            }
+        }
+
+        /* --- LOCAL AI ENGINE --- */
+        let currentAIMode = 'TUTOR';
+
+        function setAIMode(mode) {
+            currentAIMode = mode;
+            playBeep(650, 'sine', 0.05);
+            const chatBox = document.getElementById('ai-chat-box');
+            chatBox.innerHTML += `<br><span style="color: var(--secondary-glow);">[SYSTEM]: تم تغيير وضع الذكاء الاصطناعي إلى ${mode}</span>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function sendAIMessage() {
+            const input = document.getElementById('ai-input');
+            const chatBox = document.getElementById('ai-chat-box');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            playBeep(500, 'sine', 0.05);
+            chatBox.innerHTML += `<br><span style="color: var(--primary-glow);">[المستخدم]: ${text}</span>`;
+            input.value = '';
+
+            setTimeout(() => {
+                let response = `بصفتي مرشد VANTA AI في وضع (${currentAIMode})، يسعدني الإجابة: يتعلق استفسارك بـ "${text}" بمبادئ الأمن السيبراني. يمكنك الاطلاع على المسارات الأكاديمية أو محاكي SOC لتطبيق ذلك عملياً.`;
+                chatBox.innerHTML += `<br><span style="color: var(--secondary-glow);">[VANTA AI]: ${response}</span>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                playBeep(750, 'sine', 0.08);
+            }, 500);
+        }
+
+        /* --- SETTINGS ENGINE --- */
+        function toggleTheme() {
+            document.body.classList.toggle('theme-light');
+            appState.theme = document.body.classList.contains('theme-light') ? 'light' : 'dark';
+            saveState(appState);
+            playBeep(550, 'sine', 0.05);
+        }
+
+        function toggleSound() {
+            appState.soundEnabled = !appState.soundEnabled;
+            saveState(appState);
+            alert(`التأثيرات الصوتية: ${appState.soundEnabled ? 'مفعلة' : 'معطلة'}`);
+        }
+
+        function resetProgress() {
+            if (confirm('هل أنت تأكد من إعادة ضبط التقدم والنقاط؟')) {
+                appState = defaultState;
+                saveState(appState);
+                updateUIStats();
+                alert('تمت إعادة ضبط البيانات بنجاح.');
+            }
+        }
+    </script>
 </body>
 </html>
