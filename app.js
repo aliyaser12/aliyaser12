@@ -1,202 +1,200 @@
-document.addEventListener("DOMContentLoaded", () => {
+"use strict";
 
-    console.log("VANTA System Online");
+let supabaseClient = null;
 
-    /* =========================
-       VANTA NOTIFICATION
-    ========================= */
-
-    function notify(message) {
-        const box = document.createElement("div");
-
-        box.textContent = message;
-
-        box.style.position = "fixed";
-        box.style.bottom = "25px";
-        box.style.right = "25px";
-        box.style.padding = "15px 20px";
-        box.style.background = "#0d141d";
-        box.style.color = "#00ff9d";
-        box.style.border = "1px solid rgba(0,255,157,.4)";
-        box.style.borderRadius = "10px";
-        box.style.zIndex = "9999";
-        box.style.boxShadow = "0 0 25px rgba(0,255,157,.15)";
-
-        document.body.appendChild(box);
-
-        setTimeout(() => {
-            box.remove();
-        }, 3000);
+function initSupabase() {
+    if (
+        typeof window.supabase === "undefined" ||
+        typeof SUPABASE_URL === "undefined" ||
+        typeof SUPABASE_PUBLISHABLE_KEY === "undefined"
+    ) {
+        console.error("VANTA: Supabase configuration not loaded.");
+        return false;
     }
 
+    supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
 
-    /* =========================
-       BUTTON EFFECTS
-    ========================= */
+    return true;
+}
 
-    document.querySelectorAll("button").forEach(button => {
+async function registerUser(email, password, username = "") {
+    if (!supabaseClient) {
+        return { error: { message: "Supabase غير متصل" } };
+    }
 
-        button.addEventListener("click", () => {
-
-            button.style.transform = "scale(.97)";
-
-            setTimeout(() => {
-                button.style.transform = "";
-            }, 100);
-
-        });
-
-    });
-
-
-    /* =========================
-       QUIZ SYSTEM
-    ========================= */
-
-    const quizCards = document.querySelectorAll(".quiz-card");
-
-    const answers = [
-        "Translate domain names into IP addresses",
-        "443",
-        "Representing data with a fixed-length digest",
-        "A social engineering technique used to trick users"
-    ];
-
-    let score = 0;
-
-    quizCards.forEach((card, index) => {
-
-        const buttons = card.querySelectorAll(".quiz-options button");
-
-        buttons.forEach(button => {
-
-            button.addEventListener("click", () => {
-
-                buttons.forEach(btn => {
-                    btn.disabled = true;
-                });
-
-                if (button.textContent.trim() === answers[index]) {
-
-                    score += 100;
-
-                    button.style.borderColor = "#00ff9d";
-
-                    notify("Correct! +100 XP");
-
-                } else {
-
-                    button.style.borderColor = "#ff465d";
-
-                    notify("Incorrect");
-
-                }
-
-            });
-
-        });
-
-    });
-
-
-    /* =========================
-       REVIEW SYSTEM
-    ========================= */
-
-    const reviewButton = document.getElementById("submitReview");
-
-    if (reviewButton) {
-
-        reviewButton.addEventListener("click", () => {
-
-            const reviewText =
-                document.getElementById("reviewText");
-
-            if (!reviewText ||
-                reviewText.value.trim() === "") {
-
-                notify("Please write your feedback first.");
-
-                return;
+    return await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+            data: {
+                username: username.trim()
             }
+        }
+    });
+}
 
-            notify("Thank you for your feedback.");
-
-            reviewText.value = "";
-
-        });
-
+async function loginUser(email, password) {
+    if (!supabaseClient) {
+        return { error: { message: "Supabase غير متصل" } };
     }
 
+    return await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+    });
+}
 
-    /* =========================
-       FEEDBACK SYSTEM
-    ========================= */
+async function logoutUser() {
+    if (!supabaseClient) return;
 
-    const feedbackForm =
-        document.getElementById("feedbackForm");
+    const { error } = await supabaseClient.auth.signOut();
 
-    if (feedbackForm) {
+    if (error) {
+        console.error("VANTA logout error:", error);
+    }
+}
 
-        feedbackForm.addEventListener("submit", event => {
+async function getCurrentUser() {
+    if (!supabaseClient) return null;
 
-            event.preventDefault();
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
 
-            const message =
-                document.getElementById("feedbackMessage");
-
-            if (!message ||
-                message.value.trim() === "") {
-
-                notify("Please enter your feedback.");
-
-                return;
-            }
-
-            notify("Feedback submitted successfully.");
-
-            feedbackForm.reset();
-
-        });
-
+    if (error) {
+        console.error("VANTA user error:", error);
+        return null;
     }
 
+    return user;
+}
 
-    /* =========================
-       PAGE INTRO
-    ========================= */
+function setStatus(message) {
+    const status = document.getElementById("status");
 
-    const hero = document.querySelector(".page-hero");
+    if (status) {
+        status.textContent = message;
+    }
+}
 
-    if (hero) {
+function getAuthValues() {
+    return {
+        email: document.getElementById("email")?.value.trim() || "",
+        password: document.getElementById("password")?.value || "",
+        username: document.getElementById("username")?.value.trim() || ""
+    };
+}
 
-        hero.style.opacity = "0";
-        hero.style.transform = "translateY(15px)";
+async function registerUserUI() {
+    const { email, password, username } = getAuthValues();
 
-        setTimeout(() => {
-
-            hero.style.transition =
-                "opacity .7s ease, transform .7s ease";
-
-            hero.style.opacity = "1";
-            hero.style.transform = "translateY(0)";
-
-        }, 100);
-
+    if (!email || !password) {
+        setStatus("أدخل البريد الإلكتروني وكلمة المرور.");
+        return;
     }
 
+    setStatus("جاري إنشاء الحساب...");
 
-    /* =========================
-       VANTA CONSOLE MESSAGE
-    ========================= */
+    const { data, error } = await registerUser(
+        email,
+        password,
+        username
+    );
+
+    if (error) {
+        setStatus("فشل إنشاء الحساب: " + error.message);
+        return;
+    }
+
+    if (data.session) {
+        setStatus("تم إنشاء الحساب وتسجيل الدخول.");
+        await updateAuthUI();
+    } else {
+        setStatus(
+            "تم إنشاء الحساب. تحقق من بريدك الإلكتروني لتأكيد الحساب."
+        );
+    }
+}
+
+async function loginUserUI() {
+    const { email, password } = getAuthValues();
+
+    if (!email || !password) {
+        setStatus("أدخل البريد الإلكتروني وكلمة المرور.");
+        return;
+    }
+
+    setStatus("جاري تسجيل الدخول...");
+
+    const { data, error } = await loginUser(
+        email,
+        password
+    );
+
+    if (error) {
+        setStatus("فشل تسجيل الدخول: " + error.message);
+        return;
+    }
+
+    if (data.user) {
+        setStatus("تم تسجيل الدخول بنجاح.");
+        await updateAuthUI();
+    }
+}
+
+async function logoutUserUI() {
+    await logoutUser();
+
+    document.getElementById("authPanel").style.display = "block";
+    document.getElementById("userPanel").style.display = "none";
+
+    setStatus("تم تسجيل الخروج.");
+}
+
+async function updateAuthUI() {
+    const user = await getCurrentUser();
+
+    const authPanel = document.getElementById("authPanel");
+    const userPanel = document.getElementById("userPanel");
+    const userEmail = document.getElementById("userEmail");
+
+    if (!authPanel || !userPanel) return;
+
+    if (user) {
+        authPanel.style.display = "none";
+        userPanel.style.display = "block";
+
+        if (userEmail) {
+            userEmail.textContent = user.email || "مستخدم VANTA";
+        }
+    } else {
+        authPanel.style.display = "block";
+        userPanel.style.display = "none";
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    if (!initSupabase()) {
+        setStatus("تعذر الاتصال بـ Supabase.");
+        return;
+    }
+
+    await updateAuthUI();
+
+    supabaseClient.auth.onAuthStateChange(() => {
+        updateAuthUI();
+    });
 
     console.log(
-        "%cVANTA",
-        "color:#00ff9d;font-size:30px;font-weight:bold;"
+        "%cVANTA × ALI YASER",
+        "color:#00ff9d;font-size:24px;font-weight:bold"
     );
 
     console.log(
         "Cybersecurity • Education • Research"
     );
-
 });

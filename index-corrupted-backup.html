@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="description" content="VANTA — Cybersecurity Education • Research">
+<title>VANTA × ALI YASER</title>
+
+<style>
+:root{
+ --bg:#05070b;--bg2:#080d13;--card:#0c141d;--card2:#101b25;
+ --text:#eafff7;--muted:#8ca49d;--green:#00ff9d;--blue:#55a7ff;
+ --red:#ff465d;--yellow:#ffd166;--border:rgba(0,255,157,.17);
+ --shadow:0 0 35px rgba(0,255,157,.08);
+}
+body.light{
+ --bg:#eef4f1;--bg2:#f7faf9;--card:#fff;--card2:#edf5f1;
+ --text:#10201a;--muted:#52645d;--border:rgba(0,120,75,.18);
+ --shadow:0 8px 30px rgba(0,80,50,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+ min-height:100vh;background:
+ radial-gradient(circle at 10% 0%,rgba(0,255,157,.09),transparent 28%),
+ radial-gradient(circle at 90% 90%,rgba(85,167,255,.08),transparent 30%),var(--bg);
+ color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.7;
+ transition:.25s;
+}
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;opacity:.035;
+ background-image:linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);
+ background-size:42px 42px;z-index:-1
+}
+header{
+ position:sticky;top:0;z-index:999;display:flex;align-items:center;
+ justify-content:space-between;gap:18px;padding:13px 5%;
+ background:rgba(5,7,11,.88);backdrop-filter:blur(18px);
+ border-bottom:1px solid var(--border)
+}
+body.light header{background:rgba(247,250,249,.9)}
+.brand{display:flex;align-items:center;gap:14px;white-space:nowrap}
+.brand b{font-size:28px;letter-spacing:5px;color:var(--green);text-shadow:0 0 18px rgba(0,255,157,.45)}
+.brand span{font-size:18px;font-weight:900;color:var(--text);letter-spacing:2px}
+nav{display:flex;gap:11px;flex-wrap:wrap;justify-content:center}
+nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:800;transition:.2s}
+nav a:hover{color:var(--green)}
+.controls{display:flex;gap:7px;align-items:center}
+button,.btn{
+ border:1px solid var(--border);background:rgba(0,255,157,.07);color:var(--green);
+ padding:10px 15px;border-radius:9px;font-weight:800;cursor:pointer;text-decoration:none;
+ transition:.2s;font-family:inherit
+}
+button:hover,.btn:hover{border-color:var(--green);box-shadow:0 0 20px rgba(0,255,157,.12)}
+main{width:min(1250px,92%);margin:auto;padding:35px 0 80px}
+section{scroll-margin-top:100px;margin-bottom:55px}
+.hero{
+ min-height:590px;display:flex;align-items:center;position:relative;overflow:hidden;
+ border:1px solid var(--border);border-radius:25px;padding:55px;
+ background:linear-gradient(135deg,rgba(0,255,157,.08),transparent 45%),var(--bg2);
+ box-shadow:var(--shadow)
+}
+.hero-content{max-width:800px}
+.eyebrow{font-size:11px;letter-spacing:3px;color:var(--green);font-weight:900;margin-bottom:10px}
+.hero h1{font-size:clamp(55px,10vw,115px);line-height:.9;margin:10px 0}
+.hero h1 span{color:var(--green)}
+.hero h2{font-size:clamp(24px,4vw,45px);margin-bottom:15px}
+.hero p{color:var(--muted);max-width:700px}
+.hero-orb{
+ position:absolute;left:-100px;bottom:-130px;width:430px;height:430px;border:1px solid rgba(0,255,157,.25);
+ border-radius:50%;box-shadow:0 0 0 55px rgba(0,255,157,.025),0 0 0 110px rgba(0,255,157,.018)
+}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.section-head{margin-bottom:20px}
+.section-head h2{font-size:32px}
+.section-head p{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.card{
+ background:linear-gradient(145deg,rgba(255,255,255,.025),transparent),var(--card);
+ border:1px solid var(--border);border-radius:17px;padding:22px;box-shadow:var(--shadow);
+ transition:.22s
+}
+.card:hover{transform:translateY(-3px);border-color:rgba(0,255,157,.4)}
+.card h3{margin:8px 0;font-size:20px}
+.card p{color:var(--muted);font-size:14px}
+.badge{display:inline-block;padding:4px 8px;border:1px solid var(--border);border-radius:20px;color:var(--green);font-size:10px;font-weight:900}
+.card details{margin-top:15px;border-top:1px solid var(--border);padding-top:12px}
+.card summary{cursor:pointer;color:var(--green);font-weight:800}
+pre{
+ background:#030609;color:#baffdf;border:1px solid var(--border);border-radius:10px;
+ padding:15px;overflow:auto;direction:ltr;text-align:left;font-size:13px;margin-top:12px
+}
+body.light pre{background:#101814;color:#baffdf}
+input,textarea,select{
+ width:100%;padding:12px;background:var(--bg2);border:1px solid var(--border);
+ border-radius:9px;color:var(--text);outline:none;font-family:inherit
+}
+textarea{min-height:130px;resize:vertical}
+label{display:block;color:var(--muted);font-size:12px;margin:12px 0 5px;font-weight:800}
+.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1}
+.progress{height:10px;background:var(--bg2);border-radius:20px;overflow:hidden;margin-top:8px}
+.progress div{height:100%;background:var(--green);box-shadow:0 0 15px rgba(0,255,157,.6);width:0;transition:.5s}
+.statgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.stat{text-align:center;padding:18px;border:1px solid var(--border);border-radius:14px;background:var(--card)}
+.stat strong{display:block;color:var(--green);font-size:32px}
+.terminal{
+ background:#020507;border:1px solid rgba(0,255,157,.25);border-radius:14px;
+ overflow:hidden;box-shadow:0 0 30px rgba(0,255,157,.08)
+}
+.termbar{padding:10px 14px;background:#0b1117;color:#687a74;font-size:12px}
+.termout{height:300px;overflow:auto;padding:16px;color:#baffdf;font:13px monospace;direction:ltr;text-align:left;white-space:pre-wrap}
+.termin{display:flex;border-top:1px solid rgba(0,255,157,.15)}
+.termin span{padding:12px;color:var(--green);font-family:monospace}
+.termin input{border:0;border-radius:0;background:#050a0e;font-family:monospace;direction:ltr}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:11px;border-bottom:1px solid var(--border);text-align:right}
+th{color:var(--green)}
+.alert{padding:13px;border-radius:10px;border:1px solid var(--border);margin:8px 0}
+.alert.high{border-color:rgba(255,70,93,.4);color:var(--red)}
+.alert.med{border-color:rgba(255,209,102,.4);color:var(--yellow)}
+.alert.low{color:var(--green)}
+.code-editor{
+ min-height:280px;background:#030609;color:#caffdf;border:1px solid var(--border);
+ border-radius:12px;padding:16px;font:13px monospace;direction:ltr;text-align:left
+}
+.resultbox{margin-top:14px;padding:15px;border:1px solid var(--border);border-radius:10px}
+.good{color:var(--green)}.bad{color:var(--red)}.warn{color:var(--yellow)}
+.skill{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.skill div{padding:20px;border:1px solid var(--border);border-radius:14px;text-align:center;background:var(--card)}
+.skill b{display:block;color:var(--green);margin-bottom:6px}
+.toolgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.toolgrid button{text-align:right}
+.challenge{position:relative}
+.lock{opacity:.55}
+#toast{
+ position:fixed;left:20px;bottom:20px;z-index:9999;display:none;
+ padding:13px 18px;background:var(--card);border:1px solid var(--green);
+ color:var(--green);border-radius:10px;box-shadow:0 0 25px rgba(0,255,157,.18)
+}
+footer{text-align:center;padding:30px;border-top:1px solid var(--border);color:var(--muted);font-size:12px}
+.about-me{display:flex;gap:22px;align-items:center}
+.avatar{
+ width:125px;height:125px;border-radius:50%;border:2px solid var(--green);
+ object-fit:cover;box-shadow:0 0 25px rgba(0,255,157,.18)
+}
+.avatar-placeholder{
+ width:125px;height:125px;border-radius:50%;border:2px solid var(--green);
+ display:grid;place-items:center;color:var(--green);font-weight:900;font-size:30px
+}
+.timeline{border-right:2px solid var(--green);padding-right:20px}
+.timeline div{margin:12px 0;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:9px}
+.meter{font-size:11px;color:var(--muted)}
+@media(max-width:950px){
+ header{flex-wrap:wrap}.grid,.grid2{grid-template-columns:1fr 1fr}
+ .skill{grid-template-columns:1fr 1fr}.toolgrid{grid-template-columns:1fr 1fr}.statgrid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+ nav{display:none}.hero{padding:30px;min-height:500px}.grid,.grid2,.skill,.toolgrid{grid-template-columns:1fr}
+ .statgrid{grid-template-columns:1fr 1fr}.brand span{display:none}.about-me{align-items:flex-start;flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="brand">
+   <b>VANTA</b>
+   <span>× ALI YASER</span>
+ </div>
+
+ <nav>
+  <a href="#home">الرئيسية</a>
+  <a href="#about">عني</a>
+  <a href="#academy">الأكاديمية</a>
+  <a href="#labs">المختبرات</a>
+  <a href="#soc">SOC</a>
+  <a href="#ctf">CTF</a>
+  <a href="#tools">الأدوات</a>
+  <a href="#progress">التقدم</a>
+ </nav>
+
+ <div class="controls">
+  <button onclick="toggleTheme()" id="themeBtn">☀️</button>
+  <button onclick="toggleMute()" id="muteBtn">🔊</button>
+ </div>
+</header>
+
+<main>
+
+<section id="home" class="hero">
+ <div class="hero-content">
+  <div class="eyebrow">CYBERSECURITY • EDUCATION • RESEARCH</div>
+  <h1>VANTA <span>×</span></h1>
+  <h2>ALI YASER</h2>
+  <p>
+   منصة تعليمية تفاعلية للأمن السيبراني تجمع التعلم، المختبرات،
+   التحقيقات، CTF، تحليل الحزم، البرمجة الآمنة ومحاكاة بيئات الأمن.
+  </p>
+
+  <div class="actions">
+   <a class="btn" href="#academy">ابدأ التعلم</a>
+   <a class="btn" href="#terminal">افتح Terminal</a>
+   <a class="btn" href="#ctf">ادخل CTF</a>
+  </div>
+
+  <div style="margin-top:28px">
+   <div class="meter">VANTA SYSTEM STATUS: ONLINE</div>
+   <div class="progress"><div id="heroProgress"></div></div>
+  </div>
+ </div>
+ <div class="hero-orb"></div>
+</section>
+
+<section id="about">
+ <div class="section-head">
+  <div class="eyebrow">IDENTITY</div>
+  <h2>عن ALI YASER</h2>
+  <p>المطور وصاحب فكرة VANTA.</p>
+ </div>
+
+ <div class="card about-me">
+  <div class="avatar-placeholder">AY</div>
+  <div>
+   <h2>ALI YASER</h2>
+   <p>
+    مطور VANTA ومهتم ببناء بيئة تعليمية تساعد على فهم الأمن السيبراني
+    من خلال التطبيق والمحاكاة والتحديات، وليس حفظ المصطلحات فقط.
+   </p>
+   <p style="margin-top:8px">
+    <b style="color:var(--green)">VANTA</b> =
+    Cybersecurity • Education • Research
+   </p>
+   <div class="actions">
+    <a class="btn" target="_blank" href="https://www.instagram.com/ali_yr_1/">Instagram @ali_yr_1</a>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="academy">
+ <div class="section-head">
+  <div class="eyebrow">ACADEMY</div>
+  <h2>Cybersecurity Academy</h2>
+  <p>مسارات أعمق من مجرد "ما هو تعريف المصطلح؟".</p>
+ </div>
+
+ <div class="grid">
+
+  <article class="card">
+   <span class="badge">FOUNDATION</span>
+   <h3>أساسيات الأمن السيبراني</h3>
+   <p>فهم التهديدات، الأصول، المخاطر، CIA Triad ونماذج الأمن.</p>
+   <details><summary>فتح الدرس</summary>
+    <p>
+     السرية Confidentiality، التكامل Integrity، التوافر Availability.
+     بعدها ننتقل إلى Threats وVulnerabilities وRisk وAttack Surface.
+    </p>
+   </details>
+  </article>
+
+  <article class="card">
+   <span class="badge">NETWORKING</span>
+   <h3>Networking Deep Dive</h3>
+   <p>TCP/IP وDNS وHTTP وPorts وRouting وFirewalls.</p>
+   <details><summary>فتح الدرس</summary>
+    <pre>Client → Router → Firewall → Server
+
+DNS
+TCP
+TLS
+HTTP / HTTPS
+Ports
+Packets</pre>
+   </details>
+  </article>
+
+  <article class="card">
+   <span class="badge">LINUX</span>
+   <h3>Linux & Command Line</h3>
+   <p>الملفات، الصلاحيات، العمليات، الشبكات والسجلات.</p>
+   <details><summary>فتح الدرس</summary>
+    <pre>pwd
+ls
+cd
+cat
+grep
+ip a
+ss -tuln
+journalctl</pre>
+   </details>
+  </article>
+
+  <article class="card">
+   <span class="badge">WEB</span>
+   <h3>Web Security</h3>
+   <p>HTTP، Sessions، Cookies، Authentication والثغرات الشائعة.</p>
+   <details><summary>فتح الدرس</summary>
+    <p>
+     ندرس كيفية اكتشاف أخطاء التصميم والتحقق من المدخلات والصلاحيات
+     داخل Sandbox آمن.
+    </p>
+   </details>
+  </article>
+
+  <article class="card">
+   <span class="badge">DEFENSE</span>
+   <h3>SOC & Detection</h3>
+   <p>Logs، Alerts، IOC، Incident Response وThreat Hunting.</p>
+   <details><summary>فتح الدرس</summary>
+    <p>
+     الهدف هو تحويل الأحداث الخام إلى Evidence ثم Incident ثم قرار دفاعي.
+    </p>
+   </details>
+  </article>
+
+  <article class="card">
+   <span class="badge">FORENSICS</span>
+   <h3>Digital Forensics</h3>
+   <p>Timeline، Browser Artifacts، Logs وتحليل الأدلة.</p>
+   <details><summary>فتح الدرس</summary>
+    <p>
+     نبدأ من الأدلة ثم نبني Timeline ونحدد نقطة البداية والسبب الجذري للحادث.
+    </p>
+   </details>
+  </article>
+
+  <article class="card">
+   <span class="badge">CRYPTO</span>
+   <h3>Cryptography</h3>
+   <p>Hashing، Encoding، XOR، مفاهيم AES وRSA.</p>
+   <details><summary>فتح الدرس</summary>
+    <p>
+     نميز بين Encoding وEncryption وHashing، ثم نطبق عمليات تعليمية داخل المتصفح.
+    </p>
+   </details>
+  </article>
+
+  <article class="card">
+   <span class="badge">SECURE CODE</span>
+   <h3>Secure Coding</h3>
+   <p>اكتشاف الأخطاء وإصلاحها وربطها بمبادئ OWASP.</p>
+   <details><summary>فتح الدرس</summary>
+    <p>
+     Input validation، Output encoding، Authentication، Authorization،
+     Secret management وغيرها.
+    </p>
+   </details>
+  </article>
+
+  <article class="card">
+   <span class="badge">INCIDENT RESPONSE</span>
+   <h3>Incident Response</h3>
+   <p>Preparation → Detection → Containment → Recovery → Lessons Learned.</p>
+  </article>
+
+  <article class="card">
+   <span class="badge">THREAT MODELING</span>
+   <h3>Threat Modeling</h3>
+   <p>Assets، Trust Boundaries، Threats وMitigations.</p>
+  </article>
+
+  <article class="card">
+   <span class="badge">CTF</span>
+   <h3>CTF Methodology</h3>
+   <p>Enumeration، تحليل الأدلة، التفكير المنطقي وإدارة الوقت.</p>
+  </article>
+
+  <article class="card">
+   <span class="badge">OSINT</span>
+   <h3>Ethical OSINT</h3>
+   <p>جمع وتحليل المعلومات العامة بطريقة قانونية وأخلاقية.</p>
+  </article>
+
+ </div>
+</section>
+
+<section id="terminal">
+ <div class="section-head">
+  <div class="eyebrow">LAB 01</div>
+  <h2>VANTA Virtual Terminal</h2>
+  <p>Terminal محاكاة يعمل داخل الصفحة.</p>
+ </div>
+
+ <div class="terminal">
+  <div class="termbar">vanta@cyberlab:~</div>
+  <div id="termout" class="termout">VANTA Terminal Simulator
+Type "help" to view available commands.
+
+</div>
+  <div class="termin">
+   <span>vanta@lab:~$</span>
+   <input id="termInput" autocomplete="off" placeholder="اكتب الأمر..." onkeydown="terminalKey(event)">
+  </div>
+ </div>
+</section>
+
+<section id="network">
+ <div class="section-head">
+  <div class="eyebrow">LAB 02</div>
+  <h2>Network Simulator</h2>
+  <p>شبكة وهمية تعليمية وتحليل للحركة.</p>
+ </div>
+
+ <div class="grid">
+  <div class="card">
+   <span class="badge">CLIENT</span>
+   <h3>WORKSTATION-01</h3>
+   <p>10.10.0.15</p>
+  </div>
+  <div class="card">
+   <span class="badge">FIREWALL</span>
+   <h3>VANTA-FW</h3>
+   <p>Traffic inspection enabled</p>
+  </div>
+  <div class="card">
+   <span class="badge">SERVER</span>
+   <h3>WEB-SRV-01</h3>
+   <p>10.10.0.20 : 443</p>
+  </div>
+ </div>
+
+ <div class="card" style="margin-top:16px">
+  <button onclick="simulateTraffic()">▶ تشغيل Traffic Simulation</button>
+  <div id="trafficLog" style="margin-top:12px"></div>
+ </div>
+</section>
+
+<section id="packets">
+ <div class="section-head">
+  <div class="eyebrow">PCAP ANALYSIS</div>
+  <h2>Packet Analyzer</h2>
+  <p>تحليل حزم محاكاة واستخراج الأدلة.</p>
+ </div>
+
+ <div class="card">
+  <div class="row">
+   <input id="packetFilter" placeholder="Filter: DNS / TCP / HTTP" oninput="filterPackets()">
+   <button onclick="resetPackets()">إظهار الكل</button>
+  </div>
+
+  <div style="overflow:auto;margin-top:15px">
+   <table>
+    <thead><tr><th>#</th><th>Protocol</th><th>Source</th><th>Destination</th><th>Info</th></tr></thead>
+    <tbody id="packetTable"></tbody>
+   </table>
+  </div>
+
+  <div id="packetDetail" class="resultbox">اختر Packet لتحليلها.</div>
+ </div>
+</section>
+
+<section id="soc">
+ <div class="section-head">
+  <div class="eyebrow">SOC COMMAND CENTER</div>
+  <h2>Security Operations Center</h2>
+  <p>تعامل مع التنبيهات مثل محلل Blue Team.</p>
+ </div>
+
+ <div class="statgrid">
+  <div class="stat"><strong id="alertCount">4</strong>Alerts</div>
+  <div class="stat"><strong>12</strong>Events</div>
+  <div class="stat"><strong id="threatLevel">HIGH</strong>Threat</div>
+  <div class="stat"><strong>94%</strong>Visibility</div>
+ </div>
+
+ <div class="card" style="margin-top:16px">
+  <div class="alert high">
+   🔴 HIGH — Multiple failed authentication attempts detected.
+   <button onclick="resolveAlert(this,true)">Investigate</button>
+  </div>
+  <div class="alert med">
+   🟡 MEDIUM — Unusual DNS request pattern.
+   <button onclick="resolveAlert(this,false)">Investigate</button>
+  </div>
+  <div class="alert low">
+   🟢 LOW — Routine HTTPS traffic.
+   <button onclick="resolveAlert(this,true)">Review</button>
+  </div>
+ </div>
+
+ <div class="card" style="margin-top:16px">
+  <h3>Incident Timeline</h3>
+  <div class="timeline">
+   <div>09:31 — Failed Login × 12</div>
+   <div>09:33 — Successful Authentication</div>
+   <div>09:35 — Suspicious DNS Query</div>
+   <div>09:37 — Endpoint Alert</div>
+   <div>09:40 — SOC Investigation Started</div>
+  </div>
+ </div>
+</section>
+
+<section id="code">
+ <div class="section-head">
+  <div class="eyebrow">SECURE CODE REVIEW</div>
+  <h2>Code Security Sandbox</h2>
+  <p>اكتشف أخطاء أمنية تعليمية ثم أصلحها.</p>
+ </div>
+
+ <div class="card">
+  <textarea id="codeEditor" class="code-editor" spellcheck="false"><script>
+const user = location.hash.substring(1);
+document.querySelector("#welcome").innerHTML = "Hello " + user;
+</script></textarea>
+
+  <div class="actions">
+   <button onclick="scanCode()">🔍 Scan Code</button>
+   <button onclick="secureExample()">🛡️ Secure Example</button>
+  </div>
+
+  <div id="codeResult" class="resultbox">لم يبدأ الفحص.</div>
+ </div>
+</section>
+
+<section id="api">
+ <div class="section-head">
+  <div class="eyebrow">API SECURITY LAB</div>
+  <h2>API & JWT Simulator</h2>
+  <p>مختبر API وهمي لفهم Authentication وAuthorization.</p>
+ </div>
+
+ <div class="grid2">
+  <div class="card">
+   <h3>Request</h3>
+   <label>Endpoint</label>
+   <input id="apiEndpoint" value="/api/profile">
+   <label>Authorization</label>
+   <input id="apiToken" value="Bearer VANTA-DEMO-TOKEN">
+   <button style="margin-top:12px" onclick="sendApi()">Send Request</button>
+  </div>
+
+  <div class="card">
+   <h3>Response</h3>
+   <pre id="apiResponse">{ "status": "waiting" }</pre>
+  </div>
+ </div>
+
+ <div class="card" style="margin-top:16px">
+  <h3>JWT Inspector</h3>
+  <input id="jwtInput" placeholder="header.payload.signature">
+  <button style="margin-top:10px" onclick="decodeJWT()">Decode JWT</button>
+  <pre id="jwtOutput">Waiting...</pre>
+ </div>
+</section>
+
+<section id="ctf">
+ <div class="section-head">
+  <div class="eyebrow">CTF ARENA</div>
+  <h2>Capture The Flag</h2>
+  <p>حل التحدي، أدخل الـFlag، واحصل على XP.</p>
+ </div>
+
+ <div class="grid">
+
+  <div class="card challenge">
+   <span class="badge">EASY</span>
+   <h3>DNS Evidence</h3>
+   <p>حلل الـPacket Simulator وابحث عن الكلمة السرية.</p>
+   <details><summary>Hint</summary><p>راجع DNS packet رقم 3.</p></details>
+   <input id="flag1" placeholder="VANTA{...}">
+   <button style="margin-top:10px" onclick="submitFlag(1)">Submit Flag</button>
+  </div>
+
+  <div class="card challenge">
+   <span class="badge">MEDIUM</span>
+   <h3>Web Input</h3>
+   <p>اكتشف المشكلة في Secure Code Review.</p>
+   <details><summary>Hint</summary><p>ابحث عن إدخال المستخدم وكيف يتم عرضه.</p></details>
+   <input id="flag2" placeholder="VANTA{...}">
+   <button style="margin-top:10px" onclick="submitFlag(2)">Submit Flag</button>
+  </div>
+
+  <div class="card challenge">
+   <span class="badge">BLUE TEAM</span>
+   <h3>Incident Hunter</h3>
+   <p>حدد الحدث الذي يمثل نقطة الدخول.</p>
+   <details><summary>Hint</summary><p>ابدأ من Authentication logs.</p></details>
+   <input id="flag3" placeholder="VANTA{...}">
+   <button style="margin-top:10px" onclick="submitFlag(3)">Submit Flag</button>
+  </div>
+
+ </div>
+</section>
+
+<section id="scenarios">
+ <div class="section-head">
+  <div class="eyebrow">SCENARIO ENGINE</div>
+  <h2>Incident Decision</h2>
+  <p>قرارك يؤثر على نتيجة التحقيق.</p>
+ </div>
+
+ <div class="card">
+  <h3>🚨 شركة VANTA لاحظت تسجيل دخول غير طبيعي</h3>
+  <p>
+   الحساب قام بـ 17 محاولة فاشلة ثم نجح الدخول من جهاز غير معروف.
+   ما أول تصرف دفاعي؟
+  </p>
+
+  <div class="actions">
+   <button onclick="scenario('good')">تعطيل الجلسة والتحقيق في Logs</button>
+   <button onclick="scenario('bad')">تجاهل التنبيه</button>
+   <button onclick="scenario('mid')">حذف الحساب فورًا بدون جمع أدلة</button>
+  </div>
+
+  <div id="scenarioResult" class="resultbox">بانتظار قرار المحلل.</div>
+ </div>
+</section>
+
+<section id="forensics">
+ <div class="section-head">
+  <div class="eyebrow">DIGITAL FORENSICS</div>
+  <h2>Crime Scene</h2>
+  <p>ابنِ Timeline من الأدلة.</p>
+ </div>
+
+ <div class="grid2">
+  <div class="card">
+   <h3>Evidence</h3>
+   <p>auth.log — 17 failed logins</p>
+   <p>browser.db — suspicious session</p>
+   <p>dns.log — unusual domain</p>
+   <p>process.log — unknown process</p>
+  </div>
+
+  <div class="card">
+   <h3>Analyst Conclusion</h3>
+   <select id="forensicAnswer">
+    <option>اختر السبب الجذري</option>
+    <option value="phishing">Credential phishing</option>
+    <option value="malware">Malware execution</option>
+    <option value="dns">DNS failure</option>
+   </select>
+   <button style="margin-top:10px" onclick="forensicCheck()">Submit Analysis</button>
+   <div id="forensicResult" class="resultbox">لم يتم التحليل.</div>
+  </div>
+ </div>
+</section>
+
+<section id="crypto">
+ <div class="section-head">
+  <div class="eyebrow">CRYPTO LAB</div>
+  <h2>Cryptography Toolkit</h2>
+ </div>
+
+ <div class="card">
+  <textarea id="cryptoInput" placeholder="اكتب النص هنا"></textarea>
+  <div class="actions">
+   <button onclick="b64(true)">Base64 Encode</button>
+   <button onclick="b64(false)">Base64 Decode</button>
+   <button onclick="hashText()">SHA-256 Hash</button>
+  </div>
+  <pre id="cryptoOutput">Output...</pre>
+ </div>
+</section>
+
+<section id="tools">
+ <div class="section-head">
+  <div class="eyebrow">CYBER TOOLKIT</div>
+  <h2>Developer & Security Tools</h2>
+ </div>
+
+ <div class="toolgrid">
+  <button onclick="tool('base64')">Base64 Encoder</button>
+  <button onclick="tool('hex')">Hex Converter</button>
+  <button onclick="tool('binary')">Binary Converter</button>
+  <button onclick="tool('url')">URL Encoder</button>
+  <button onclick="tool('json')">JSON Formatter</button>
+  <button onclick="tool('password')">Password Strength</button>
+  <button onclick="tool('regex')">Regex Tester</button>
+  <button onclick="tool('timestamp')">Timestamp</button>
+ </div>
+
+ <div class="card" style="margin-top:16px">
+  <h3 id="toolTitle">Toolkit</h3>
+  <textarea id="toolInput" placeholder="Input"></textarea>
+  <button style="margin-top:10px" onclick="runTool()">Run Tool</button>
+  <pre id="toolOutput">Output...</pre>
+ </div>
+</section>
+
+<section id="skilltree">
+ <div class="section-head">
+  <div class="eyebrow">SKILL TREE</div>
+  <h2>VANTA Skill Tree</h2>
+ </div>
+
+ <div class="skill">
+  <div><b>01</b>Fundamentals</div>
+  <div><b>02</b>Networking</div>
+  <div><b>03</b>Linux</div>
+  <div><b>04</b>Web Security</div>
+  <div><b>05</b>Cryptography</div>
+  <div><b>06</b>SOC</div>
+  <div><b>07</b>Forensics</div>
+  <div><b>08</b>CTF Mastery</div>
+ </div>
+</section>
+
+<section id="progress">
+ <div class="section-head">
+  <div class="eyebrow">COMMAND CENTER</div>
+  <h2>My Progress</h2>
+ </div>
+
+ <div class="statgrid">
+  <div class="stat"><strong id="xp">0</strong>XP</div>
+  <div class="stat"><strong id="level">1</strong>Level</div>
+  <div class="stat"><strong id="flags">0</strong>Flags</div>
+  <div class="stat"><strong id="achievements">0</strong>Badges</div>
+ </div>
+
+ <div class="card" style="margin-top:16px">
+  <h3>Progress</h3>
+  <div class="progress"><div id="mainProgress"></div></div>
+  <p id="progressText" style="margin-top:8px;color:var(--muted)">0%</p>
+ </div>
+
+ <div class="grid" style="margin-top:16px">
+  <div class="card"><span class="badge">ACHIEVEMENT</span><h3>First Flag</h3><p>حل أول تحدي CTF.</p></div>
+  <div class="card"><span class="badge">ACHIEVEMENT</span><h3>Packet Hunter</h3><p>تحليل حزم الشبكة.</p></div>
+  <div class="card"><span class="badge">ACHIEVEMENT</span><h3>Blue Analyst</h3><p>التعامل مع SOC Incident.</p></div>
+ </div>
+
+ <div class="actions">
+  <button onclick="resetProgress()">Reset Local Progress</button>
+  <button onclick="exportProfile()">Export Profile</button>
+  <button onclick="generateCertificate()">Generate Certificate</button>
+ </div>
+</section>
+
+<section id="assistant">
+ <div class="section-head">
+  <div class="eyebrow">VANTA ASSISTANT</div>
+  <h2>Cyber Assistant</h2>
+  <p>مساعد تعليمي محلي مبني داخل VANTA.</p>
+ </div>
+
+ <div class="card">
+  <div class="actions">
+   <button onclick="ask('dns')">ما هو DNS؟</button>
+   <button onclick="ask('soc')">كيف يعمل SOC؟</button>
+   <button onclick="ask('xss')">ما هي XSS؟</button>
+   <button onclick="ask('hash')">ما الفرق بين Hash وEncryption؟</button>
+   <button onclick="ask('linux')">كيف أبدأ Linux؟</button>
+  </div>
+  <div id="assistantAnswer" class="resultbox">اختر سؤالًا.</div>
+ </div>
+</section>
+
+<section id="reviews">
+ <div class="section-head">
+  <div class="eyebrow">COMMUNITY</div>
+  <h2>Reviews & Feedback</h2>
+  <p>المراجعات هنا تحفظ محليًا في جهاز المستخدم.</p>
+ </div>
+
+ <div class="card">
+  <label>رأيك في VANTA</label>
+  <textarea id="reviewText"></textarea>
+  <button style="margin-top:10px" onclick="saveReview()">Publish Review</button>
+  <div id="reviewsList" style="margin-top:15px"></div>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ <b style="color:var(--green)">VANTA × ALI YASER</b><br>
+ Cybersecurity • Education • Research<br>
+ Built for learning, practice and defense.
+</footer>
+
+<div id="toast"></div>
+
+<script>
+/* =========================
+   VANTA CORE ENGINE
+========================= */
+
+const state = JSON.parse(localStorage.getItem("vantaState") || "{}");
+
+state.xp ??= 0;
+state.flags ??= [];
+state.achievements ??= [];
+state.muted ??= false;
+state.theme ??= "dark";
+state.reviews ??= [];
+
+function save(){
+ localStorage.setItem("vantaState",JSON.stringify(state));
+ updateUI();
+}
+
+function toast(msg){
+ const t=document.getElementById("toast");
+ t.textContent=msg;
+ t.style.display="block";
+ setTimeout(()=>t.style.display="none",2300);
+}
+
+let audioCtx=null;
+
+function sound(type){
+ if(state.muted)return;
+ try{
+  audioCtx ??= new (window.AudioContext||window.webkitAudioContext)();
+  const o=audioCtx.createOscillator();
+  const g=audioCtx.createGain();
+  const f={click:500,correct:850,wrong:180,level:1100,alert:250,mission:700}[type]||500;
+  o.frequency.value=f;
+  o.type=type==="wrong"?"sawtooth":"sine";
+  g.gain.setValueAtTime(.0001,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.07,audioCtx.currentTime+.01);
+  g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.16);
+  o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+.18);
+ }catch(e){}
+}
+
+document.addEventListener("click",e=>{
+ if(e.target.matches("button,.btn,a"))sound("click");
+});
+
+function toggleMute(){
+ state.muted=!state.muted;
+ document.getElementById("muteBtn").textContent=state.muted?"🔇":"🔊";
+ save();
+}
+
+function toggleTheme(){
+ state.theme=state.theme==="dark"?"light":"dark";
+ document.body.classList.toggle("light",state.theme==="light");
+ document.getElementById("themeBtn").textContent=state.theme==="dark"?"☀️":"🌙";
+ save();
+}
+
+function addXP(amount){
+ const oldLevel=Math.floor(state.xp/500)+1;
+ state.xp+=amount;
+ const newLevel=Math.floor(state.xp/500)+1;
+ toast("+"+amount+" XP");
+ sound("correct");
+ if(newLevel>oldLevel){
+  toast("LEVEL UP → "+newLevel);
+  sound("level");
+  if(!state.achievements.includes("level")){
+   state.achievements.push("level");
+  }
+ }
+ save();
+}
+
+function updateUI(){
+ const level=Math.floor(state.xp/500)+1;
+ const pct=Math.min(100,(state.xp%500)/5);
+
+ document.getElementById("xp").textContent=state.xp;
+ document.getElementById("level").textContent=level;
+ document.getElementById("flags").textContent=state.flags.length;
+ document.getElementById("achievements").textContent=state.achievements.length;
+ document.getElementById("mainProgress").style.width=pct+"%";
+ document.getElementById("heroProgress").style.width=pct+"%";
+ document.getElementById("progressText").textContent=pct+"% toward next level";
+}
+
+function resetProgress(){
+ if(confirm("Reset VANTA local progress?")){
+  localStorage.removeItem("vantaState");
+  location.reload();
+ }
+}
+
+/* =========================
+   TERMINAL
+========================= */
+
+const files={
+ "/home/vanta/readme.txt":"Welcome to VANTA Cyber Lab.",
+ "/home/vanta/mission.txt":"Analyze the network and find the evidence.",
+ "/var/log/auth.log":"Failed login x12\nSuccessful login from 10.10.0.15",
+ "/etc/hostname":"vanta-lab"
+};
+
+let cwd="/home/vanta";
+
+function terminalKey(e){
+ if(e.key!=="Enter")return;
+ const input=e.target;
+ const cmd=input.value.trim();
+ input.value="";
+ if(!cmd)return;
+
+ const out=document.getElementById("termout");
+ out.textContent+="vanta@lab:~$ "+cmd+"\n";
+ out.textContent+=terminalCommand(cmd)+"\n";
+ out.scrollTop=out.scrollHeight;
+}
+
+function terminalCommand(cmd){
+ const p=cmd.split(/\s+/);
+ const base=p[0].toLowerCase();
+
+ if(base==="help")return[
+  "Available commands:",
+  "help  ls  pwd  cd  cat  whoami  ip",
+  "ss  ping  nmap  clear  history"
+ ].join("\n");
+
+ if(base==="pwd")return cwd;
+
+ if(base==="whoami")return"vanta";
+
+ if(base==="ls"){
+  return cwd==="/home/vanta"
+   ?"readme.txt  mission.txt"
+   :"auth.log  hostname";
+ }
+
+ if(base==="cd"){
+  if(p[1]===".."){cwd="/home/vanta";return""}
+  if(p[1]==="/var/log"){cwd="/var/log";return""}
+  if(p[1]==="/etc"){cwd="/etc";return""}
+  return"No such directory";
+ }
+
+ if(base==="cat"){
+  const path=p[1]?.startsWith("/")
+   ?p[1]:cwd+"/"+p[1];
+  return files[path]||"cat: file not found";
+ }
+
+ if(base==="ip"){
+  return"eth0: 10.10.0.15/24\nGateway: 10.10.0.1";
+ }
+
+ if(base==="ss")return"LISTEN 0 128 0.0.0.0:22\nLISTEN 0 128 0.0.0.0:443";
+
+ if(base==="ping"){
+  return"PING "+(p[1]||"example.local")+
+   "\n64 bytes: time=12 ms\n64 bytes: time=11 ms\n64 bytes: time=13 ms";
+ }
+
+ if(base==="nmap"){
+  return[
+   "VANTA SAFE NMAP SIMULATION",
+   "Host: "+(p[1]||"10.10.0.20"),
+   "PORT     STATE   SERVICE",
+   "22/tcp   open    ssh",
+   "80/tcp   open    http",
+   "443/tcp  open    https"
+  ].join("\n");
+ }
+
+ if(base==="clear"){
+  document.getElementById("termout").textContent="";
+  return"";
+ }
+
+ return"Command not found. Type 'help'.";
+}
+
+/* =========================
+   NETWORK
+========================= */
+
+function simulateTraffic(){
+ const box=document.getElementById("trafficLog");
+ const events=[
+  "10.10.0.15 → 10.10.0.20 TCP/443 ALLOWED",
+  "10.10.0.15 → DNS/53 QUERY vanta.local",
+  "Firewall inspection completed",
+  "Packet sequence normal",
+  "SOC telemetry received"
+ ];
+ box.innerHTML="";
+ events.forEach((x,i)=>{
+  setTimeout(()=>{
+   const d=document.createElement("div");
+   d.className="alert low";
+   d.textContent="📡 "+x;
+   box.appendChild(d);
+  },i*450);
+ });
+ addXP(50);
+}
+
+/* =========================
+   PACKETS
+========================= */
+
+const packets=[
+ {id:1,p:"TCP",s:"10.10.0.15",d:"10.10.0.20",i:"443 SYN",detail:"TCP SYN connection attempt."},
+ {id:2,p:"TCP",s:"10.10.0.20",d:"10.10.0.15",i:"443 SYN/ACK",detail:"Server accepted connection."},
+ {id:3,p:"DNS",s:"10.10.0.15",d:"10.10.0.1",i:"vanta-training.local",detail:"Educational DNS query. FLAG: VANTA{DNS_HUNTER}"},
+ {id:4,p:"HTTP",s:"10.10.0.15",d:"10.10.0.20",i:"GET /training",detail:"Safe simulated HTTP request."},
+ {id:5,p:"UDP",s:"10.10.0.15",d:"10.10.0.1",i:"DNS response",detail:"Response to educational query."},
+ {id:6,p:"TCP",s:"10.10.0.20",d:"10.10.0.15",i:"443 FIN",detail:"Connection closed."}
+];
+
+function renderPackets(list=packets){
+ const tbody=document.getElementById("packetTable");
+ tbody.innerHTML=list.map(x=>
+  `<tr onclick="packetInfo(${x.id})">
+   <td>${x.id}</td><td>${x.p}</td><td>${x.s}</td><td>${x.d}</td><td>${x.i}</td>
+  </tr>`).join("");
+}
+
+function packetInfo(id){
+ const x=packets.find(p=>p.id===id);
+ document.getElementById("packetDetail").innerHTML=
+ `<b>${x.p} Packet #${x.id}</b><br>${x.detail}`;
+ addXP(10);
+}
+
+function filterPackets(){
+ const q=document.getElementById("packetFilter").value.toLowerCase();
+ renderPackets(packets.filter(x=>
+  (x.p+x.s+x.d+x.i+x.detail).toLowerCase().includes(q)
+ ));
+}
+
+function resetPackets(){renderPackets()}
+
+/* =========================
+   SOC
+========================= */
+
+function resolveAlert(btn,good){
+ btn.parentElement.style.opacity=".45";
+ btn.disabled=true;
+ document.getElementById("alertCount").textContent=
+  Math.max(0,+document.getElementById("alertCount").textContent-1);
+ if(good){
+  addXP(75);
+  toast("Incident handled correctly");
+ }else{
+  sound("wrong");
+  toast("Review your decision");
+ }
+}
+
+/* =========================
+   SECURE CODE REVIEW
+========================= */
+
+function scanCode(){
+ const code=document.getElementById("codeEditor").value;
+ const findings=[];
+
+ if(/innerHTML\s*=/.test(code))findings.push("Potential DOM XSS: direct innerHTML assignment.");
+ if(/location\.hash/.test(code))findings.push("Untrusted input is taken from URL hash.");
+ if(/password\s*=\s*["']/.test(code))findings.push("Possible hardcoded credential.");
+ if(/eval\s*\(/.test(code))findings.push("Dangerous eval() usage.");
+
+ const box=document.getElementById("codeResult");
+
+ if(findings.length){
+  box.innerHTML="<b class='bad'>⚠ "+findings.length+
+   " security finding(s)</b><ul style='margin-top:8px'>"+
+   findings.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
+  sound("alert");
+ }else{
+  box.innerHTML="<b class='good'>✓ No simulated findings detected.</b>";
+  addXP(50);
+ }
+}
+
+function secureExample(){
+ document.getElementById("codeEditor").value=
+`const user = new URLSearchParams(location.search).get("user") || "";
+const welcome = document.querySelector("#welcome");
+welcome.textContent = "Hello " + user;`;
+ toast("Secure example loaded");
+}
+
+/* =========================
+   API / JWT
+========================= */
+
+function sendApi(){
+ const endpoint=document.getElementById("apiEndpoint").value;
+ const token=document.getElementById("apiToken").value;
+
+ let result;
+
+ if(!token){
+  result={status:401,error:"Unauthorized"};
+ }else if(endpoint.includes("admin")){
+  result={status:403,error:"Authorization required"};
+ }else{
+  result={
+   status:200,
+   endpoint,
+   user:"vanta-user",
+   role:"student",
+   message:"Simulated API response"
+  };
+ }
+
+ document.getElementById("apiResponse").textContent=
+ JSON.stringify(result,null,2);
+ addXP(20);
+}
+
+function decodeJWT(){
+ const input=document.getElementById("jwtInput").value.trim();
+ const out=document.getElementById("jwtOutput");
+
+ try{
+  const parts=input.split(".");
+  if(parts.length!==3)throw Error();
+  const decode=s=>JSON.parse(atob(s.replace(/-/g,"+").replace(/_/g,"/")));
+  out.textContent=JSON.stringify({
+   header:decode(parts[0]),
+   payload:decode(parts[1]),
+   signature:"Present but not verified by this simulator."
+  },null,2);
+  addXP(30);
+ }catch{
+  out.textContent="Invalid JWT structure.";
+  sound("wrong");
+ }
+}
+
+/* =========================
+   CTF
+========================= */
+
+const flags={
+ 1:"VANTA{DNS_HUNTER}",
+ 2:"VANTA{INPUT_DEFENDER}",
+ 3:"VANTA{BLUE_TEAM_FIRST}"
+};
+
+function submitFlag(n){
+ const value=document.getElementById("flag"+n).value.trim();
+
+ if(state.flags.includes(n)){
+  toast("Flag already claimed");
+  return;
+ }
+
+ if(value===flags[n]){
+  state.flags.push(n);
+  state.achievements.push("flag-"+n);
+  addXP(250);
+  toast("🚩 FLAG CAPTURED +250 XP");
+  sound("mission");
+ }else{
+  toast("Incorrect Flag");
+  sound("wrong");
+ }
+ save();
+}
+
+/* =========================
+   SCENARIOS
+========================= */
+
+function scenario(type){
+ const box=document.getElementById("scenarioResult");
+
+ if(type==="good"){
+  box.innerHTML="<b class='good'>Correct.</b> Preserve evidence, investigate authentication logs and contain the suspicious session.";
+  addXP(150);
+ }else if(type==="mid"){
+  box.innerHTML="<b class='warn'>Partially correct.</b> Containment matters, but deleting the account immediately can destroy useful evidence.";
+  addXP(40);
+ }else{
+  box.innerHTML="<b class='bad'>Incorrect.</b> Ignoring repeated authentication anomalies is poor incident response.";
+  sound("wrong");
+ }
+}
+
+/* =========================
+   FORENSICS
+========================= */
+
+function forensicCheck(){
+ const v=document.getElementById("forensicAnswer").value;
+ const box=document.getElementById("forensicResult");
+
+ if(v==="phishing"){
+  box.innerHTML="<b class='good'>Correct analysis.</b> The evidence is consistent with compromised credentials.";
+  addXP(120);
+ }else{
+  box.innerHTML="<b class='bad'>Not the strongest conclusion.</b> Re-check the authentication and browser evidence.";
+  sound("wrong");
+ }
+}
+
+/* =========================
+   CRYPTO
+========================= */
+
+function b64(enc){
+ const input=document.getElementById("cryptoInput").value;
+ const out=document.getElementById("cryptoOutput");
+
+ try{
+  out.textContent=enc?btoa(unescape(encodeURIComponent(input))):
+   decodeURIComponent(escape(atob(input)));
+  addXP(15);
+ }catch{
+  out.textContent="Invalid Base64 input.";
+ }
+}
+
+async function hashText(){
+ const input=document.getElementById("cryptoInput").value;
+ const data=new TextEncoder().encode(input);
+ const hash=await crypto.subtle.digest("SHA-256",data);
+ out=[...new Uint8Array(hash)].map(x=>x.toString(16).padStart(2,"0")).join("");
+ document.getElementById("cryptoOutput").textContent=out;
+ addXP(20);
+}
+
+/* =========================
+   TOOLKIT
+========================= */
+
+let activeTool="base64";
+
+function tool(name){
+ activeTool=name;
+ const titles={
+  base64:"Base64 Encoder",
+  hex:"Hex Converter",
+  binary:"Binary Converter",
+  url:"URL Encoder",
+  json:"JSON Formatter",
+  password:"Password Strength",
+  regex:"Regex Tester",
+  timestamp:"Timestamp"
+ };
+ document.getElementById("toolTitle").textContent=titles[name];
+ document.getElementById("toolOutput").textContent="Output...";
+}
+
+function runTool(){
+ const x=document.getElementById("toolInput").value;
+ let o="";
+
+ try{
+  if(activeTool==="base64")o=btoa(unescape(encodeURIComponent(x)));
+  if(activeTool==="hex")o=[...x].map(c=>c.charCodeAt(0).toString(16)).join(" ");
+  if(activeTool==="binary")o=[...x].map(c=>c.charCodeAt(0).toString(2).padStart(8,"0")).join(" ");
+  if(activeTool==="url")o=encodeURIComponent(x);
+  if(activeTool==="json")o=JSON.stringify(JSON.parse(x),null,2);
+  if(activeTool==="password"){
+   let score=0;
+   if(x.length>=8)score++;
+   if(/[A-Z]/.test(x))score++;
+   if(/[a-z]/.test(x))score++;
+   if(/[0-9]/.test(x))score++;
+   if(/[^A-Za-z0-9]/.test(x))score++;
+   o="Strength: "+["Very Weak","Weak","Fair","Good","Strong","Excellent"][score];
+  }
+  if(activeTool==="regex"){
+   const parts=x.split("\n");
+   const re=new RegExp(parts[0]);
+   o=parts.slice(1).map(s=>`${re.test(s)}  ${s}`).join("\n");
+  }
+  if(activeTool==="timestamp")o=new Date(Number(x)*1000).toString();
+ }catch(e){
+  o="Invalid input.";
+ }
+ document.getElementById("toolOutput").textContent=o;
+ addXP(10);
+}
+
+/* =========================
+   ASSISTANT
+========================= */
+
+const answers={
+ dns:"DNS يحول أسماء النطاقات إلى عناوين IP، ويعمل كجزء أساسي من بنية الإنترنت.",
+ soc:"SOC هو مركز عمليات الأمن، حيث تتم مراقبة الأحداث والتنبيهات والتحقيق في الحوادث والاستجابة لها.",
+ xss:"XSS تحدث عندما يتم التعامل مع إدخال غير موثوق بطريقة تسمح بتنفيذه كجزء من صفحة الويب. في VANTA ندرسها داخل Sandbox فقط.",
+ hash:"Hashing عملية أحادية الاتجاه لإنتاج بصمة ثابتة نسبيًا، بينما Encryption مصمم للتشفير ثم فك التشفير باستخدام مفتاح.",
+ linux:"ابدأ بالملفات والصلاحيات والعمليات والشبكات، ثم انتقل إلى logs وshell scripting وأدوات التحليل."
+};
+
+function ask(k){
+ document.getElementById("assistantAnswer").innerHTML=
+ `<b class="good">VANTA Assistant</b><br>${answers[k]}`;
+ addXP(5);
+}
+
+/* =========================
+   REVIEWS
+========================= */
+
+function saveReview(){
+ const x=document.getElementById("reviewText").value.trim();
+ if(!x)return toast("اكتب مراجعة أولًا");
+ state.reviews.unshift({
+  text:x,
+  date:new Date().toLocaleString()
+ });
+ document.getElementById("reviewText").value="";
+ saveReviews();
+ addXP(20);
+ toast("Review saved locally");
+}
+
+function saveReviews(){
+ document.getElementById("reviewsList").innerHTML=
+ state.reviews.map(r=>
+ `<div class="card" style="margin-top:8px">
+  <p>${escapeHTML(r.text)}</p>
+  <small>${r.date}</small>
+ </div>`).join("");
+}
+
+function escapeHTML(s){
+ return s.replace(/[&<>"']/g,m=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+ }[m]));
+}
+
+/* =========================
+   EXPORTS
+========================= */
+
+function exportProfile(){
+ const level=Math.floor(state.xp/500)+1;
+ const text=
+`VANTA PROFILE
+==============
+ALI YASER
+
+Level: ${level}
+XP: ${state.xp}
+CTF Flags: ${state.flags.length}
+Achievements: ${state.achievements.length}
+
+Skills:
+Cybersecurity
+Networking
+Linux
+Web Security
+SOC
+Forensics
+Cryptography
+CTF
+
+VANTA
+Cybersecurity • Education • Research`;
+
+ const blob=new Blob([text],{type:"text/plain"});
+ const a=document.createElement("a");
+ a.href=URL.createObjectURL(blob);
+ a.download="VANTA-Profile.txt";
+ a.click();
+ URL.revokeObjectURL(a.href);
+}
+
+function generateCertificate(){
+ const level=Math.floor(state.xp/500)+1;
+ const w=window.open("","_blank");
+ if(!w)return toast("Allow popups to generate certificate");
+
+ w.document.write(`
+ <!doctype html>
+ <html>
+ <head>
+ <title>VANTA Certificate</title>
+ <style>
+ body{margin:0;background:#05070b;color:#eafff7;font-family:Arial;text-align:center}
+ .cert{margin:7vh auto;padding:70px 40px;max-width:800px;border:3px solid #00ff9d;background:#081018}
+ h1{font-size:60px;color:#00ff9d}
+ h2{font-size:32px}
+ .name{font-size:40px;margin:30px}
+ </style>
+ </head>
+ <body>
+ <div class="cert">
+ <h1>VANTA</h1>
+ <p>CYBERSECURITY • EDUCATION • RESEARCH</p>
+ <h2>CERTIFICATE OF ACHIEVEMENT</h2>
+ <div class="name">ALI YASER</div>
+ <p>has completed a VANTA learning achievement.</p>
+ <p>Level ${level} • ${state.xp} XP</p>
+ <p>Issued by VANTA • Developer: Ali Yaser</p>
+ <button onclick="window.print()">Print / Save as PDF</button>
+ </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="app.js"></script>
+</body>
+ </html>`);
+ w.document.close();
+}
+
+/* =========================
+   INIT
+========================= */
+
+document.body.classList.toggle("light",state.theme==="light");
+document.getElementById("themeBtn").textContent=state.theme==="dark"?"☀️":"🌙";
+document.getElementById("muteBtn").textContent=state.muted?"🔇":"🔊";
+
+renderPackets();
+updateUI();
+saveReviews();
+
+console.log("%cVANTA × ALI YASER","color:#00ff9d;font-size:24px;font-weight:bold");
+console.log("Cybersecurity • Education • Research");
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
+
