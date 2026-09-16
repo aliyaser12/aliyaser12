@@ -4,1201 +4,3157 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#07111f">
-<meta name="description" content="VANTA — أكاديمية التقنية والأمن السيبراني">
-<title>VANTA — أكاديمية التقنية والأمن السيبراني</title>
+<meta name="description" content="VANTA V1.61 — عالم تعليمي تفاعلي للبرمجة والتقنية والذكاء الاصطناعي والأمن السيبراني من Ali Yaser">
+<meta property="og:title" content="VANTA — Ali Yaser">
+<meta property="og:description" content="تعلم. اصنع. تطوّر.">
+<title>VANTA V1.61 — Ali Yaser</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
-
 :root{
-  --bg:#050b14;
-  --bg2:#081321;
-  --panel:rgba(10,25,42,.78);
-  --panel2:rgba(14,34,56,.9);
-  --line:rgba(72,177,255,.18);
-  --blue:#21a9ff;
-  --blue2:#62d0ff;
-  --text:#eef8ff;
-  --muted:#8fa8bc;
-  --success:#35e39a;
-  --danger:#ff5575;
-  --shadow:0 20px 70px rgba(0,0,0,.4);
-  --radius:22px;
+  --bg:#050816;
+  --panel:rgba(255,255,255,.09);
+  --panel2:rgba(255,255,255,.14);
+  --text:#f7fbff;
+  --muted:#aab8ce;
+  --cyan:#00eaff;
+  --blue:#4f7cff;
+  --purple:#9b5cff;
+  --pink:#ff4fbd;
+  --orange:#ff9d42;
+  --yellow:#ffe66d;
+  --green:#45f59a;
+  --red:#ff5b6e;
+  --glass-blur:22px;
+  --glow:1;
+  --stars:1;
+  --motion:1;
 }
 
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0}
+
 html{scroll-behavior:smooth}
+
 body{
-  margin:0;
-  font-family:Cairo,Arial,sans-serif;
-  background:
-    radial-gradient(circle at 20% 10%,rgba(33,169,255,.12),transparent 28%),
-    radial-gradient(circle at 80% 70%,rgba(98,208,255,.06),transparent 30%),
-    var(--bg);
+  min-height:100vh;
+  font-family:
+    "Tajawal",
+    "Cairo",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   color:var(--text);
+  background:
+    radial-gradient(circle at 20% 10%,rgba(0,234,255,.15),transparent 25%),
+    radial-gradient(circle at 80% 20%,rgba(155,92,255,.16),transparent 25%),
+    radial-gradient(circle at 50% 90%,rgba(255,79,189,.1),transparent 30%),
+    var(--bg);
   overflow-x:hidden;
 }
 
-button,input,select{font:inherit}
-button{cursor:pointer}
+button,input,textarea{font-family:inherit}
 
-#particles{
+/* ================= BACKGROUND ================= */
+
+#space{
   position:fixed;
   inset:0;
-  width:100%;
-  height:100%;
-  z-index:-5;
-}
-
-.grid{
-  position:fixed;
-  inset:0;
-  z-index:-4;
-  pointer-events:none;
-  opacity:.25;
-  background-image:
-    linear-gradient(rgba(33,169,255,.06) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(33,169,255,.06) 1px,transparent 1px);
-  background-size:50px 50px;
-  mask-image:linear-gradient(to bottom,black,transparent 90%);
-}
-
-.scan{
-  position:fixed;
-  left:0;
-  right:0;
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--blue),transparent);
-  opacity:.15;
-  animation:scan 7s linear infinite;
-  pointer-events:none;
-  z-index:10;
-}
-@keyframes scan{
-  from{top:-5%}
-  to{top:105%}
-}
-
-/* BOOT */
-#boot{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  background:#030811;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:.7s ease;
-}
-#boot.hide{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-}
-.bootBox{
-  width:min(620px,90%);
-  text-align:center;
-}
-.bootLogo{
-  font-size:clamp(55px,12vw,100px);
-  font-weight:800;
-  letter-spacing:12px;
-  color:#fff;
-  text-shadow:0 0 30px rgba(33,169,255,.8);
-}
-.bootSub{color:var(--muted);margin:0 0 35px}
-.progress{
-  height:8px;
-  border-radius:20px;
-  background:#101d2a;
+  z-index:-10;
   overflow:hidden;
-}
-.progress span{
-  display:block;
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,var(--blue),var(--blue2));
-  box-shadow:0 0 25px var(--blue);
-  transition:.25s;
-}
-.bootInfo{
-  display:flex;
-  justify-content:space-between;
-  margin-top:12px;
-  color:var(--muted);
-  font-size:13px;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(49,72,155,.15),transparent 40%),
+    linear-gradient(130deg,#03050e,#08132b 45%,#100622);
 }
 
-/* NAV */
-.nav{
-  position:fixed;
+#stars{
+  position:absolute;
+  inset:-10%;
+  opacity:var(--stars);
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,.9) 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(0,234,255,.7) 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(255,79,189,.65) 1px,transparent 1.5px);
+  background-size:90px 90px,145px 145px,210px 210px;
+  animation:starMove 35s linear infinite;
+}
+
+@keyframes starMove{
+  from{transform:translate3d(0,0,0)}
+  to{transform:translate3d(-160px,120px,0)}
+}
+
+.nebula{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(60px);
+  opacity:.2;
+  pointer-events:none;
+}
+
+.n1{
+  width:420px;height:420px;
+  background:#00eaff;
+  top:-160px;left:-120px;
+}
+
+.n2{
+  width:500px;height:500px;
+  background:#9b5cff;
+  right:-180px;top:160px;
+}
+
+.n3{
+  width:420px;height:420px;
+  background:#ff4fbd;
+  left:25%;bottom:-230px;
+}
+
+/* ================= PLANETS ================= */
+
+.planet{
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  animation:floatPlanet 8s ease-in-out infinite;
+}
+
+.planet::after{
+  content:"";
+  position:absolute;
+  inset:15%;
+  border-radius:50%;
+  background:rgba(255,255,255,.18);
+  filter:blur(16px);
+}
+
+.p1{
+  width:115px;height:115px;
+  top:13%;left:7%;
+  background:
+    radial-gradient(circle at 30% 25%,#fff,#57eaff 8%,#2477ff 45%,#14246e 75%);
+  box-shadow:0 0 60px rgba(0,234,255,.55);
+}
+
+.p2{
+  width:155px;height:155px;
+  top:20%;right:7%;
+  background:
+    radial-gradient(circle at 35% 30%,#fff,#ffd66b 8%,#ff7c42 38%,#84264d 78%);
+  box-shadow:0 0 70px rgba(255,157,66,.4);
+}
+
+.p3{
+  width:82px;height:82px;
+  bottom:19%;left:11%;
+  background:
+    radial-gradient(circle at 30% 25%,#fff,#b9a2ff 8%,#754bff 42%,#27104e 80%);
+  box-shadow:0 0 50px rgba(155,92,255,.5);
+}
+
+.p4{
+  width:105px;height:105px;
+  bottom:8%;right:15%;
+  background:
+    radial-gradient(circle at 30% 20%,#fff,#62ffbb 7%,#16aa73 43%,#073c42 80%);
+  box-shadow:0 0 60px rgba(69,245,154,.4);
+}
+
+.p5{
+  width:48px;height:48px;
+  top:54%;left:4%;
+  background:
+    radial-gradient(circle at 30% 20%,#fff,#ff8be0 8%,#ff4fbd 40%,#65164e);
+  box-shadow:0 0 35px rgba(255,79,189,.55);
+  animation-duration:6s;
+}
+
+@keyframes floatPlanet{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  50%{transform:translateY(-18px) rotate(5deg)}
+}
+
+/* ================= SATURN ================= */
+
+.saturn{
+  position:absolute;
+  width:130px;
+  height:130px;
+  top:62%;
+  right:3%;
+  animation:floatPlanet 9s ease-in-out infinite;
+}
+
+.saturn-body{
+  position:absolute;
+  width:100px;
+  height:100px;
+  left:15px;
   top:15px;
-  left:50%;
-  transform:translateX(-50%);
-  width:min(1180px,94%);
-  padding:10px;
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:rgba(5,12,22,.76);
-  backdrop-filter:blur(20px);
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 25%,#fff7c5 0%,#ffc96a 9%,#d97b48 34%,#71354b 68%,#321c42 100%);
+  box-shadow:
+    0 0 calc(45px * var(--glow)) rgba(255,157,66,.6);
+  z-index:2;
+}
+
+.saturn-ring{
+  position:absolute;
+  width:150px;
+  height:48px;
+  left:-10px;
+  top:41px;
+  border-radius:50%;
+  border:10px solid rgba(255,218,133,.8);
+  box-shadow:
+    0 0 14px rgba(255,194,95,.65),
+    inset 0 0 10px rgba(255,255,255,.35);
+  transform:rotate(-18deg);
+  transform-origin:center center;
+  animation:saturnSpin 5s linear infinite;
+  z-index:3;
+}
+
+.saturn-ring::before{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border-radius:50%;
+  border:4px solid rgba(255,255,255,.2);
+}
+
+@keyframes saturnSpin{
+  from{transform:rotate(-18deg)}
+  to{transform:rotate(342deg)}
+}
+
+/* ================= GLASS ================= */
+
+.glass{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.15),
+      rgba(255,255,255,.055)
+    );
+  border:1px solid rgba(255,255,255,.17);
+  box-shadow:
+    0 20px 70px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -1px 0 rgba(255,255,255,.04);
+  backdrop-filter:
+    blur(var(--glass-blur))
+    saturate(150%);
+  -webkit-backdrop-filter:
+    blur(var(--glass-blur))
+    saturate(150%);
+}
+
+.card{
+  border-radius:28px;
+  padding:24px;
+  transition:.35s ease;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(0,234,255,.4);
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.35),
+    0 0 35px rgba(0,234,255,.12);
+}
+
+/* ================= HEADER ================= */
+
+header{
+  position:sticky;
+  top:14px;
+  z-index:100;
+  width:min(1200px,calc(100% - 24px));
+  margin:14px auto 0;
+}
+
+.nav{
+  min-height:72px;
+  border-radius:24px;
   display:flex;
   align-items:center;
-  gap:8px;
-  z-index:1000;
-  box-shadow:0 10px 50px rgba(0,0,0,.3);
+  gap:12px;
+  padding:10px 14px;
 }
+
 .logo{
-  font-size:22px;
-  font-weight:800;
-  letter-spacing:4px;
-  color:#fff;
-  padding:0 15px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-left:auto;
+  cursor:pointer;
 }
-.navlinks{
+
+.logo-orb{
+  width:44px;
+  height:44px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  font-size:22px;
+  background:
+    linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));
+  box-shadow:0 0 30px rgba(0,234,255,.4);
+}
+
+.logo strong{font-size:19px}
+
+.logo small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.nav-links{
   display:flex;
   gap:5px;
-  flex:1;
-  overflow:auto;
-}
-.navlinks button,
-.iconBtn{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  padding:10px 12px;
-  border-radius:12px;
-  white-space:nowrap;
-}
-.navlinks button:hover,
-.navlinks button.active,
-.iconBtn:hover{
-  color:#fff;
-  background:rgba(33,169,255,.1);
-}
-.menu{
-  display:none;
+  flex-wrap:wrap;
 }
 
-/* GENERAL */
-main{
-  width:min(1200px,92%);
-  margin:auto;
-  padding-top:105px;
+.nav-btn{
+  border:0;
+  color:var(--muted);
+  background:transparent;
+  padding:10px 13px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.25s;
 }
+
+.nav-btn:hover,
+.nav-btn.active{
+  color:white;
+  background:rgba(255,255,255,.11);
+}
+
+.nav-settings{
+  width:44px;
+  height:44px;
+  border:0;
+  border-radius:15px;
+  color:white;
+  background:linear-gradient(135deg,#315cff,#9b5cff);
+  cursor:pointer;
+  font-size:20px;
+  transition:.3s;
+}
+
+.nav-settings:hover{
+  transform:rotate(25deg) scale(1.08);
+}
+
+/* ================= APP ================= */
+
+main{
+  width:min(1200px,calc(100% - 24px));
+  margin:35px auto 80px;
+}
+
 .page{
   display:none;
-  min-height:calc(100vh - 120px);
-  padding-bottom:70px;
-}
-.page.active{
-  display:block;
-  animation:pageIn .35s ease;
-}
-@keyframes pageIn{
-  from{opacity:0;transform:translateY(12px)}
-  to{opacity:1;transform:none}
+  animation:pageIn .45s ease;
 }
 
-.hero{
-  min-height:calc(100vh - 120px);
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  align-items:center;
-  gap:50px;
+.page.active{display:block}
+
+@keyframes pageIn{
+  from{
+    opacity:0;
+    transform:translateY(18px) scale(.99);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
+
+/* ================= HERO ================= */
+
+.hero{
+  min-height:610px;
+  display:grid;
+  grid-template-columns:1.2fr .8fr;
+  align-items:center;
+  gap:30px;
+}
+
+.hero-text{position:relative}
+
 .badge{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  border:1px solid var(--line);
-  background:rgba(33,169,255,.07);
-  padding:7px 13px;
-  border-radius:30px;
-  color:var(--blue2);
-  font-size:13px;
+  padding:9px 14px;
+  border-radius:999px;
+  background:rgba(0,234,255,.09);
+  border:1px solid rgba(0,234,255,.22);
+  color:#9ff8ff;
+  margin-bottom:20px;
 }
-h1{
-  font-size:clamp(42px,7vw,82px);
-  line-height:1.05;
-  margin:18px 0;
-}
-.gradient{
-  background:linear-gradient(90deg,#fff,var(--blue2),var(--blue));
+
+.hero h1{
+  font-size:clamp(48px,8vw,94px);
+  line-height:.9;
+  letter-spacing:-4px;
+  margin-bottom:22px;
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #64efff,
+      #9b5cff,
+      #ff6fd0,
+      #fff
+    );
+  background-size:250% auto;
   -webkit-background-clip:text;
   color:transparent;
+  animation:textFlow 7s linear infinite;
 }
+
+@keyframes textFlow{
+  to{background-position:250% center}
+}
+
+.hero h2{
+  font-size:24px;
+  margin-bottom:14px;
+}
+
 .hero p{
   color:var(--muted);
   font-size:17px;
-  line-height:2;
+  line-height:1.9;
   max-width:650px;
 }
-.actions{
+
+.hero-actions{
   display:flex;
   gap:12px;
   flex-wrap:wrap;
   margin-top:28px;
 }
+
 .btn{
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:12px 18px;
-  background:rgba(33,169,255,.08);
-  color:#fff;
-  transition:.2s;
-}
-.btn:hover{
-  transform:translateY(-2px);
-  border-color:rgba(33,169,255,.5);
-}
-.btn.primary{
-  background:linear-gradient(135deg,#168ddd,#0872ba);
-  box-shadow:0 10px 35px rgba(33,169,255,.2);
-}
-.btn.success{
-  background:rgba(53,227,154,.1);
-  color:var(--success);
-}
-.btn.danger{
-  background:rgba(255,85,117,.1);
-  color:var(--danger);
+  border:0;
+  border-radius:17px;
+  padding:14px 19px;
+  color:white;
+  font-weight:800;
+  cursor:pointer;
+  transition:.25s;
 }
 
-/* INTERACTIVE CYBER SCENE */
-.scene{
+.btn:hover{
+  transform:translateY(-3px) scale(1.02);
+}
+
+.btn-primary{
+  background:
+    linear-gradient(135deg,#00cfff,#4169ff,#9b5cff);
+  box-shadow:0 12px 35px rgba(65,105,255,.3);
+}
+
+.btn-secondary{
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.15);
+}
+
+/* ================= VANTA CHARACTER ================= */
+
+.character-zone{
   position:relative;
-  height:520px;
-  perspective:1000px;
-}
-.core{
-  position:absolute;
-  width:280px;
-  height:190px;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%) rotateX(8deg) rotateY(-8deg);
-  border:1px solid rgba(33,169,255,.5);
-  border-radius:18px;
-  background:linear-gradient(145deg,rgba(16,42,67,.95),rgba(4,14,25,.95));
-  box-shadow:
-    0 0 40px rgba(33,169,255,.12),
-    inset 0 0 30px rgba(33,169,255,.05);
-  animation:float 5s ease-in-out infinite;
-}
-.monitor{
-  position:absolute;
-  inset:14px;
-  border-radius:10px;
-  border:1px solid rgba(98,208,255,.4);
-  background:#02080e;
-  overflow:hidden;
-}
-.monitor::before{
-  content:"VANTA://SYSTEM";
-  position:absolute;
-  top:12px;
-  right:15px;
-  color:var(--blue2);
-  font-size:11px;
-}
-.terminalLines{
-  position:absolute;
-  top:45px;
-  right:15px;
-  left:15px;
-  color:#62d0ff;
-  font:12px monospace;
-  line-height:2;
-}
-.terminalLines span{
-  display:block;
-  animation:terminal 3s infinite;
-}
-@keyframes terminal{
-  0%,100%{opacity:.35}
-  50%{opacity:1}
-}
-.float{
-  position:absolute;
-  width:78px;
-  height:78px;
+  height:470px;
   display:grid;
   place-items:center;
-  border:1px solid var(--line);
-  background:rgba(7,22,37,.8);
-  border-radius:20px;
-  backdrop-filter:blur(10px);
-  font-size:30px;
-  box-shadow:0 0 30px rgba(33,169,255,.08);
-  transition:.3s;
-  animation:float 4s ease-in-out infinite;
-}
-.float:hover{
-  transform:scale(1.12) rotate(5deg);
-  border-color:var(--blue);
-  box-shadow:0 0 35px rgba(33,169,255,.3);
-}
-.f1{top:8%;right:8%}
-.f2{top:25%;left:5%;animation-delay:-1s}
-.f3{bottom:12%;right:15%;animation-delay:-2s}
-.f4{bottom:22%;left:15%;animation-delay:-3s}
-.f5{top:5%;left:40%;animation-delay:-1.5s}
-.f6{bottom:2%;left:45%;animation-delay:-2.5s}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-14px)}
 }
 
-.orbit{
+.character-aura{
   position:absolute;
-  inset:9%;
-  border:1px dashed rgba(33,169,255,.15);
+  width:330px;
+  height:330px;
   border-radius:50%;
-  animation:rotate 25s linear infinite;
+  background:
+    radial-gradient(circle,
+      rgba(0,234,255,.22),
+      rgba(155,92,255,.12),
+      transparent 70%);
+  animation:aura 4s ease-in-out infinite;
 }
-.orbit::after{
+
+@keyframes aura{
+  50%{transform:scale(1.15);opacity:.7}
+}
+
+.vanta-character{
+  position:relative;
+  width:260px;
+  height:360px;
+  animation:characterDance 2.7s ease-in-out infinite;
+  z-index:3;
+}
+
+@keyframes characterDance{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  25%{transform:translateY(-13px) rotate(3deg)}
+  50%{transform:translateY(0) rotate(-2deg)}
+  75%{transform:translateY(-8px) rotate(2deg)}
+}
+
+.char-shadow{
+  position:absolute;
+  width:190px;
+  height:28px;
+  bottom:0;
+  left:35px;
+  border-radius:50%;
+  background:rgba(0,0,0,.35);
+  filter:blur(12px);
+}
+
+.char-body{
+  position:absolute;
+  width:130px;
+  height:155px;
+  left:65px;
+  top:125px;
+  border-radius:48px 48px 34px 34px;
+  background:
+    linear-gradient(145deg,#263d8c,#4f7cff 40%,#9b5cff);
+  border:4px solid rgba(255,255,255,.28);
+  box-shadow:
+    inset 0 8px 15px rgba(255,255,255,.15),
+    0 0 40px rgba(79,124,255,.35);
+}
+
+.char-head{
+  position:absolute;
+  width:142px;
+  height:142px;
+  left:59px;
+  top:32px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 28%,#fff 0 5%,#b9f9ff 7%,#36dfff 28%,#4772ff 65%,#372275);
+  border:5px solid rgba(255,255,255,.3);
+  box-shadow:0 0 45px rgba(0,234,255,.4);
+  z-index:3;
+}
+
+.char-head::before{
+  content:"V";
+  position:absolute;
+  top:-14px;
+  left:50%;
+  transform:translateX(-50%);
+  font-weight:1000;
+  font-size:30px;
+  color:white;
+  text-shadow:0 0 15px #00eaff;
+}
+
+.eye{
+  position:absolute;
+  width:24px;
+  height:32px;
+  top:55px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 14px #00eaff;
+  transition:.25s;
+}
+
+.eye::after{
   content:"";
   position:absolute;
   width:9px;
-  height:9px;
-  background:var(--blue);
-  box-shadow:0 0 20px var(--blue);
+  height:13px;
+  background:#15235d;
   border-radius:50%;
-  top:-4px;
-  left:50%;
+  left:7px;
+  top:9px;
 }
-@keyframes rotate{to{transform:rotate(360deg)}}
 
-/* SECTIONS */
-.sectionHead{
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:20px;
-  margin:35px 0 22px;
-}
-.sectionHead h2{
-  font-size:30px;
-  margin:0;
-}
-.sectionHead p{
-  color:var(--muted);
-  margin:5px 0 0;
-}
-.cards{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-.card{
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  background:var(--panel);
-  padding:22px;
-  box-shadow:var(--shadow);
+.eye.left{left:35px}
+.eye.right{right:35px}
+
+.smile{
+  position:absolute;
+  width:48px;
+  height:22px;
+  border-bottom:5px solid white;
+  border-radius:0 0 50px 50px;
+  left:47px;
+  top:93px;
   transition:.25s;
 }
-.card:hover{
-  transform:translateY(-5px);
-  border-color:rgba(33,169,255,.4);
+
+.arm{
+  position:absolute;
+  width:30px;
+  height:120px;
+  border-radius:30px;
+  background:linear-gradient(#4f7cff,#9b5cff);
+  top:140px;
+  z-index:1;
 }
-.cardIcon{
-  font-size:34px;
-  margin-bottom:12px;
+
+.arm.left{
+  left:35px;
+  transform:rotate(35deg);
+  animation:waveLeft 1.2s ease-in-out infinite;
+  transform-origin:top center;
 }
-.card h3{margin:0 0 7px}
-.card p{
-  color:var(--muted);
-  line-height:1.9;
-  margin:0;
+
+.arm.right{
+  right:35px;
+  transform:rotate(-35deg);
 }
+
+@keyframes waveLeft{
+  0%,100%{transform:rotate(35deg)}
+  50%{transform:rotate(75deg)}
+}
+
+.hand{
+  position:absolute;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#6beaff;
+  top:-10px;
+  left:-6px;
+}
+
+.leg{
+  position:absolute;
+  width:38px;
+  height:90px;
+  bottom:18px;
+  border-radius:25px;
+  background:linear-gradient(#354bc0,#9b5cff);
+}
+
+.leg.left{
+  left:76px;
+  transform:rotate(8deg);
+}
+
+.leg.right{
+  right:76px;
+  transform:rotate(-8deg);
+}
+
+.welcome-bubble{
+  position:absolute;
+  right:-5px;
+  top:20px;
+  padding:15px 19px;
+  border-radius:20px;
+  font-weight:900;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(18px);
+  animation:bubbleFloat 3s ease-in-out infinite;
+}
+
+@keyframes bubbleFloat{
+  50%{transform:translateY(-10px)}
+}
+
+/* ================= MINI MASCOT ================= */
+
+#mascotMini{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  width:155px;
+  height:185px;
+  z-index:90;
+  pointer-events:none;
+  transition:.35s;
+}
+
+#mascotMini .mini-aura{
+  position:absolute;
+  width:150px;
+  height:150px;
+  left:2px;
+  top:15px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle,
+      rgba(0,234,255,.20),
+      rgba(155,92,255,.08),
+      transparent 70%);
+}
+
+#mascotMini .mini-character{
+  position:absolute;
+  transform:scale(.45);
+  transform-origin:bottom left;
+  left:0;
+  bottom:0;
+  width:260px;
+  height:360px;
+}
+
+#mascotMini .mini-bubble{
+  position:absolute;
+  top:0;
+  left:25px;
+  min-width:105px;
+  max-width:145px;
+  padding:8px 11px;
+  border-radius:14px;
+  background:rgba(8,15,32,.82);
+  border:1px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(15px);
+  font-size:11px;
+  font-weight:900;
+  text-align:center;
+}
+
+#mascotMini .vanta-character{
+  animation:miniFloat 2.7s ease-in-out infinite;
+}
+
+@keyframes miniFloat{
+  0%,100%{transform:translateY(0) rotate(-2deg)}
+  50%{transform:translateY(-9px) rotate(2deg)}
+}
+
+#mascotMini.thinking .vanta-character{
+  animation:thinkMove 2s ease-in-out infinite;
+}
+
+@keyframes thinkMove{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-5px) rotate(-7deg)}
+}
+
+#mascotMini.angry .vanta-character{
+  animation:angryMove .35s ease-in-out infinite alternate;
+}
+
+@keyframes angryMove{
+  from{transform:translateX(-3px) rotate(-2deg)}
+  to{transform:translateX(3px) rotate(2deg)}
+}
+
+#mascotMini.celebrate .vanta-character{
+  animation:celebrateMove .65s ease-in-out infinite;
+}
+
+@keyframes celebrateMove{
+  0%,100%{transform:translateY(0) rotate(-4deg) scale(1)}
+  50%{transform:translateY(-18px) rotate(5deg) scale(1.04)}
+}
+
+#mascotMini.dance .vanta-character{
+  animation:danceMove .55s ease-in-out infinite;
+}
+
+@keyframes danceMove{
+  0%{transform:rotate(-10deg) translateY(0)}
+  25%{transform:rotate(10deg) translateY(-9px)}
+  50%{transform:rotate(-8deg) translateY(0)}
+  75%{transform:rotate(9deg) translateY(-8px)}
+  100%{transform:rotate(-10deg) translateY(0)}
+}
+
+#mascotMini.angry .smile{
+  width:45px;
+  height:15px;
+  border-bottom:0;
+  border-top:5px solid #fff;
+  border-radius:50%;
+  top:105px;
+}
+
+#mascotMini.thinking .smile{
+  width:20px;
+  height:10px;
+  border-bottom:4px solid #fff;
+  left:60px;
+}
+
+#mascotMini.celebrate .smile,
+#mascotMini.dance .smile{
+  width:55px;
+  height:27px;
+  border-bottom-width:7px;
+  left:43px;
+}
+
+#mascotMini.thinking .eye{
+  height:25px;
+}
+
+.mascot-name{
+  color:#8ef8ff;
+  font-size:11px;
+  margin-top:4px;
+}
+
+/* ================= STATS ================= */
+
 .stats{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:12px;
+  gap:15px;
   margin-top:25px;
 }
-.stat{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:18px;
-  padding:18px;
-}
-.stat b{
-  display:block;
+
+.stat{text-align:center}
+
+.stat .icon{
   font-size:27px;
+  margin-bottom:8px;
 }
-.stat span{color:var(--muted);font-size:13px}
 
-/* COURSE */
-.toolbar{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:20px 0;
-}
-.input{
-  flex:1;
-  min-width:220px;
-  background:rgba(8,19,32,.8);
-  border:1px solid var(--line);
-  color:#fff;
-  border-radius:13px;
-  padding:12px 15px;
-  outline:none;
-}
-.input:focus{border-color:var(--blue)}
-.course{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  gap:16px;
-  align-items:center;
-}
-.courseNum{
-  width:52px;
-  height:52px;
-  border-radius:15px;
-  display:grid;
-  place-items:center;
-  background:rgba(33,169,255,.1);
-  color:var(--blue2);
-  font-weight:800;
-}
-.course small{color:var(--muted)}
-.course .xp{color:#ffd76a;font-size:13px}
-.course.done{
-  border-color:rgba(53,227,154,.35);
-}
-.progressBar{
-  height:6px;
-  background:#132131;
-  border-radius:10px;
-  overflow:hidden;
-  margin-top:10px;
-}
-.progressBar span{
+.stat strong{
+  font-size:27px;
   display:block;
-  height:100%;
-  background:var(--blue);
 }
 
-/* LESSON */
-.lessonBox{
-  max-width:850px;
-  margin:30px auto;
-}
-.lessonBox h1{font-size:45px}
-.lessonContent{
-  line-height:2;
-  color:#c9d9e6;
-}
-.lessonContent h3{color:#fff;margin-top:28px}
-.code{
-  direction:ltr;
-  text-align:left;
-  background:#02070c;
-  border:1px solid var(--line);
-  padding:18px;
-  border-radius:15px;
-  overflow:auto;
-  color:#7edbff;
-  font-family:monospace;
-}
-.quiz{
-  margin-top:30px;
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:22px;
-  background:rgba(33,169,255,.04);
-}
-.option{
-  display:block;
-  width:100%;
-  text-align:right;
-  margin:8px 0;
+.stat span{
+  color:var(--muted);
+  font-size:13px;
 }
 
-/* LIBRARY */
-.resource{
+/* ================= SECTION ================= */
+
+.section-head{
   display:flex;
   justify-content:space-between;
-  gap:15px;
-  align-items:center;
+  align-items:end;
+  gap:20px;
+  margin:35px 0 20px;
 }
-.resourceInfo{
-  display:flex;
-  gap:15px;
-  align-items:center;
+
+.section-head h2{font-size:31px}
+
+.section-head p{
+  color:var(--muted);
+  line-height:1.7;
 }
-.resourceIcon{
-  width:52px;
-  height:52px;
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.feature-icon{
+  width:55px;
+  height:55px;
   display:grid;
   place-items:center;
-  background:rgba(33,169,255,.1);
-  border-radius:15px;
+  border-radius:18px;
+  font-size:25px;
+  margin-bottom:17px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0,234,255,.22),
+      rgba(155,92,255,.22)
+    );
+}
+
+/* ================= LEARNING ================= */
+
+.learning-layout{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:18px;
+}
+
+.unit-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.unit-btn{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.06);
+  color:white;
+  border-radius:16px;
+  padding:14px;
+  text-align:right;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.unit-btn:hover,
+.unit-btn.active{
+  background:linear-gradient(135deg,rgba(0,234,255,.18),rgba(155,92,255,.18));
+  border-color:rgba(0,234,255,.35);
+}
+
+.lesson-box{
+  min-height:500px;
+}
+
+.lesson-number{
+  color:#8ef8ff;
+  font-weight:900;
+}
+
+.lesson-box h2{
+  font-size:36px;
+  margin:10px 0;
+}
+
+.lesson-box p{
+  color:var(--muted);
+  line-height:2;
+}
+
+.lesson-progress{
+  height:8px;
+  border-radius:99px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+  margin:15px 0 20px;
+}
+
+.lesson-progress div{
+  height:100%;
+  background:linear-gradient(90deg,#00eaff,#4f7cff,#9b5cff,#ff4fbd);
+  transition:.5s;
+}
+
+.lesson-tabs{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin:18px 0;
+}
+
+.lesson-tab{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:var(--muted);
+  border-radius:13px;
+  padding:9px 12px;
+  cursor:pointer;
+}
+
+.lesson-tab.active{
+  color:#fff;
+  background:rgba(0,234,255,.14);
+  border-color:rgba(0,234,255,.35);
+}
+
+.lesson-panel{
+  display:none;
+}
+
+.lesson-panel.active{
+  display:block;
+  animation:pageIn .3s ease;
+}
+
+.code-box{
+  direction:ltr;
+  text-align:left;
+  margin:22px 0;
+  padding:20px;
+  border-radius:20px;
+  background:#02040b;
+  border:1px solid rgba(0,234,255,.2);
+  color:#bafaff;
+  overflow:auto;
+  font-family:monospace;
+  line-height:1.8;
+  white-space:pre-wrap;
+}
+
+.cheat{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin-top:15px;
+}
+
+.cheat-item{
+  padding:13px;
+  border-radius:16px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.cheat-item strong{
+  display:block;
+  margin-bottom:5px;
+}
+
+.cheat-item span{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.challenge{
+  border:1px solid rgba(255,230,109,.2);
+  background:linear-gradient(
+    135deg,
+    rgba(255,230,109,.08),
+    rgba(155,92,255,.08)
+  );
+  border-radius:22px;
+  padding:20px;
+}
+
+.challenge-badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(255,230,109,.12);
+  color:#ffe66d;
+  font-size:12px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.editor{
+  direction:ltr;
+  text-align:left;
+  width:100%;
+  min-height:180px;
+  resize:vertical;
+  border:1px solid rgba(0,234,255,.18);
+  border-radius:20px;
+  padding:17px;
+  background:#02040b;
+  color:#bafaff;
+  outline:none;
+  line-height:1.7;
+  font-family:monospace;
+  margin-top:14px;
+}
+
+.editor:focus{
+  border-color:#00eaff;
+  box-shadow:0 0 25px rgba(0,234,255,.12);
+}
+
+.run-output{
+  min-height:45px;
+  padding:13px;
+  border-radius:16px;
+  background:rgba(0,0,0,.22);
+  color:#aab8ce;
+  margin-top:10px;
+  line-height:1.8;
+}
+
+.run-output.ok{color:#63ffb0}
+.run-output.bad{color:#ff7887}
+
+/* ================= JOURNEYS ================= */
+
+.journey{
+  min-height:260px;
+  position:relative;
+  overflow:hidden;
+}
+
+.journey-planet{
+  position:absolute;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  left:20px;
+  top:20px;
+  opacity:.75;
+  box-shadow:0 0 55px rgba(0,234,255,.3);
+}
+
+.journey h3{
+  position:relative;
+  margin-top:145px;
   font-size:25px;
 }
 
-/* LEVEL */
-.levelBox{
-  text-align:center;
-  padding:35px;
+.journey p{
+  position:relative;
+  color:var(--muted);
+  line-height:1.8;
+  margin:8px 0;
 }
-.levelCircle{
-  width:150px;
-  height:150px;
-  margin:10px auto 25px;
+
+.progress{
+  height:9px;
+  background:rgba(255,255,255,.09);
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:15px;
+}
+
+.progress > div{
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#00eaff,#4f7cff,#9b5cff,#ff4fbd);
+  transition:1s;
+}
+
+/* ================= PRACTICE ================= */
+
+.practice-card{
+  max-width:900px;
+  margin:auto;
+}
+
+.practice-top{
+  display:flex;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.pill{
+  padding:9px 13px;
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.1);
+}
+
+.question{
+  white-space:pre-wrap;
+  font-size:28px;
+  line-height:1.7;
+  margin:20px 0;
+}
+
+.answer{
+  width:100%;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(0,0,0,.2);
+  color:white;
+  border-radius:18px;
+  padding:16px;
+  font-size:17px;
+  outline:none;
+}
+
+.answer:focus{
+  border-color:#00eaff;
+  box-shadow:0 0 25px rgba(0,234,255,.12);
+}
+
+.feedback{
+  min-height:40px;
+  margin:14px 0;
+  line-height:1.8;
+}
+
+.feedback.correct{color:#63ffb0}
+.feedback.wrong{color:#ff7887}
+
+.hint{
+  color:#ffe66d;
+  margin:10px 0;
+  min-height:25px;
+}
+
+.quiz-box{
+  margin-top:20px;
+  padding:20px;
+  border-radius:22px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.09);
+}
+
+.quiz-option{
+  display:block;
+  width:100%;
+  margin-top:9px;
+  padding:13px;
+  border-radius:15px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  color:white;
+  text-align:right;
+  cursor:pointer;
+}
+
+.quiz-option:hover{
+  background:rgba(0,234,255,.12);
+  border-color:rgba(0,234,255,.3);
+}
+
+.quiz-option.correct-option{
+  background:rgba(69,245,154,.14);
+  border-color:rgba(69,245,154,.4);
+}
+
+.quiz-option.wrong-option{
+  background:rgba(255,91,110,.13);
+  border-color:rgba(255,91,110,.4);
+}
+
+/* ================= SKILLS ================= */
+
+.skill{
+  position:relative;
+  overflow:hidden;
+}
+
+.skill-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.skill-level{
+  font-size:25px;
+  font-weight:1000;
+}
+
+.skill small{color:var(--muted)}
+
+.skill-bar{
+  margin-top:18px;
+  height:11px;
+  border-radius:99px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+}
+
+.skill-bar div{
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#00eaff,#9b5cff,#ff4fbd);
+}
+
+/* ================= DASHBOARD ================= */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.big-level{
+  font-size:70px;
+  font-weight:1000;
+  background:linear-gradient(90deg,#00eaff,#9b5cff,#ff4fbd);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.mission{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:15px;
+  border-radius:18px;
+  background:rgba(255,255,255,.06);
+  margin-top:10px;
+}
+
+.check{
+  width:35px;
+  height:35px;
   border-radius:50%;
   display:grid;
   place-items:center;
-  border:2px solid var(--blue);
-  box-shadow:0 0 45px rgba(33,169,255,.2);
-}
-.levelCircle b{font-size:50px}
-.levelProgress{
-  max-width:600px;
-  margin:auto;
-  height:12px;
-  background:#101d2a;
-  border-radius:20px;
-  overflow:hidden;
-}
-.levelProgress span{
-  display:block;
-  height:100%;
-  background:linear-gradient(90deg,var(--blue),var(--blue2));
+  background:rgba(69,245,154,.15);
 }
 
-/* SETTINGS */
+/* ================= AI ================= */
+
+.ai-chat{
+  max-width:900px;
+  margin:auto;
+}
+
+.messages{
+  min-height:400px;
+  max-height:500px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  margin-bottom:15px;
+}
+
+.message{
+  max-width:80%;
+  padding:15px 18px;
+  border-radius:20px;
+  line-height:1.8;
+}
+
+.message.ai{
+  align-self:flex-start;
+  background:rgba(255,255,255,.09);
+}
+
+.message.user{
+  align-self:flex-end;
+  background:linear-gradient(135deg,rgba(0,234,255,.2),rgba(155,92,255,.25));
+}
+
+.ai-input{
+  display:flex;
+  gap:10px;
+}
+
+/* ================= SETTINGS ================= */
+
+.settings-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
 .setting{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:17px 0;
-  border-bottom:1px solid rgba(255,255,255,.06);
+  gap:15px;
+  padding:18px;
+  border-radius:20px;
+  background:rgba(255,255,255,.06);
+  margin-bottom:10px;
 }
-.setting:last-child{border:0}
-.setting span small{
+
+.setting-info strong{
   display:block;
-  color:var(--muted);
-  margin-top:3px;
+  margin-bottom:4px;
 }
+
+.setting-info small{color:var(--muted)}
+
 .switch{
-  width:50px;
-  height:28px;
+  width:56px;
+  height:31px;
+  border:0;
   border-radius:30px;
-  background:#182839;
-  border:1px solid var(--line);
+  background:#343b52;
+  cursor:pointer;
   position:relative;
+  flex-shrink:0;
 }
+
 .switch::after{
   content:"";
   position:absolute;
-  width:20px;
-  height:20px;
-  top:3px;
+  width:23px;
+  height:23px;
+  top:4px;
   right:4px;
-  background:#71869a;
+  background:white;
   border-radius:50%;
-  transition:.2s;
+  transition:.25s;
 }
+
 .switch.on{
-  background:rgba(33,169,255,.2);
-}
-.switch.on::after{
-  right:25px;
-  background:var(--blue);
-  box-shadow:0 0 12px var(--blue);
+  background:linear-gradient(90deg,#00dfff,#805cff);
 }
 
-/* FOOTER */
-footer{
-  border-top:1px solid var(--line);
-  padding:35px 0;
-  color:var(--muted);
+.switch.on::after{right:29px}
+
+/* ================= CREDITS ================= */
+
+.owner{
   text-align:center;
-}
-footer b{color:#fff}
-
-/* TOAST */
-#toast{
-  position:fixed;
-  bottom:25px;
-  left:50%;
-  transform:translate(-50%,20px);
-  opacity:0;
-  pointer-events:none;
-  background:#0b1c2d;
-  border:1px solid var(--line);
-  padding:12px 18px;
-  border-radius:13px;
-  z-index:5000;
-  transition:.3s;
-}
-#toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
+  padding:45px 25px;
 }
 
-/* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.7);
-  backdrop-filter:blur(8px);
-  z-index:4000;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
+.owner-avatar{
+  width:100px;
+  height:100px;
+  border-radius:30px;
+  margin:0 auto 18px;
+  display:grid;
+  place-items:center;
+  font-size:38px;
+  font-weight:1000;
+  background:linear-gradient(135deg,#00eaff,#4f7cff,#9b5cff,#ff4fbd);
+  box-shadow:0 0 50px rgba(0,234,255,.3);
 }
-.modal.show{display:flex}
-.modalBox{
-  width:min(700px,100%);
-  max-height:85vh;
-  overflow:auto;
-  background:#081522;
-  border:1px solid var(--line);
-  border-radius:25px;
+
+.owner h2{font-size:35px}
+
+.owner p{
+  color:var(--muted);
+  line-height:1.9;
+}
+
+.instagram{
+  display:inline-flex;
+  margin-top:15px;
+  padding:10px 15px;
+  border-radius:14px;
+  background:rgba(255,255,255,.08);
+  color:white;
+  text-decoration:none;
+}
+
+.thanks{
+  text-align:center;
+  margin-top:20px;
+}
+
+.friend-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+  margin-top:20px;
+}
+
+.friend{
+  text-align:center;
   padding:25px;
 }
-.close{
-  float:left;
-  border:0;
-  background:transparent;
-  color:#fff;
-  font-size:25px;
+
+.friend-icon{
+  font-size:38px;
+  margin-bottom:8px;
 }
 
-/* MOBILE */
-@media(max-width:900px){
-  .hero{grid-template-columns:1fr}
-  .scene{height:390px}
-  .cards{grid-template-columns:repeat(2,1fr)}
-  .stats{grid-template-columns:repeat(2,1fr)}
+.friend p{
+  color:var(--muted);
+  margin-top:7px;
 }
-@media(max-width:650px){
-  .nav{
-    top:8px;
-    width:96%;
+
+/* ================= BOOT ================= */
+
+#boot{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at center,rgba(20,46,100,.7),transparent 40%),
+    #02040b;
+  transition:.7s ease;
+}
+
+#boot.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.boot-box{
+  width:min(680px,calc(100% - 30px));
+  padding:35px;
+  border-radius:30px;
+}
+
+.boot-logo{
+  text-align:center;
+  font-size:68px;
+  font-weight:1000;
+  letter-spacing:7px;
+  background:linear-gradient(90deg,#00eaff,#4f7cff,#9b5cff,#ff4fbd);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.boot-sub{
+  text-align:center;
+  color:#9eabc2;
+  margin:8px 0 28px;
+}
+
+.boot-terminal{
+  background:#02040a;
+  border-radius:20px;
+  padding:18px;
+  min-height:170px;
+  direction:ltr;
+  text-align:left;
+  color:#74f9ff;
+  font-family:monospace;
+  line-height:1.8;
+  border:1px solid rgba(0,234,255,.15);
+}
+
+.boot-progress{
+  margin:18px 0;
+  height:8px;
+  border-radius:99px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+}
+
+.boot-progress div{
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,#00eaff,#9b5cff,#ff4fbd);
+  transition:width .25s;
+}
+
+.boot-actions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+}
+
+.skip{
+  border:0;
+  background:transparent;
+  color:#aab8ce;
+  cursor:pointer;
+  padding:12px;
+}
+
+/* ================= TOAST ================= */
+
+#toast{
+  position:fixed;
+  bottom:22px;
+  left:50%;
+  transform:translateX(-50%) translateY(100px);
+  z-index:10000;
+  padding:14px 20px;
+  border-radius:18px;
+  background:rgba(9,15,30,.9);
+  border:1px solid rgba(255,255,255,.15);
+  backdrop-filter:blur(20px);
+  transition:.4s;
+  pointer-events:none;
+}
+
+#toast.show{
+  transform:translateX(-50%) translateY(0);
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+  width:min(1200px,calc(100% - 24px));
+  margin:0 auto 30px;
+  text-align:center;
+  color:#8492aa;
+  line-height:1.9;
+}
+
+footer strong{color:white}
+
+/* ================= LIGHT MODE ================= */
+
+body.light-mode{
+  color:#07111f;
+  background:
+    radial-gradient(circle at 20% 10%,rgba(0,190,220,.18),transparent 25%),
+    radial-gradient(circle at 80% 20%,rgba(155,92,255,.18),transparent 25%),
+    #edf7ff;
+}
+
+body.light-mode .glass{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.72),
+      rgba(255,255,255,.38)
+    );
+  border-color:rgba(20,50,90,.13);
+  box-shadow:
+    0 20px 60px rgba(40,70,110,.15),
+    inset 0 1px 0 rgba(255,255,255,.8);
+}
+
+body.light-mode .nav-btn{
+  color:#52627a;
+}
+
+body.light-mode .nav-btn:hover,
+body.light-mode .nav-btn.active{
+  color:#07111f;
+  background:rgba(0,0,0,.06);
+}
+
+body.light-mode .hero p,
+body.light-mode .section-head p,
+body.light-mode .journey p,
+body.light-mode .owner p,
+body.light-mode footer{
+  color:#52627a;
+}
+
+body.light-mode .unit-btn,
+body.light-mode .setting,
+body.light-mode .mission,
+body.light-mode .pill,
+body.light-mode .quiz-box,
+body.light-mode .cheat-item{
+  background:rgba(0,0,0,.045);
+  color:#07111f;
+}
+
+body.light-mode .unit-btn{color:#07111f}
+
+body.light-mode .answer{
+  background:rgba(255,255,255,.65);
+  color:#07111f;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+  .hero{
+    grid-template-columns:1fr;
   }
-  .logo{font-size:18px;padding:0 8px}
-  .navlinks{display:none}
-  .menu{display:block;margin-right:auto}
-  main{width:94%;padding-top:85px}
-  h1{font-size:45px}
-  .cards{grid-template-columns:1fr}
-  .stats{grid-template-columns:1fr 1fr}
-  .scene{height:330px}
-  .core{width:220px;height:150px}
-  .float{width:58px;height:58px;font-size:22px}
-  .f1{right:0}.f2{left:0}.f3{right:5%}.f4{left:5%}
+
+  .character-zone{height:420px}
+
+  .grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .learning-layout{
+    grid-template-columns:1fr;
+  }
+
+  .dashboard-grid,
+  .settings-grid{
+    grid-template-columns:1fr;
+  }
+
+  .nav{overflow:auto}
+
+  .nav-links{flex-wrap:nowrap}
+
+  #mascotMini{
+    transform:scale(.82);
+    transform-origin:bottom left;
+  }
+}
+
+@media(max-width:600px){
+
+  header{top:7px}
+
+  .nav{
+    min-height:64px;
+    padding:7px;
+  }
+
+  .logo small{display:none}
+
+  .nav-btn{
+    padding:9px;
+    font-size:12px;
+  }
+
+  .hero{
+    min-height:auto;
+    padding-top:20px;
+  }
+
+  .hero h1{
+    font-size:58px;
+    letter-spacing:-3px;
+  }
+
+  .grid,
+  .friend-grid,
+  .cheat{
+    grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .planet{opacity:.5}
+
+  .p2{right:-45px}
+
+  .p4{right:-25px}
+
+  .saturn{right:-35px}
+
+  .welcome-bubble{
+    right:0;
+    top:0;
+  }
+
+  .question{font-size:22px}
+
+  .ai-input{flex-direction:column}
+
+  #mascotMini{
+    left:4px;
+    bottom:5px;
+    transform:scale(.68);
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    scroll-behavior:auto!important;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
-<div class="grid"></div>
-<div class="scan"></div>
+<!-- ================= SPACE ================= -->
 
-<!-- BOOT -->
-<div id="boot">
-  <div class="bootBox">
-    <div class="bootLogo">VANTA</div>
-    <p class="bootSub">أكاديمية التقنية والأمن السيبراني</p>
-    <div class="progress"><span id="bootProgress"></span></div>
-    <div class="bootInfo">
-      <span id="bootText">تهيئة النظام...</span>
-      <b id="bootPercent">0%</b>
-    </div>
+<div id="space">
+
+  <div id="stars"></div>
+
+  <div class="nebula n1"></div>
+  <div class="nebula n2"></div>
+  <div class="nebula n3"></div>
+
+  <div class="planet p1"></div>
+  <div class="planet p2"></div>
+  <div class="planet p3"></div>
+  <div class="planet p4"></div>
+  <div class="planet p5"></div>
+
+  <div class="saturn">
+    <div class="saturn-ring"></div>
+    <div class="saturn-body"></div>
   </div>
+
 </div>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="logo">VANTA</div>
+<!-- ================= BOOT ================= -->
 
-  <div class="navlinks">
-    <button class="active" data-page="home">الرئيسية</button>
-    <button data-page="academy">الأكاديمية</button>
-    <button data-page="labs">المختبرات</button>
-    <button data-page="library">المكتبة</button>
-    <button data-page="levels">المستويات</button>
-    <button data-page="about">عن علي</button>
-    <button data-page="thanks">الشكر والتقدير</button>
-    <button data-page="settings">الإعدادات</button>
+<div id="boot">
+
+  <div class="boot-box glass">
+
+    <div class="boot-logo">VANTA</div>
+
+    <div class="boot-sub">
+      V1.61 • TECH • CODE • CYBER • AI • LEARNING
+    </div>
+
+    <div class="boot-terminal" id="bootTerminal">
+      <div>> initializing VANTA universe...</div>
+    </div>
+
+    <div class="boot-progress">
+      <div id="bootBar"></div>
+    </div>
+
+    <div class="boot-actions">
+
+      <button class="btn btn-primary" onclick="enterVanta()">
+        🚀 دخول إلى VANTA
+      </button>
+
+      <button class="skip" onclick="enterVanta()">
+        تخطي
+      </button>
+
+    </div>
+
   </div>
 
-  <button class="iconBtn menu" onclick="toggleMenu()">☰</button>
-</nav>
+</div>
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+  <nav class="nav glass">
+
+    <div class="logo" onclick="go('home')">
+
+      <div class="logo-orb">V</div>
+
+      <div>
+        <strong>VANTA</strong>
+        <small>by Ali Yaser • V1.61</small>
+      </div>
+
+    </div>
+
+    <div class="nav-links">
+
+      <button class="nav-btn active"
+              data-page="home"
+              onclick="go('home')">
+        الرئيسية
+      </button>
+
+      <button class="nav-btn"
+              data-page="learn"
+              onclick="go('learn')">
+        التعلم
+      </button>
+
+      <button class="nav-btn"
+              data-page="journeys"
+              onclick="go('journeys')">
+        الرحلات
+      </button>
+
+      <button class="nav-btn"
+              data-page="practice"
+              onclick="go('practice')">
+        التدريب
+      </button>
+
+      <button class="nav-btn"
+              data-page="skills"
+              onclick="go('skills')">
+        المهارات
+      </button>
+
+      <button class="nav-btn"
+              data-page="dashboard"
+              onclick="go('dashboard')">
+        لوحتي
+      </button>
+
+      <button class="nav-btn"
+              data-page="ai"
+              onclick="go('ai')">
+        🤖 AI
+      </button>
+
+      <button class="nav-btn"
+              data-page="credits"
+              onclick="go('credits')">
+        ❤️ عن VANTA
+      </button>
+
+    </div>
+
+    <button class="nav-settings"
+            onclick="go('settings')"
+            title="الإعدادات">
+      ⚙️
+    </button>
+
+  </nav>
+
+</header>
+
+<!-- ================= MAIN ================= -->
 
 <main>
 
-<!-- HOME -->
-<section class="page active" id="home">
+<!-- ================= HOME ================= -->
+
+<section id="home" class="page active">
 
   <div class="hero">
-    <div>
-      <span class="badge">● النظام متصل — VANTA 2.0</span>
 
-      <h1>
-        تعلّم التقنية.<br>
-        <span class="gradient">ابنِ مستقبلك.</span>
-      </h1>
+    <div class="hero-text">
+
+      <div class="badge">
+        ✦ VANTA Universe
+        <span>● Online</span>
+      </div>
+
+      <h1>VANTA</h1>
+
+      <h2>
+        تعلم. اصنع. تطوّر. 🚀
+      </h2>
 
       <p>
-        منصة تعليمية عربية تجمع الأمن السيبراني والبرمجة والشبكات
-        والتقنية في تجربة تفاعلية واحدة.
+        عالم تعليمي تفاعلي صمم ليحوّل تعلم البرمجة والتقنية
+        إلى رحلة حقيقية مليئة بالمراحل والمهارات والتحديات.
       </p>
 
-      <div class="actions">
-        <button class="btn primary" onclick="go('academy')">ابدأ التعلم 🚀</button>
-        <button class="btn" onclick="go('labs')">ادخل المختبر 🧪</button>
+      <p style="margin-top:8px">
+        <strong>Powered by Ali Yaser</strong>
+      </p>
+
+      <p style="margin-top:8px;font-size:13px">
+        🤖 رفيقك داخل VANTA:
+        <strong style="color:#8ef8ff">
+          NOVA
+        </strong>
+      </p>
+
+      <div class="hero-actions">
+
+        <button class="btn btn-primary"
+                onclick="go('learn')">
+          🚀 ابدأ التعلم
+        </button>
+
+        <button class="btn btn-secondary"
+                onclick="go('practice')">
+          ⚡ ادخل ساحة التدريب
+        </button>
+
       </div>
 
-      <div class="stats">
-        <div class="stat"><b id="statXP">0</b><span>XP مكتسب</span></div>
-        <div class="stat"><b id="statLevel">1</b><span>المستوى</span></div>
-        <div class="stat"><b id="statDone">0</b><span>دروس مكتملة</span></div>
-        <div class="stat"><b>24/7</b><span>تعلم متاح</span></div>
-      </div>
     </div>
 
-    <!-- INTERACTIVE SCENE -->
-    <div class="scene" id="scene">
+    <div class="character-zone">
 
-      <div class="orbit"></div>
+      <div class="character-aura"></div>
 
-      <div class="core">
-        <div class="monitor">
-          <div class="terminalLines">
-            <span>root@vanta:~$ initializing...</span>
-            <span>root@vanta:~$ academy.load()</span>
-            <span>root@vanta:~$ cyber_range.start()</span>
-            <span>root@vanta:~$ system.ready ✓</span>
+      <div class="welcome-bubble">
+        👋 أهلاً بك في VANTA!
+        <div class="mascot-name">
+          NOVA • رفيقك
+        </div>
+      </div>
+
+      <div class="vanta-character">
+
+        <div class="char-shadow"></div>
+
+        <div class="char-body"></div>
+
+        <div class="arm left">
+          <div class="hand"></div>
+        </div>
+
+        <div class="arm right">
+          <div class="hand"></div>
+        </div>
+
+        <div class="leg left"></div>
+        <div class="leg right"></div>
+
+        <div class="char-head">
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="smile"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat card glass">
+      <div class="icon">⚡</div>
+      <strong id="homeXP">0</strong>
+      <span>XP</span>
+    </div>
+
+    <div class="stat card glass">
+      <div class="icon">🔥</div>
+      <strong id="homeStreak">0</strong>
+      <span>Learning Streak</span>
+    </div>
+
+    <div class="stat card glass">
+      <div class="icon">💎</div>
+      <strong id="homeGems">0</strong>
+      <span>Gems</span>
+    </div>
+
+    <div class="stat card glass">
+      <div class="icon">🧬</div>
+      <strong id="homeLevel">1</strong>
+      <span>Skill Level</span>
+    </div>
+
+  </div>
+
+  <div class="section-head">
+
+    <div>
+      <h2>داخل عالم VANTA</h2>
+
+      <p>
+        كل زر هنا يقودك إلى شيء فعلي،
+        وليس مجرد "قريبًا".
+      </p>
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <div class="card glass">
+      <div class="feature-icon">🧠</div>
+      <h3>Adaptive Learning</h3>
+      <p style="color:var(--muted);line-height:1.8;margin-top:8px">
+        مستوى الأسئلة يتغير بناءً على أدائك الحقيقي.
+      </p>
+    </div>
+
+    <div class="card glass">
+      <div class="feature-icon">🎮</div>
+      <h3>XP + Combo</h3>
+      <p style="color:var(--muted);line-height:1.8;margin-top:8px">
+        الإجابات الصحيحة تبني الـCombo والـXP.
+      </p>
+    </div>
+
+    <div class="card glass">
+      <div class="feature-icon">🌌</div>
+      <h3>VANTA Universe</h3>
+      <p style="color:var(--muted);line-height:1.8;margin-top:8px">
+        الكواكب تمثل رحلات ومجالات تعلم مختلفة.
+      </p>
+    </div>
+
+    <div class="card glass">
+      <div class="feature-icon">🏆</div>
+      <h3>Achievements</h3>
+      <p style="color:var(--muted);line-height:1.8;margin-top:8px">
+        افتح إنجازات حقيقية أثناء تقدمك.
+      </p>
+    </div>
+
+    <div class="card glass">
+      <div class="feature-icon">🤖</div>
+      <h3>AI Tutor</h3>
+      <p style="color:var(--muted);line-height:1.8;margin-top:8px">
+        مساعد VANTA يعرف مستواك والدرس الحالي.
+      </p>
+    </div>
+
+    <div class="card glass">
+      <div class="feature-icon">🧩</div>
+      <h3>Skill DNA</h3>
+      <p style="color:var(--muted);line-height:1.8;margin-top:8px">
+        شاهد تطور مهاراتك بدل مجرد رقم مستوى.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= LEARN ================= -->
+
+<section id="learn" class="page">
+
+  <div class="section-head">
+
+    <div>
+
+      <h2>📚 مركز التعلم</h2>
+
+      <p>
+        شرح → مثال → مرجع سريع → تحدي → تشغيل → اختبار.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="learning-layout">
+
+    <div class="card glass">
+
+      <h3 style="margin-bottom:14px">
+        🐍 Python Fundamentals
+      </h3>
+
+      <div class="unit-list">
+
+        <button class="unit-btn active"
+                onclick="lesson(0,this)">
+          🟢 01 — المتغيرات
+        </button>
+
+        <button class="unit-btn"
+                onclick="lesson(1,this)">
+          🔵 02 — الشروط
+        </button>
+
+        <button class="unit-btn"
+                onclick="lesson(2,this)">
+          🟣 03 — الحلقات
+        </button>
+
+        <button class="unit-btn"
+                onclick="lesson(3,this)">
+          🟠 04 — الدوال
+        </button>
+
+        <button class="unit-btn"
+                onclick="lesson(4,this)">
+          🩷 05 — النصوص
+        </button>
+
+        <button class="unit-btn"
+                onclick="lesson(5,this)">
+          🟢 06 — القوائم
+        </button>
+
+      </div>
+
+      <div style="margin-top:20px;
+                  padding:15px;
+                  border-radius:18px;
+                  background:rgba(0,234,255,.06);
+                  border:1px solid rgba(0,234,255,.1)">
+
+        <strong>🎯 طريقة VANTA</strong>
+
+        <p style="color:var(--muted);
+                  line-height:1.8;
+                  margin-top:6px;
+                  font-size:13px">
+
+          لا تحفظ فقط.
+          افهم، جرّب، أخطئ، صحح، ثم اختبر نفسك.
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="lesson-box card glass">
+
+      <span class="lesson-number"
+            id="lessonNumber">
+        LESSON 01
+      </span>
+
+      <h2 id="lessonTitle">
+        المتغيرات Variables
+      </h2>
+
+      <div class="lesson-progress">
+        <div id="lessonProgress"
+             style="width:16%">
+        </div>
+      </div>
+
+      <div class="lesson-tabs">
+
+        <button class="lesson-tab active"
+                onclick="showLessonTab('explain',this)">
+          📖 الشرح
+        </button>
+
+        <button class="lesson-tab"
+                onclick="showLessonTab('example',this)">
+          💻 المثال
+        </button>
+
+        <button class="lesson-tab"
+                onclick="showLessonTab('cheat',this)">
+          🧠 المرجع
+        </button>
+
+        <button class="lesson-tab"
+                onclick="showLessonTab('challenge',this)">
+          🧪 التحدي
+        </button>
+
+        <button class="lesson-tab"
+                onclick="showLessonTab('quiz',this)">
+          🎯 الاختبار
+        </button>
+
+      </div>
+
+      <!-- EXPLAIN -->
+
+      <div id="lessonExplain"
+           class="lesson-panel active">
+
+        <p id="lessonText">
+          المتغير هو اسم نخزن داخله قيمة
+          يمكن استخدامها لاحقًا.
+          في Python لا تحتاج إلى تحديد نوع
+          المتغير يدويًا في البداية.
+        </p>
+
+        <div class="code-box"
+             id="lessonCode">
+name = "Ali"
+age = 18
+
+print(name)
+print(age)
+        </div>
+
+        <p id="lessonExtra">
+          المتغيرات هي من أول الأشياء التي تحتاج فهمها
+          قبل بناء برامج أكبر.
+        </p>
+
+        <div class="hero-actions">
+
+          <button class="btn btn-primary"
+                  onclick="showLessonTab('challenge')">
+            🧪 ابدأ التحدي
+          </button>
+
+          <button class="btn btn-secondary"
+                  onclick="showLessonTab('example')">
+            ➜ شاهد المثال
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- EXAMPLE -->
+
+      <div id="lessonExample"
+           class="lesson-panel">
+
+        <h3>💻 مثال عملي</h3>
+
+        <p style="margin-top:10px"
+           id="exampleExplain">
+          شاهد كيف يستخدم المفهوم داخل برنامج صغير.
+        </p>
+
+        <div class="code-box"
+             id="exampleCode">
+name = "Ali"
+age = 18
+
+print("Name:", name)
+print("Age:", age)
+        </div>
+
+        <div class="run-output"
+             id="exampleOutput">
+          ▶ اضغط تشغيل لرؤية نتيجة المثال.
+        </div>
+
+        <button class="btn btn-primary"
+                style="margin-top:12px"
+                onclick="runExample()">
+          ▶ تشغيل المثال
+        </button>
+
+      </div>
+
+      <!-- CHEAT -->
+
+      <div id="lessonCheat"
+           class="lesson-panel">
+
+        <h3>🧠 Cheat Sheet</h3>
+
+        <div class="cheat"
+             id="cheatGrid">
+
+          <div class="cheat-item">
+            <strong>المتغير</strong>
+            <span>اسم يخزن قيمة.</span>
           </div>
+
+          <div class="cheat-item">
+            <strong>=</strong>
+            <span>تعيين قيمة للمتغير.</span>
+          </div>
+
+          <div class="cheat-item">
+            <strong>print()</strong>
+            <span>عرض نتيجة على الشاشة.</span>
+          </div>
+
+          <div class="cheat-item">
+            <strong>type()</strong>
+            <span>معرفة نوع القيمة.</span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CHALLENGE -->
+
+      <div id="lessonChallenge"
+           class="lesson-panel">
+
+        <div class="challenge">
+
+          <span class="challenge-badge"
+                id="challengeDifficulty">
+            Beginner
+          </span>
+
+          <h3 id="challengeTitle">
+            🧪 تحدي المتغيرات
+          </h3>
+
+          <p id="challengeText"
+             style="margin-top:8px">
+            أنشئ متغيرًا باسم age وضع فيه الرقم 18
+            ثم اطبع قيمة المتغير.
+          </p>
+
+          <textarea
+            id="challengeEditor"
+            class="editor"
+            spellcheck="false"
+          >age = 18
+print(age)</textarea>
+
+          <div class="hero-actions">
+
+            <button class="btn btn-primary"
+                    onclick="runChallenge()">
+              ▶ تشغيل والتحقق
+            </button>
+
+            <button class="btn btn-secondary"
+                    onclick="showChallengeHint()">
+              💡 تلميح
+            </button>
+
+          </div>
+
+          <div id="challengeHint"
+               class="hint">
+          </div>
+
+          <div id="challengeOutput"
+               class="run-output">
+            💻 اكتب الكود ثم شغله.
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- QUIZ -->
+
+      <div id="lessonQuiz"
+           class="lesson-panel">
+
+        <div class="quiz-box">
+
+          <span class="challenge-badge">
+            🎯 Test Yourself
+          </span>
+
+          <h3 id="lessonQuizQuestion">
+            ما نوع القيمة في:
+            <br>
+            <code>age = 18</code>
+          </h3>
+
+          <div id="lessonQuizOptions"></div>
+
+          <div id="lessonQuizFeedback"
+               class="feedback">
+          </div>
+
+          <button class="btn btn-primary"
+                  onclick="finishLessonQuiz()"
+                  id="finishQuizBtn"
+                  style="display:none">
+            🚀 إكمال الدرس
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="hero-actions">
+
+        <button class="btn btn-secondary"
+                onclick="previousLesson()">
+          ← الدرس السابق
+        </button>
+
+        <button class="btn btn-primary"
+                onclick="nextLesson()">
+          الدرس التالي ➜
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= JOURNEYS ================= -->
+
+<section id="journeys" class="page">
+
+  <div class="section-head">
+
+    <div>
+
+      <h2>🌌 VANTA Journeys</h2>
+
+      <p>
+        كل رحلة عالم، وكل عالم يحتوي على مهارات وفصول ودروس.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <div class="journey card glass">
+
+      <div
+        class="journey-planet"
+        style="background:radial-gradient(circle at 30% 25%,#fff,#55eaff 8%,#326cff 45%,#171c68)">
+      </div>
+
+      <h3>🐍 Python Planet</h3>
+
+      <p>
+        المتغيرات، الشروط، الحلقات، الدوال،
+        البيانات والمشاريع.
+      </p>
+
+      <div class="progress">
+        <div id="pythonJourneyProgress"
+             style="width:16%">
         </div>
       </div>
 
-      <button class="float f1" onclick="go('academy')" title="الأكاديمية">💻</button>
-      <button class="float f2" onclick="go('labs')" title="المختبرات">🔐</button>
-      <button class="float f3" onclick="go('library')" title="المكتبة">📚</button>
-      <button class="float f4" onclick="go('levels')" title="المستويات">🏆</button>
-      <button class="float f5" onclick="showToast('VANTA AI قيد التهيئة 🤖')">🤖</button>
-      <button class="float f6" onclick="showToast('اتصال آمن — VANTA NODE ✓')">🌐</button>
+      <small id="pythonJourneyText"
+             style="display:block;margin-top:7px;color:var(--muted)">
+        16% مكتمل
+      </small>
+
+      <button class="btn btn-secondary"
+              style="margin-top:15px"
+              onclick="go('learn')">
+        🚀 متابعة الرحلة
+      </button>
 
     </div>
-  </div>
 
-  <div class="sectionHead">
-    <div>
-      <h2>ماذا ستتعلم؟</h2>
-      <p>مسارات أساسية تبني معرفتك خطوة بخطوة.</p>
-    </div>
-  </div>
+    <div class="journey card glass">
 
-  <div class="cards">
-    <div class="card">
-      <div class="cardIcon">🛡️</div>
-      <h3>الأمن السيبراني</h3>
-      <p>تعلم أساسيات حماية الأنظمة والشبكات وفهم الهجمات والدفاع عنها بشكل قانوني وآمن.</p>
-    </div>
+      <div
+        class="journey-planet"
+        style="background:radial-gradient(circle at 30% 25%,#fff,#ff86d9 8%,#9b42ff 45%,#32135d)">
+      </div>
 
-    <div class="card">
-      <div class="cardIcon">💻</div>
-      <h3>البرمجة</h3>
-      <p>ابدأ من المنطق البرمجي وصولًا إلى بناء مشاريع حقيقية.</p>
-    </div>
+      <h3>🌐 Web Galaxy</h3>
 
-    <div class="card">
-      <div class="cardIcon">🌐</div>
-      <h3>الشبكات</h3>
-      <p>افهم كيف تتواصل الأجهزة وكيف تعمل عناوين IP وDNS وHTTP.</p>
+      <p>
+        HTML وCSS وJavaScript وبناء المواقع التفاعلية.
+      </p>
+
+      <div class="progress">
+        <div style="width:14%"></div>
+      </div>
+
+      <small style="display:block;margin-top:7px;color:var(--muted)">
+        14% مكتمل
+      </small>
+
     </div>
 
-    <div class="card">
-      <div class="cardIcon">🐧</div>
-      <h3>Linux</h3>
-      <p>تعلم الطرفية والأوامر الأساسية وإدارة الملفات والعمليات.</p>
+    <div class="journey card glass">
+
+      <div
+        class="journey-planet"
+        style="background:radial-gradient(circle at 30% 25%,#fff,#63ffad 8%,#12a16e 45%,#073d3e)">
+      </div>
+
+      <h3>📡 Networking World</h3>
+
+      <p>
+        الشبكات، IP، DNS، HTTP والمفاهيم الأساسية.
+      </p>
+
+      <div class="progress">
+        <div style="width:8%"></div>
+      </div>
+
+      <small style="display:block;margin-top:7px;color:var(--muted)">
+        8% مكتمل
+      </small>
+
     </div>
 
-    <div class="card">
-      <div class="cardIcon">🔐</div>
-      <h3>التشفير</h3>
-      <p>افهم التشفير والمفاتيح والتجزئة والمفاهيم الأساسية لحماية البيانات.</p>
+    <div class="journey card glass">
+
+      <div
+        class="journey-planet"
+        style="background:radial-gradient(circle at 30% 25%,#fff,#ffbd69 8%,#ff4f6f 45%,#5a1630)">
+      </div>
+
+      <h3>🛡️ Cyber Sector</h3>
+
+      <p>
+        أمن المعلومات بطريقة قانونية وآمنة وتعليمية.
+      </p>
+
+      <div class="progress">
+        <div style="width:5%"></div>
+      </div>
+
+      <small style="display:block;margin-top:7px;color:var(--muted)">
+        5% مكتمل
+      </small>
+
     </div>
 
-    <div class="card">
-      <div class="cardIcon">🤖</div>
-      <h3>الذكاء الاصطناعي</h3>
-      <p>تعرف على أساسيات الذكاء الاصطناعي واستخدامه في التقنية والأمن.</p>
-    </div>
-  </div>
+    <div class="journey card glass">
 
-</section>
+      <div
+        class="journey-planet"
+        style="background:radial-gradient(circle at 30% 25%,#fff,#d2b6ff 8%,#805cff 45%,#24104c)">
+      </div>
 
+      <h3>🤖 AI Universe</h3>
 
-<!-- ACADEMY -->
-<section class="page" id="academy">
+      <p>
+        الذكاء الاصطناعي، النماذج، البيانات واستخدام AI.
+      </p>
 
-  <div class="sectionHead">
-    <div>
-      <h2>🎓 أكاديمية VANTA</h2>
-      <p>دروس مرتبة من الأساسيات إلى المستوى المتقدم.</p>
-    </div>
-  </div>
+      <div class="progress">
+        <div style="width:3%"></div>
+      </div>
 
-  <div class="toolbar">
-    <input class="input" id="search" placeholder="ابحث عن درس..." oninput="renderLessons()">
+      <small style="display:block;margin-top:7px;color:var(--muted)">
+        3% مكتمل
+      </small>
 
-    <button class="btn" onclick="filterLessons('all')">الكل</button>
-    <button class="btn" onclick="filterLessons('cyber')">الأمن</button>
-    <button class="btn" onclick="filterLessons('programming')">البرمجة</button>
-    <button class="btn" onclick="filterLessons('tech')">التقنية</button>
-  </div>
-
-  <div id="lessons" class="cards"></div>
-
-</section>
-
-
-<!-- LESSON -->
-<section class="page" id="lesson">
-
-  <div class="lessonBox">
-
-    <button class="btn" onclick="go('academy')">← العودة للأكاديمية</button>
-
-    <h1 id="lessonTitle">الدرس</h1>
-
-    <div class="badge" id="lessonCategory">درس</div>
-
-    <div class="card lessonContent" id="lessonBody"></div>
-
-    <div class="quiz" id="quizBox"></div>
-
-  </div>
-
-</section>
-
-
-<!-- LABS -->
-<section class="page" id="labs">
-
-  <div class="sectionHead">
-    <div>
-      <h2>🧪 المختبرات</h2>
-      <p>تطبيق آمن داخل المتصفح — بدون مهاجمة أي نظام حقيقي.</p>
-    </div>
-  </div>
-
-  <div class="cards">
-
-    <div class="card">
-      <div class="cardIcon">🐧</div>
-      <h3>مختبر أوامر Linux</h3>
-      <p>تعلم وظيفة الأوامر الأساسية من خلال تحدي بسيط.</p>
-      <button class="btn primary" style="margin-top:18px" onclick="openLab('linux')">ابدأ المختبر</button>
     </div>
 
-    <div class="card">
-      <div class="cardIcon">🌐</div>
-      <h3>مختبر HTTP</h3>
-      <p>تعرف على الطلبات والاستجابات ورموز الحالة.</p>
-      <button class="btn primary" style="margin-top:18px" onclick="openLab('http')">ابدأ المختبر</button>
-    </div>
+    <div class="journey card glass">
 
-    <div class="card">
-      <div class="cardIcon">🔐</div>
-      <h3>مختبر كلمات المرور</h3>
-      <p>تعلم لماذا تكون كلمات المرور الضعيفة مشكلة أمنية.</p>
-      <button class="btn primary" style="margin-top:18px" onclick="openLab('password')">ابدأ المختبر</button>
+      <div
+        class="journey-planet"
+        style="background:radial-gradient(circle at 30% 25%,#fff,#ffe96b 8%,#ff9c42 45%,#62272a)">
+      </div>
+
+      <h3>💻 Programming Logic</h3>
+
+      <p>
+        المنطق البرمجي وحل المشكلات وبناء التفكير البرمجي.
+      </p>
+
+      <div class="progress">
+        <div style="width:20%"></div>
+      </div>
+
+      <small style="display:block;margin-top:7px;color:var(--muted)">
+        20% مكتمل
+      </small>
+
     </div>
 
   </div>
 
 </section>
 
+<!-- ================= PRACTICE ================= -->
 
-<!-- LIBRARY -->
-<section class="page" id="library">
+<section id="practice" class="page">
 
-  <div class="sectionHead">
+  <div class="section-head">
+
     <div>
-      <h2>📚 مكتبة VANTA</h2>
-      <p>مصادر وكتب ودروس خارجية تساعدك على التعمق.</p>
+
+      <h2>⚡ Practice Arena</h2>
+
+      <p>
+        الأسئلة تتدرج من السهل إلى الأصعب
+        حسب إجاباتك ومهارتك.
+      </p>
+
     </div>
+
   </div>
 
-  <div class="cards">
+  <div class="practice-card card glass">
 
-    <div class="card resource">
-      <div class="resourceInfo">
-        <div class="resourceIcon">📖</div>
+    <div class="practice-top">
+
+      <span class="pill">
+        المستوى:
+        <strong id="qLevel">سهل</strong>
+      </span>
+
+      <span class="pill">
+        🔥 Combo:
+        <strong id="combo">0</strong>
+      </span>
+
+      <span class="pill">
+        ⚡ XP:
+        <strong id="practiceXP">0</strong>
+      </span>
+
+      <span class="pill">
+        🎯 سؤال:
+        <strong id="questionNumber">1</strong>
+      </span>
+
+    </div>
+
+    <div class="progress">
+      <div id="difficultyBar"
+           style="width:15%">
+      </div>
+    </div>
+
+    <div class="question"
+         id="question">
+      جاري تجهيز السؤال...
+    </div>
+
+    <input
+      id="answer"
+      class="answer"
+      autocomplete="off"
+      placeholder="اكتب إجابتك هنا..."
+      onkeydown="if(event.key==='Enter')checkAnswer()"
+    >
+
+    <div id="hint"
+         class="hint">
+    </div>
+
+    <div id="feedback"
+         class="feedback">
+    </div>
+
+    <div class="hero-actions">
+
+      <button class="btn btn-primary"
+              onclick="checkAnswer()">
+        ✓ تحقق
+      </button>
+
+      <button class="btn btn-secondary"
+              onclick="showHint()">
+        💡 أنا عالق
+      </button>
+
+      <button class="btn btn-secondary"
+              onclick="newQuestion(true)">
+        🔄 سؤال جديد
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= SKILLS ================= -->
+
+<section id="skills" class="page">
+
+  <div class="section-head">
+
+    <div>
+
+      <h2>🧬 Skill DNA</h2>
+
+      <p>
+        مستواك هنا يتغير مع تقدمك الحقيقي.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="grid"
+       id="skillsGrid">
+  </div>
+
+</section>
+
+<!-- ================= DASHBOARD ================= -->
+
+<section id="dashboard" class="page">
+
+  <div class="section-head">
+
+    <div>
+
+      <h2>🎮 لوحتك</h2>
+
+      <p>
+        كل تقدمك في مكان واحد.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div class="dashboard-grid">
+
+    <div class="card glass">
+
+      <small style="color:var(--muted)">
+        VANTA SKILL LEVEL
+      </small>
+
+      <div class="big-level"
+           id="dashLevel">
+        1
+      </div>
+
+      <p style="color:var(--muted)">
+        المستوى يرتفع مع إتقان المهارات،
+        وليس بمجرد فتح الموقع.
+      </p>
+
+      <div class="progress"
+           style="margin-top:20px">
+
+        <div id="dashProgress"
+             style="width:15%">
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="card glass">
+
+      <h3>🎯 Daily Missions</h3>
+
+      <div class="mission">
+        <div class="check">✓</div>
         <div>
-          <h3>MDN Web Docs</h3>
-          <p>مرجع ممتاز لتعلم HTML وCSS وJavaScript.</p>
+          <strong>
+            حل 3 أسئلة
+          </strong>
+          <small style="display:block;color:var(--muted)">
+            أكملها اليوم لتحصل على XP
+          </small>
         </div>
       </div>
-      <a class="btn" href="https://developer.mozilla.org/ar/" target="_blank" rel="noopener">فتح</a>
-    </div>
 
-    <div class="card resource">
-      <div class="resourceInfo">
-        <div class="resourceIcon">🐧</div>
+      <div class="mission">
+        <div class="check">🔥</div>
         <div>
-          <h3>Linux Documentation</h3>
-          <p>مراجع وأدلة لتعلم Linux.</p>
+          <strong>
+            حافظ على الـStreak
+          </strong>
+          <small style="display:block;color:var(--muted)">
+            تعلم فعليًا اليوم
+          </small>
         </div>
       </div>
-      <a class="btn" href="https://www.kernel.org/doc/html/latest/" target="_blank" rel="noopener">فتح</a>
-    </div>
 
-    <div class="card resource">
-      <div class="resourceInfo">
-        <div class="resourceIcon">🛡️</div>
+      <div class="mission">
+        <div class="check">💎</div>
         <div>
-          <h3>OWASP</h3>
-          <p>مصدر أساسي لتعلم أمن تطبيقات الويب.</p>
+          <strong>
+            احصل على Gems
+          </strong>
+          <small style="display:block;color:var(--muted)">
+            مكافآت من الإنجاز
+          </small>
         </div>
       </div>
-      <a class="btn" href="https://owasp.org/" target="_blank" rel="noopener">فتح</a>
-    </div>
 
-    <div class="card resource">
-      <div class="resourceInfo">
-        <div class="resourceIcon">🎥</div>
+      <div class="mission">
+        <div class="check">🧪</div>
         <div>
-          <h3>YouTube Cybersecurity</h3>
-          <p>ابحث عن دروس الأمن السيبراني التعليمية.</p>
+          <strong>
+            أكمل تحدي الدرس
+          </strong>
+          <small style="display:block;color:var(--muted)">
+            تحديات VANTA التعليمية
+          </small>
         </div>
       </div>
-      <a class="btn" href="https://www.youtube.com/results?search_query=cybersecurity+for+beginners" target="_blank" rel="noopener">مشاهدة</a>
+
     </div>
 
   </div>
 
 </section>
 
+<!-- ================= AI ================= -->
 
-<!-- LEVELS -->
-<section class="page" id="levels">
+<section id="ai" class="page">
 
-  <div class="card levelBox">
+  <div class="section-head">
 
-    <div class="badge">نظام التقدم</div>
-
-    <div class="levelCircle">
-      <div>
-        <small>المستوى</small>
-        <b id="levelNumber">1</b>
-      </div>
-    </div>
-
-    <h2 id="levelName">المبتدئ</h2>
-
-    <p style="color:var(--muted)" id="xpText">0 / 500 XP</p>
-
-    <div class="levelProgress">
-      <span id="levelBar" style="width:0%"></span>
-    </div>
-
-  </div>
-
-  <div class="sectionHead">
     <div>
-      <h2>🏅 الإنجازات</h2>
-      <p>أكمل الدروس والمختبرات لفتح الإنجازات.</p>
+
+      <h2>🤖 VANTA AI Tutor</h2>
+
+      <p>
+        NOVA يعرف الدرس الحالي ومستواك
+        ويمكنه إعطاؤك شرحًا وتلميحات.
+      </p>
+
     </div>
+
   </div>
 
-  <div class="cards">
+  <div class="ai-chat card glass">
 
-    <div class="card">
-      <div class="cardIcon">🌱</div>
-      <h3>البداية</h3>
-      <p>أكمل أول درس.</p>
-      <span id="badgeStart">🔒 مغلق</span>
+    <div class="messages"
+         id="messages">
+
+      <div class="message ai">
+
+        👋 أنا NOVA، رفيق VANTA.
+
+        <br><br>
+
+        أعرف أنك الآن تتعلم:
+
+        <strong id="aiCurrentLesson">
+          المتغيرات
+        </strong>
+
+        <br><br>
+
+        يمكنك أن تقول:
+
+        <br>
+        "اشرح لي المتغيرات"
+
+        <br>
+        "أنا مش فاهم loops"
+
+        <br>
+        "أعطني تلميح"
+
+        <br>
+        "اختبرني"
+
+      </div>
+
     </div>
 
-    <div class="card">
-      <div class="cardIcon">🧠</div>
-      <h3>متعلم</h3>
-      <p>احصل على 500 XP.</p>
-      <span id="badgeXP">🔒 مغلق</span>
-    </div>
+    <div class="ai-input">
 
-    <div class="card">
-      <div class="cardIcon">🧪</div>
-      <h3>مختبر أول</h3>
-      <p>أكمل أول مختبر.</p>
-      <span id="badgeLab">🔒 مغلق</span>
+      <input
+        id="aiInput"
+        class="answer"
+        placeholder="اكتب سؤالك..."
+        onkeydown="if(event.key==='Enter')askAI()"
+      >
+
+      <button class="btn btn-primary"
+              onclick="askAI()">
+        إرسال 🚀
+      </button>
+
     </div>
 
   </div>
 
 </section>
 
+<!-- ================= SETTINGS ================= -->
 
-<!-- ABOUT -->
-<section class="page" id="about">
+<section id="settings" class="page">
 
-  <div class="card" style="max-width:850px;margin:40px auto;text-align:center">
+  <div class="section-head">
 
-    <div style="font-size:70px">👨‍💻</div>
+    <div>
 
-    <span class="badge">المؤسس والمطور</span>
+      <h2>⚙️ الإعدادات</h2>
 
-    <h1 style="font-size:50px">علي ياسر</h1>
+      <p>
+        تحكم في تجربة VANTA كما تريد.
+      </p>
 
-    <p style="color:var(--muted);line-height:2;font-size:17px">
-      مؤسس ومطور VANTA، مهتم بالتقنية والبرمجة والأمن السيبراني،
-      وهدفه بناء تجربة تعليمية عربية تساعد الشباب على دخول عالم التقنية
-      بطريقة عملية وممتعة.
+    </div>
+
+  </div>
+
+  <div class="settings-grid">
+
+    <div class="card glass">
+
+      <h3 style="margin-bottom:15px">
+        🎨 المظهر
+      </h3>
+
+      <div class="setting">
+
+        <div class="setting-info">
+          <strong>الوضع المضيء</strong>
+          <small>غيّر أجواء الموقع</small>
+        </div>
+
+        <button class="switch"
+                id="lightSwitch"
+                onclick="toggleLight()">
+        </button>
+
+      </div>
+
+      <div class="setting">
+
+        <div class="setting-info">
+          <strong>تأثير الزجاج</strong>
+          <small>Glassmorphism Blur</small>
+        </div>
+
+        <button class="switch on"
+                id="glassSwitch"
+                onclick="toggleGlass()">
+        </button>
+
+      </div>
+
+      <div class="setting">
+
+        <div class="setting-info">
+          <strong>الإضاءة</strong>
+          <small>Glow Effects</small>
+        </div>
+
+        <button class="switch on"
+                id="glowSwitch"
+                onclick="toggleGlow()">
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card glass">
+
+      <h3 style="margin-bottom:15px">
+        🌌 الفضاء
+      </h3>
+
+      <div class="setting">
+
+        <div class="setting-info">
+          <strong>الكواكب</strong>
+          <small>إظهار كواكب VANTA</small>
+        </div>
+
+        <button class="switch on"
+                id="planetSwitch"
+                onclick="togglePlanets()">
+        </button>
+
+      </div>
+
+      <div class="setting">
+
+        <div class="setting-info">
+          <strong>النجوم</strong>
+          <small>خلفية النجوم المتحركة</small>
+        </div>
+
+        <button class="switch on"
+                id="starsSwitch"
+                onclick="toggleStars()">
+        </button>
+
+      </div>
+
+      <div class="setting">
+
+        <div class="setting-info">
+          <strong>الحركة</strong>
+          <small>الحركة والأنيميشن</small>
+        </div>
+
+        <button class="switch on"
+                id="motionSwitch"
+                onclick="toggleMotion()">
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card glass">
+
+      <h3 style="margin-bottom:15px">
+        🔊 الصوت
+      </h3>
+
+      <div class="setting">
+
+        <div class="setting-info">
+          <strong>أصوات VANTA</strong>
+          <small>Boot / Click / XP / Correct</small>
+        </div>
+
+        <button class="switch on"
+                id="soundSwitch"
+                onclick="toggleSound()">
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="card glass">
+
+      <h3>
+        🤖 NOVA
+      </h3>
+
+      <p style="color:var(--muted);line-height:1.8;margin:10px 0">
+        الشخصية الرسمية المرافقة لعالم VANTA.
+        مظهرها الأساسي ثابت، وتتغير فقط الحركة
+        والتعبير حسب الموقف.
+      </p>
+
+      <div style="padding:12px;
+                  border-radius:15px;
+                  background:rgba(0,234,255,.06);
+                  color:#8ef8ff">
+        NOVA — VANTA Learning Companion
+      </div>
+
+    </div>
+
+    <div class="card glass">
+
+      <h3>🧹 البيانات</h3>
+
+      <p style="color:var(--muted);line-height:1.8;margin:10px 0 15px">
+        يمسح تقدم VANTA المحفوظ على هذا الجهاز.
+      </p>
+
+      <button class="btn btn-secondary"
+              onclick="resetData()">
+        إعادة ضبط التقدم
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ================= CREDITS ================= -->
+
+<section id="credits" class="page">
+
+  <div class="owner card glass">
+
+    <div class="owner-avatar">
+      AY
+    </div>
+
+    <h2>Ali Yaser</h2>
+
+    <p>
+      Founder • Owner • Developer
     </p>
 
-    <div class="cards" style="margin-top:25px">
+    <p style="margin-top:10px">
+      مؤسس ومالك ومطوّر VANTA.
+      صاحب الفكرة والعلامة وتجربة المشروع.
+    </p>
 
-      <div class="card">
-        <div class="cardIcon">💻</div>
-        <h3>التقنية</h3>
-        <p>شغف بدأ منذ الصغر واستمر حتى بناء VANTA.</p>
+    <a
+      class="instagram"
+      href="https://instagram.com/ali_yr_1"
+      target="_blank"
+      rel="noopener"
+    >
+      📸 @ali_yr_1
+    </a>
+
+  </div>
+
+  <div class="card glass thanks">
+
+    <h2>❤️ شكر وتقدير</h2>
+
+    <p style="color:var(--muted);line-height:1.9;margin-top:10px">
+
+      كل مشروع جميل خلفه أشخاص يشجعون صاحبه.
+
+      <br>
+
+      شكراً لأصدقائي على الدعم والتشجيع:
+
+    </p>
+
+    <div class="friend-grid">
+
+      <div class="friend glass">
+
+        <div class="friend-icon">
+          🤝
+        </div>
+
+        <h3>
+          Mohammed Sami
+        </h3>
+
+        <p>
+          شكراً على الدعم والتشجيع ❤️
+        </p>
+
       </div>
 
-      <div class="card">
-        <div class="cardIcon">🛡️</div>
-        <h3>الأمن السيبراني</h3>
-        <p>تعلم الأمن بهدف المعرفة والحماية والاستخدام المسؤول.</p>
+      <div class="friend glass">
+
+        <div class="friend-icon">
+          🚀
+        </div>
+
+        <h3>
+          Faisal Rani
+        </h3>
+
+        <p>
+          شكراً على الدعم والتشجيع ❤️
+        </p>
+
       </div>
 
-      <div class="card">
-        <div class="cardIcon">🚀</div>
-        <h3>VANTA</h3>
-        <p>مشروع شخصي يتحول إلى بيئة تعليمية تقنية متكاملة.</p>
-      </div>
-
     </div>
 
   </div>
 
-</section>
+  <div class="card glass"
+       style="margin-top:18px;text-align:center">
 
+    <h3>
+      © VANTA
+    </h3>
 
-<!-- THANKS -->
-<section class="page" id="thanks">
+    <p style="color:var(--muted);
+              line-height:1.9;
+              margin-top:8px">
 
-  <div class="sectionHead">
-    <div>
-      <h2>❤️ الشكر والتقدير</h2>
-      <p>صفحة مخصصة لكل من ساهم ودعم رحلة VANTA.</p>
-    </div>
-  </div>
+      VANTA، تصميمه، فكرته، علامته وتجربته التعليمية
+      مملوكة لـ <strong>Ali Yaser</strong>.
 
-  <div class="cards">
+    </p>
 
-    <div class="card" style="text-align:center">
-      <div style="font-size:60px">🤝</div>
-      <h2>محمد سامي</h2>
-      <p>
-        شكرًا على الدعم والمساهمة في رحلة المشروع.
-        وجود الأشخاص الداعمين يجعل الطريق أسهل.
-      </p>
-    </div>
+    <p style="color:#72809a;margin-top:8px">
+      Built with passion by Ali Yaser.
+    </p>
 
-    <div class="card" style="text-align:center">
-      <div style="font-size:60px">🤝</div>
-      <h2>فيصل راني</h2>
-      <p>
-        شكرًا على الدعم والمساهمة والأفكار التي ساعدت
-        في استمرار VANTA وتطويره.
-      </p>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- SETTINGS -->
-<section class="page" id="settings">
-
-  <div class="sectionHead">
-    <div>
-      <h2>⚙️ الإعدادات</h2>
-      <p>تحكم في تجربة VANTA بالطريقة التي تناسبك.</p>
-    </div>
-  </div>
-
-  <div class="card">
-
-    <div class="setting">
-      <span>
-        الوضع الداكن
-        <small>أفضل تجربة للمظهر السيبراني.</small>
-      </span>
-      <button class="switch on" id="darkSwitch" onclick="toggleDark()"></button>
-    </div>
-
-    <div class="setting">
-      <span>
-        الخلفية التفاعلية
-        <small>الجسيمات والشبكة والعناصر المتحركة.</small>
-      </span>
-      <button class="switch on" id="particleSwitch" onclick="toggleParticles()"></button>
-    </div>
-
-    <div class="setting">
-      <span>
-        المؤثرات الصوتية
-        <small>أصوات التفاعل والإنجازات.</small>
-      </span>
-      <button class="switch" id="soundSwitch" onclick="toggleSound()"></button>
-    </div>
-
-    <div class="setting">
-      <span>
-        الحركة
-        <small>تقليل الحركات للمستخدمين الذين يفضلون تجربة هادئة.</small>
-      </span>
-      <button class="switch on" id="motionSwitch" onclick="toggleMotion()"></button>
-    </div>
-
-    <div class="setting">
-      <span>
-        لون الواجهة
-        <small>اختر اللون الرئيسي للموقع.</small>
-      </span>
-
-      <select class="input" style="max-width:170px" onchange="changeAccent(this.value)">
-        <option value="blue">أزرق</option>
-        <option value="cyan">سماوي</option>
-        <option value="purple">بنفسجي</option>
-      </select>
-    </div>
-
-    <div class="setting">
-      <span>
-        حجم الخط
-        <small>تغيير حجم النصوص.</small>
-      </span>
-
-      <select class="input" style="max-width:170px" onchange="changeFont(this.value)">
-        <option value="normal">عادي</option>
-        <option value="large">كبير</option>
-        <option value="xl">كبير جدًا</option>
-      </select>
-    </div>
-
-    <div class="setting">
-      <span>
-        البيانات
-        <small>إعادة XP والدروس المكتملة.</small>
-      </span>
-      <button class="btn danger" onclick="resetProgress()">إعادة التقدم</button>
-    </div>
+    <p style="color:#72809a;margin-top:6px">
+      VANTA V1.61
+    </p>
 
   </div>
 
@@ -1206,1083 +3162,2763 @@ footer b{color:#fff}
 
 </main>
 
+<!-- ================= NOVA GLOBAL MASCOT ================= -->
+
+<div id="mascotMini">
+
+  <div class="mini-aura"></div>
+
+  <div class="mini-bubble"
+       id="mascotBubble">
+    👋 أنا NOVA
+  </div>
+
+  <div class="mini-character">
+
+    <div class="char-shadow"></div>
+
+    <div class="char-body"></div>
+
+    <div class="arm left">
+      <div class="hand"></div>
+    </div>
+
+    <div class="arm right">
+      <div class="hand"></div>
+    </div>
+
+    <div class="leg left"></div>
+    <div class="leg right"></div>
+
+    <div class="char-head">
+
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+
+      <div class="smile"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
 <footer>
-  <b>VANTA</b> — أكاديمية التقنية والأمن السيبراني
+
+  <strong>VANTA</strong>
+  — A learning universe by
+  <strong>Ali Yaser</strong>
+
   <br>
-  <span>صُنع بشغف بواسطة علي ياسر © 2026</span>
+
+  <span>
+    Learn. Build. Evolve. —
+    تعلم. اصنع. تطوّر.
+  </span>
+
+  <br>
+
+  © 2026 Ali Yaser. All rights reserved.
+
 </footer>
 
 <div id="toast"></div>
 
-<!-- MODAL -->
-<div class="modal" id="modal">
-  <div class="modalBox">
-    <button class="close" onclick="closeModal()">×</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
 <script>
 
-/* =========================
-   VANTA CORE
-========================= */
+/* =========================================================
+   VANTA V1.61 CORE
+========================================================= */
 
-const state = {
-  xp:Number(localStorage.getItem("vanta_xp") || 0),
-  completed:JSON.parse(localStorage.getItem("vanta_completed") || "[]"),
-  labs:Number(localStorage.getItem("vanta_labs") || 0),
-  sound:localStorage.getItem("vanta_sound")==="true",
-  particles:localStorage.getItem("vanta_particles")!=="false",
-  motion:localStorage.getItem("vanta_motion")!=="false"
+const $ = id => document.getElementById(id);
+
+const DEFAULT_STATE = {
+
+  xp:0,
+  gems:0,
+  streak:0,
+
+  combo:0,
+
+  correct:0,
+  wrong:0,
+  questions:0,
+
+  lessonCompleted:[],
+
+  quizCompleted:[],
+
+  dailyQuestions:0,
+
+  lastDay:"",
+
+  skill:{
+    Python:8,
+    Web:0,
+    Networking:0,
+    Cybersecurity:0,
+    AI:0,
+    Logic:10
+  },
+
+  settings:{
+    sound:true,
+    light:false,
+    glass:true,
+    glow:true,
+    planets:true,
+    stars:true,
+    motion:true
+  }
+
 };
 
-let currentFilter="all";
-let particlesEnabled=state.particles;
+let state =
+  JSON.parse(
+    localStorage.getItem("vanta_state") || "null"
+  ) || DEFAULT_STATE;
 
+state.settings =
+  Object.assign(
+    {},
+    DEFAULT_STATE.settings,
+    state.settings || {}
+  );
 
-/* =========================
+state.skill =
+  Object.assign(
+    {},
+    DEFAULT_STATE.skill,
+    state.skill || {}
+  );
+
+state.lessonCompleted =
+  Array.isArray(state.lessonCompleted)
+    ? state.lessonCompleted
+    : [];
+
+state.quizCompleted =
+  Array.isArray(state.quizCompleted)
+    ? state.quizCompleted
+    : [];
+
+function save(){
+
+  localStorage.setItem(
+    "vanta_state",
+    JSON.stringify(state)
+  );
+
+}
+
+/* =========================================================
    NAVIGATION
-========================= */
+========================================================= */
+
+const mascotStates = {
+
+  home:{
+    className:"",
+    text:"👋 أهلاً! أنا NOVA"
+  },
+
+  learn:{
+    className:"thinking",
+    text:"🤔 خلينا نفهمها"
+  },
+
+  journeys:{
+    className:"dance",
+    text:"🌌 اختر رحلتك"
+  },
+
+  practice:{
+    className:"",
+    text:"👀 أنا أراقب إجابتك"
+  },
+
+  skills:{
+    className:"celebrate",
+    text:"🧬 مهاراتك تتطور!"
+  },
+
+  dashboard:{
+    className:"celebrate",
+    text:"🏆 شوف تقدمك!"
+  },
+
+  ai:{
+    className:"thinking",
+    text:"🤖 اسألني"
+  },
+
+  settings:{
+    className:"",
+    text:"⚙️ غيّر تجربتك"
+  },
+
+  credits:{
+    className:"dance",
+    text:"❤️ شكرًا لكم"
+  }
+
+};
+
+function setMascot(page){
+
+  const mascot =
+    $("mascotMini");
+
+  if(!mascot) return;
+
+  const info =
+    mascotStates[page] ||
+    mascotStates.home;
+
+  mascot.className =
+    info.className;
+
+  $("mascotBubble").textContent =
+    info.text;
+
+}
+
+function mascotMood(mood,text){
+
+  const mascot =
+    $("mascotMini");
+
+  mascot.className =
+    mood || "";
+
+  $("mascotBubble").textContent =
+    text || "🤖 NOVA";
+
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
 function go(page){
-  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
 
-  const target=document.getElementById(page);
+  document.querySelectorAll(".page")
+    .forEach(p=>{
+      p.classList.remove("active");
+    });
 
-  if(target){
-    target.classList.add("active");
-  }
+  const target =
+    $(page);
 
-  document.querySelectorAll(".navlinks button").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.page===page);
+  if(!target) return;
+
+  target.classList.add("active");
+
+  document.querySelectorAll(".nav-btn")
+    .forEach(btn=>{
+
+      btn.classList.toggle(
+        "active",
+        btn.dataset.page === page
+      );
+
+    });
+
+  setMascot(page);
+
+  window.scrollTo({
+    top:0,
+    behavior:
+      state.settings.motion
+        ? "smooth"
+        : "auto"
   });
 
-  window.scrollTo({top:0,behavior:"smooth"});
-  updateUI();
-  playSound(400,.04);
-}
+  if(page === "practice"){
 
-document.querySelectorAll("[data-page]").forEach(btn=>{
-  btn.addEventListener("click",()=>go(btn.dataset.page));
-});
+    if(!currentQuestion){
+      newQuestion();
+    }
 
+    registerLearningActivity();
 
-function toggleMenu(){
-  const links=document.querySelector(".navlinks");
-  const visible=links.style.display==="flex";
-
-  links.style.display=visible?"none":"flex";
-
-  if(!visible){
-    links.style.position="absolute";
-    links.style.top="60px";
-    links.style.right="0";
-    links.style.left="0";
-    links.style.background="#071321";
-    links.style.padding="10px";
-    links.style.border="1px solid var(--line)";
-    links.style.borderRadius="15px";
-    links.style.flexDirection="column";
   }
+
+  if(page === "skills"){
+    renderSkills();
+  }
+
+  if(page === "dashboard"){
+    updateDashboard();
+  }
+
+  if(page === "learn"){
+    updateLearningUI();
+  }
+
+  updateHome();
+
+  sound("click");
+
 }
 
+/* =========================================================
+   HOME / LEVEL
+========================================================= */
 
-/* =========================
+function calculateLevel(){
+
+  const total =
+    Object.values(state.skill)
+      .reduce((a,b)=>a+b,0);
+
+  if(total < 35) return 1;
+  if(total < 60) return 2;
+  if(total < 90) return 3;
+  if(total < 125) return 4;
+  if(total < 165) return 5;
+  if(total < 210) return 6;
+  if(total < 260) return 7;
+
+  return 8;
+
+}
+
+function updateHome(){
+
+  $("homeXP").textContent =
+    state.xp;
+
+  $("homeGems").textContent =
+    state.gems;
+
+  $("homeStreak").textContent =
+    state.streak;
+
+  $("homeLevel").textContent =
+    calculateLevel();
+
+}
+
+function updateDashboard(){
+
+  const level =
+    calculateLevel();
+
+  $("dashLevel").textContent =
+    level;
+
+  const total =
+    Object.values(state.skill)
+      .reduce((a,b)=>a+b,0);
+
+  const progress =
+    Math.round(
+      (
+        total % 35
+      ) / 35 * 100
+    );
+
+  $("dashProgress").style.width =
+    Math.max(5,progress) + "%";
+
+}
+
+/* =========================================================
    LESSON DATA
-========================= */
+========================================================= */
 
-const lessons=[
+const lessons = [
+
   {
-    id:1,
-    cat:"cyber",
-    icon:"🛡️",
-    title:"مقدمة في الأمن السيبراني",
-    desc:"تعرف على مفهوم الأمن السيبراني وأهميته.",
-    xp:100,
-    body:`
-      <p>
-      الأمن السيبراني هو مجموعة من الممارسات والتقنيات التي تهدف إلى حماية
-      الأنظمة والشبكات والبيانات من الوصول غير المصرح به أو التغيير أو التخريب.
-      </p>
 
-      <h3>الأهداف الأساسية</h3>
-      <p>
-      من أشهر المفاهيم في الأمن مثلث CIA:
-      السرية Confidentiality، السلامة Integrity، والتوافر Availability.
-      </p>
+    title:"المتغيرات Variables",
 
-      <h3>مثال</h3>
-      <p>
-      عندما تستخدم تطبيقًا مصرفيًا، يجب أن تبقى بياناتك سرية،
-      ولا يتم تغيير معلومات حسابك دون إذن، ويجب أن تستطيع الوصول للخدمة
-      عندما تحتاجها.
-      </p>
-    `,
-    question:"ما العناصر الثلاثة الأساسية في مثلث CIA؟",
-    options:[
-      "السرية والسلامة والتوافر",
-      "السرعة والقوة والذاكرة",
-      "HTML وCSS وJavaScript"
+    text:
+      "المتغير هو اسم نخزن داخله قيمة. " +
+      "يمكنك استخدام القيمة لاحقًا وتغييرها عند الحاجة. " +
+      "في Python لا تحتاج إلى كتابة نوع المتغير يدويًا.",
+
+    code:
+`name = "Ali"
+age = 18
+
+print(name)
+print(age)`,
+
+    extra:
+      "افهم المتغير كصندوق له اسم. " +
+      "تضع بداخله قيمة ثم تستخدم هذا الاسم.",
+
+    example:
+`name = "VANTA"
+age = 18
+
+print("Name:", name)
+print("Age:", age)`,
+
+    exampleOutput:
+`Name: VANTA
+Age: 18`,
+
+    cheat:[
+      ["المتغير","اسم نخزن داخله قيمة."],
+      ["=","تعيين قيمة."],
+      ["print()","عرض قيمة أو نتيجة."],
+      ["type()","معرفة نوع القيمة."]
     ],
-    answer:0
+
+    challenge:{
+      title:"🧪 تحدي المتغيرات",
+      difficulty:"Beginner",
+      text:
+        "أنشئ متغيرًا باسم age وضع فيه الرقم 18 " +
+        "ثم اطبع قيمة المتغير.",
+      starter:
+`age = 18
+print(age)`,
+      keywords:["age","18","print"],
+      expected:"18",
+      hint:
+        "تأكد أن لديك متغيرًا باسم age وقيمته 18، ثم استخدم print."
+    },
+
+    quiz:{
+      question:
+        "ما نوع القيمة في: age = 18 ؟",
+      options:[
+        "String",
+        "Integer",
+        "Boolean",
+        "List"
+      ],
+      answer:1
+    }
+
   },
 
   {
-    id:2,
-    cat:"cyber",
-    icon:"🔐",
-    title:"كلمات المرور الآمنة",
-    desc:"لماذا تعتبر كلمات المرور الطويلة والمختلفة مهمة؟",
-    xp:100,
-    body:`
-      <p>
-      كلمة المرور هي أحد خطوط الدفاع الأولى عن الحسابات.
-      استخدام كلمة مرور واحدة في جميع المواقع يزيد الخطر بشكل كبير.
-      </p>
 
-      <h3>قاعدة مهمة</h3>
-      <p>
-      اجعل كلمات المرور طويلة وفريدة لكل خدمة، واستخدم مدير كلمات مرور
-      عندما يكون ذلك مناسبًا، وفعّل المصادقة متعددة العوامل.
-      </p>
-    `,
-    question:"ما أفضل ممارسة؟",
-    options:[
-      "استخدام كلمة واحدة لكل الحسابات",
-      "استخدام كلمات مرور فريدة وطويلة",
-      "كتابة كلمة المرور في مكان عام"
+    title:"الشروط Conditions",
+
+    text:
+      "الشروط تسمح للبرنامج باتخاذ قرار. " +
+      "إذا تحقق الشرط ينفذ البرنامج جزءًا معينًا، " +
+      "وإلا يمكنه تنفيذ else.",
+
+    code:
+`age = 18
+
+if age >= 18:
+    print("Adult")
+else:
+    print("Young")`,
+
+    extra:
+      "لا تحفظ if فقط. حاول أن تتوقع النتيجة " +
+      "عندما تتغير قيمة age.",
+
+    example:
+`score = 85
+
+if score >= 60:
+    print("Pass")
+else:
+    print("Try again")`,
+
+    exampleOutput:
+`Pass`,
+
+    cheat:[
+      ["if","تنفذ الكود إذا كان الشرط صحيحًا."],
+      ["else","تنفذ عندما لا يتحقق الشرط."],
+      [">","أكبر من."],
+      ["==","مساواة للمقارنة."]
     ],
-    answer:1
+
+    challenge:{
+      title:"🧪 تحدي الشروط",
+      difficulty:"Beginner",
+      text:
+        "أنشئ شرطًا يطبع Pass إذا كانت الدرجة 60 أو أكثر.",
+      starter:
+`score = 80
+
+if score >= 60:
+    print("Pass")`,
+      keywords:["if","score","60","print"],
+      expected:"Pass",
+      hint:
+        "استخدم if مع المقارنة >= ثم اطبع Pass."
+    },
+
+    quiz:{
+      question:
+        "أي كلمة تستخدم لتنفيذ جزء بديل عندما يكون if غير صحيح؟",
+      options:[
+        "loop",
+        "else",
+        "return",
+        "def"
+      ],
+      answer:1
+    }
+
   },
 
   {
-    id:3,
-    cat:"cyber",
-    icon:"🎣",
-    title:"التصيد الإلكتروني",
-    desc:"تعلم كيف تتعرف على الرسائل والمواقع المشبوهة.",
-    xp:120,
-    body:`
-      <p>
-      التصيد هو محاولة خداع المستخدم للحصول على معلومات حساسة
-      عبر رسالة أو موقع أو حساب ينتحل شخصية جهة موثوقة.
-      </p>
 
-      <h3>علامات تستحق الانتباه</h3>
-      <p>
-      روابط غريبة، استعجال شديد، طلب كلمات مرور أو رموز تحقق،
-      أخطاء لغوية غير معتادة، أو نطاق لا يطابق الجهة الحقيقية.
-      </p>
-    `,
-    question:"ما التصرف الأكثر أمانًا عند وصول رابط مشبوه؟",
-    options:[
-      "فتحه مباشرة",
-      "إرساله لأصدقائك",
-      "التحقق من الجهة والرابط قبل التفاعل"
+    title:"الحلقات Loops",
+
+    text:
+      "الحلقات تستخدم لتكرار مجموعة من الأوامر. " +
+      "حلقة for مفيدة عندما تعرف عدد التكرارات أو تريد المرور " +
+      "على مجموعة من القيم.",
+
+    code:
+`for i in range(5):
+    print(i)`,
+
+    extra:
+      "range(5) تبدأ من 0 وتنتهي قبل 5، لذلك الناتج 0 إلى 4.",
+
+    example:
+`for i in range(1, 4):
+    print(i)`,
+
+    exampleOutput:
+`1
+2
+3`,
+
+    cheat:[
+      ["for","إنشاء حلقة تكرار."],
+      ["range()","إنشاء نطاق من الأرقام."],
+      ["i","متغير يتغير مع كل دورة."],
+      ["indentation","المسافة تحدد جسم الحلقة."]
     ],
-    answer:2
+
+    challenge:{
+      title:"🧪 تحدي الحلقات",
+      difficulty:"Easy",
+      text:
+        "استخدم for لطباعة الأرقام من 1 إلى 5.",
+      starter:
+`for i in range(1, 6):
+    print(i)`,
+      keywords:["for","range","print"],
+      expected:"1 2 3 4 5",
+      hint:
+        "استخدم range(1, 6) ثم اطبع i داخل الحلقة."
+    },
+
+    quiz:{
+      question:
+        "ما أول رقم تطبعه range(5) عند استخدامها في for؟",
+      options:[
+        "0",
+        "1",
+        "4",
+        "5"
+      ],
+      answer:0
+    }
+
   },
 
   {
-    id:4,
-    cat:"tech",
-    icon:"🌐",
-    title:"كيف تعمل الشبكات؟",
-    desc:"مقدمة في الأجهزة والاتصال وعناوين IP.",
-    xp:120,
-    body:`
-      <p>
-      الشبكة تسمح للأجهزة بتبادل البيانات.
-      يمكن أن تكون صغيرة مثل شبكة منزلية أو ضخمة مثل الإنترنت.
-      </p>
 
-      <h3>عنوان IP</h3>
-      <p>
-      عنوان IP يساعد على تحديد وجهة الجهاز أو الواجهة الشبكية
-      داخل شبكة معينة.
-      </p>
-    `,
-    question:"ما وظيفة عنوان IP بشكل أساسي؟",
-    options:[
-      "تحديد عنوان واجهة على الشبكة",
-      "زيادة حجم الشاشة",
-      "تشغيل البطارية"
+    title:"الدوال Functions",
+
+    text:
+      "الدالة تجمع مجموعة أوامر تحت اسم واحد. " +
+      "هذا يساعد على إعادة استخدام الكود وتنظيم البرامج.",
+
+    code:
+`def hello(name):
+    print("Hello", name)
+
+hello("Ali")`,
+
+    extra:
+      "الفكرة المهمة: نكتب الدالة مرة ثم نستطيع استدعاءها أكثر من مرة.",
+
+    example:
+`def add(a, b):
+    return a + b
+
+print(add(3, 4))`,
+
+    exampleOutput:
+`7`,
+
+    cheat:[
+      ["def","تعريف دالة."],
+      ["parameter","قيمة تدخل للدالة."],
+      ["return","إرجاع نتيجة."],
+      ["call","استدعاء الدالة."]
     ],
-    answer:0
+
+    challenge:{
+      title:"🧪 تحدي الدوال",
+      difficulty:"Easy",
+      text:
+        "أنشئ دالة باسم add تستقبل رقمين وتعيد مجموعهما.",
+      starter:
+`def add(a, b):
+    return a + b
+
+print(add(3, 4))`,
+      keywords:["def","add","return"],
+      expected:"7",
+      hint:
+        "الدالة تحتاج a و b ثم return a + b."
+    },
+
+    quiz:{
+      question:
+        "ما الكلمة التي تستخدم لتعريف دالة في Python؟",
+      options:[
+        "function",
+        "def",
+        "make",
+        "func"
+      ],
+      answer:1
+    }
+
   },
 
   {
-    id:5,
-    cat:"programming",
-    icon:"💻",
-    title:"ما هي البرمجة؟",
-    desc:"افهم فكرة كتابة التعليمات للحاسوب.",
-    xp:100,
-    body:`
-      <p>
-      البرمجة هي كتابة تعليمات يفهمها الحاسوب لتنفيذ مهمة معينة.
-      </p>
 
-      <h3>مثال بسيط</h3>
+    title:"النصوص Strings",
 
-      <div class="code">
-console.log("Hello VANTA");
-      </div>
+    text:
+      "النص String عبارة عن بيانات تتكون من أحرف وكلمات. " +
+      "يمكنك تغيير طريقة عرض النص ومعرفة طوله ومعالجته.",
 
-      <p>
-      هذا السطر في JavaScript يطبع النص داخل وحدة التحكم.
-      </p>
-    `,
-    question:"ماذا يفعل console.log في JavaScript؟",
-    options:[
-      "يطبع قيمة في وحدة التحكم",
-      "يطفي الجهاز",
-      "يحذف الإنترنت"
+    code:
+`name = "VANTA"
+
+print(name.upper())
+print(len(name))`,
+
+    extra:
+      "النصوص مهمة جدًا في البرامج لأنها تستخدم للتعامل مع أسماء ورسائل وبيانات كثيرة.",
+
+    example:
+`text = "hello"
+
+print(text.upper())
+print(len(text))`,
+
+    exampleOutput:
+`HELLO
+5`,
+
+    cheat:[
+      ["String","نص بين علامات اقتباس."],
+      [".upper()","تحويل الأحرف إلى كبيرة."],
+      [".lower()","تحويل الأحرف إلى صغيرة."],
+      ["len()","حساب عدد العناصر/الأحرف."]
     ],
-    answer:0
+
+    challenge:{
+      title:"🧪 تحدي النصوص",
+      difficulty:"Easy",
+      text:
+        "أنشئ النص VANTA ثم اطبعه باستخدام .upper().",
+      starter:
+`name = "VANTA"
+print(name.upper())`,
+      keywords:["VANTA","upper","print"],
+      expected:"VANTA",
+      hint:
+        "ضع VANTA في متغير ثم استخدم .upper() عند الطباعة."
+    },
+
+    quiz:{
+      question:
+        "ما وظيفة len() مع النص؟",
+      options:[
+        "تحويل النص",
+        "حذف النص",
+        "حساب طول النص",
+        "تشغيل النص"
+      ],
+      answer:2
+    }
+
   },
 
   {
-    id:6,
-    cat:"programming",
-    icon:"🧠",
-    title:"المتغيرات",
-    desc:"تعلم كيف تخزن البرامج البيانات.",
-    xp:100,
-    body:`
-      <p>
-      المتغير هو اسم يشير إلى قيمة يمكن للبرنامج استخدامها.
-      </p>
 
-      <div class="code">
-let xp = 100;
-console.log(xp);
-      </div>
-    `,
-    question:"ماذا يخزن المتغير؟",
-    options:[
-      "قيمة يمكن للبرنامج استخدامها",
-      "الكهرباء",
-      "إشارة Wi-Fi"
+    title:"القوائم Lists",
+
+    text:
+      "القائمة List تسمح لك بتخزين عدة قيم داخل متغير واحد. " +
+      "في Python يبدأ الفهرس عادة من 0.",
+
+    code:
+`skills = [
+    "Python",
+    "Web",
+    "Cyber"
+]
+
+print(skills[0])`,
+
+    extra:
+      "skills[0] تعني أول عنصر، لأن الفهرسة تبدأ من الصفر.",
+
+    example:
+`skills = ["Python", "Web", "Cyber"]
+
+print(skills[1])`,
+
+    exampleOutput:
+`Web`,
+
+    cheat:[
+      ["[]","إنشاء قائمة."],
+      ["index","موقع العنصر داخل القائمة."],
+      ["[0]","أول عنصر."],
+      ["append()","إضافة عنصر."]
     ],
-    answer:0
-  },
 
-  {
-    id:7,
-    cat:"tech",
-    icon:"🐧",
-    title:"مقدمة Linux",
-    desc:"تعرف على نظام Linux ولماذا يستخدمه التقنيون.",
-    xp:130,
-    body:`
-      <p>
-      Linux نظام تشغيل مفتوح المصدر يستخدم في الخوادم وأجهزة التطوير
-      والأمن السيبراني والأنظمة المضمنة وغيرها.
-      </p>
+    challenge:{
+      title:"🧪 تحدي القوائم",
+      difficulty:"Easy",
+      text:
+        "أنشئ قائمة تحتوي Python و Web و Cyber، " +
+        "ثم اطبع أول عنصر.",
+      starter:
+`skills = ["Python", "Web", "Cyber"]
+print(skills[0])`,
+      keywords:["Python","Web","Cyber","skills","print"],
+      expected:"Python",
+      hint:
+        "تذكر أن أول عنصر في Python يحمل الفهرس 0."
+    },
 
-      <h3>أمر مشهور</h3>
+    quiz:{
+      question:
+        "ما فهرس أول عنصر في قائمة Python؟",
+      options:[
+        "0",
+        "1",
+        "-1",
+        "10"
+      ],
+      answer:0
+    }
 
-      <div class="code">
-ls
-      </div>
-
-      <p>
-      يعرض الملفات والمجلدات الموجودة في المسار الحالي.
-      </p>
-    `,
-    question:"ماذا يفعل الأمر ls؟",
-    options:[
-      "يعرض الملفات والمجلدات",
-      "يحذف النظام",
-      "يغير كلمة المرور"
-    ],
-    answer:0
-  },
-
-  {
-    id:8,
-    cat:"cyber",
-    icon:"🔎",
-    title:"مفهوم اختبار الاختراق",
-    desc:"تعرف على الاختبار الأمني المصرح به.",
-    xp:150,
-    body:`
-      <p>
-      اختبار الاختراق الأمني هو عملية منظمة لاكتشاف نقاط الضعف
-      في الأنظمة ضمن نطاق وتصريح واضح.
-      </p>
-
-      <h3>قاعدة VANTA</h3>
-      <p>
-      لا تختبر نظامًا لا تملكه أو لا تملك تصريحًا واضحًا لاختباره.
-      التعلم يجب أن يكون داخل مختبرات آمنة أو أنظمة مصرح بها.
-      </p>
-    `,
-    question:"متى يكون اختبار الاختراق قانونيًا؟",
-    options:[
-      "عندما يكون لديك تصريح ونطاق واضح",
-      "عندما يكون الموقع مشهورًا",
-      "عندما لا يعرف صاحب النظام"
-    ],
-    answer:0
-  },
-
-  {
-    id:9,
-    cat:"cyber",
-    icon:"🧬",
-    title:"التجزئة Hashing",
-    desc:"افهم فكرة Hash واستخداماتها.",
-    xp:140,
-    body:`
-      <p>
-      دالة التجزئة تحول البيانات إلى قيمة ذات طول محدد وفق خوارزمية معينة.
-      تستخدم في العديد من التطبيقات الأمنية، مثل التحقق من سلامة البيانات.
-      </p>
-    `,
-    question:"ما استخدام شائع للتجزئة؟",
-    options:[
-      "التحقق من سلامة البيانات",
-      "زيادة سطوع الشاشة",
-      "تسريع المروحة"
-    ],
-    answer:0
-  },
-
-  {
-    id:10,
-    cat:"tech",
-    icon:"🤖",
-    title:"مقدمة الذكاء الاصطناعي",
-    desc:"ما هو الذكاء الاصطناعي وكيف تتعلم الأنظمة؟",
-    xp:150,
-    body:`
-      <p>
-      الذكاء الاصطناعي مجال يهتم ببناء أنظمة تستطيع تنفيذ مهام
-      تتطلب عادةً قدرًا من الاستدلال أو التعرف أو التنبؤ.
-      </p>
-
-      <h3>التعلم الآلي</h3>
-      <p>
-      أحد فروع الذكاء الاصطناعي حيث تتعلم الخوارزميات أنماطًا
-      من البيانات بدل الاعتماد على تعليمات ثابتة لكل حالة.
-      </p>
-    `,
-    question:"ما المقصود بالتعلم الآلي؟",
-    options:[
-      "تعلم الأنماط من البيانات",
-      "إصلاح شاشة الجهاز",
-      "تغيير لغة لوحة المفاتيح"
-    ],
-    answer:0
   }
+
 ];
 
+let currentLesson = 0;
 
-/* =========================
-   LESSON RENDER
-========================= */
+function lesson(index,button){
 
-function renderLessons(){
+  currentLesson =
+    Math.max(
+      0,
+      Math.min(
+        lessons.length-1,
+        index
+      )
+    );
 
-  const box=document.getElementById("lessons");
-  if(!box)return;
+  const l =
+    lessons[currentLesson];
 
-  const q=(document.getElementById("search")?.value || "").toLowerCase();
+  $("lessonNumber").textContent =
+    "LESSON " +
+    String(currentLesson+1)
+      .padStart(2,"0");
 
-  const list=lessons.filter(l=>{
-    const filterOK=currentFilter==="all" || l.cat===currentFilter;
-    const searchOK=(l.title+" "+l.desc).toLowerCase().includes(q);
-    return filterOK && searchOK;
-  });
+  $("lessonTitle").textContent =
+    l.title;
 
-  box.innerHTML=list.map(l=>{
+  $("lessonText").textContent =
+    l.text;
 
-    const done=state.completed.includes(l.id);
+  $("lessonCode").textContent =
+    l.code;
 
-    return `
-      <div class="card course ${done?"done":""}">
-        <div class="courseNum">${l.icon}</div>
+  $("lessonExtra").textContent =
+    l.extra;
 
-        <div>
-          <h3>${l.title}</h3>
-          <small>${l.desc}</small>
+  $("exampleExplain").textContent =
+    "شاهد المثال ثم حاول فهم النتيجة قبل الضغط على تشغيل.";
 
-          <div class="progressBar">
-            <span style="width:${done?100:0}%"></span>
-          </div>
-        </div>
+  $("exampleCode").textContent =
+    l.example;
 
-        <div>
-          <div class="xp">+${l.xp} XP</div>
-          <button class="btn ${done?"success":"primary"}"
-            onclick="openLesson(${l.id})">
-            ${done?"مراجعة":"ابدأ"}
-          </button>
-        </div>
-      </div>
-    `;
+  $("exampleOutput").textContent =
+    "▶ اضغط تشغيل لرؤية نتيجة المثال.";
 
-  }).join("");
-}
+  $("challengeDifficulty").textContent =
+    l.challenge.difficulty;
 
-function filterLessons(cat){
-  currentFilter=cat;
-  renderLessons();
-}
+  $("challengeTitle").textContent =
+    l.challenge.title;
 
+  $("challengeText").textContent =
+    l.challenge.text;
 
-/* =========================
-   OPEN LESSON
-========================= */
+  $("challengeEditor").value =
+    l.challenge.starter;
 
-function openLesson(id){
+  $("challengeHint").textContent =
+    "";
 
-  const lesson=lessons.find(x=>x.id===id);
-  if(!lesson)return;
+  $("challengeOutput").textContent =
+    "💻 اكتب الكود ثم شغله.";
 
-  document.getElementById("lessonTitle").textContent=lesson.title;
-  document.getElementById("lessonCategory").textContent=
-    lesson.cat==="cyber"?"🛡️ الأمن السيبراني":
-    lesson.cat==="programming"?"💻 البرمجة":
-    "⚙️ التقنية";
+  $("challengeOutput").className =
+    "run-output";
 
-  document.getElementById("lessonBody").innerHTML=lesson.body;
+  document.querySelectorAll(".unit-btn")
+    .forEach(x=>{
+      x.classList.remove("active");
+    });
 
-  document.getElementById("quizBox").innerHTML=`
-    <h3>🎯 اختبار الدرس</h3>
-    <p>${lesson.question}</p>
+  if(button){
+    button.classList.add("active");
+  }else{
 
-    ${lesson.options.map((x,i)=>`
-      <button class="btn option"
-        onclick="answerLesson(${lesson.id},${i})">
-        ${x}
-      </button>
-    `).join("")}
-  `;
+    const buttons =
+      document.querySelectorAll(".unit-btn");
 
-  go("lesson");
-}
+    if(buttons[currentLesson]){
+      buttons[currentLesson]
+        .classList.add("active");
+    }
 
-
-/* =========================
-   QUIZ
-========================= */
-
-function answerLesson(id,answer){
-
-  const lesson=lessons.find(x=>x.id===id);
-
-  if(state.completed.includes(id)){
-    showToast("هذا الدرس مكتمل بالفعل ✓");
-    return;
   }
 
-  if(answer===lesson.answer){
+  renderCheat(l.cheat);
 
-    state.completed.push(id);
-    state.xp+=lesson.xp;
+  renderLessonQuiz();
 
-    save();
-    updateUI();
-    renderLessons();
+  $("aiCurrentLesson").textContent =
+    l.title;
 
-    playSound(800,.12);
+  updateLearningUI();
 
-    document.getElementById("quizBox").innerHTML=`
-      <div style="text-align:center">
-        <div style="font-size:55px">🎉</div>
-        <h2 style="color:var(--success)">إجابة صحيحة!</h2>
-        <p>حصلت على <b>+${lesson.xp} XP</b></p>
-        <button class="btn primary" onclick="go('academy')">
-          العودة للأكاديمية
-        </button>
-      </div>
-    `;
+  showLessonTab("explain");
+
+  mascotMood(
+    "thinking",
+    "🤔 درس جديد... خلينا نفهمه"
+  );
+
+  sound("click");
+
+  save();
+
+}
+
+function updateLearningUI(){
+
+  const percentage =
+    Math.round(
+      (
+        (currentLesson+1) /
+        lessons.length
+      ) * 100
+    );
+
+  $("lessonProgress").style.width =
+    percentage + "%";
+
+  updateJourneyProgress();
+
+}
+
+function nextLesson(){
+
+  if(currentLesson <
+     lessons.length-1){
+
+    currentLesson++;
+
+    const buttons =
+      document.querySelectorAll(".unit-btn");
+
+    lesson(
+      currentLesson,
+      buttons[currentLesson]
+    );
+
+    showToast(
+      "📚 انتقلت إلى الدرس التالي"
+    );
+
+    registerLearningActivity();
 
   }else{
 
-    playSound(180,.15);
-    showToast("ليست الإجابة الصحيحة، حاول مرة أخرى ❌");
+    showToast(
+      "🏆 وصلت إلى نهاية مسار Python الحالي!"
+    );
+
+    mascotMood(
+      "celebrate",
+      "🥳 أنهيت المسار!"
+    );
+
+    state.xp += 30;
+    state.gems += 3;
+
+    save();
+    updateHome();
 
   }
+
 }
 
+function previousLesson(){
 
-/* =========================
-   LEVEL SYSTEM
-========================= */
+  if(currentLesson > 0){
 
-function getLevel(){
+    currentLesson--;
 
-  const xp=state.xp;
+    const buttons =
+      document.querySelectorAll(".unit-btn");
 
-  if(xp>=5000)return 10;
-  if(xp>=3500)return 9;
-  if(xp>=2500)return 8;
-  if(xp>=1800)return 7;
-  if(xp>=1200)return 6;
-  if(xp>=800)return 5;
-  if(xp>=500)return 4;
-  if(xp>=300)return 3;
-  if(xp>=150)return 2;
+    lesson(
+      currentLesson,
+      buttons[currentLesson]
+    );
 
-  return 1;
+  }else{
+
+    showToast(
+      "🪐 أنت في أول درس."
+    );
+
+  }
+
 }
 
-function levelName(level){
+function showLessonTab(tab,button){
 
-  const names={
-    1:"المبتدئ",
-    2:"المستكشف",
-    3:"المتعلم",
-    4:"التقني",
-    5:"الممارس",
-    6:"المتقدم",
-    7:"الباحث",
-    8:"المحلل",
-    9:"الخبير",
-    10:"VANTA Master"
+  const panels = {
+
+    explain:"lessonExplain",
+    example:"lessonExample",
+    cheat:"lessonCheat",
+    challenge:"lessonChallenge",
+    quiz:"lessonQuiz"
+
   };
 
-  return names[level] || "المتعلم";
-}
+  Object.values(panels)
+    .forEach(id=>{
+      $(id).classList.remove("active");
+    });
 
-function updateUI(){
+  $(panels[tab])
+    .classList.add("active");
 
-  const level=getLevel();
+  document.querySelectorAll(".lesson-tab")
+    .forEach(x=>{
+      x.classList.remove("active");
+    });
 
-  document.getElementById("statXP").textContent=state.xp;
-  document.getElementById("statLevel").textContent=level;
-  document.getElementById("statDone").textContent=state.completed.length;
+  if(button){
+    button.classList.add("active");
+  }else{
 
-  document.getElementById("levelNumber").textContent=level;
-  document.getElementById("levelName").textContent=levelName(level);
+    const map={
+      explain:0,
+      example:1,
+      cheat:2,
+      challenge:3,
+      quiz:4
+    };
 
-  const previous=[
-    0,150,300,500,800,1200,1800,2500,3500,5000
-  ][level-1];
+    const tabs =
+      document.querySelectorAll(".lesson-tab");
 
-  const next=[
-    150,300,500,800,1200,1800,2500,3500,5000,5000
-  ][level-1];
-
-  const percentage=level>=10
-    ?100
-    :Math.min(100,((state.xp-previous)/(next-previous))*100);
-
-  document.getElementById("levelBar").style.width=percentage+"%";
-
-  document.getElementById("xpText").textContent=
-    level>=10
-      ?`${state.xp} XP — وصلت لأعلى مستوى`
-      :`${state.xp} / ${next} XP`;
-
-  document.getElementById("badgeStart").textContent=
-    state.completed.length>=1?"✓ مفتوح":"🔒 مغلق";
-
-  document.getElementById("badgeXP").textContent=
-    state.xp>=500?"✓ مفتوح":"🔒 مغلق";
-
-  document.getElementById("badgeLab").textContent=
-    state.labs>=1?"✓ مفتوح":"🔒 مغلق";
-}
-
-
-/* =========================
-   LABS
-========================= */
-
-function openLab(type){
-
-  let content="";
-
-  if(type==="linux"){
-
-    content=`
-      <h2>🐧 مختبر Linux</h2>
-      <p>أي أمر يستخدم لعرض الملفات الموجودة في المجلد الحالي؟</p>
-
-      <button class="btn option" onclick="labAnswer(true)">
-        ls
-      </button>
-
-      <button class="btn option" onclick="labAnswer(false)">
-        shutdown
-      </button>
-
-      <button class="btn option" onclick="labAnswer(false)">
-        reboot
-      </button>
-    `;
+    if(tabs[map[tab]])
+      tabs[map[tab]].classList.add("active");
 
   }
 
-  if(type==="http"){
+  if(tab==="challenge"){
 
-    content=`
-      <h2>🌐 مختبر HTTP</h2>
-      <p>أي رمز حالة يعني أن الطلب نجح عادةً؟</p>
-
-      <button class="btn option" onclick="labAnswer(true)">200</button>
-      <button class="btn option" onclick="labAnswer(false)">404</button>
-      <button class="btn option" onclick="labAnswer(false)">500</button>
-    `;
+    mascotMood(
+      "",
+      "👀 ورّيني كودك!"
+    );
 
   }
 
-  if(type==="password"){
+  if(tab==="quiz"){
 
-    content=`
-      <h2>🔐 مختبر كلمات المرور</h2>
-      <p>أي خيار أكثر أمانًا؟</p>
-
-      <button class="btn option" onclick="labAnswer(false)">
-        123456
-      </button>
-
-      <button class="btn option" onclick="labAnswer(true)">
-        كلمة مرور طويلة وفريدة + MFA
-      </button>
-
-      <button class="btn option" onclick="labAnswer(false)">
-        نفس كلمة المرور لكل المواقع
-      </button>
-    `;
+    mascotMood(
+      "thinking",
+      "🤔 آخر اختبار..."
+    );
 
   }
 
-  document.getElementById("modalContent").innerHTML=content;
-  document.getElementById("modal").classList.add("show");
 }
 
-function labAnswer(correct){
+function renderCheat(items){
 
-  if(correct){
+  const grid =
+    $("cheatGrid");
 
-    state.labs++;
-    state.xp+=100;
+  grid.innerHTML = "";
+
+  items.forEach(item=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "cheat-item";
+
+    div.innerHTML =
+      `
+        <strong>${escapeHTML(item[0])}</strong>
+        <span>${escapeHTML(item[1])}</span>
+      `;
+
+    grid.appendChild(div);
+
+  });
+
+}
+
+/* =========================================================
+   EXAMPLE RUNNER
+========================================================= */
+
+function runExample(){
+
+  const output =
+    lessons[currentLesson]
+      .exampleOutput;
+
+  $("exampleOutput").textContent =
+    "▶ الناتج المتوقع:\n" + output;
+
+  $("exampleOutput").className =
+    "run-output ok";
+
+  mascotMood(
+    "celebrate",
+    "✨ شفت النتيجة؟"
+  );
+
+  sound("correct");
+
+}
+
+/* =========================================================
+   CHALLENGE ENGINE
+========================================================= */
+
+function runChallenge(){
+
+  const l =
+    lessons[currentLesson];
+
+  const code =
+    $("challengeEditor")
+      .value
+      .trim();
+
+  if(!code){
+
+    $("challengeOutput").textContent =
+      "✍️ اكتب الكود أولاً.";
+
+    $("challengeOutput").className =
+      "run-output bad";
+
+    return;
+
+  }
+
+  const lower =
+    code.toLowerCase();
+
+  const keywords =
+    l.challenge.keywords;
+
+  const hasKeywords =
+    keywords.every(k =>
+      lower.includes(k.toLowerCase())
+    );
+
+  const expected =
+    String(l.challenge.expected);
+
+  let passes =
+    hasKeywords;
+
+  /*
+    This is a lightweight browser validator.
+    It does not execute arbitrary code.
+    It checks the learning challenge
+    against the expected educational pattern.
+  */
+
+  if(currentLesson === 0){
+
+    passes =
+      hasKeywords &&
+      /age\s*=\s*18/.test(lower) &&
+      /print\s*\(\s*age\s*\)/.test(lower);
+
+  }
+
+  if(currentLesson === 1){
+
+    passes =
+      hasKeywords &&
+      /score\s*>=\s*60/.test(lower) &&
+      /print\s*\(\s*["']pass["']\s*\)/i.test(code);
+
+  }
+
+  if(currentLesson === 2){
+
+    passes =
+      hasKeywords &&
+      /for\s+\w+\s+in\s+range\s*\(\s*1\s*,\s*6\s*\)/.test(lower);
+
+  }
+
+  if(currentLesson === 3){
+
+    passes =
+      hasKeywords &&
+      /def\s+add\s*\(/.test(lower) &&
+      /return\s+a\s*\+\s*b/.test(lower);
+
+  }
+
+  if(currentLesson === 4){
+
+    passes =
+      hasKeywords &&
+      /vanta/.test(lower) &&
+      /upper\s*\(\s*\)/.test(lower);
+
+  }
+
+  if(currentLesson === 5){
+
+    passes =
+      hasKeywords &&
+      /skills\s*=/.test(lower) &&
+      /skills\s*\[\s*0\s*\]/.test(lower);
+
+  }
+
+  if(passes){
+
+    $("challengeOutput").textContent =
+      "✅ ممتاز! التحدي صحيح حسب شروط هذا الدرس.\n" +
+      "🎯 تم تسجيل إتقان التحدي.";
+
+    $("challengeOutput").className =
+      "run-output ok";
+
+    completeChallenge();
+
+    mascotMood(
+      "celebrate",
+      "🥳 ممتاز! كود صحيح!"
+    );
+
+    sound("correct");
+
+  }else{
+
+    $("challengeOutput").textContent =
+      "❌ لم يكتمل التحدي بعد.\n" +
+      "راجع المطلوب وحاول مرة أخرى.";
+
+    $("challengeOutput").className =
+      "run-output bad";
+
+    mascotMood(
+      "angry",
+      "😤 قريب! جرّب مرة ثانية"
+    );
+
+    sound("wrong");
+
+  }
+
+}
+
+function completeChallenge(){
+
+  const key =
+    "challenge-" + currentLesson;
+
+  if(!state.lessonCompleted.includes(key)){
+
+    state.lessonCompleted.push(key);
+
+    const reward =
+      20 + currentLesson * 5;
+
+    state.xp += reward;
+
+    state.gems += 1;
+
+    improveSkill(
+      "Python",
+      currentLesson+1
+    );
+
+    showToast(
+      `🏆 +${reward} XP • تحدي مكتمل`
+    );
 
     save();
-    updateUI();
 
-    closeModal();
+    updateHome();
+    renderSkills();
 
-    playSound(900,.14);
-    showToast("نجحت في المختبر! +100 XP 🧪");
+  }
+
+}
+
+/* =========================================================
+   CHALLENGE HINT
+========================================================= */
+
+function showChallengeHint(){
+
+  const hint =
+    lessons[currentLesson]
+      .challenge
+      .hint;
+
+  $("challengeHint").textContent =
+    "💡 " + hint;
+
+  mascotMood(
+    "thinking",
+    "💡 أعطيك تلميحًا..."
+  );
+
+}
+
+/* =========================================================
+   LESSON QUIZ
+========================================================= */
+
+let quizAnswered = false;
+
+function renderLessonQuiz(){
+
+  const q =
+    lessons[currentLesson].quiz;
+
+  quizAnswered = false;
+
+  $("lessonQuizQuestion").textContent =
+    q.question;
+
+  $("lessonQuizFeedback").textContent =
+    "";
+
+  $("finishQuizBtn").style.display =
+    "none";
+
+  const container =
+    $("lessonQuizOptions");
+
+  container.innerHTML = "";
+
+  q.options.forEach((option,index)=>{
+
+    const button =
+      document.createElement("button");
+
+    button.className =
+      "quiz-option";
+
+    button.textContent =
+      option;
+
+    button.onclick =
+      ()=>answerLessonQuiz(index,button);
+
+    container.appendChild(button);
+
+  });
+
+}
+
+function answerLessonQuiz(index,button){
+
+  if(quizAnswered) return;
+
+  quizAnswered = true;
+
+  const q =
+    lessons[currentLesson].quiz;
+
+  const buttons =
+    document.querySelectorAll(
+      "#lessonQuizOptions .quiz-option"
+    );
+
+  if(index === q.answer){
+
+    button.classList.add(
+      "correct-option"
+    );
+
+    $("lessonQuizFeedback").textContent =
+      "🎉 صحيح! فهمت الفكرة.";
+
+    $("lessonQuizFeedback").className =
+      "feedback correct";
+
+    $("finishQuizBtn").style.display =
+      "inline-block";
+
+    mascotMood(
+      "celebrate",
+      "🥳 إجابة صحيحة!"
+    );
+
+    sound("correct");
 
   }else{
 
-    playSound(160,.12);
-    showToast("إجابة غير صحيحة ❌");
+    button.classList.add(
+      "wrong-option"
+    );
+
+    buttons[q.answer]
+      .classList.add(
+        "correct-option"
+      );
+
+    $("lessonQuizFeedback").textContent =
+      "❌ ليست هذه الإجابة. راجع الشرح وحاول فهم السبب.";
+
+    $("lessonQuizFeedback").className =
+      "feedback wrong";
+
+    mascotMood(
+      "angry",
+      "😤 راجعها وجرب"
+    );
+
+    sound("wrong");
 
   }
+
 }
 
-function closeModal(){
-  document.getElementById("modal").classList.remove("show");
+function finishLessonQuiz(){
+
+  const key =
+    "quiz-" + currentLesson;
+
+  if(!state.quizCompleted.includes(key)){
+
+    state.quizCompleted.push(key);
+
+    const reward =
+      15 + currentLesson * 3;
+
+    state.xp += reward;
+
+    state.gems += 1;
+
+    improveSkill(
+      "Python",
+      currentLesson+1
+    );
+
+    save();
+
+    updateHome();
+    renderSkills();
+
+    showToast(
+      `🎯 اختبار مكتمل • +${reward} XP`
+    );
+
+  }
+
+  registerLearningActivity();
+
+  mascotMood(
+    "dance",
+    "💃 درس مكتمل!"
+  );
+
 }
 
+/* =========================================================
+   PRACTICE QUESTIONS
+========================================================= */
 
-/* =========================
+let currentQuestion = null;
+let hintUsed = false;
+let questionStart = Date.now();
+let questionIndex = 0;
+
+function getDifficulty(){
+
+  const mastery =
+    Object.values(state.skill)
+      .reduce((a,b)=>a+b,0) /
+    Object.keys(state.skill).length;
+
+  if(mastery < 18) return 1;
+  if(mastery < 30) return 2;
+  if(mastery < 45) return 3;
+  if(mastery < 65) return 4;
+  if(mastery < 85) return 5;
+
+  return 6;
+
+}
+
+function difficultyName(level){
+
+  if(level <= 2) return "سهل";
+
+  if(level <= 4) return "متوسط";
+
+  return "صعب";
+
+}
+
+function randomInt(min,max){
+
+  return Math.floor(
+    Math.random()*(max-min+1)
+  )+min;
+
+}
+
+function generateQuestion(){
+
+  const level =
+    getDifficulty();
+
+  let a,b,answer,text,skill;
+
+  if(level === 1){
+
+    a=randomInt(1,5);
+    b=randomInt(1,5);
+
+    answer=a+b;
+
+    text=
+`ما ناتج هذا الكود؟
+
+a = ${a}
+b = ${b}
+
+print(a + b)`;
+
+    skill="Logic";
+
+  }else if(level === 2){
+
+    a=randomInt(5,15);
+    b=randomInt(1,9);
+
+    answer=a-b;
+
+    text=
+`ما الناتج؟
+
+x = ${a}
+y = ${b}
+
+print(x - y)`;
+
+    skill="Python";
+
+  }else if(level === 3){
+
+    a=randomInt(2,8);
+    b=randomInt(2,8);
+
+    answer=a*b;
+
+    text=
+`ما قيمة الناتج؟
+
+x = ${a}
+y = ${b}
+
+print(x * y)`;
+
+    skill="Python";
+
+  }else if(level === 4){
+
+    a=randomInt(5,15);
+    b=randomInt(2,5);
+
+    answer=Math.floor(a/b);
+
+    text=
+`ما الناتج الصحيح؟
+
+x = ${a}
+y = ${b}
+
+print(x // y)`;
+
+    skill="Python";
+
+  }else if(level === 5){
+
+    a=randomInt(2,6);
+    b=randomInt(2,5);
+
+    answer=Math.pow(a,b);
+
+    text=
+`ما الناتج؟
+
+x = ${a}
+y = ${b}
+
+print(x ** y)`;
+
+    skill="Logic";
+
+  }else{
+
+    a=randomInt(3,9);
+    b=randomInt(2,5);
+
+    answer =
+      [...Array(b)]
+        .map((_,i)=>a+i)
+        .reduce((x,y)=>x+y,0);
+
+    text=
+`ما الناتج النهائي للحلقة؟
+
+total = 0
+
+for i in range(${b}):
+    total += ${a} + i
+
+print(total)`;
+
+    skill="Python";
+
+  }
+
+  return {
+    text,
+    answer:String(answer),
+    level,
+    skill
+  };
+
+}
+
+function newQuestion(manual=false){
+
+  currentQuestion =
+    generateQuestion();
+
+  hintUsed=false;
+
+  questionStart =
+    Date.now();
+
+  questionIndex++;
+
+  $("question").textContent =
+    currentQuestion.text;
+
+  $("qLevel").textContent =
+    difficultyName(
+      currentQuestion.level
+    );
+
+  $("difficultyBar").style.width =
+    (
+      currentQuestion.level /
+      6 *
+      100
+    ) + "%";
+
+  $("questionNumber").textContent =
+    questionIndex;
+
+  $("answer").value="";
+
+  $("hint").textContent="";
+
+  $("feedback").textContent="";
+
+  $("feedback").className =
+    "feedback";
+
+  updatePractice();
+
+  if(manual){
+
+    showToast(
+      "🔄 تم إنشاء سؤال جديد"
+    );
+
+    mascotMood(
+      "",
+      "👀 سؤال جديد!"
+    );
+
+  }
+
+}
+
+function normalizeAnswer(value){
+
+  return String(value)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g,"");
+
+}
+
+function checkAnswer(){
+
+  if(!currentQuestion)
+    return;
+
+  const user =
+    normalizeAnswer(
+      $("answer").value
+    );
+
+  if(!user){
+
+    showToast(
+      "✍️ اكتب إجابتك أولاً"
+    );
+
+    return;
+
+  }
+
+  const correct =
+    normalizeAnswer(
+      currentQuestion.answer
+    );
+
+  state.questions++;
+  state.dailyQuestions++;
+
+  if(user === correct){
+
+    state.correct++;
+    state.combo++;
+
+    const seconds =
+      Math.max(
+        1,
+        Math.floor(
+          (Date.now()-questionStart)/1000
+        )
+      );
+
+    let earned =
+      10 +
+      currentQuestion.level * 5;
+
+    if(state.combo >= 3)
+      earned += 5;
+
+    if(seconds <= 8 && !hintUsed)
+      earned += 5;
+
+    state.xp += earned;
+
+    if(Math.random() < .25)
+      state.gems++;
+
+    improveSkill(
+      currentQuestion.skill,
+      currentQuestion.level
+    );
+
+    $("feedback").textContent =
+      `🎉 ممتاز! +${earned} XP`;
+
+    $("feedback").className =
+      "feedback correct";
+
+    save();
+
+    updateHome();
+    updatePractice();
+    renderSkills();
+
+    registerLearningActivity();
+
+    mascotMood(
+      "celebrate",
+      `🥳 +${earned} XP!`
+    );
+
+    sound("correct");
+
+    showToast(
+      `⚡ +${earned} XP • Combo ${state.combo}`
+    );
+
+    setTimeout(()=>{
+      newQuestion();
+      setMascot("practice");
+    },900);
+
+  }else{
+
+    state.wrong++;
+    state.combo=0;
+
+    weakenSkill(
+      currentQuestion.skill,
+      currentQuestion.level
+    );
+
+    $("feedback").textContent =
+      "❌ ليست الإجابة الصحيحة. جرّب مرة أخرى.";
+
+    $("feedback").className =
+      "feedback wrong";
+
+    save();
+
+    updatePractice();
+    updateHome();
+
+    mascotMood(
+      "angry",
+      "😤 لا تستسلم!"
+    );
+
+    sound("wrong");
+
+    showToast(
+      "💡 لا مشكلة — حاول مرة ثانية"
+    );
+
+  }
+
+}
+
+function improveSkill(skill,level){
+
+  state.skill[skill] =
+    Math.min(
+      100,
+      state.skill[skill] +
+      (2 + level*.4)
+    );
+
+}
+
+function weakenSkill(skill){
+
+  state.skill[skill] =
+    Math.max(
+      0,
+      state.skill[skill] - .15
+    );
+
+}
+
+function showHint(){
+
+  if(!currentQuestion)
+    return;
+
+  hintUsed=true;
+
+  let hint="";
+
+  if(currentQuestion.level <= 2){
+
+    hint =
+      "💡 راقب العملية الحسابية الموجودة داخل print.";
+
+  }else if(currentQuestion.level <= 4){
+
+    hint =
+      "💡 احسب العملية خطوة بخطوة.";
+
+  }else{
+
+    hint =
+      "💡 تتبع قيمة المتغير في كل دورة من الحلقة.";
+
+  }
+
+  $("hint").textContent =
+    hint;
+
+  mascotMood(
+    "thinking",
+    "💡 خذ التلميح..."
+  );
+
+  sound("click");
+
+}
+
+function updatePractice(){
+
+  $("combo").textContent =
+    state.combo;
+
+  $("practiceXP").textContent =
+    state.xp;
+
+}
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+const skillIcons = {
+
+  Python:"🐍",
+  Web:"🌐",
+  Networking:"📡",
+  Cybersecurity:"🛡️",
+  AI:"🤖",
+  Logic:"🧠"
+
+};
+
+function renderSkills(){
+
+  const grid =
+    $("skillsGrid");
+
+  grid.innerHTML="";
+
+  Object.entries(state.skill)
+    .forEach(([name,value])=>{
+
+      const level =
+        Math.max(
+          1,
+          Math.floor(value/12)+1
+        );
+
+      const div =
+        document.createElement("div");
+
+      div.className =
+        "skill card glass";
+
+      div.innerHTML = `
+
+        <div class="skill-top">
+
+          <div>
+
+            <div style="font-size:28px">
+              ${skillIcons[name]}
+            </div>
+
+            <h3 style="margin-top:8px">
+              ${name}
+            </h3>
+
+            <small>
+              Skill Mastery
+            </small>
+
+          </div>
+
+          <div class="skill-level">
+            Lv.${level}
+          </div>
+
+        </div>
+
+        <div class="skill-bar">
+          <div style="width:${value}%"></div>
+        </div>
+
+        <small style="display:block;margin-top:9px">
+          ${Math.round(value)}% إتقان
+        </small>
+
+      `;
+
+      grid.appendChild(div);
+
+    });
+
+}
+
+/* =========================================================
+   AI TUTOR
+========================================================= */
+
+function askAI(){
+
+  const input =
+    $("aiInput");
+
+  const text =
+    input.value.trim();
+
+  if(!text)
+    return;
+
+  const messages =
+    $("messages");
+
+  const user =
+    document.createElement("div");
+
+  user.className =
+    "message user";
+
+  user.textContent =
+    text;
+
+  messages.appendChild(user);
+
+  input.value="";
+
+  setTimeout(()=>{
+
+    const ai =
+      document.createElement("div");
+
+    ai.className =
+      "message ai";
+
+    ai.textContent =
+      generateAIReply(text);
+
+    messages.appendChild(ai);
+
+    messages.scrollTop =
+      messages.scrollHeight;
+
+  },350);
+
+}
+
+function generateAIReply(text){
+
+  const t =
+    text.toLowerCase();
+
+  const lessonName =
+    lessons[currentLesson].title;
+
+  if(
+    t.includes("متغير") ||
+    t.includes("variable")
+  ){
+
+    return(
+      "🧠 المتغير هو اسم نستخدمه لتخزين قيمة. " +
+      "مثلاً: name = \"Ali\". " +
+      "بعدها تستطيع استخدام name في بقية البرنامج. " +
+      "حاول الآن حل تحدي المتغيرات من صفحة الدرس."
+    );
+
+  }
+
+  if(
+    t.includes("loop") ||
+    t.includes("حلقة") ||
+    t.includes("حلقات")
+  ){
+
+    return(
+      "🔁 الحلقة تستخدم لتكرار مجموعة أوامر. " +
+      "في Python أشهر مثال هو for. " +
+      "ابدأ بفهم range() ثم تتبع قيمة i في كل دورة."
+    );
+
+  }
+
+  if(
+    t.includes("شرط") ||
+    t.includes("if")
+  ){
+
+    return(
+      "🔵 if تجعل البرنامج ينفذ أمرًا عندما يكون شرط معين صحيحًا. " +
+      "مثلاً if age >= 18. " +
+      "فكر الآن: ماذا يحدث إذا أصبحت age تساوي 16؟"
+    );
+
+  }
+
+  if(
+    t.includes("دالة") ||
+    t.includes("function")
+  ){
+
+    return(
+      "🧩 الدالة تجمع أوامر تحت اسم واحد. " +
+      "في Python تبدأ عادةً بـ def، ويمكنها استقبال parameters وإرجاع نتيجة بـ return."
+    );
+
+  }
+
+  if(
+    t.includes("مستوا") ||
+    t.includes("level")
+  ){
+
+    return(
+      `🎮 مستواك الحالي في VANTA هو ${calculateLevel()}. ` +
+      `والدرس الحالي هو ${lessonName}. ` +
+      "المستوى يعتمد على إتقان المهارات."
+    );
+
+  }
+
+  if(
+    t.includes("تلميح") ||
+    t.includes("hint")
+  ){
+
+    return(
+      "💡 سأعطيك تلميحًا وليس الحل مباشرة. " +
+      "افتح تبويب التحدي في الدرس الحالي واضغط زر «تلميح»."
+    );
+
+  }
+
+  if(
+    t.includes("اختبر") ||
+    t.includes("quiz")
+  ){
+
+    return(
+      "🎯 افتح تبويب «الاختبار» داخل الدرس الحالي. " +
+      "هناك سؤال قصير يقيس فهمك للمفهوم."
+    );
+
+  }
+
+  return(
+    "🤖 فهمت. أنت الآن في درس " +
+    lessonName +
+    ". " +
+    "حدد الشيء الذي لا تفهمه، وسأشرحه لك خطوة خطوة " +
+    "ثم أعطيك مثالًا وتحديًا مناسبًا."
+  );
+
+}
+
+/* =========================================================
    SETTINGS
-========================= */
+========================================================= */
 
-function toggleDark(){
+function toggleLight(){
 
-  document.body.classList.toggle("light");
+  state.settings.light =
+    !state.settings.light;
 
-  const light=document.body.classList.contains("light");
+  applySettings();
+  save();
 
-  if(light){
-
-    document.documentElement.style.setProperty("--bg","#edf6fb");
-    document.documentElement.style.setProperty("--bg2","#fff");
-    document.documentElement.style.setProperty("--panel","rgba(255,255,255,.8)");
-    document.documentElement.style.setProperty("--text","#081522");
-    document.documentElement.style.setProperty("--muted","#536b7d");
-
-  }else{
-
-    document.documentElement.style.setProperty("--bg","#050b14");
-    document.documentElement.style.setProperty("--bg2","#081321");
-    document.documentElement.style.setProperty("--panel","rgba(10,25,42,.78)");
-    document.documentElement.style.setProperty("--text","#eef8ff");
-    document.documentElement.style.setProperty("--muted","#8fa8bc");
-
-  }
-
-  document.getElementById("darkSwitch").classList.toggle("on",!light);
 }
 
-function toggleParticles(){
+function toggleGlass(){
 
-  particlesEnabled=!particlesEnabled;
-  state.particles=particlesEnabled;
+  state.settings.glass =
+    !state.settings.glass;
 
-  localStorage.setItem("vanta_particles",particlesEnabled);
+  applySettings();
+  save();
 
-  document.getElementById("particleSwitch").classList.toggle("on",particlesEnabled);
 }
 
-function toggleSound(){
+function toggleGlow(){
 
-  state.sound=!state.sound;
+  state.settings.glow =
+    !state.settings.glow;
 
-  localStorage.setItem("vanta_sound",state.sound);
+  applySettings();
+  save();
 
-  document.getElementById("soundSwitch").classList.toggle("on",state.sound);
+}
 
-  if(state.sound)playSound(600,.1);
+function togglePlanets(){
+
+  state.settings.planets =
+    !state.settings.planets;
+
+  applySettings();
+  save();
+
+}
+
+function toggleStars(){
+
+  state.settings.stars =
+    !state.settings.stars;
+
+  applySettings();
+  save();
+
 }
 
 function toggleMotion(){
 
-  state.motion=!state.motion;
+  state.settings.motion =
+    !state.settings.motion;
 
-  localStorage.setItem("vanta_motion",state.motion);
-
-  document.getElementById("motionSwitch").classList.toggle("on",state.motion);
-
-  document.body.style.setProperty(
-    "--motion",
-    state.motion?"1":"0"
-  );
-}
-
-function changeAccent(value){
-
-  const colors={
-    blue:["#21a9ff","#62d0ff"],
-    cyan:["#00d9ff","#7cf5ff"],
-    purple:["#9b6cff","#c6a7ff"]
-  };
-
-  const c=colors[value];
-
-  document.documentElement.style.setProperty("--blue",c[0]);
-  document.documentElement.style.setProperty("--blue2",c[1]);
-
-  localStorage.setItem("vanta_accent",value);
-}
-
-function changeFont(value){
-
-  const sizes={
-    normal:"1",
-    large:"1.08",
-    xl:"1.16"
-  };
-
-  document.body.style.fontSize=sizes[value]+"em";
-
-  localStorage.setItem("vanta_font",value);
-}
-
-function resetProgress(){
-
-  if(!confirm("هل أنت متأكد من حذف تقدم VANTA؟"))return;
-
-  state.xp=0;
-  state.completed=[];
-  state.labs=0;
-
+  applySettings();
   save();
-  updateUI();
-  renderLessons();
 
-  showToast("تمت إعادة التقدم.");
 }
 
+function toggleSound(){
 
-/* =========================
-   SOUND
-========================= */
+  state.settings.sound =
+    !state.settings.sound;
 
-let audioContext=null;
+  applySettings();
+  save();
 
-function playSound(freq=500,duration=.06){
+}
 
-  if(!state.sound)return;
+function applySettings(){
+
+  document.body.classList.toggle(
+    "light-mode",
+    state.settings.light
+  );
+
+  document.documentElement.style
+    .setProperty(
+      "--glow",
+      state.settings.glow
+        ? "1"
+        : "0"
+    );
+
+  document.documentElement.style
+    .setProperty(
+      "--stars",
+      state.settings.stars
+        ? "1"
+        : "0"
+    );
+
+  document.documentElement.style
+    .setProperty(
+      "--glass-blur",
+      state.settings.glass
+        ? "22px"
+        : "0px"
+    );
+
+  document.querySelectorAll(
+    ".planet,.saturn"
+  ).forEach(x=>{
+
+    x.style.display =
+      state.settings.planets
+        ? ""
+        : "none";
+
+  });
+
+  if(!state.settings.motion){
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--motion",
+        "0"
+      );
+
+    document.querySelectorAll("*")
+      .forEach(el=>{
+        el.style.animationPlayState =
+          "paused";
+      });
+
+  }else{
+
+    document.documentElement
+      .style
+      .setProperty(
+        "--motion",
+        "1"
+      );
+
+    document.querySelectorAll("*")
+      .forEach(el=>{
+        el.style.animationPlayState =
+          "";
+      });
+
+  }
+
+  $("soundSwitch")
+    .classList.toggle(
+      "on",
+      state.settings.sound
+    );
+
+  $("glassSwitch")
+    .classList.toggle(
+      "on",
+      state.settings.glass
+    );
+
+  $("glowSwitch")
+    .classList.toggle(
+      "on",
+      state.settings.glow
+    );
+
+  $("planetSwitch")
+    .classList.toggle(
+      "on",
+      state.settings.planets
+    );
+
+  $("starsSwitch")
+    .classList.toggle(
+      "on",
+      state.settings.stars
+    );
+
+  $("motionSwitch")
+    .classList.toggle(
+      "on",
+      state.settings.motion
+    );
+
+  $("lightSwitch")
+    .classList.toggle(
+      "on",
+      state.settings.light
+    );
+
+}
+
+/* =========================================================
+   SOUND ENGINE
+========================================================= */
+
+let audioContext = null;
+
+function getAudio(){
+
+  if(!audioContext){
+
+    audioContext =
+      new(
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+  }
+
+  return audioContext;
+
+}
+
+function beep(
+  frequency,
+  duration=.1,
+  type="sine",
+  volume=.035
+){
+
+  if(!state.settings.sound)
+    return;
 
   try{
 
-    audioContext ||= new (window.AudioContext||window.webkitAudioContext)();
+    const ctx =
+      getAudio();
 
-    const osc=audioContext.createOscillator();
-    const gain=audioContext.createGain();
+    const osc =
+      ctx.createOscillator();
 
-    osc.frequency.value=freq;
-    osc.type="sine";
+    const gain =
+      ctx.createGain();
 
-    gain.gain.setValueAtTime(.035,audioContext.currentTime);
+    osc.type =
+      type;
+
+    osc.frequency.value =
+      frequency;
+
+    gain.gain.setValueAtTime(
+      volume,
+      ctx.currentTime
+    );
+
     gain.gain.exponentialRampToValueAtTime(
       .001,
-      audioContext.currentTime+duration
+      ctx.currentTime + duration
     );
 
     osc.connect(gain);
-    gain.connect(audioContext.destination);
+    gain.connect(ctx.destination);
 
     osc.start();
-    osc.stop(audioContext.currentTime+duration);
+
+    osc.stop(
+      ctx.currentTime + duration
+    );
 
   }catch(e){}
 
 }
 
+function sound(type){
 
-/* =========================
+  if(!state.settings.sound)
+    return;
+
+  if(type==="click"){
+
+    beep(
+      500,
+      .06,
+      "sine"
+    );
+
+  }
+
+  if(type==="correct"){
+
+    beep(
+      600,
+      .08,
+      "triangle"
+    );
+
+    setTimeout(
+      ()=>beep(
+        900,
+        .13,
+        "triangle"
+      ),
+      80
+    );
+
+  }
+
+  if(type==="wrong"){
+
+    beep(
+      180,
+      .14,
+      "sawtooth"
+    );
+
+  }
+
+  if(type==="boot"){
+
+    beep(
+      300,
+      .07,
+      "square"
+    );
+
+    setTimeout(
+      ()=>beep(
+        500,
+        .08,
+        "square"
+      ),
+      90
+    );
+
+    setTimeout(
+      ()=>beep(
+        800,
+        .12,
+        "square"
+      ),
+      180
+    );
+
+  }
+
+}
+
+/* =========================================================
+   BOOT
+========================================================= */
+
+let bootDone=false;
+
+function enterVanta(){
+
+  if(bootDone)
+    return;
+
+  bootDone=true;
+
+  sound("boot");
+
+  $("boot")
+    .classList
+    .add("hide");
+
+  setTimeout(()=>{
+
+    $("boot").style.display =
+      "none";
+
+  },800);
+
+}
+
+const bootLines = [
+
+  "> loading VANTA core...",
+  "> calibrating learning engine...",
+  "> loading NOVA companion...",
+  "> connecting Skill DNA...",
+  "> spawning VANTA Universe...",
+  "> activating adaptive questions...",
+  "> preparing lesson challenges...",
+  "> initializing AI Tutor...",
+  "> loading Ali Yaser interface...",
+  "> VANTA V1.61 ready."
+
+];
+
+let bootIndex=0;
+
+function bootSequence(){
+
+  const terminal =
+    $("bootTerminal");
+
+  const bar =
+    $("bootBar");
+
+  const timer =
+    setInterval(()=>{
+
+      if(
+        bootIndex >=
+        bootLines.length
+      ){
+
+        clearInterval(timer);
+
+        setTimeout(
+          enterVanta,
+          600
+        );
+
+        return;
+
+      }
+
+      const line =
+        document.createElement("div");
+
+      line.textContent =
+        bootLines[bootIndex];
+
+      terminal.appendChild(line);
+
+      bootIndex++;
+
+      bar.style.width =
+        (
+          bootIndex /
+          bootLines.length *
+          100
+        ) + "%";
+
+      beep(
+        220 + bootIndex * 65,
+        .045,
+        "square",
+        .018
+      );
+
+    },240);
+
+}
+
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
-let toastTimer;
+let toastTimer=null;
 
-function showToast(message){
+function showToast(text){
 
-  const toast=document.getElementById("toast");
+  const toast =
+    $("toast");
 
-  toast.textContent=message;
-  toast.classList.add("show");
+  toast.textContent =
+    text;
 
-  clearTimeout(toastTimer);
-
-  toastTimer=setTimeout(()=>{
-    toast.classList.remove("show");
-  },2200);
-}
-
-
-/* =========================
-   STORAGE
-========================= */
-
-function save(){
-
-  localStorage.setItem("vanta_xp",state.xp);
-  localStorage.setItem("vanta_completed",JSON.stringify(state.completed));
-  localStorage.setItem("vanta_labs",state.labs);
-
-}
-
-
-/* =========================
-   INTERACTIVE BACKGROUND
-========================= */
-
-const canvas=document.getElementById("particles");
-const ctx=canvas.getContext("2d");
-
-let dots=[];
-let mouse={x:-1000,y:-1000};
-
-function resizeCanvas(){
-
-  canvas.width=innerWidth*devicePixelRatio;
-  canvas.height=innerHeight*devicePixelRatio;
-
-  canvas.style.width=innerWidth+"px";
-  canvas.style.height=innerHeight+"px";
-
-  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-}
-
-function createParticles(){
-
-  dots=[];
-
-  const amount=Math.min(
-    100,
-    Math.floor(innerWidth/13)
+  toast.classList.add(
+    "show"
   );
 
-  for(let i=0;i<amount;i++){
+  clearTimeout(
+    toastTimer
+  );
 
-    dots.push({
-      x:Math.random()*innerWidth,
-      y:Math.random()*innerHeight,
-      vx:(Math.random()-.5)*.25,
-      vy:(Math.random()-.5)*.25,
-      r:Math.random()*1.7+.4
+  toastTimer =
+    setTimeout(()=>{
+
+      toast.classList.remove(
+        "show"
+      );
+
+    },2200);
+
+}
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetData(){
+
+  if(
+    !confirm(
+      "هل تريد فعلاً حذف تقدم VANTA؟"
+    )
+  ) return;
+
+  localStorage.removeItem(
+    "vanta_state"
+  );
+
+  localStorage.removeItem(
+    "vanta_last_activity"
+  );
+
+  location.reload();
+
+}
+
+/* =========================================================
+   INTERACTIVE BACKGROUND
+========================================================= */
+
+document.addEventListener(
+  "mousemove",
+  e=>{
+
+    if(!state.settings.motion)
+      return;
+
+    const x =
+      (
+        e.clientX /
+        window.innerWidth -
+        .5
+      ) * 20;
+
+    const y =
+      (
+        e.clientY /
+        window.innerHeight -
+        .5
+      ) * 20;
+
+    document.querySelectorAll(
+      ".planet,.saturn"
+    ).forEach((p,i)=>{
+
+      const amount =
+        (i%3+1)*.35;
+
+      p.style.marginLeft =
+        `${x*amount}px`;
+
+      p.style.marginTop =
+        `${y*amount}px`;
+
     });
 
   }
-}
+);
 
-function drawParticles(){
+/* =========================================================
+   REAL LEARNING ACTIVITY / STREAK
+========================================================= */
 
-  ctx.clearRect(0,0,innerWidth,innerHeight);
+function registerLearningActivity(){
 
-  if(particlesEnabled){
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0,10);
 
-    for(const p of dots){
+  const last =
+    localStorage.getItem(
+      "vanta_last_activity"
+    );
 
-      if(state.motion){
+  if(last !== today){
 
-        p.x+=p.vx;
-        p.y+=p.vy;
+    /*
+      Streak is based on real learning actions,
+      not simply opening the website.
+    */
 
-        if(p.x<0)p.x=innerWidth;
-        if(p.x>innerWidth)p.x=0;
-        if(p.y<0)p.y=innerHeight;
-        if(p.y>innerHeight)p.y=0;
+    state.streak++;
 
-      }
+    localStorage.setItem(
+      "vanta_last_activity",
+      today
+    );
 
-      const dx=p.x-mouse.x;
-      const dy=p.y-mouse.y;
-      const distance=Math.sqrt(dx*dx+dy*dy);
+    save();
 
-      if(distance<130){
-
-        ctx.beginPath();
-        ctx.moveTo(p.x,p.y);
-        ctx.lineTo(mouse.x,mouse.y);
-        ctx.strokeStyle=`rgba(33,169,255,${.12*(1-distance/130)})`;
-        ctx.stroke();
-
-      }
-
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle="rgba(70,190,255,.55)";
-      ctx.fill();
-
-    }
+    updateHome();
 
   }
 
-  requestAnimationFrame(drawParticles);
 }
 
-window.addEventListener("mousemove",e=>{
-  mouse.x=e.clientX;
-  mouse.y=e.clientY;
+document.addEventListener(
+  "keydown",
+  e=>{
 
-  const scene=document.getElementById("scene");
-
-  if(scene && state.motion){
-
-    const rect=scene.getBoundingClientRect();
+    const target =
+      document.activeElement;
 
     if(
-      e.clientX>=rect.left &&
-      e.clientX<=rect.right &&
-      e.clientY>=rect.top &&
-      e.clientY<=rect.bottom
+      e.key.length === 1 &&
+      target &&
+      (
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA"
+      )
     ){
 
-      const x=(e.clientX-rect.left)/rect.width-.5;
-      const y=(e.clientY-rect.top)/rect.height-.5;
-
-      const core=document.querySelector(".core");
-
-      if(core){
-        core.style.transform=
-          `translate(-50%,-50%) rotateX(${y*-10}deg) rotateY(${x*12}deg)`;
-      }
+      registerLearningActivity();
 
     }
 
   }
-});
+);
 
-window.addEventListener("resize",()=>{
-  resizeCanvas();
-  createParticles();
-});
+/* =========================================================
+   JOURNEY PROGRESS
+========================================================= */
 
+function updateJourneyProgress(){
 
-/* =========================
-   BOOT
-========================= */
+  const completed =
+    state.lessonCompleted.length +
+    state.quizCompleted.length;
 
-function boot(){
+  const total =
+    lessons.length * 2;
 
-  const progress=document.getElementById("bootProgress");
-  const percent=document.getElementById("bootPercent");
-  const text=document.getElementById("bootText");
-
-  const steps=[
-    ["بدء تشغيل VANTA...",15],
-    ["تهيئة البيئة التفاعلية...",32],
-    ["تحميل الأكاديمية...",50],
-    ["تهيئة المختبرات...",68],
-    ["استعادة تقدمك...",86],
-    ["النظام جاهز.",100]
-  ];
-
-  let i=0;
-
-  function next(){
-
-    if(i>=steps.length){
-
-      setTimeout(()=>{
-        document.getElementById("boot").classList.add("hide");
-        go("home");
-      },450);
-
-      return;
-    }
-
-    const [msg,value]=steps[i++];
-
-    text.textContent=msg;
-    progress.style.width=value+"%";
-    percent.textContent=value+"%";
-
-    playSound(300+value*3,.035);
-
-    setTimeout(
-      next,
-      state.motion?260:80
+  const percentage =
+    Math.min(
+      100,
+      Math.round(
+        completed / total * 100
+      )
     );
+
+  $("pythonJourneyProgress")
+    .style.width =
+      Math.max(
+        5,
+        percentage
+      ) + "%";
+
+  $("pythonJourneyText")
+    .textContent =
+      percentage +
+      "% مكتمل";
+
+}
+
+/* =========================================================
+   SAFE HTML
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+/* =========================================================
+   START
+========================================================= */
+
+window.addEventListener(
+  "load",
+  ()=>{
+
+    applySettings();
+
+    updateHome();
+
+    updatePractice();
+
+    renderSkills();
+
+    updateDashboard();
+
+    updateJourneyProgress();
+
+    lesson(
+      0,
+      document.querySelector(
+        ".unit-btn"
+      )
+    );
+
+    setMascot("home");
+
+    bootSequence();
+
   }
-
-  next();
-}
-
-
-/* =========================
-   INIT
-========================= */
-
-resizeCanvas();
-createParticles();
-drawParticles();
-
-renderLessons();
-updateUI();
-
-document.getElementById("particleSwitch")
-  .classList.toggle("on",state.particles);
-
-document.getElementById("soundSwitch")
-  .classList.toggle("on",state.sound);
-
-document.getElementById("motionSwitch")
-  .classList.toggle("on",state.motion);
-
-const savedAccent=localStorage.getItem("vanta_accent");
-
-if(savedAccent){
-  changeAccent(savedAccent);
-}
-
-const savedFont=localStorage.getItem("vanta_font");
-
-if(savedFont){
-  changeFont(savedFont);
-}
-
-if(document.readyState==="loading"){
-  document.addEventListener("DOMContentLoaded",boot,{once:true});
-}else{
-  boot();
-}
+);
 
 </script>
 
