@@ -1720,6 +1720,19 @@ body.light-mode .answer{
 }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const SUPABASE_URL = "https://mknbfymmwuesjffbmkmu.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_fLJzcNmcjgSYGh9-EspBuQ_nJlDnZby";
+
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  console.log("✅ VANTA connected to Supabase!");
+</script>
 </head>
 
 <body>
