@@ -1,199 +1,74 @@
-/* =========================================
-   VANTA — MOBILE RESPONSIVE SYSTEM
-   ========================================= */
-
-html,
-body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-img,
-video,
-canvas {
-  max-width: 100%;
-}
-
-/* Mobile */
+/* VANTA MOBILE NAV FIX */
 @media (max-width: 768px) {
 
+  html,
   body {
-    min-width: 0;
-    overflow-x: hidden;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
   }
 
-  /* Header */
   header,
-  .topbar,
+  nav,
   .navbar,
-  nav {
-    width: 100%;
-    max-width: 100%;
+  .topbar {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 60px !important;
+    overflow: visible !important;
   }
 
-  nav {
-    position: relative;
+  /* حاول إظهار عناصر التنقل الموجودة */
+  nav a,
+  header a,
+  .navbar a,
+  .topbar a,
+  nav button,
+  header button,
+  .navbar button {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    transform: none !important;
   }
 
-  /* Hide desktop navigation */
-  nav .nav-links,
-  .nav-links {
-    display: none;
+  /* أي حاوية شائعة للقائمة */
+  nav > div,
+  header > div,
+  .navbar > div,
+  .nav-links,
+  .navigation,
+  .menu,
+  .nav-menu,
+  .nav-items {
+    max-width: 100% !important;
+    width: auto !important;
+    overflow: visible !important;
   }
 
-  /* Main containers */
-  main,
-  .container,
-  .page,
-  .content,
-  .hero,
-  .dashboard,
-  .section {
-    width: 100%;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
+  .nav-links,
+  .navigation,
+  .menu,
+  .nav-menu,
+  .nav-items {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 6px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 
-  .container,
-  .content {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-
-  /* Typography */
-  h1 {
-    font-size: clamp(30px, 9vw, 48px);
-    line-height: 1.05;
-  }
-
-  h2 {
-    font-size: clamp(24px, 7vw, 34px);
-  }
-
-  h3 {
-    font-size: 20px;
-  }
-
-  p {
-    font-size: 15px;
-    line-height: 1.7;
-  }
-
-  /* Cards */
-  .cards,
-  .grid,
-  .features,
-  .course-grid,
-  .dashboard-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    width: 100%;
-    gap: 14px;
-  }
-
-  .card,
-  .glass-card,
-  .course-card,
-  .feature-card {
-    width: 100%;
-    min-width: 0;
-  }
-
-  /* Buttons */
-  button,
-  .btn,
-  .primary-btn {
-    min-height: 46px;
-    max-width: 100%;
-  }
-
-  /* NOVA */
-  .nova,
-  .nova-panel,
-  .nova-container {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .nova-panel {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* Prevent giant 3D elements from pushing the page */
-  .nova-core,
-  .nova-orb,
-  .nova-eye,
-  .nova-creature {
-    max-width: 90vw;
-    max-height: 90vw;
-  }
-
-  /* Tables */
-  .table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  table {
-    min-width: 600px;
-  }
-
-  /* Modal */
-  .modal,
-  .auth-modal,
-  .settings-modal {
-    width: calc(100% - 24px);
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  /* Forms */
-  input,
-  textarea,
-  select {
-    width: 100%;
-    max-width: 100%;
-    font-size: 16px;
-  }
-
-  /* Footer */
-  footer {
-    width: 100%;
-    padding: 30px 16px;
-    text-align: center;
-  }
-}
-
-
-/* Very small phones */
-@media (max-width: 420px) {
-
-  .container,
-  .content {
-    padding-left: 12px;
-    padding-right: 12px;
-  }
-
-  h1 {
-    font-size: 32px;
-  }
-
-  .card,
-  .glass-card {
-    padding: 16px;
-  }
-
-  button,
-  .btn {
-    width: 100%;
+  nav a,
+  header a,
+  .navbar a,
+  .topbar a {
+    white-space: nowrap !important;
+    font-size: 12px !important;
+    padding: 7px 9px !important;
+    min-height: 36px !important;
   }
 }
