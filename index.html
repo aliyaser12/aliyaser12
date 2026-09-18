@@ -3678,7 +3678,11 @@ async function novaAnswer(question){
               message:question,
               context:{
                 product:"VANTA",
-                page:state.page
+                page:state.page,
+                xp: state.xp,
+lessons: state.lessons,
+badges: state.badges,
+user: state.user
               }
             })
           }
