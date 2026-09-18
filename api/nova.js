@@ -4,7 +4,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message } = req.body || {};
+    const { message, context } = req.body || {};
+
+const xp = Number(context?.xp || 0);
+const lessons = Number(context?.lessons || 0);
+const badges = Number(context?.badges || 0);
+const page = context?.page || "home";
+
+const userName =
+  typeof context?.user?.name === "string"
+    ? context.user.name
+    : "";
 
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Message is required" });
