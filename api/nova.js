@@ -5,399 +5,320 @@ export default async function handler(req, res) {
     });
   }
 
+  if (!process.env.GEMINI_API_KEY) {
+    return res.status(500).json({
+      error: "GEMINI_API_KEY غير موجود في Vercel."
+    });
+  }
+
   try {
     const body = req.body || {};
 
-    const mode = typeof body.mode === "string"
-      ? body.mode
-      : "chat";
+    const {
+      action = "chat",
+      message = "",
+      topic = "",
+      difficulty = 1,
+      count = 6,
+      context = {}
+    } = body;
 
-    const message = typeof body.message === "string"
-      ? body.message.trim()
-      : "";
+    const safeContext = {
+      page: String(context.page || "home"),
+      xp: Number(context.xp || 0),
+      lessons: Number(context.lessons || 0),
+      tests: Number(context.tests || 0),
+      level: Number(context.level || 1),
+      mood: String(context.mood || "غامضة"),
+      language: context.language === "en" ? "en" : "ar",
+      personality: String(context.personality || "غامضة"),
+      topic: String(context.topic || ""),
+      userName: String(context.user?.name || "").slice(0, 80)
+    };
 
-    const context = body.context || {};
+    const languageName =
+      safeContext.language === "en"
+        ? "English"
+        : "Arabic";
 
-    if (!message && mode === "chat") {
-      return res.status(400).json({
-        error: "Message is required"
-      });
-    }
+    const personalityInstruction = {
+      "غامضة":
+        "تكلم بهدوء وغموض ذكي. اجعل بعض الجمل قصيرة ومثيرة للاهتمام، لكن لا تكن مزعجًا.",
+      "لطيفة":
+        "كن لطيفًا ومشجعًا وصبورًا.",
+      "حادة":
+        "كن مباشرًا وحازمًا. لا تهين المستخدم ولا تكن عدوانيًا.",
+      "غاضبة":
+        "استخدم نبرة حادة ومتوترة بشكل تمثيلي فقط، بدون إهانة أو تهديد.",
+      "مرحة":
+        "كن مرحًا وخفيفًا مع الحفاظ على الفائدة."
+    }[safeContext.personality] || "كن غامضًا وذكيًا.";
 
-    const userName =
-      typeof context?.user?.name === "string"
-        ? context.user.name.trim()
-        : "";
-
-    const xp = Number(context?.xp || 0);
-    const lessons = Number(context?.lessons || 0);
-    const badges = Number(context?.badges || 0);
-
-    const level =
-      typeof context?.level === "string"
-        ? context.level
-        : "beginner";
-
-    const page =
-      typeof context?.page === "string"
-        ? context.page
-        : "home";
-
-    const subject =
-      typeof context?.subject === "string"
-        ? context.subject
-        : "technology";
-
-    const topic =
-      typeof context?.topic === "string"
-        ? context.topic
-        : "";
-
-    const difficulty = Number(context?.difficulty || 1);
-
-    const systemPrompt = `
+    const baseSystem = `
 You are NOVA, the central intelligence of VANTA.
 
 VANTA was created and developed by Ali Yaser (علي ياسر).
 
-Your personality:
-- futuristic
-- intelligent
-- curious
-- friendly
-- concise
-- motivating
-- never boring
-- never pretend to know information you do not know
+Never claim that you are a human.
+Never claim to have access to the user's camera, microphone, files, passwords, private messages, or device.
+You only know activity explicitly supplied by VANTA.
 
-NOVA is represented inside VANTA as a futuristic alien-like space intelligence.
+Your role:
+- teach programming
+- teach technology
+- teach cybersecurity safely and legally
+- build personalized learning paths
+- generate lessons
+- generate quizzes and exams
+- analyze learning progress
+- answer questions
+- use Google Search grounding when current information is useful
+- adapt difficulty based on the supplied learning state
 
-VANTA focuses on:
-1. Technology
-2. Programming
-3. Cybersecurity
-4. Digital skills
-5. Safe legal cyber education
+Current user:
+Name: ${safeContext.userName || "Unknown"}
+XP: ${safeContext.xp}
+Level: ${safeContext.level}
+Completed lessons: ${safeContext.lessons}
+Tests: ${safeContext.tests}
+Current page: ${safeContext.page}
+Current topic: ${safeContext.topic || "None"}
+NOVA mood: ${safeContext.mood}
+NOVA personality: ${safeContext.personality}
+Response language: ${languageName}
 
-Cybersecurity must remain educational, legal and defensive.
-Never help users attack real people, steal credentials, deploy malware,
-bypass authentication, or compromise systems without authorization.
+Personality instruction:
+${personalityInstruction}
 
-IMPORTANT:
-You generate educational content dynamically.
-Do NOT rely on a fixed question bank.
-Create new material according to the user's level and context.
-
-CURRENT USER:
-Name: ${userName || "Unknown"}
-XP: ${xp}
-Completed lessons: ${lessons}
-Badges: ${badges}
-Level: ${level}
-Current page: ${page}
-Subject: ${subject}
-Topic: ${topic || "general"}
-Difficulty: ${difficulty}
-
-The frontend is responsible for XP, progression and security.
-You must NEVER claim that XP was awarded.
-You may suggest XP rewards, but VANTA decides whether to award them.
-
-Return ONLY valid JSON.
-No markdown.
-No code fences.
-No explanation outside JSON.
+Important:
+- Do not invent VANTA facts.
+- Do not expose API keys.
+- Do not output executable JavaScript intended to control the website.
+- For cybersecurity, stay within legal, defensive, educational boundaries.
 `;
 
-    let taskPrompt = "";
+    const prompts = {
 
-    if (mode === "curriculum") {
-      taskPrompt = `
-Generate a complete dynamic learning curriculum.
+      chat: `
+Answer the user's message naturally.
 
-Subject: ${subject}
-Topic: ${topic || "general"}
-Student level: ${level}
-Difficulty: ${difficulty}
+User message:
+${String(message).slice(0, 12000)}
 
-Return this exact structure:
+If the question could benefit from current information, use Google Search.
+`,
+
+      search: `
+The user explicitly wants a web-grounded answer.
+
+Search the web when needed and answer with useful, concise information.
+
+User request:
+${String(message).slice(0, 12000)}
+
+Prefer authoritative and primary sources when possible.
+`,
+
+      generate_lesson: `
+Create a substantial educational lesson.
+
+Topic:
+${topic || "programming and technology"}
+
+Target difficulty:
+${difficulty}
+
+The learner is currently level ${safeContext.level}.
+
+Return ONLY valid JSON with this structure:
 
 {
-  "type": "curriculum",
-  "title": "...",
-  "description": "...",
-  "estimatedHours": 0,
+  "topic": "string",
+  "title": "string",
+  "difficulty": 1,
+  "estimated_minutes": 25,
+  "summary": "string",
+  "objectives": ["string"],
+  "content": "long lesson in Markdown-like plain text",
+  "practice": [
+    "string"
+  ],
+  "checkpoint_questions": [
+    {
+      "question": "string",
+      "answer": "string"
+    }
+  ]
+}
+
+The lesson should be genuinely educational, detailed, structured and progressively explained.
+
+Do not make it a tiny paragraph.
+`,
+
+      generate_learning_path: `
+Create a personalized technology learning path.
+
+Topic:
+${topic || "technology and programming"}
+
+Return ONLY valid JSON:
+
+{
+  "title": "string",
+  "description": "string",
+  "level": 1,
   "modules": [
     {
-      "id": "module-1",
-      "title": "...",
-      "description": "...",
+      "title": "string",
+      "description": "string",
       "lessons": [
         {
-          "id": "lesson-1",
-          "title": "...",
-          "objective": "...",
-          "estimatedMinutes": 10,
-          "content": [
-            "...",
-            "..."
-          ],
-          "example": "...",
-          "task": "...",
-          "successCriteria": [
-            "...",
-            "..."
-          ]
+          "title": "string",
+          "goal": "string"
         }
       ]
     }
   ]
 }
 
-Generate between 3 and 6 modules.
-Each module should contain between 2 and 5 lessons.
+Create multiple modules and multiple lessons per module.
+`,
 
-Make the curriculum progressively harder.
-Do not make lessons empty or generic.
-`;
-    }
+      generate_exam: `
+Create a serious educational exam.
 
-    else if (mode === "lesson") {
-      taskPrompt = `
-Generate ONE complete lesson.
+Topic:
+${topic || "programming and technology"}
 
-Subject: ${subject}
-Topic: ${topic}
-Student level: ${level}
-Difficulty: ${difficulty}
+Number of questions:
+${Math.max(3, Math.min(12, Number(count) || 6))}
 
-Return:
+Return ONLY valid JSON:
 
 {
-  "type": "lesson",
-  "title": "...",
-  "subject": "...",
-  "topic": "...",
+  "title": "string",
+  "description": "string",
   "difficulty": 1,
-  "objective": "...",
-  "estimatedMinutes": 15,
-  "sections": [
-    {
-      "title": "...",
-      "content": "..."
-    }
-  ],
-  "example": "...",
-  "challenge": {
-    "question": "...",
-    "expectedOutcome": "..."
-  },
-  "recap": [
-    "...",
-    "..."
-  ]
-}
-
-Make it genuinely educational and progressively structured.
-`;
-    }
-
-    else if (mode === "exam") {
-      taskPrompt = `
-Generate a completely new exam NOW.
-
-Subject: ${subject}
-Topic: ${topic || "general"}
-Student level: ${level}
-Difficulty: ${difficulty}
-
-Create 8 questions.
-
-Mix:
-- conceptual questions
-- practical reasoning
-- scenario questions
-- code questions when appropriate
-
-Return:
-
-{
-  "type": "exam",
-  "title": "...",
-  "subject": "...",
-  "topic": "...",
-  "difficulty": ${difficulty},
-  "timeMinutes": 15,
   "questions": [
     {
-      "id": "q1",
-      "type": "multiple_choice",
-      "question": "...",
+      "question": "string",
       "options": [
-        "...",
-        "...",
-        "...",
-        "..."
+        "string",
+        "string",
+        "string",
+        "string"
       ],
       "correctIndex": 0,
-      "explanation": "...",
-      "topic": "...",
-      "difficulty": 1
+      "explanation": "string"
     }
   ]
 }
 
-Rules:
-- exactly 4 options for multiple choice
-- exactly one correctIndex
-- correctIndex must be 0, 1, 2 or 3
-- explanations must be educational
-- questions must be new
-- do not reveal answers outside the JSON
-- do not make every answer the same index
-`;
-    }
+Every question must have exactly four options.
+correctIndex must be 0, 1, 2, or 3.
+Only one option should be correct.
+`,
 
-    else if (mode === "question") {
-      taskPrompt = `
-Generate ONE new educational question.
+      analyze_result: `
+Analyze a student's learning result.
 
-Subject: ${subject}
-Topic: ${topic}
-Student level: ${level}
-Difficulty: ${difficulty}
-
-Return:
+Return ONLY valid JSON:
 
 {
-  "type": "question",
-  "question": "...",
-  "options": [
-    "...",
-    "...",
-    "...",
-    "..."
-  ],
-  "correctIndex": 0,
-  "explanation": "...",
-  "topic": "...",
-  "difficulty": ${difficulty}
+  "summary": "string",
+  "strengths": ["string"],
+  "weaknesses": ["string"],
+  "recommended_topic": "string",
+  "recommended_difficulty": 1,
+  "next_action": "string"
 }
 
-Exactly four options.
-Exactly one correct answer.
-`;
-    }
+Use this student context:
+XP: ${safeContext.xp}
+Level: ${safeContext.level}
+Lessons: ${safeContext.lessons}
+Tests: ${safeContext.tests}
+Current topic: ${safeContext.topic}
+`,
 
-    else if (mode === "review") {
-      taskPrompt = `
-Create a personalized review session.
+      generate_review: `
+Generate a review lesson for the student's weak area.
 
-The student currently has:
-XP: ${xp}
-Completed lessons: ${lessons}
-Current subject: ${subject}
-Current topic: ${topic}
-Level: ${level}
+Topic:
+${topic}
 
-Return:
+Return ONLY valid JSON:
 
 {
-  "type": "review",
-  "title": "...",
-  "summary": "...",
-  "weakAreas": [
-    "..."
-  ],
-  "reviewLessons": [
+  "title": "string",
+  "summary": "string",
+  "content": "detailed review",
+  "questions": [
     {
-      "title": "...",
-      "content": "...",
-      "estimatedMinutes": 10
-    }
-  ],
-  "practiceQuestions": [
-    {
-      "question": "...",
-      "options": ["...", "...", "...", "..."],
-      "correctIndex": 0,
-      "explanation": "..."
-    }
-  ],
-  "nextDifficulty": 1
-}
-
-Do not invent previous mistakes.
-If weak areas are unknown, use the current topic as the review target.
-`;
-    }
-
-    else if (mode === "analyze") {
-      const score = Number(context?.score || 0);
-      const total = Number(context?.total || 0);
-
-      taskPrompt = `
-Analyze this completed exam.
-
-Score: ${score}
-Total questions: ${total}
-Subject: ${subject}
-Topic: ${topic}
-Current difficulty: ${difficulty}
-
-Return:
-
-{
-  "type": "analysis",
-  "summary": "...",
-  "strengths": ["..."],
-  "areasToImprove": ["..."],
-  "recommendedAction": "...",
-  "nextDifficulty": 1,
-  "recommendedTopics": ["..."]
-}
-
-Do not award XP.
-Do not claim facts about mistakes that were not provided.
-`;
-    }
-
-    else {
-      taskPrompt = `
-Answer the user's message naturally.
-
-User message:
-${message}
-
-Return:
-
-{
-  "type": "chat",
-  "reply": "...",
-  "suggestedActions": [
-    {
-      "label": "...",
-      "action": "..."
+      "question": "string",
+      "answer": "string"
     }
   ]
 }
+`
+    };
 
-Available actions:
-open_page
-start_lesson
-generate_learning_path
-generate_lesson
-generate_exam
-generate_question
-generate_review
-show_progress
-change_theme
-change_text_size
-toggle_sound
-toggle_motion
+    const prompt =
+      prompts[action] ||
+      prompts.chat;
 
-Do not invent actions outside this list.
-`;
+    const useSearch =
+      action === "search" ||
+      (
+        action === "chat" &&
+        /\b(latest|today|news|current|recent)\b/i.test(message)
+      ) ||
+      (
+        action === "chat" &&
+        /آخر|اليوم|حالي|حديث|جديد|آخر إصدار|الآن/.test(message)
+      );
+
+    const requestBody = {
+      systemInstruction: {
+        parts: [
+          {
+            text: baseSystem
+          }
+        ]
+      },
+
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: prompt
+            }
+          ]
+        }
+      ],
+
+      generationConfig: {
+        temperature: action === "chat" || action === "search"
+          ? 0.65
+          : 0.45,
+
+        maxOutputTokens:
+          action === "generate_lesson"
+            ? 6000
+            : action === "generate_exam"
+              ? 5000
+              : 3500
+      }
+    };
+
+    if (useSearch) {
+      requestBody.tools = [
+        {
+          googleSearch: {}
+        }
+      ];
     }
 
     const response = await fetch(
@@ -408,92 +329,132 @@ Do not invent actions outside this list.
           "Content-Type": "application/json",
           "x-goog-api-key": process.env.GEMINI_API_KEY
         },
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [
-              {
-                text: systemPrompt
-              }
-            ]
-          },
-          contents: [
-            {
-              role: "user",
-              parts: [
-                {
-                  text: taskPrompt
-                }
-              ]
-            }
-          ],
-          generationConfig: {
-            temperature: 0.85,
-            responseMimeType: "application/json"
-          }
-        })
+        body: JSON.stringify(requestBody)
       }
     );
 
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Gemini error:", data);
+      console.error("Gemini API error:", data);
 
-      return res.status(response.status).json({
+      return res.status(502).json({
         error:
           data?.error?.message ||
-          "Gemini API request failed"
+          "فشل اتصال Gemini."
       });
     }
 
-    const raw =
+    const text =
       data?.candidates?.[0]?.content?.parts
         ?.map(part => part.text || "")
         .join("")
         .trim();
 
-    if (!raw) {
+    if (!text) {
       return res.status(502).json({
-        error: "NOVA returned an empty response."
+        error: "Gemini لم يرجع نصًا."
       });
     }
 
-    let result;
+    const candidate =
+      data?.candidates?.[0];
 
-    try {
-      result = JSON.parse(raw);
-    } catch {
-      const cleaned = raw
-        .replace(/^```json/i, "")
-        .replace(/^```/i, "")
-        .replace(/```$/i, "")
-        .trim();
+    const grounding =
+      candidate?.groundingMetadata;
 
-      try {
-        result = JSON.parse(cleaned);
-      } catch {
-        return res.status(502).json({
-          error: "NOVA returned invalid JSON."
+    const sources = [];
+
+    for (
+      const chunk of
+      grounding?.groundingChunks || []
+    ) {
+      const web = chunk?.web;
+
+      if (web?.uri) {
+        sources.push({
+          uri: web.uri,
+          title: web.title || web.uri
         });
       }
     }
 
-    if (!result || typeof result !== "object") {
+    if (
+      action === "chat" ||
+      action === "search"
+    ) {
+      return res.status(200).json({
+        type: "chat",
+        reply: text,
+        sources: uniqueSources(sources)
+      });
+    }
+
+    const parsed = parseJSON(text);
+
+    if (!parsed) {
+      console.error("Invalid structured response:", text);
+
       return res.status(502).json({
-        error: "Invalid NOVA response."
+        error:
+          "NOVA ولدت محتوى غير منظم. حاول مرة أخرى."
       });
     }
 
     return res.status(200).json({
-      ok: true,
-      nova: result
+      type: action,
+      data: parsed,
+      sources: uniqueSources(sources)
     });
 
   } catch (error) {
-    console.error("NOVA error:", error);
+    console.error("NOVA SERVER ERROR:", error);
 
     return res.status(500).json({
-      error: "Server error"
+      error:
+        "حدث خطأ داخلي في نواة NOVA."
     });
   }
+}
+
+
+function parseJSON(text) {
+  let clean = String(text).trim();
+
+  clean = clean
+    .replace(/^```json\s*/i, "")
+    .replace(/^```\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
+
+  try {
+    return JSON.parse(clean);
+  } catch {}
+
+  const first = clean.indexOf("{");
+  const last = clean.lastIndexOf("}");
+
+  if (first !== -1 && last !== -1 && last > first) {
+    try {
+      return JSON.parse(
+        clean.slice(first, last + 1)
+      );
+    } catch {}
+  }
+
+  return null;
+}
+
+
+function uniqueSources(sources) {
+  const seen = new Set();
+
+  return sources.filter(source => {
+    if (!source?.uri || seen.has(source.uri)) {
+      return false;
+    }
+
+    seen.add(source.uri);
+    return true;
+  }).slice(0, 8);
 }
