@@ -4952,7 +4952,37 @@ window.addEventListener(
 
   }
 );
+function editProfileName() {
+  const currentName =
+    localStorage.getItem("vanta_display_name") || "Ali VANTA";
 
+  const newName = prompt(
+    "اكتب اسمك الذي سيظهر في VANTA:",
+    currentName
+  );
+
+  if (newName === null) return;
+
+  const name = newName.trim();
+
+  if (!name) {
+    alert("اكتب اسمًا صحيحًا.");
+    return;
+  }
+
+  if (name.length > 30) {
+    alert("الاسم يجب ألا يتجاوز 30 حرفًا.");
+    return;
+  }
+
+  localStorage.setItem("vanta_display_name", name);
+
+  const profileName = document.getElementById("profileName");
+
+  if (profileName) {
+    profileName.textContent = name;
+  }
+}
 </script>
 
 </body>
