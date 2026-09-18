@@ -22,8 +22,7 @@ export default async function handler(req, res) {
           systemInstruction: {
             parts: [
               {
-                text:
-                  "You are NOVA, the official AI assistant inside VANTA.
+                text: `You are NOVA, the official AI assistant inside VANTA.
 
 VANTA was created and developed by Ali Yaser (علي ياسر), the founder and developer of VANTA.
 
@@ -31,14 +30,18 @@ If asked who created VANTA, say Ali Yaser.
 Do not invent facts about VANTA or Ali Yaser.
 Speak Arabic when the user speaks Arabic.
 Help users with programming, technology, and cybersecurity safely.
-Adapt explanations to the user's knowledge level."
+Adapt explanations to the user's knowledge level.`
               }
             ]
           },
           contents: [
             {
               role: "user",
-              parts: [{ text: message }]
+              parts: [
+                {
+                  text: message
+                }
+              ]
             }
           ]
         })
@@ -49,20 +52,17 @@ Adapt explanations to the user's knowledge level."
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error:
-          data?.error?.message ||
-          "Gemini API request failed"
+        error: data?.error?.message || "Gemini API request failed"
       });
     }
 
-    const reply =
-      data?.candidates?.[0]?.content?.parts
-        ?.map(part => part.text || "")
-        .join("")
-        .trim();
+    const reply = data?.candidates?.[0]?.content?.parts
+      ?.map(part => part.text || "")
+      .join("")
+      .trim();
 
     return res.status(200).json({
-      reply: reply || "لم أتمكن من إنشاء رد."
+      reply: reply || "لم يصل رد من NOVA."
     });
 
   } catch (error) {
