@@ -2,149 +2,73 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#050817">
-<meta name="description" content="VANTA — Academy, Cyber Range & Technology Lab by Ali Yaser">
-<meta property="og:title" content="VANTA — Academy & Cyber Range">
-<meta property="og:description" content="Learn Programming, Technology and Cybersecurity with VANTA.">
-<title>VANTA — Academy & Cyber Range</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07101f">
+<meta name="description" content="VANTA — أكاديمية تقنية ومدى سيبراني تفاعلي">
+<meta name="author" content="Ali Yaser">
+<title>VANTA — Technology • Programming • Cybersecurity</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Orbitron:wght@500;600;700;800&display=swap');
-
 :root{
-  --bg:#030511;
-  --bg2:#080b1c;
-  --glass:rgba(12,17,40,.55);
-  --glass2:rgba(18,25,57,.68);
-  --line:rgba(255,255,255,.13);
-  --text:#f5f7ff;
-  --muted:#a9b1ce;
-  --cyan:#39e7ff;
-  --blue:#4d7cff;
-  --purple:#a855f7;
-  --pink:#ff4fd8;
-  --orange:#ff9d42;
-  --gold:#ffd166;
-  --green:#55f59a;
-  --danger:#ff5577;
-  --accent:#39e7ff;
+  --bg:#030711;
+  --bg2:#071226;
+  --panel:rgba(10,22,43,.62);
+  --panel2:rgba(14,30,58,.72);
+  --line:rgba(115,190,255,.20);
+  --text:#f4f8ff;
+  --muted:#9badc9;
+  --cyan:#39d9ff;
+  --blue:#4387ff;
+  --purple:#9b6cff;
+  --pink:#ff55c8;
+  --gold:#ffc857;
+  --orange:#ff7b35;
+  --green:#5dffa0;
+  --danger:#ff5470;
   --radius:24px;
-  --blur:22px;
-  --motion:1;
-  --density:1;
+  --shadow:0 25px 90px rgba(0,0,0,.45);
   --scale:1;
 }
 
-*{box-sizing:border-box;margin:0;padding:0}
-
-html{
-  scroll-behavior:smooth;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(64,118,255,.13),transparent 28%),
+    radial-gradient(circle at 90% 30%,rgba(188,67,255,.11),transparent 25%),
+    linear-gradient(135deg,var(--bg),var(--bg2));
+  color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;
+  overflow-x:hidden;
   font-size:calc(16px * var(--scale));
 }
 
-body{
-  min-height:100vh;
-  overflow-x:hidden;
-  color:var(--text);
-  font-family:"Cairo",sans-serif;
-  background:
-    radial-gradient(circle at 10% 15%,rgba(77,124,255,.16),transparent 28%),
-    radial-gradient(circle at 85% 25%,rgba(168,85,247,.14),transparent 30%),
-    radial-gradient(circle at 50% 90%,rgba(255,79,216,.08),transparent 30%),
-    var(--bg);
-}
-
-body.light{
-  --bg:#edf3ff;
-  --bg2:#dce8ff;
-  --glass:rgba(255,255,255,.55);
-  --glass2:rgba(255,255,255,.76);
-  --line:rgba(20,35,70,.13);
-  --text:#11172a;
-  --muted:#56627d;
-}
-
-body.performance *{
-  animation-duration:.01ms!important;
-  transition-duration:.01ms!important;
-  backdrop-filter:none!important;
-}
-
-button,input,textarea,select{
-  font:inherit;
-}
-
-button{
-  border:0;
-  cursor:pointer;
-}
-
-a{
-  color:inherit;
-  text-decoration:none;
-}
-
-::selection{
-  background:var(--accent);
-  color:#031019;
-}
-
-/* =========================
-   SPACE BACKGROUND
-========================= */
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
 
 #space{
   position:fixed;
   inset:0;
+  z-index:-5;
   width:100%;
   height:100%;
-  z-index:-5;
-  pointer-events:none;
+  background:#02050d;
 }
 
-.space-vignette{
+#spaceGlow{
   position:fixed;
   inset:0;
   z-index:-4;
   pointer-events:none;
   background:
-    radial-gradient(circle at center,transparent 25%,rgba(0,0,0,.35) 100%),
-    linear-gradient(180deg,rgba(3,5,17,.05),rgba(3,5,17,.58));
+    radial-gradient(circle at 50% 40%,transparent 25%,rgba(0,0,0,.35) 100%),
+    linear-gradient(120deg,rgba(36,126,255,.04),rgba(213,71,255,.04));
 }
-
-.nebula{
-  position:fixed;
-  width:420px;
-  height:420px;
-  border-radius:50%;
-  filter:blur(90px);
-  opacity:.18;
-  pointer-events:none;
-  z-index:-3;
-}
-
-.nebula.one{
-  background:#664cff;
-  top:5%;
-  left:-120px;
-}
-
-.nebula.two{
-  background:#ff35c8;
-  right:-120px;
-  top:38%;
-}
-
-.nebula.three{
-  background:#00eaff;
-  left:30%;
-  bottom:-180px;
-}
-
-/* =========================
-   BOOT
-========================= */
 
 #boot{
   position:fixed;
@@ -153,1147 +77,773 @@ a{
   display:flex;
   align-items:center;
   justify-content:center;
-  overflow:hidden;
-  background:#02030b;
-  transition:opacity 1s ease,visibility 1s ease;
+  background:
+    radial-gradient(circle at 50% 40%,rgba(40,133,255,.12),transparent 25%),
+    #02050c;
+  transition:opacity .9s,visibility .9s,transform .9s;
 }
 
 #boot.hide{
   opacity:0;
   visibility:hidden;
-  pointer-events:none;
+  transform:scale(1.04);
 }
 
-.boot-grid{
-  position:absolute;
-  inset:-30%;
-  background-image:
-    linear-gradient(rgba(57,231,255,.06) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(57,231,255,.06) 1px,transparent 1px);
-  background-size:50px 50px;
-  transform:perspective(600px) rotateX(65deg) translateY(15%);
-  animation:gridMove 5s linear infinite;
-}
-
-@keyframes gridMove{
-  to{transform:perspective(600px) rotateX(65deg) translateY(18%);}
-}
-
-.boot-core{
-  position:relative;
-  width:min(600px,90vw);
-  padding:45px;
+.bootBox{
+  width:min(680px,90vw);
   text-align:center;
-  border:1px solid rgba(57,231,255,.25);
-  border-radius:34px;
-  background:rgba(5,9,25,.72);
-  backdrop-filter:blur(25px);
-  box-shadow:
-    0 0 80px rgba(57,231,255,.13),
-    inset 0 0 60px rgba(168,85,247,.06);
 }
 
-.boot-logo{
-  width:100px;
-  height:100px;
-  margin:auto auto 22px;
-  display:grid;
-  place-items:center;
-  font-family:Orbitron,sans-serif;
-  font-size:42px;
-  font-weight:900;
-  color:white;
-  border:1px solid rgba(57,231,255,.5);
-  background:
-    linear-gradient(145deg,rgba(57,231,255,.18),rgba(168,85,247,.22));
-  clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
-  box-shadow:
-    0 0 40px rgba(57,231,255,.35),
-    inset 0 0 30px rgba(255,255,255,.08);
-  animation:logoFloat 2.5s ease-in-out infinite;
-}
-
-@keyframes logoFloat{
-  50%{transform:translateY(-7px) rotate(2deg);}
-}
-
-.boot-brand{
-  font-family:Orbitron,sans-serif;
-  font-size:clamp(38px,8vw,72px);
-  letter-spacing:8px;
-  background:linear-gradient(90deg,#39e7ff,#a855f7,#ff4fd8,#ff9d42);
+.bootLogo{
+  font-size:clamp(58px,12vw,130px);
+  font-weight:1000;
+  letter-spacing:.16em;
+  background:linear-gradient(90deg,#fff,#55dfff,#9b6cff,#ff63ce,#fff);
   -webkit-background-clip:text;
   color:transparent;
+  text-shadow:0 0 40px rgba(69,205,255,.25);
+  animation:logoPulse 2.5s infinite;
 }
 
-.boot-sub{
-  margin:8px 0 26px;
-  color:#aab4d5;
-  letter-spacing:3px;
-  font-family:Orbitron,sans-serif;
-  font-size:11px;
+@keyframes logoPulse{
+  50%{filter:brightness(1.45)}
 }
 
-.boot-status{
-  color:#7deeff;
-  min-height:25px;
-  font-family:monospace;
-  margin-bottom:15px;
-}
-
-.boot-progress{
-  height:5px;
-  overflow:hidden;
-  border-radius:99px;
-  background:rgba(255,255,255,.08);
-}
-
-.boot-progress i{
-  display:block;
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,#39e7ff,#4d7cff,#a855f7,#ff4fd8);
-  box-shadow:0 0 18px #39e7ff;
-  transition:width .2s;
-}
-
-.boot-actions{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  margin-top:25px;
-  opacity:0;
-  pointer-events:none;
-  transition:.5s;
-}
-
-.boot-actions.show{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.btn{
-  padding:12px 21px;
-  border-radius:14px;
-  color:white;
-  background:linear-gradient(135deg,#347fff,#974cf5);
-  box-shadow:0 8px 30px rgba(77,124,255,.22);
-  transition:.25s;
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 12px 38px rgba(77,124,255,.35);
-}
-
-.btn.secondary{
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-}
-
-/* =========================
-   NAVBAR
-========================= */
-
-.navbar{
-  position:fixed;
-  top:14px;
-  left:14px;
-  right:14px;
-  z-index:500;
-  height:70px;
-  display:flex;
-  align-items:center;
-  gap:16px;
-  padding:9px 12px 9px 18px;
-  border:1px solid var(--line);
-  border-radius:22px;
-  background:rgba(5,9,25,.64);
-  backdrop-filter:blur(var(--blur));
-  box-shadow:
-    0 15px 50px rgba(0,0,0,.25),
-    inset 0 1px rgba(255,255,255,.08);
-  transform:translateY(-100px);
-  opacity:0;
-  transition:.8s cubic-bezier(.2,.8,.2,1);
-}
-
-.navbar.ready{
-  transform:none;
-  opacity:1;
-}
-
-.brand{
-  min-width:125px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.brand-mark{
-  width:38px;
-  height:38px;
-  display:grid;
-  place-items:center;
-  font-family:Orbitron;
-  font-size:15px;
-  border-radius:12px;
-  background:linear-gradient(135deg,#39e7ff,#8055ff,#ff4fd8);
-  box-shadow:0 0 24px rgba(57,231,255,.28);
-}
-
-.brand-text{
-  font-family:Orbitron;
-  font-size:16px;
-  letter-spacing:2px;
-}
-
-.brand small{
-  display:block;
-  color:#7884a8;
-  font:8px monospace;
-  letter-spacing:2px;
-}
-
-.nav-scroll{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  overflow-x:auto;
-  scrollbar-width:none;
-}
-
-.nav-scroll::-webkit-scrollbar{display:none}
-
-.nav-item{
-  position:relative;
-  white-space:nowrap;
-  padding:10px 11px;
-  border-radius:12px;
-  color:#adb7d4;
-  background:transparent;
+.bootSub{
+  color:#8db8e9;
+  letter-spacing:.18em;
   font-size:12px;
-  transition:.22s;
+  margin:8px 0 30px;
 }
 
-.nav-item:hover{
-  color:white;
-  background:rgba(255,255,255,.06);
-}
-
-.nav-item.active{
-  color:white;
-  background:rgba(57,231,255,.09);
-}
-
-.nav-item.active::after{
-  content:"";
-  position:absolute;
-  left:20%;
-  right:20%;
-  bottom:3px;
-  height:2px;
-  border-radius:9px;
-  background:linear-gradient(90deg,#39e7ff,#a855f7,#ff4fd8);
-  box-shadow:0 0 10px var(--accent);
-}
-
-.nav-actions{
-  display:flex;
-  gap:6px;
-}
-
-.icon-btn{
-  width:40px;
-  height:40px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  color:white;
-  background:rgba(255,255,255,.055);
-  border:1px solid var(--line);
-  transition:.22s;
-}
-
-.icon-btn:hover{
-  transform:translateY(-2px);
-  border-color:rgba(57,231,255,.4);
-  box-shadow:0 0 20px rgba(57,231,255,.15);
-}
-
-#menuBtn{
-  display:none;
-}
-
-/* =========================
-   MOBILE NAV
-========================= */
-
-.mobile-menu{
-  position:fixed;
-  z-index:600;
-  top:92px;
-  right:14px;
-  left:14px;
-  max-height:calc(100vh - 110px);
-  overflow:auto;
-  padding:14px;
-  border:1px solid var(--line);
-  border-radius:22px;
-  background:rgba(5,9,25,.9);
-  backdrop-filter:blur(25px);
-  transform:translateY(-15px);
-  opacity:0;
-  visibility:hidden;
-  transition:.3s;
-}
-
-.mobile-menu.open{
-  transform:none;
-  opacity:1;
-  visibility:visible;
-}
-
-.mobile-menu button{
-  width:100%;
-  text-align:right;
-  padding:14px;
-  margin-bottom:5px;
-  color:#dce5ff;
-  border-radius:12px;
-  background:transparent;
-}
-
-.mobile-menu button:hover,
-.mobile-menu button.active{
-  background:rgba(57,231,255,.1);
-  color:white;
-}
-
-/* =========================
-   MAIN / PAGES
-========================= */
-
-main{
-  position:relative;
-  z-index:1;
-  width:min(1400px,calc(100% - 28px));
-  margin:auto;
-  padding-top:105px;
-}
-
-.page{
-  display:none;
-  min-height:calc(100vh - 105px);
-  padding:40px 0 90px;
-  animation:pageIn .5s ease;
-}
-
-.page.active{
-  display:block;
-}
-
-@keyframes pageIn{
-  from{opacity:0;transform:translateY(15px) scale(.99)}
-  to{opacity:1;transform:none}
-}
-
-.hero{
-  min-height:calc(100vh - 150px);
-  display:grid;
-  grid-template-columns:1.15fr .85fr;
-  align-items:center;
-  gap:35px;
-}
-
-.hero-copy{
-  position:relative;
-  z-index:2;
-}
-
-.kicker{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:7px 12px;
-  margin-bottom:18px;
-  border:1px solid rgba(57,231,255,.2);
-  border-radius:99px;
-  background:rgba(57,231,255,.06);
-  color:#79edff;
-  font-size:11px;
-}
-
-.kicker i{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  background:#55f59a;
-  box-shadow:0 0 12px #55f59a;
-}
-
-.hero h1{
-  max-width:800px;
-  font-size:clamp(45px,7vw,92px);
-  line-height:1;
-  letter-spacing:-3px;
-  margin-bottom:22px;
-}
-
-.gradient{
-  background:linear-gradient(
-    100deg,
-    #fff 0%,
-    #39e7ff 25%,
-    #a855f7 52%,
-    #ff4fd8 72%,
-    #ffb25c 100%
-  );
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.hero p{
-  max-width:680px;
-  color:#b3bdd9;
-  font-size:17px;
-  line-height:2;
-}
-
-.hero-actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:28px;
-}
-
-.hero-meta{
-  display:flex;
-  gap:18px;
-  flex-wrap:wrap;
-  margin-top:25px;
-  color:#8995b5;
-  font-size:11px;
-}
-
-.hero-meta span{
-  display:flex;
-  align-items:center;
-  gap:7px;
-}
-
-.hero-meta b{
-  color:#fff;
-}
-
-.glass{
-  border:1px solid var(--line);
-  background:
-    linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025)),
-    var(--glass);
-  backdrop-filter:blur(var(--blur));
-  -webkit-backdrop-filter:blur(var(--blur));
-  box-shadow:
-    0 25px 80px rgba(0,0,0,.23),
-    inset 0 1px rgba(255,255,255,.1);
-}
-
-.hero-panel{
-  position:relative;
-  min-height:520px;
-  overflow:hidden;
-  border-radius:34px;
-  transform:perspective(1000px) rotateY(-3deg);
-}
-
-.hero-panel::before{
-  content:"";
-  position:absolute;
-  width:230px;
-  height:230px;
-  border-radius:50%;
-  background:#39e7ff;
-  filter:blur(100px);
-  opacity:.13;
-  top:-70px;
-  right:-50px;
-}
-
-.panel-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:18px 20px;
-  border-bottom:1px solid var(--line);
-}
-
-.panel-dots{
-  display:flex;
-  gap:5px;
-}
-
-.panel-dots i{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-}
-
-.panel-dots i:nth-child(1){background:#ff5577}
-.panel-dots i:nth-child(2){background:#ffd166}
-.panel-dots i:nth-child(3){background:#55f59a}
-
-.orbit-view{
-  position:absolute;
-  inset:70px 0 0;
-  display:grid;
-  place-items:center;
-  overflow:hidden;
-}
-
-.orbit{
-  position:absolute;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:50%;
-  aspect-ratio:1;
-}
-
-.orbit.o1{width:190px}
-.orbit.o2{width:290px}
-.orbit.o3{width:390px}
-
-.mini-sun{
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  background:
-    radial-gradient(circle at 35% 30%,#fff6b0 0 8%,#ffd166 25%,#ff7b22 60%,#d93415);
-  box-shadow:
-    0 0 25px #ff9d42,
-    0 0 70px rgba(255,157,66,.35);
-}
-
-.planet{
-  position:absolute;
-  border-radius:50%;
-  box-shadow:
-    inset -9px -10px 15px rgba(0,0,0,.38),
-    inset 5px 5px 8px rgba(255,255,255,.18),
-    0 0 20px rgba(255,255,255,.07);
-}
-
-.planet.p1{
-  width:16px;height:16px;
-  background:linear-gradient(135deg,#d5b28c,#665047);
-  top:28%;left:29%;
-  animation:orbitFloat 7s linear infinite;
-}
-
-.planet.p2{
-  width:24px;height:24px;
-  background:linear-gradient(135deg,#ffe7a8,#bc7149);
-  top:64%;left:27%;
-  animation:orbitFloat 10s linear infinite reverse;
-}
-
-.planet.p3{
-  width:34px;height:34px;
-  background:linear-gradient(135deg,#6dd9ff,#2365b8 50%,#2b9a63);
-  top:25%;right:18%;
-  box-shadow:0 0 24px rgba(57,231,255,.25),inset -8px -8px 12px rgba(0,0,0,.4);
-  animation:orbitFloat 12s linear infinite;
-}
-
-.planet.p4{
-  width:26px;height:26px;
-  background:linear-gradient(135deg,#d87855,#7b2e22);
-  bottom:25%;right:24%;
-  animation:orbitFloat 14s linear infinite reverse;
-}
-
-@keyframes orbitFloat{
-  50%{transform:translate(20px,-12px)}
-}
-
-.stats-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-  margin-top:25px;
-}
-
-.stat{
+.bootTerminal{
+  min-height:120px;
   padding:20px;
-  border-radius:20px;
-}
-
-.stat strong{
-  display:block;
-  font-size:27px;
-}
-
-.stat span{
-  color:var(--muted);
-  font-size:11px;
-}
-
-/* =========================
-   SECTION HEAD
-========================= */
-
-.section-head{
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:20px;
-  margin-bottom:25px;
-}
-
-.section-head h2{
-  font-size:clamp(27px,4vw,45px);
-}
-
-.section-head p{
-  max-width:650px;
-  color:var(--muted);
-  line-height:1.8;
-}
-
-.eyebrow{
-  color:#69eaff;
-  font-size:11px;
-  letter-spacing:2px;
-  margin-bottom:8px;
-}
-
-/* =========================
-   CARDS
-========================= */
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-
-.card{
-  position:relative;
-  padding:24px;
-  overflow:hidden;
-  border-radius:24px;
-  transition:.3s cubic-bezier(.2,.8,.2,1);
-}
-
-.card::before{
-  content:"";
-  position:absolute;
-  width:140px;
-  height:140px;
-  top:-80px;
-  left:-70px;
-  border-radius:50%;
-  background:var(--accent);
-  filter:blur(65px);
-  opacity:.1;
-}
-
-.card:hover{
-  transform:translateY(-6px) rotateX(1deg);
-  border-color:rgba(255,255,255,.22);
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.3),
-    0 0 35px rgba(57,231,255,.07);
-}
-
-.card-icon{
-  width:48px;
-  height:48px;
-  display:grid;
-  place-items:center;
-  margin-bottom:18px;
-  border-radius:15px;
-  font-size:22px;
-  background:linear-gradient(135deg,rgba(57,231,255,.15),rgba(168,85,247,.15));
-  border:1px solid var(--line);
-}
-
-.card h3{
-  margin-bottom:8px;
-}
-
-.card p{
-  color:var(--muted);
-  line-height:1.8;
-  font-size:13px;
-}
-
-.card-footer{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:20px;
-}
-
-.small-btn{
-  padding:8px 13px;
-  border-radius:10px;
-  color:white;
-  background:rgba(255,255,255,.07);
-  border:1px solid var(--line);
-}
-
-/* =========================
-   LEARNING
-========================= */
-
-.course{
-  min-height:250px;
-}
-
-.course .level{
-  color:#7feeff;
-  font-size:10px;
-  letter-spacing:1px;
-}
-
-.course .bar{
-  height:5px;
-  margin-top:16px;
-  border-radius:99px;
-  background:rgba(255,255,255,.08);
-  overflow:hidden;
-}
-
-.course .bar i{
-  display:block;
-  width:0;
-  height:100%;
-  background:linear-gradient(90deg,#39e7ff,#a855f7,#ff4fd8);
-}
-
-.lesson{
-  display:none;
-}
-
-.lesson.open{
-  display:block;
-}
-
-.lesson-box{
-  max-width:1000px;
-  margin:auto;
-  padding:35px;
-  border-radius:28px;
-}
-
-.lesson-box h2{
-  margin-bottom:14px;
-}
-
-.lesson-box h3{
-  margin:28px 0 10px;
-  color:#7deeff;
-}
-
-.lesson-box p,
-.lesson-box li{
-  color:#bdc6df;
-  line-height:2;
-}
-
-.lesson-box ul{
-  padding-right:22px;
-}
-
-.code{
-  direction:ltr;
   text-align:left;
-  white-space:pre-wrap;
-  margin:18px 0;
-  padding:20px;
-  border-radius:16px;
-  color:#dceaff;
-  background:#030611;
-  border:1px solid rgba(57,231,255,.12);
-  font:13px/1.7 monospace;
-  overflow:auto;
-}
-
-.lesson-actions{
-  display:flex;
-  gap:10px;
-  margin-top:25px;
-}
-
-/* =========================
-   LABS
-========================= */
-
-.lab{
-  min-height:270px;
-}
-
-.lab input,
-.lab textarea,
-.search-box{
-  width:100%;
-  margin-top:14px;
-  padding:13px 15px;
-  border-radius:13px;
-  outline:none;
-  color:var(--text);
-  background:rgba(0,0,0,.2);
-  border:1px solid var(--line);
-}
-
-.lab-result{
-  min-height:30px;
-  margin-top:12px;
-  color:#7feeff;
-  font-size:12px;
-}
-
-/* =========================
-   DASHBOARD
-========================= */
-
-.dashboard-top{
-  display:grid;
-  grid-template-columns:1.4fr .6fr;
-  gap:16px;
-  margin-bottom:16px;
-}
-
-.profile-card{
-  padding:28px;
-  border-radius:26px;
-}
-
-.profile-row{
-  display:flex;
-  align-items:center;
-  gap:18px;
-}
-
-.avatar{
-  width:75px;
-  height:75px;
-  display:grid;
-  place-items:center;
-  border-radius:22px;
-  font-size:25px;
-  font-weight:900;
-  background:linear-gradient(135deg,#39e7ff,#7c4dff,#ff4fd8);
-}
-
-.xp-number{
-  font-family:Orbitron;
-  font-size:32px;
+  direction:ltr;
+  font-family:ui-monospace,SFMono-Regular,monospace;
+  font-size:13px;
+  color:#7ee9ff;
+  border:1px solid rgba(85,220,255,.2);
+  background:rgba(3,13,28,.72);
+  box-shadow:0 0 50px rgba(44,179,255,.08);
+  border-radius:18px;
 }
 
 .progress{
-  height:8px;
-  margin-top:18px;
-  border-radius:99px;
-  background:rgba(255,255,255,.08);
+  height:7px;
+  margin:25px 0 14px;
   overflow:hidden;
+  background:#0b1930;
+  border-radius:99px;
 }
 
 .progress i{
   display:block;
   height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#39e7ff,#a855f7,#ff4fd8);
-}
-
-/* =========================
-   NOVA
-========================= */
-
-.nova{
-  position:fixed;
-  left:25px;
-  bottom:25px;
-  z-index:450;
-}
-
-.nova-orb{
-  position:relative;
-  width:72px;
-  height:72px;
-  display:grid;
-  place-items:center;
-  border-radius:50%;
-  cursor:pointer;
-  background:
-    radial-gradient(circle at 35% 28%,#fff,transparent 9%),
-    linear-gradient(145deg,#39e7ff,#7755ff 50%,#ff4fd8);
-  box-shadow:
-    0 0 25px rgba(57,231,255,.45),
-    0 0 70px rgba(168,85,247,.2);
-  animation:novaFloat 3s ease-in-out infinite;
-}
-
-.nova-orb::before,
-.nova-orb::after{
-  content:"";
-  position:absolute;
-  inset:-8px;
-  border:1px solid rgba(57,231,255,.3);
-  border-radius:50%;
-  transform:rotate(25deg);
-}
-
-.nova-orb::after{
-  inset:-15px;
-  border-color:rgba(255,79,216,.18);
-  transform:rotate(-30deg);
-}
-
-.nova-core{
-  width:38px;
-  height:38px;
-  background:linear-gradient(135deg,#dffcff,#39e7ff 40%,#7458ff);
-  clip-path:polygon(50% 0,100% 30%,82% 100%,18% 100%,0 30%);
-  box-shadow:0 0 20px white;
-}
-
-.nova-eyes{
-  position:absolute;
-  display:flex;
-  gap:9px;
-}
-
-.nova-eyes i{
-  width:7px;
-  height:4px;
+  width:0;
   border-radius:99px;
-  background:#fff;
-  box-shadow:0 0 8px #fff;
+  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink),var(--gold));
+  box-shadow:0 0 22px #48dfff;
+  transition:width .3s;
 }
 
-@keyframes novaFloat{
-  50%{transform:translateY(-8px) rotate(2deg)}
+.bootActions{
+  display:flex;
+  justify-content:center;
+  gap:10px;
 }
 
-.nova-chat{
-  position:absolute;
-  bottom:85px;
-  left:0;
-  width:min(350px,calc(100vw - 35px));
-  padding:18px;
-  border-radius:20px;
-  opacity:0;
-  visibility:hidden;
-  transform:translateY(12px);
+.glassBtn{
+  border:1px solid rgba(117,211,255,.3);
+  color:white;
+  background:rgba(15,33,63,.55);
+  backdrop-filter:blur(18px);
+  padding:12px 20px;
+  border-radius:14px;
   transition:.25s;
 }
 
-.nova-chat.open{
-  opacity:1;
-  visibility:visible;
-  transform:none;
+.glassBtn:hover{
+  transform:translateY(-2px);
+  border-color:#58dcff;
+  box-shadow:0 10px 35px rgba(41,190,255,.16);
 }
 
-.nova-chat strong{
-  display:block;
-  margin-bottom:8px;
+.primary{
+  border:0;
+  background:linear-gradient(135deg,#1caee0,#675cff,#b94dff);
+  box-shadow:0 10px 35px rgba(78,107,255,.25);
 }
 
-.nova-chat p{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.8;
+#app{
+  min-height:100vh;
+  opacity:0;
+  transition:opacity .8s;
 }
 
-.nova-chat input{
-  width:100%;
-  margin-top:12px;
-  padding:11px;
-  border-radius:10px;
-  outline:none;
-  color:white;
-  background:rgba(0,0,0,.25);
-  border:1px solid var(--line);
-}
+#app.ready{opacity:1}
 
-/* =========================
-   MODAL
-========================= */
-
-.modal{
-  position:fixed;
-  inset:0;
+.topbar{
+  position:sticky;
+  top:0;
   z-index:1000;
+  padding:12px;
+  background:rgba(2,7,18,.68);
+  backdrop-filter:blur(22px);
+  border-bottom:1px solid rgba(125,200,255,.13);
+}
+
+.nav{
+  width:min(1450px,96%);
+  margin:auto;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.brand{
+  flex:0 0 auto;
+  font-weight:1000;
+  letter-spacing:.15em;
+  font-size:23px;
+  background:linear-gradient(90deg,#fff,#42ddff,#9c70ff,#ff62c9);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.navScroll{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  flex:1;
+  padding-bottom:2px;
+}
+
+.navScroll::-webkit-scrollbar{display:none}
+
+.navBtn{
+  flex:0 0 auto;
+  border:1px solid transparent;
+  background:transparent;
+  color:#9fb1cd;
+  padding:10px 13px;
+  border-radius:13px;
+  white-space:nowrap;
+}
+
+.navBtn:hover,.navBtn.active{
+  color:white;
+  border-color:rgba(74,213,255,.22);
+  background:rgba(50,122,210,.12);
+}
+
+.userMini{
+  flex:0 0 auto;
+  border:1px solid rgba(107,203,255,.2);
+  background:rgba(17,35,64,.5);
+  color:white;
+  padding:9px 13px;
+  border-radius:14px;
+}
+
+main{
+  width:min(1450px,94%);
+  margin:auto;
+}
+
+.page{
   display:none;
-  place-items:center;
-  padding:20px;
-  background:rgba(0,0,0,.65);
+  min-height:calc(100vh - 90px);
+  padding:45px 0 90px;
+  animation:pageIn .45s ease;
 }
 
-.modal.open{
+.page.active{display:block}
+
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
+}
+
+.hero{
+  min-height:600px;
   display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:30px;
+  align-items:center;
 }
 
-.modal-box{
-  width:min(500px,100%);
-  max-height:90vh;
-  overflow:auto;
-  padding:28px;
-  border-radius:27px;
+.heroText h1{
+  font-size:clamp(48px,7vw,96px);
+  line-height:.95;
+  margin:0 0 22px;
+  letter-spacing:-.06em;
 }
 
-.modal-box h2{
-  margin-bottom:18px;
+.gradientText{
+  background:linear-gradient(90deg,#fff 5%,#51ddff 32%,#9b68ff 60%,#ff58c8 82%,#ffd15c);
+  -webkit-background-clip:text;
+  color:transparent;
 }
 
-.modal-box input{
-  width:100%;
-  padding:13px;
-  margin-bottom:10px;
-  border-radius:12px;
-  outline:none;
-  color:var(--text);
-  background:rgba(0,0,0,.18);
+.heroText p{
+  max-width:700px;
+  color:#afbdd2;
+  font-size:18px;
+  line-height:1.9;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:25px;
+}
+
+.heroPlanet{
+  position:relative;
+  height:520px;
+  perspective:900px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.orbit{
+  position:absolute;
+  width:400px;
+  height:400px;
+  border:1px solid rgba(82,204,255,.18);
+  border-radius:50%;
+  transform:rotateX(68deg);
+  animation:orbitSpin 22s linear infinite;
+}
+
+.orbit.o2{width:300px;height:300px;animation-duration:15s}
+.orbit.o3{width:490px;height:490px;animation-duration:31s}
+
+@keyframes orbitSpin{
+  to{transform:rotateX(68deg) rotateZ(360deg)}
+}
+
+.planet{
+  position:relative;
+  width:220px;
+  height:220px;
+  border-radius:50%;
+  overflow:hidden;
+  transform-style:preserve-3d;
+  box-shadow:
+    inset -42px -22px 55px rgba(0,0,0,.72),
+    inset 18px 10px 30px rgba(255,255,255,.13),
+    0 0 70px rgba(53,197,255,.25);
+}
+
+.planet:before{
+  content:"";
+  position:absolute;
+  inset:-2%;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 28%,rgba(255,255,255,.55),transparent 9%),
+    radial-gradient(circle at 58% 62%,rgba(0,0,0,.3),transparent 25%),
+    repeating-radial-gradient(ellipse at 45% 50%,transparent 0 9px,rgba(255,255,255,.07) 10px 13px);
+  mix-blend-mode:overlay;
+  opacity:.65;
+}
+
+.earth{
+  background:
+    radial-gradient(circle at 28% 30%,#69ecff 0 3%,transparent 4%),
+    radial-gradient(ellipse at 35% 40%,#4cae55 0 8%,transparent 9%),
+    radial-gradient(ellipse at 62% 50%,#5dbb60 0 11%,transparent 12%),
+    radial-gradient(ellipse at 54% 67%,#277e48 0 7%,transparent 8%),
+    linear-gradient(145deg,#3de3ff,#146bc9 44%,#061a66);
+}
+
+.mars{
+  background:
+    radial-gradient(circle at 35% 25%,rgba(255,209,150,.35),transparent 10%),
+    radial-gradient(circle at 65% 63%,rgba(60,15,7,.4),transparent 16%),
+    repeating-linear-gradient(160deg,rgba(255,194,129,.13) 0 8px,transparent 9px 17px),
+    linear-gradient(140deg,#ffb06c,#b84a2e 48%,#42130e);
+}
+
+.jupiter{
+  width:290px;
+  height:290px;
+  background:
+    radial-gradient(ellipse at 48% 60%,#8e3f28 0 6%,transparent 7%),
+    repeating-linear-gradient(
+      0deg,
+      #e9c18c 0 13px,
+      #b7774b 14px 23px,
+      #f4d7a4 24px 37px,
+      #a95f40 38px 45px,
+      #f0c991 46px 58px
+    );
+}
+
+.saturn{
+  width:250px;
+  height:250px;
+  background:
+    repeating-linear-gradient(8deg,#e9c893 0 10px,#a87950 11px 18px,#f2d7a8 19px 29px),
+    linear-gradient(120deg,#e9c38d,#825438);
+}
+
+.saturnRing{
+  position:absolute;
+  width:440px;
+  height:135px;
+  border-radius:50%;
+  border:20px solid rgba(224,192,135,.7);
+  box-shadow:
+    0 0 0 7px rgba(150,116,73,.35),
+    0 0 0 14px rgba(238,211,159,.35);
+  transform:rotateX(68deg) rotateZ(-12deg);
+}
+
+.neptune{
+  background:
+    repeating-linear-gradient(160deg,rgba(255,255,255,.09) 0 4px,transparent 5px 18px),
+    radial-gradient(circle at 38% 28%,rgba(255,255,255,.35),transparent 7%),
+    linear-gradient(140deg,#66e4ff,#1b56dc 45%,#07155c);
+}
+
+.venus{
+  background:
+    repeating-linear-gradient(150deg,#ffdba0 0 8px,#b87538 9px 17px,#ffe1ad 18px 28px),
+    linear-gradient(130deg,#ffd98a,#8d4e22);
+}
+
+.moon{
+  position:absolute;
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 25% 25%,#fff,transparent 8%),
+    radial-gradient(circle at 65% 65%,#555 0 7%,transparent 8%),
+    radial-gradient(circle at 40% 55%,#777 0 5%,transparent 6%),
+    linear-gradient(145deg,#ddd,#555);
+  box-shadow:inset -8px -7px 10px rgba(0,0,0,.5);
+}
+
+.moon.m1{right:9%;top:20%;animation:moon1 9s linear infinite}
+.moon.m2{left:4%;bottom:20%;width:27px;height:27px;animation:moon2 12s linear infinite}
+
+@keyframes moon1{
+  to{transform:translate(-110px,180px)}
+}
+@keyframes moon2{
+  to{transform:translate(130px,-120px)}
+}
+
+.sectionTitle{
+  margin:0 0 25px;
+  font-size:clamp(30px,5vw,52px);
+}
+
+.muted{color:var(--muted)}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.glass{
+  position:relative;
   border:1px solid var(--line);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.06),transparent 35%),
+    var(--panel);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow:hidden;
 }
 
-.modal-actions{
+.glass:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.09),transparent 22%,transparent 75%,rgba(70,210,255,.04));
+}
+
+.card{
+  padding:25px;
+}
+
+.card h3{
+  margin:0 0 10px;
+}
+
+.icon{
+  width:50px;
+  height:50px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  margin-bottom:17px;
+  background:linear-gradient(135deg,rgba(51,217,255,.2),rgba(157,92,255,.2));
+  border:1px solid rgba(93,216,255,.2);
+  font-size:24px;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin:25px 0;
+}
+
+.stat{
+  padding:20px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:30px;
+}
+
+.progressLine{
+  height:9px;
+  background:#0a1730;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progressLine i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
+  transition:width .5s;
+}
+
+.course{
+  min-height:260px;
+  display:flex;
+  flex-direction:column;
+}
+
+.course .grow{flex:1}
+
+.course button{margin-top:18px}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid rgba(255,200,87,.25);
+  background:rgba(255,200,87,.08);
+  color:#ffd979;
+  padding:7px 11px;
+  border-radius:99px;
+  font-size:12px;
+  margin:3px;
+}
+
+.lessonView{
+  max-width:950px;
+  margin:auto;
+}
+
+.lessonBody{
+  line-height:2;
+  color:#c3cee0;
+}
+
+.lessonBody h3{
+  color:#fff;
+  margin-top:30px;
+}
+
+.lessonCode{
+  direction:ltr;
+  text-align:left;
+  white-space:pre-wrap;
+  background:#020812;
+  border:1px solid rgba(70,180,255,.16);
+  border-radius:16px;
+  padding:18px;
+  color:#9defff;
+  font-family:ui-monospace,monospace;
+}
+
+.quizBox{
+  margin-top:30px;
+  padding:22px;
+  border:1px solid rgba(150,110,255,.2);
+  background:rgba(85,55,155,.08);
+  border-radius:20px;
+}
+
+.choice{
+  display:block;
+  width:100%;
+  text-align:right;
+  margin:9px 0;
+  padding:14px;
+  border-radius:13px;
+  border:1px solid rgba(110,180,255,.14);
+  background:rgba(8,20,40,.75);
+  color:#d9e6f8;
+}
+
+.choice:hover{
+  border-color:rgba(73,216,255,.4);
+}
+
+.choice.correct{
+  border-color:rgba(93,255,160,.6);
+  background:rgba(93,255,160,.08);
+}
+
+.choice.wrong{
+  border-color:rgba(255,84,112,.6);
+  background:rgba(255,84,112,.08);
+}
+
+.input{
+  width:100%;
+  border:1px solid rgba(109,196,255,.2);
+  background:rgba(2,10,23,.72);
+  color:white;
+  outline:none;
+  padding:14px 16px;
+  border-radius:14px;
+  margin:7px 0;
+}
+
+.input:focus{
+  border-color:#47d9ff;
+  box-shadow:0 0 0 3px rgba(71,217,255,.08);
+}
+
+textarea.input{
+  min-height:130px;
+  resize:vertical;
+}
+
+.form{
+  width:min(520px,100%);
+  margin:30px auto;
+}
+
+.form .glass{padding:30px}
+
+.tabs{
+  display:flex;
+  gap:7px;
+  margin-bottom:20px;
+}
+
+.tab{
+  flex:1;
+  padding:11px;
+  border:1px solid rgba(110,190,255,.13);
+  background:rgba(8,19,38,.7);
+  color:#9eb0c8;
+  border-radius:12px;
+}
+
+.tab.active{
+  color:white;
+  background:linear-gradient(135deg,rgba(43,190,255,.17),rgba(151,88,255,.18));
+}
+
+.novaLayout{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:20px;
+  min-height:700px;
+}
+
+.novaSide{
+  padding:22px;
+}
+
+.novaOrb{
+  width:130px;
+  height:130px;
+  margin:10px auto 25px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 25%,#fff,transparent 8%),
+    radial-gradient(circle at 50% 50%,#5bdfff,#7255ff 50%,#20104e);
+  box-shadow:0 0 65px rgba(81,193,255,.3);
+  animation:orb 4s ease-in-out infinite;
+}
+
+@keyframes orb{
+  50%{transform:translateY(-8px) scale(1.03)}
+}
+
+.novaChat{
+  display:flex;
+  flex-direction:column;
+  min-height:700px;
+}
+
+.messages{
+  flex:1;
+  padding:25px;
+  overflow:auto;
+  max-height:600px;
+}
+
+.msg{
+  max-width:82%;
+  margin:10px 0;
+  padding:14px 17px;
+  border-radius:18px;
+  line-height:1.8;
+  white-space:pre-wrap;
+}
+
+.msg.ai{
+  margin-left:auto;
+  background:linear-gradient(135deg,rgba(55,175,255,.13),rgba(143,82,255,.13));
+  border:1px solid rgba(92,204,255,.15);
+}
+
+.msg.user{
+  margin-right:auto;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.08);
+}
+
+.chatInput{
   display:flex;
   gap:9px;
-  flex-wrap:wrap;
-  margin-top:10px;
+  padding:15px;
+  border-top:1px solid rgba(100,190,255,.12);
 }
 
-.close{
-  float:left;
-  background:transparent;
-  color:#aaa;
-  font-size:22px;
+.chatInput textarea{
+  min-height:50px;
+  max-height:150px;
+  margin:0;
 }
 
-/* =========================
-   SETTINGS
-========================= */
-
-.settings{
+.settingsGrid{
   display:grid;
-  gap:12px;
-  max-width:900px;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
 }
 
 .setting{
+  padding:22px;
+}
+
+.settingRow{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:15px;
-  padding:18px;
-  border-radius:18px;
-}
-
-.setting-info h3{
-  font-size:14px;
-}
-
-.setting-info p{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:4px;
+  padding:15px 0;
+  border-bottom:1px solid rgba(130,190,255,.08);
 }
 
 .switch{
-  position:relative;
-  width:48px;
-  height:26px;
-  flex:none;
-}
-
-.switch input{
-  display:none;
-}
-
-.slider{
-  position:absolute;
-  inset:0;
+  width:52px;
+  height:29px;
   border-radius:99px;
-  background:#20263c;
-  cursor:pointer;
+  padding:3px;
+  background:#182640;
+  border:1px solid rgba(130,190,255,.15);
 }
 
-.slider::before{
-  content:"";
-  position:absolute;
-  width:20px;
-  height:20px;
-  top:3px;
-  right:3px;
+.switch i{
+  display:block;
+  width:21px;
+  height:21px;
   border-radius:50%;
-  background:white;
-  transition:.2s;
+  background:#7889a5;
+  transition:.25s;
 }
 
-.switch input:checked + .slider{
-  background:linear-gradient(90deg,#39e7ff,#8055ff);
+.switch.on{
+  background:rgba(55,210,255,.2);
 }
 
-.switch input:checked + .slider::before{
-  transform:translateX(-22px);
+.switch.on i{
+  transform:translateX(-21px);
+  background:#51ddff;
+  box-shadow:0 0 15px #51ddff;
 }
 
-/* =========================
-   FOOTER
-========================= */
+.aboutHero{
+  display:grid;
+  grid-template-columns:300px 1fr;
+  gap:25px;
+  align-items:stretch;
+}
 
-footer{
-  position:relative;
-  z-index:1;
-  width:min(1400px,calc(100% - 28px));
-  margin:auto;
-  padding:50px 0 30px;
-  border-top:1px solid var(--line);
-  color:#7d88a8;
+.avatar{
+  min-height:330px;
+  display:grid;
+  place-items:center;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(69,213,255,.25),transparent 22%),
+    linear-gradient(145deg,rgba(45,107,196,.17),rgba(139,66,255,.12));
+}
+
+.avatarCircle{
+  width:170px;
+  height:170px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:60px;
+  font-weight:1000;
+  background:linear-gradient(135deg,#37dfff,#7255ff,#ef4fc0);
+  box-shadow:0 0 70px rgba(84,199,255,.28);
+}
+
+.social{
+  display:inline-flex;
+  margin-top:20px;
+  padding:12px 16px;
+  border:1px solid rgba(255,90,190,.22);
+  background:rgba(255,90,190,.07);
+  border-radius:13px;
+}
+
+.footer{
+  width:min(1450px,94%);
+  margin:30px auto;
+  padding:25px 0 45px;
+  border-top:1px solid rgba(110,190,255,.1);
+  color:#71839e;
   text-align:center;
 }
 
-footer strong{
-  color:white;
-}
-
-.credits{
-  display:flex;
-  justify-content:center;
-  gap:15px;
-  flex-wrap:wrap;
-  margin:15px 0;
-}
-
-.credit{
-  padding:8px 13px;
-  border-radius:10px;
-  background:rgba(255,255,255,.04);
-}
-
-/* =========================
-   TOAST
-========================= */
+.hidden{display:none!important}
 
 .toast{
   position:fixed;
-  right:20px;
+  left:20px;
   bottom:20px;
-  z-index:2000;
-  max-width:330px;
-  padding:13px 17px;
-  border-radius:14px;
-  color:white;
-  background:rgba(10,15,35,.9);
-  border:1px solid var(--line);
-  box-shadow:0 15px 50px rgba(0,0,0,.35);
-  transform:translateY(20px);
+  z-index:9998;
+  max-width:350px;
+  padding:14px 18px;
+  border:1px solid rgba(90,211,255,.2);
+  border-radius:15px;
+  background:rgba(5,16,32,.88);
+  backdrop-filter:blur(20px);
+  box-shadow:var(--shadow);
+  transform:translateY(120px);
   opacity:0;
-  pointer-events:none;
-  transition:.3s;
+  transition:.35s;
 }
 
 .toast.show{
@@ -1301,3687 +851,1536 @@ footer strong{
   opacity:1;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:1050px){
-  .nav-item:nth-child(n+8){display:none}
-  .hero{
-    grid-template-columns:1fr;
-  }
-  .hero-panel{
-    min-height:420px;
-    transform:none;
-  }
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
+body.light{
+  --bg:#edf6ff;
+  --bg2:#dfeeff;
+  --panel:rgba(255,255,255,.62);
+  --panel2:rgba(255,255,255,.8);
+  --text:#10203a;
+  --muted:#52637b;
 }
 
-@media(max-width:760px){
-  .navbar{
-    height:62px;
-    top:9px;
-    left:9px;
-    right:9px;
-    border-radius:18px;
-  }
+body.light #space{opacity:.22}
+body.reduced *{
+  animation-duration:.001ms!important;
+  transition-duration:.001ms!important;
+}
+body.lowperf .starLayer{display:none}
 
-  .brand{
-    min-width:auto;
-  }
-
-  .brand-text,
-  .nav-scroll{
-    display:none;
-  }
-
-  .nav-actions{
-    margin-right:auto;
-  }
-
-  #menuBtn{
-    display:grid;
-  }
-
-  main{
-    width:min(100% - 18px,1400px);
-    padding-top:85px;
-  }
-
-  .page{
-    padding-top:25px;
-  }
-
-  .hero{
-    min-height:auto;
-    padding-top:35px;
-  }
-
-  .hero h1{
-    font-size:47px;
-    letter-spacing:-2px;
-  }
-
-  .hero p{
-    font-size:14px;
-  }
-
-  .hero-panel{
-    min-height:370px;
-  }
-
-  .stats-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-  }
-
-  .dashboard-top{
-    grid-template-columns:1fr;
-  }
-
-  .section-head{
-    display:block;
-  }
-
-  .section-head p{
-    margin-top:8px;
-  }
-
-  .lesson-box{
-    padding:22px;
-  }
-
-  .nova{
-    left:14px;
-    bottom:14px;
-  }
-
-  .nova-orb{
-    width:62px;
-    height:62px;
-  }
+@media(max-width:1000px){
+  .hero{grid-template-columns:1fr}
+  .heroPlanet{height:400px}
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .novaLayout{grid-template-columns:1fr}
+  .novaSide{min-height:auto}
+  .novaOrb{width:95px;height:95px}
+  .aboutHero{grid-template-columns:1fr}
 }
 
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:.01ms!important;
-    scroll-behavior:auto!important;
-    transition-duration:.01ms!important;
-  }
+@media(max-width:650px){
+  main{width:94%}
+  .page{padding-top:28px}
+  .grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .heroText h1{font-size:50px}
+  .heroPlanet{height:330px}
+  .planet{width:165px;height:165px}
+  .jupiter{width:205px;height:205px}
+  .saturn{width:180px;height:180px}
+  .saturnRing{width:320px;height:95px}
+  .orbit{width:280px;height:280px}
+  .orbit.o2{width:210px;height:210px}
+  .orbit.o3{width:340px;height:340px}
+  .settingsGrid{grid-template-columns:1fr}
+  .bootTerminal{font-size:11px}
+  .msg{max-width:92%}
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     BOOT SCREEN
-========================= -->
-
-<div id="boot">
-  <div class="boot-grid"></div>
-
-  <div class="boot-core">
-    <div class="boot-logo">V</div>
-    <div class="boot-brand">VANTA</div>
-    <div class="boot-sub">ACADEMY • CYBER RANGE • TECHNOLOGY</div>
-
-    <div id="bootStatus" class="boot-status">
-      INITIALIZING SECURE ENVIRONMENT...
-    </div>
-
-    <div class="boot-progress">
-      <i id="bootBar"></i>
-    </div>
-
-    <div id="bootActions" class="boot-actions">
-      <button class="btn" id="enterBtn">ENTER VANTA</button>
-      <button class="btn secondary" id="skipBtn">SKIP INTRO</button>
-    </div>
-  </div>
-</div>
-
 <canvas id="space"></canvas>
-<div class="space-vignette"></div>
-<div class="nebula one"></div>
-<div class="nebula two"></div>
-<div class="nebula three"></div>
+<div id="spaceGlow"></div>
 
-<!-- =========================
-     NAVIGATION
-========================= -->
+<!-- BOOT -->
+<section id="boot">
+  <div class="bootBox">
+    <div class="bootLogo">VANTA</div>
+    <div class="bootSub">SECURE TECHNOLOGY ENVIRONMENT</div>
 
-<header class="navbar" id="navbar">
+    <div class="bootTerminal" id="bootTerminal">
+      <div>&gt; VANTA CORE v1.0</div>
+      <div id="bootLine">Initializing secure environment...</div>
+    </div>
 
-  <button class="brand" data-page="home" style="background:none;color:white">
-    <span class="brand-mark">V</span>
-    <span class="brand-text">
-      VANTA
-      <small>SECURE LEARNING</small>
-    </span>
-  </button>
+    <div class="progress"><i id="bootProgress"></i></div>
 
-  <nav class="nav-scroll" id="desktopNav">
-
-    <button class="nav-item active" data-page="home">الرئيسية</button>
-    <button class="nav-item" data-page="learn">تعلّم</button>
-    <button class="nav-item" data-page="range">Cyber Range</button>
-    <button class="nav-item" data-page="labs">Labs</button>
-    <button class="nav-item" data-page="ctf">CTF</button>
-    <button class="nav-item" data-page="programming">البرمجة</button>
-    <button class="nav-item" data-page="technology">التقنية</button>
-    <button class="nav-item" data-page="library">المكتبة</button>
-    <button class="nav-item" data-page="quiz">الاختبارات</button>
-    <button class="nav-item" data-page="roadmap">خارطة الطريق</button>
-    <button class="nav-item" data-page="community">المجتمع</button>
-    <button class="nav-item" data-page="dashboard">لوحة التحكم</button>
-
-  </nav>
-
-  <div class="nav-actions">
-    <button class="icon-btn" id="novaBtn" title="NOVA">✦</button>
-    <button class="icon-btn" id="accountBtn" title="الحساب">◉</button>
-    <button class="icon-btn" id="settingsBtn" title="الإعدادات">⚙</button>
-    <button class="icon-btn" id="menuBtn" title="القائمة">☰</button>
+    <div class="bootActions">
+      <button class="glassBtn primary" id="enterBtn">ENTER VANTA</button>
+      <button class="glassBtn" id="skipBtn">SKIP INTRO</button>
+    </div>
   </div>
+</section>
 
+<div id="app">
+
+<header class="topbar">
+  <nav class="nav">
+    <div class="brand">VANTA</div>
+
+    <div class="navScroll" id="nav">
+      <button class="navBtn active" data-page="home">الرئيسية</button>
+      <button class="navBtn" data-page="learn">التعلم</button>
+      <button class="navBtn" data-page="range">Cyber Range</button>
+      <button class="navBtn" data-page="programming">البرمجة</button>
+      <button class="navBtn" data-page="technology">التقنية</button>
+      <button class="navBtn" data-page="nova">NOVA</button>
+      <button class="navBtn" data-page="dashboard">لوحتي</button>
+      <button class="navBtn" data-page="about">Ali Yaser</button>
+      <button class="navBtn" data-page="settings">الإعدادات</button>
+      <button class="navBtn" data-page="login">الدخول</button>
+    </div>
+
+    <button class="userMini" id="userMini">Guest</button>
+  </nav>
 </header>
-
-<div class="mobile-menu" id="mobileMenu">
-
-  <button data-page="home">⌂ &nbsp; الرئيسية</button>
-  <button data-page="learn">◈ &nbsp; تعلّم</button>
-  <button data-page="range">◉ &nbsp; Cyber Range</button>
-  <button data-page="labs">⌘ &nbsp; المختبرات</button>
-  <button data-page="ctf">⚑ &nbsp; CTF</button>
-  <button data-page="programming">〈〉 &nbsp; البرمجة</button>
-  <button data-page="technology">◉ &nbsp; التقنية</button>
-  <button data-page="library">▣ &nbsp; المكتبة</button>
-  <button data-page="quiz">✓ &nbsp; الاختبارات</button>
-  <button data-page="roadmap">⌁ &nbsp; خارطة الطريق</button>
-  <button data-page="community">♧ &nbsp; المجتمع</button>
-  <button data-page="dashboard">◉ &nbsp; لوحة التحكم</button>
-  <button data-page="settings">⚙ &nbsp; الإعدادات</button>
-
-</div>
 
 <main>
 
-<!-- =========================
-     HOME
-========================= -->
-
+<!-- HOME -->
 <section class="page active" id="page-home">
-
   <div class="hero">
-
-    <div class="hero-copy">
-
-      <div class="kicker">
-        <i></i>
-        VANTA SYSTEM ONLINE
-      </div>
-
+    <div class="heroText">
+      <div class="badge">● VANTA ONLINE</div>
       <h1>
-        تعلّم.<br>
-        <span class="gradient">ابنِ.</span><br>
-        اكتشف.
+        Explore<br>
+        <span class="gradientText">Beyond Technology.</span>
       </h1>
-
       <p>
-        VANTA مساحة تعليمية مستقبلية تجمع البرمجة والتقنية
-        والأمن السيبراني في تجربة واحدة — من أول سطر كود
-        إلى بناء مشاريع حقيقية وتحديات آمنة.
+        مساحة تعليمية تفاعلية تجمع البرمجة والتقنية والأمن السيبراني
+        داخل عالم فضائي مستقبلي.
       </p>
 
-      <div class="hero-actions">
-        <button class="btn" data-page="learn">
-          ابدأ رحلة التعلم ✦
-        </button>
-
-        <button class="btn secondary" data-page="range">
-          استكشف الـ Cyber Range
-        </button>
+      <div class="actions">
+        <button class="glassBtn primary" onclick="go('learn')">ابدأ التعلم 🚀</button>
+        <button class="glassBtn" onclick="go('nova')">تحدث مع NOVA ✦</button>
+        <button class="glassBtn" onclick="go('range')">ادخل Cyber Range 🛡️</button>
       </div>
-
-      <div class="hero-meta">
-        <span>⚡ <b>Learning Engine</b></span>
-        <span>🛡️ <b>Safe Cyber Labs</b></span>
-        <span>🤖 <b>NOVA AI</b></span>
-      </div>
-
     </div>
 
-    <div class="hero-panel glass">
+    <div class="heroPlanet" id="heroPlanet">
+      <div class="orbit"></div>
+      <div class="orbit o2"></div>
+      <div class="orbit o3"></div>
 
-      <div class="panel-top">
-        <span>VANTA / SOLAR SYSTEM</span>
-        <div class="panel-dots">
-          <i></i><i></i><i></i>
-        </div>
-      </div>
-
-      <div class="orbit-view">
-
-        <div class="orbit o1"></div>
-        <div class="orbit o2"></div>
-        <div class="orbit o3"></div>
-
-        <div class="mini-sun"></div>
-
-        <div class="planet p1"></div>
-        <div class="planet p2"></div>
-        <div class="planet p3"></div>
-        <div class="planet p4"></div>
-
-      </div>
-
+      <div class="saturnRing"></div>
+      <div class="planet saturn" id="mainPlanet"></div>
+      <div class="moon m1"></div>
+      <div class="moon m2"></div>
     </div>
-
   </div>
 
-  <div class="stats-grid">
-
-    <div class="stat glass">
-      <strong id="homeXP">0</strong>
-      <span>XP المكتسب</span>
-    </div>
-
-    <div class="stat glass">
-      <strong id="homeLessons">0</strong>
-      <span>الدروس المكتملة</span>
-    </div>
-
-    <div class="stat glass">
-      <strong id="homeBadges">0</strong>
-      <span>الشارات</span>
-    </div>
-
-    <div class="stat glass">
-      <strong>∞</strong>
-      <span>مساحة للتعلم</span>
-    </div>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     LEARN
-========================= -->
-
-<section class="page" id="page-learn">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">LEARNING ENGINE</div>
-      <h2>رحلتك التعليمية</h2>
-    </div>
-
-    <p>
-      مسارات أصلية مستوحاة من الهياكل التعليمية الحديثة:
-      أساسيات → تطبيق → تحديات → مشاريع → تخصص.
-    </p>
-  </div>
+  <h2 class="sectionTitle">عالم VANTA</h2>
 
   <div class="grid">
-
-    <article class="card glass course">
-      <div class="card-icon">🐍</div>
-      <span class="level">LEVEL 01 — PROGRAMMING</span>
-      <h3>Python من الصفر</h3>
-      <p>
-        المتغيرات، الأنواع، الشروط، الحلقات، الدوال،
-        القوائم، القواميس، الملفات، الأخطاء، OOP والمشاريع.
-      </p>
-      <div class="bar"><i style="width:12%"></i></div>
-      <div class="card-footer">
-        <small>12% مكتمل</small>
-        <button class="small-btn" onclick="openLesson('python')">ابدأ</button>
-      </div>
+    <article class="glass card">
+      <div class="icon">🧠</div>
+      <h3>تعلم فعلي</h3>
+      <p class="muted">دروس حقيقية مع أمثلة واختبارات، وليس مجرد بطاقات معلومات.</p>
     </article>
 
-    <article class="card glass course">
-      <div class="card-icon">🌐</div>
-      <span class="level">LEVEL 01 — WEB</span>
-      <h3>Web Development</h3>
-      <p>
-        HTML، CSS، JavaScript، تصميم متجاوب، DOM،
-        APIs، Accessibility، Performance وSecurity.
-      </p>
-      <div class="bar"><i style="width:8%"></i></div>
-      <div class="card-footer">
-        <small>8% مكتمل</small>
-        <button class="small-btn" onclick="openLesson('web')">ابدأ</button>
-      </div>
-    </article>
-
-    <article class="card glass course">
-      <div class="card-icon">🛡️</div>
-      <span class="level">LEVEL 01 — SECURITY</span>
-      <h3>Cybersecurity Foundations</h3>
-      <p>
-        الشبكات، الأنظمة، الحسابات، التشفير، المصادقة،
-        أمن الويب، الدفاع، تحليل المخاطر وCTF الآمن.
-      </p>
-      <div class="bar"><i style="width:5%"></i></div>
-      <div class="card-footer">
-        <small>5% مكتمل</small>
-        <button class="small-btn" onclick="openLesson('cyber')">ابدأ</button>
-      </div>
-    </article>
-
-    <article class="card glass course">
-      <div class="card-icon">🐧</div>
-      <span class="level">LEVEL 01 — SYSTEMS</span>
-      <h3>Linux & Terminal</h3>
-      <p>
-        الملفات، الصلاحيات، العمليات، الحزم، الشبكات،
-        الطرفية، Bash ومفاهيم إدارة النظام.
-      </p>
-      <div class="bar"><i style="width:0"></i></div>
-      <div class="card-footer">
-        <small>جاهز للبدء</small>
-        <button class="small-btn" onclick="toast('مسار Linux قادم داخل محرك الدروس')">فتح</button>
-      </div>
-    </article>
-
-    <article class="card glass course">
-      <div class="card-icon">🔀</div>
-      <span class="level">LEVEL 02 — TOOLING</span>
-      <h3>Git & GitHub</h3>
-      <p>
-        repositories، commits، branches، merges،
-        pull requests، التعاون ونشر المشاريع.
-      </p>
-      <div class="bar"><i style="width:0"></i></div>
-      <div class="card-footer">
-        <small>جاهز للبدء</small>
-        <button class="small-btn" onclick="toast('مسار Git قادم')">فتح</button>
-      </div>
-    </article>
-
-    <article class="card glass course">
-      <div class="card-icon">🧠</div>
-      <span class="level">LEVEL 02 — AI</span>
-      <h3>AI & Automation</h3>
-      <p>
-        كيف تعمل النماذج، prompts، APIs، الأتمتة،
-        التطبيقات العملية ومفاهيم AI الآمن.
-      </p>
-      <div class="bar"><i style="width:0"></i></div>
-      <div class="card-footer">
-        <small>قريبًا</small>
-        <button class="small-btn" onclick="toast('مسار AI تحت التطوير')">فتح</button>
-      </div>
-    </article>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     LESSON
-========================= -->
-
-<section class="page" id="page-lesson">
-
-  <div class="lesson-box glass" id="lessonContent"></div>
-
-</section>
-
-<!-- =========================
-     CYBER RANGE
-========================= -->
-
-<section class="page" id="page-range">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">SAFE ENVIRONMENT</div>
-      <h2>Cyber Range</h2>
-    </div>
-
-    <p>
-      مساحة تدريب آمنة لفهم مفاهيم الأمن السيبراني
-      بدون استهداف أنظمة حقيقية.
-    </p>
-  </div>
-
-  <div class="grid">
-
-    <article class="card glass">
-      <div class="card-icon">🔐</div>
-      <h3>Authentication Lab</h3>
-      <p>
-        تعلّم الفرق بين Authentication وAuthorization
-        وكيف تبني تدفق تسجيل دخول صحيح.
-      </p>
-      <button class="small-btn" onclick="openLab('auth')">تشغيل المختبر</button>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">🧬</div>
-      <h3>Hashing Concept</h3>
-      <p>
-        افهم فكرة hash ولماذا لا يعتبر تشفيرًا عكسيًا.
-      </p>
-      <button class="small-btn" onclick="openLab('hash')">تشغيل المختبر</button>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">🎣</div>
-      <h3>Phishing Awareness</h3>
-      <p>
-        تعلّم اكتشاف مؤشرات رسائل التصيد بطريقة دفاعية.
-      </p>
-      <button class="small-btn" onclick="openLab('phishing')">تشغيل المختبر</button>
-    </article>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     LABS
-========================= -->
-
-<section class="page" id="page-labs">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">INTERACTIVE LABS</div>
-      <h2>المختبرات</h2>
-    </div>
-
-    <p>
-      تمارين تعمل محليًا داخل المتصفح.
-    </p>
-  </div>
-
-  <div class="grid">
-
-    <article class="card glass lab">
-      <div class="card-icon">🔑</div>
-      <h3>Password Strength</h3>
-      <p>اختبر قوة كلمة مرور تدريبية بدون إرسالها لأي خادم.</p>
-      <input id="passInput" type="password" placeholder="اكتب كلمة تدريبية">
-      <div id="passResult" class="lab-result">...</div>
-    </article>
-
-    <article class="card glass lab">
-      <div class="card-icon">🔤</div>
-      <h3>Base64 Decoder</h3>
-      <p>Base64 ترميز وليس تشفيرًا. جرّب فك نص تدريبي.</p>
-      <input id="baseInput" placeholder="مثال: VkFOVEF">
-      <button class="small-btn" onclick="decodeBase()">فك الترميز</button>
-      <div id="baseResult" class="lab-result"></div>
-    </article>
-
-    <article class="card glass lab">
-      <div class="card-icon">🔄</div>
-      <h3>Caesar Cipher</h3>
-      <p>افهم فكرة الإزاحة المستخدمة في التشفير الكلاسيكي.</p>
-      <input id="caesarInput" placeholder="اكتب نصًا إنجليزيًا">
-      <button class="small-btn" onclick="caesarDecode()">Decode</button>
-      <div id="caesarResult" class="lab-result"></div>
-    </article>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     CTF
-========================= -->
-
-<section class="page" id="page-ctf">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">VANTA CTF</div>
-      <h2>تحديات آمنة</h2>
-    </div>
-
-    <p>
-      تحديات منطق وترميز وتحليل مصدر داخل بيئة VANTA.
-    </p>
-  </div>
-
-  <div class="grid">
-
-    <article class="card glass">
-      <div class="card-icon">01</div>
-      <h3>Encoded Signal</h3>
-      <p>
-        لديك النص التالي:
-        <b>VkFOVEF7U0FGRV9MRUFSTklOR30=</b>
-      </p>
-      <input id="ctf1" placeholder="أدخل الـ flag">
-      <button class="small-btn" onclick="checkCTF1()">تحقق</button>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">02</div>
-      <h3>Caesar Gate</h3>
-      <p>
-        النص التدريبي:
-        <b>YDQWD</b>
-        تم تشفيره بإزاحة +3.
-      </p>
-      <input id="ctf2" placeholder="أدخل الناتج">
-      <button class="small-btn" onclick="checkCTF2()">تحقق</button>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">03</div>
-      <h3>Logic Gate</h3>
-      <p>
-        إذا كان A=true و B=false،
-        فما نتيجة A AND NOT B؟
-      </p>
-      <input id="ctf3" placeholder="true / false">
-      <button class="small-btn" onclick="checkCTF3()">تحقق</button>
-    </article>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     PROGRAMMING
-========================= -->
-
-<section class="page" id="page-programming">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">CODE LAB</div>
-      <h2>البرمجة</h2>
-    </div>
-
-    <p>
-      ابدأ من التفكير البرمجي ثم انتقل إلى اللغات والمشاريع.
-    </p>
-  </div>
-
-  <div class="grid">
-
-    <article class="card glass">
-      <div class="card-icon">🐍</div>
-      <h3>Python</h3>
-      <p>
-        لغة مناسبة لبناء أساس قوي في البرمجة والأتمتة
-        وتحليل البيانات وأمن المعلومات.
-      </p>
-      <button class="small-btn" onclick="openLesson('python')">ابدأ Python</button>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">JS</div>
-      <h3>JavaScript</h3>
-      <p>
-        لغة المتصفح الأساسية لبناء التفاعل والمنطق
-        والتطبيقات الحديثة.
-      </p>
-      <button class="small-btn" onclick="openLesson('web')">ابدأ Web</button>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">〈〉</div>
-      <h3>HTML + CSS</h3>
-      <p>
-        أساس بناء صفحات الويب: الهيكل، التصميم،
-        التخطيط، التجاوب والوصولية.
-      </p>
-      <button class="small-btn" onclick="openLesson('web')">ابدأ</button>
-    </article>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     TECHNOLOGY
-========================= -->
-
-<section class="page" id="page-technology">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">TECHNOLOGY</div>
-      <h2>التقنية</h2>
-    </div>
-
-    <p>
-      افهم التقنية من الداخل بدل حفظ أسماء الأدوات فقط.
-    </p>
-  </div>
-
-  <div class="grid">
-
-    <article class="card glass">
-      <div class="card-icon">🌐</div>
-      <h3>كيف يعمل الإنترنت؟</h3>
-      <p>
-        DNS، IP، TCP، HTTP، HTTPS، المتصفح والخادم.
-      </p>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">🖥️</div>
-      <h3>أنظمة التشغيل</h3>
-      <p>
-        Kernel، processes، memory، storage،
-        permissions وملفات النظام.
-      </p>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">🤖</div>
-      <h3>الذكاء الاصطناعي</h3>
-      <p>
-        Machine Learning، النماذج، البيانات،
-        inference، APIs والاستخدام المسؤول.
-      </p>
-    </article>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     LIBRARY
-========================= -->
-
-<section class="page" id="page-library">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">KNOWLEDGE BASE</div>
-      <h2>المكتبة</h2>
-    </div>
-
-    <p>
-      روابط ومراجع أصلية للتوسع بعد دروس VANTA.
-    </p>
-  </div>
-
-  <input
-    class="search-box glass"
-    id="librarySearch"
-    placeholder="ابحث في المكتبة..."
-  >
-
-  <div class="grid" style="margin-top:18px">
-
-    <a class="card glass library-item"
-       href="https://developer.mozilla.org/en-US/docs/Learn_web_development"
-       target="_blank">
-      <div class="card-icon">MDN</div>
-      <h3>MDN Web Docs</h3>
-      <p>مرجع قوي لتعلم تقنيات الويب وأفضل الممارسات.</p>
-    </a>
-
-    <a class="card glass library-item"
-       href="https://docs.python.org/3/"
-       target="_blank">
-      <div class="card-icon">🐍</div>
-      <h3>Python Docs</h3>
-      <p>التوثيق الرسمي للغة Python.</p>
-    </a>
-
-    <a class="card glass library-item"
-       href="https://owasp.org/"
-       target="_blank">
-      <div class="card-icon">🛡</div>
-      <h3>OWASP</h3>
-      <p>مصادر أمن التطبيقات وممارسات الحماية.</p>
-    </a>
-
-    <a class="card glass library-item"
-       href="https://www.freecodecamp.org/learn/"
-       target="_blank">
-      <div class="card-icon">FCC</div>
-      <h3>freeCodeCamp</h3>
-      <p>دروس وتمارين ومشاريع برمجية مجانية.</p>
-    </a>
-
-    <a class="card glass library-item"
-       href="https://git-scm.com/doc"
-       target="_blank">
-      <div class="card-icon">Git</div>
-      <h3>Git Documentation</h3>
-      <p>تعلم التحكم بالإصدارات وإدارة الكود.</p>
-    </a>
-
-    <a class="card glass library-item"
-       href="https://owasp.org/www-project-web-security-testing-guide/"
-       target="_blank">
-      <div class="card-icon">WSTG</div>
-      <h3>OWASP WSTG</h3>
-      <p>مرجع منهجي لاختبار أمن تطبيقات الويب.</p>
-    </a>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     QUIZ
-========================= -->
-
-<section class="page" id="page-quiz">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">KNOWLEDGE CHECK</div>
-      <h2>اختبار سريع</h2>
-    </div>
-
-    <p>اختبر فهمك واحصل على XP عند الإجابة الصحيحة.</p>
-  </div>
-
-  <div class="lesson-box glass">
-
-    <div id="quizBox"></div>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     ROADMAP
-========================= -->
-
-<section class="page" id="page-roadmap">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">ROADMAP</div>
-      <h2>خارطة طريق VANTA</h2>
-    </div>
-
-    <p>
-      لا تحاول تعلم كل شيء مرة واحدة. ابنِ أساسًا ثم تخصص.
-    </p>
-  </div>
-
-  <div class="grid">
-
-    <article class="card glass">
-      <div class="card-icon">01</div>
-      <h3>Foundation</h3>
-      <p>
-        Computer Basics → Terminal → Logic → Internet Basics.
-      </p>
-    </article>
-
-    <article class="card glass">
-      <div class="card-icon">02</div>
+    <article class="glass card">
+      <div class="icon">💻</div>
       <h3>Programming</h3>
-      <p>
-        Python → JavaScript → Data Structures → Git → Projects.
-      </p>
+      <p class="muted">ابدأ من المنطق البرمجي ثم انتقل إلى كتابة الكود وفهمه.</p>
     </article>
 
-    <article class="card glass">
-      <div class="card-icon">03</div>
-      <h3>Web</h3>
-      <p>
-        HTML → CSS → JS → APIs → Accessibility → Performance.
-      </p>
+    <article class="glass card">
+      <div class="icon">🛡️</div>
+      <h3>Cyber Range</h3>
+      <p class="muted">تدريبات آمنة داخل المتصفح لفهم مفاهيم الأمن السيبراني.</p>
     </article>
 
-    <article class="card glass">
-      <div class="card-icon">04</div>
-      <h3>Security</h3>
-      <p>
-        Networking → Linux → Security Fundamentals →
-        Web Security → Defense → CTF.
-      </p>
+    <article class="glass card">
+      <div class="icon">🌐</div>
+      <h3>Technology</h3>
+      <p class="muted">شبكات، أنظمة، ذكاء اصطناعي، أجهزة وتقنيات حديثة.</p>
     </article>
 
-    <article class="card glass">
-      <div class="card-icon">05</div>
-      <h3>Build</h3>
-      <p>
-        ابنِ مشاريع حقيقية، وثّقها، ارفعها على GitHub،
-        وتعلم من الأخطاء.
-      </p>
+    <article class="glass card">
+      <div class="icon">🤖</div>
+      <h3>NOVA AI</h3>
+      <p class="muted">مساعد VANTA الذكي الذي يمكنه استخدام مستوى تقدمك في الإجابة.</p>
     </article>
 
-    <article class="card glass">
-      <div class="card-icon">06</div>
-      <h3>Specialize</h3>
-      <p>
-        اختر مجالًا: Web، Cybersecurity، AI، Systems
-        أو Software Engineering.
-      </p>
+    <article class="glass card">
+      <div class="icon">🏆</div>
+      <h3>XP & Levels</h3>
+      <p class="muted">تعلم، أكمل الاختبارات، اجمع XP وافتح الشارات.</p>
     </article>
-
   </div>
-
 </section>
 
-<!-- =========================
-     COMMUNITY
-========================= -->
+<!-- LEARN -->
+<section class="page" id="page-learn">
+  <h2 class="sectionTitle">مركز التعلم 📚</h2>
+  <p class="muted">اختر درسًا. زر البداية يفتح الدرس فقط، ولا يمنح XP إلا بعد إكمال الاختبار.</p>
 
-<section class="page" id="page-community">
+  <div class="grid" id="lessonGrid"></div>
 
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">VANTA COMMUNITY</div>
-      <h2>المجتمع</h2>
-    </div>
-
-    <p>
-      مساحة محلية بسيطة للملاحظات والأفكار.
-    </p>
-  </div>
-
-  <div class="lesson-box glass">
-
-    <textarea
-      id="communityInput"
-      rows="4"
-      placeholder="اكتب رسالة للمجتمع..."
-      style="width:100%;padding:15px;border-radius:15px;background:rgba(0,0,0,.2);border:1px solid var(--line);color:white;outline:none"
-    ></textarea>
-
-    <button class="btn" style="margin-top:12px" onclick="postCommunity()">
-      نشر
-    </button>
-
-    <div id="communityPosts" style="margin-top:25px"></div>
-
-  </div>
-
+  <div id="lessonContainer" class="hidden"></div>
 </section>
 
-<!-- =========================
-     DASHBOARD
-========================= -->
-
-<section class="page" id="page-dashboard">
-
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">YOUR VANTA</div>
-      <h2>لوحة التحكم</h2>
-    </div>
-
-    <p>كل تقدمك في مكان واحد.</p>
-  </div>
-
-  <div class="dashboard-top">
-
-    <div class="profile-card glass">
-
-     <div class="profile-row">
-  <div class="avatar" id="profileAvatar">A</div>
-
-  <div>
-    <h2 id="profileName">Ali VANTA</h2>
-
-    <p style="color:var(--muted)">
-      <span id="profileMode">Learning mode</span>
-    </p>
-
-    <button
-      type="button"
-      onclick="editProfileName()"
-      style="margin-top:10px"
-    >
-      ✏️ تغيير الاسم
-    </button>
-  </div>
-</div>
-
-      <div style="margin-top:25px">
-        <span style="color:var(--muted);font-size:12px">XP</span>
-        <div class="xp-number" id="dashXP">0</div>
-      </div>
-
-      <div class="progress">
-        <i id="xpBar"></i>
-      </div>
-
-    </div>
-
-    <div class="profile-card glass">
-
-      <span style="color:var(--muted)">LEVEL</span>
-      <div class="xp-number" id="dashLevel">1</div>
-
-      <p style="color:var(--muted);font-size:12px">
-        استمر. كل مهمة صحيحة تضيف تقدمًا.
-      </p>
-
-    </div>
-
-  </div>
+<!-- RANGE -->
+<section class="page" id="page-range">
+  <h2 class="sectionTitle">VANTA Cyber Range 🛡️</h2>
 
   <div class="grid">
+    <article class="glass card course">
+      <div class="icon">🔎</div>
+      <div class="grow">
+        <h3>فهم DNS</h3>
+        <p class="muted">تعرف كيف يحول DNS أسماء المواقع إلى عناوين IP.</p>
+      </div>
+      <button class="glassBtn primary" onclick="openRange('dns')">ابدأ المختبر</button>
+    </article>
 
-    <div class="card glass">
-      <div class="card-icon">📚</div>
-      <h3>الدروس</h3>
-      <p id="dashLessons">0 مكتمل</p>
-    </div>
+    <article class="glass card course">
+      <div class="icon">🔐</div>
+      <div class="grow">
+        <h3>كلمات المرور</h3>
+        <p class="muted">تعرف على hashing وsalt ولماذا تخزين كلمة المرور كنص خطر.</p>
+      </div>
+      <button class="glassBtn primary" onclick="openRange('password')">ابدأ المختبر</button>
+    </article>
 
-    <div class="card glass">
-      <div class="card-icon">🏆</div>
-      <h3>الشارات</h3>
-      <p id="dashBadges">لا توجد شارات بعد</p>
-    </div>
-
-    <div class="card glass">
-      <div class="card-icon">⚡</div>
-      <h3>آخر نشاط</h3>
-      <p id="dashActivity">ابدأ أول درس.</p>
-    </div>
-
+    <article class="glass card course">
+      <div class="icon">🧱</div>
+      <div class="grow">
+        <h3>الدفاع الشبكي</h3>
+        <p class="muted">تعلم الفرق بين firewall وauthentication وauthorization.</p>
+      </div>
+      <button class="glassBtn primary" onclick="openRange('defense')">ابدأ المختبر</button>
+    </article>
   </div>
 
+  <div id="rangeContainer" class="hidden"></div>
 </section>
 
-<!-- =========================
-     SETTINGS
-========================= -->
+<!-- PROGRAMMING -->
+<section class="page" id="page-programming">
+  <h2 class="sectionTitle">Programming 💻</h2>
 
+  <div class="grid">
+    <article class="glass card">
+      <div class="icon">JS</div>
+      <h3>JavaScript</h3>
+      <p class="muted">المتغيرات، الشروط، الدوال، DOM والتفاعل مع صفحات الويب.</p>
+      <button class="glassBtn primary" onclick="startLesson('js')">افتح المسار</button>
+    </article>
+
+    <article class="glass card">
+      <div class="icon">⌘</div>
+      <h3>منطق البرمجة</h3>
+      <p class="muted">تعلم التفكير كمبرمج قبل حفظ الأوامر.</p>
+      <button class="glassBtn primary" onclick="startLesson('logic')">افتح المسار</button>
+    </article>
+
+    <article class="glass card">
+      <div class="icon">{ }</div>
+      <h3>Web Development</h3>
+      <p class="muted">HTML وCSS وJavaScript وكيف تعمل الصفحة معًا.</p>
+      <button class="glassBtn primary" onclick="startLesson('web')">افتح الدرس</button>
+    </article>
+  </div>
+</section>
+
+<!-- TECHNOLOGY -->
+<section class="page" id="page-technology">
+  <h2 class="sectionTitle">Technology 🌐</h2>
+
+  <div class="grid">
+    <article class="glass card">
+      <div class="icon">🤖</div>
+      <h3>Artificial Intelligence</h3>
+      <p class="muted">ما هو النموذج؟ ما هي البيانات؟ وكيف تتعلم أنظمة الذكاء الاصطناعي؟</p>
+      <button class="glassBtn primary" onclick="startLesson('ai')">ابدأ الدرس</button>
+    </article>
+
+    <article class="glass card">
+      <div class="icon">🌐</div>
+      <h3>Networking</h3>
+      <p class="muted">IP، DNS، HTTP، TCP وUDP بطريقة عملية.</p>
+      <button class="glassBtn primary" onclick="startLesson('network')">ابدأ الدرس</button>
+    </article>
+
+    <article class="glass card">
+      <div class="icon">🖥️</div>
+      <h3>Operating Systems</h3>
+      <p class="muted">ما الذي يفعله نظام التشغيل وكيف يدير البرامج والذاكرة؟</p>
+      <button class="glassBtn primary" onclick="startLesson('os')">ابدأ الدرس</button>
+    </article>
+  </div>
+</section>
+
+<!-- NOVA -->
+<section class="page" id="page-nova">
+  <h2 class="sectionTitle">NOVA ✦</h2>
+
+  <div class="novaLayout">
+    <aside class="glass novaSide">
+      <div class="novaOrb"></div>
+      <h3>NOVA AI</h3>
+      <p class="muted">
+        مساعد VANTA الذكي للبرمجة والتقنية والأمن السيبراني.
+      </p>
+
+      <div class="glass card" style="margin-top:20px;padding:15px">
+        <small class="muted">المستخدم</small>
+        <strong id="novaName">Guest</strong>
+        <br><br>
+        <small class="muted">XP</small>
+        <strong id="novaXP">0</strong>
+        <br><br>
+        <small class="muted">الدروس المكتملة</small>
+        <strong id="novaLessons">0</strong>
+      </div>
+
+      <button class="glassBtn" style="width:100%;margin-top:15px" onclick="clearChat()">
+        مسح المحادثة
+      </button>
+    </aside>
+
+    <section class="glass novaChat">
+      <div class="messages" id="messages">
+        <div class="msg ai">مرحبًا 👋 أنا NOVA. اسألني عن البرمجة أو التقنية أو الأمن السيبراني.</div>
+      </div>
+
+      <div class="chatInput">
+        <textarea id="novaInput" class="input" placeholder="اكتب سؤالك لـ NOVA..."></textarea>
+        <button class="glassBtn primary" onclick="sendNova()">إرسال</button>
+      </div>
+    </section>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="page" id="page-dashboard">
+  <h2 class="sectionTitle">لوحة التحكم 🚀</h2>
+
+  <div class="glass card">
+    <h3 id="dashWelcome">مرحبًا بك في VANTA</h3>
+    <p class="muted">تابع تقدمك وافتح مستويات جديدة من خلال إكمال الدروس.</p>
+  </div>
+
+  <div class="stats">
+    <div class="glass stat">
+      <strong id="statXP">0</strong>
+      <span class="muted">XP</span>
+    </div>
+    <div class="glass stat">
+      <strong id="statLevel">1</strong>
+      <span class="muted">Level</span>
+    </div>
+    <div class="glass stat">
+      <strong id="statLessons">0</strong>
+      <span class="muted">Lessons</span>
+    </div>
+    <div class="glass stat">
+      <strong id="statBadges">0</strong>
+      <span class="muted">Badges</span>
+    </div>
+  </div>
+
+  <div class="glass card">
+    <h3>المستوى الحالي</h3>
+    <div class="progressLine">
+      <i id="levelBar"></i>
+    </div>
+    <p id="levelText" class="muted"></p>
+  </div>
+
+  <div class="glass card" style="margin-top:20px">
+    <h3>الشارات 🏆</h3>
+    <div id="badgeList"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="page" id="page-about">
+  <h2 class="sectionTitle">عن Ali Yaser</h2>
+
+  <div class="aboutHero">
+    <div class="glass avatar">
+      <div>
+        <div class="avatarCircle">AY</div>
+        <h3 style="text-align:center">Ali Yaser</h3>
+      </div>
+    </div>
+
+    <div class="glass card">
+      <div class="badge">FOUNDER • DEVELOPER</div>
+      <h1 class="gradientText">علي ياسر</h1>
+
+      <p class="lessonBody">
+        أنا Ali Yaser، مؤسس ومطور VANTA.
+        بدأت رحلتي مع التقنية منذ الصغر، وأهتم بالبرمجة والتكنولوجيا
+        والأمن السيبراني وبناء الأشياء التي يمكن أن يستفيد منها الشباب.
+      </p>
+
+      <p class="lessonBody">
+        VANTA ليست مجرد صفحة؛ هي مشروع يجمع التعلم والتجربة والاستكشاف
+        في مكان واحد، مع التركيز على جعل التقنية أسهل وأكثر متعة.
+      </p>
+
+      <a class="social" href="https://instagram.com/ali_yr_1" target="_blank" rel="noopener">
+        Instagram · @ali_yr_1
+      </a>
+    </div>
+  </div>
+
+  <div class="grid" style="margin-top:22px">
+    <div class="glass card">
+      <div class="icon">💙</div>
+      <h3>شكر خاص</h3>
+      <p class="muted">
+        شكرًا لـ <strong>Faisal Rani</strong> و<strong>Mohammed Sami</strong>
+        على دعمهم ووقوفهم معي.
+      </p>
+    </div>
+
+    <div class="glass card">
+      <div class="icon">🚀</div>
+      <h3>VANTA</h3>
+      <p class="muted">مشروع مبني بفكرة أن التعلم التقني يمكن أن يكون ممتعًا وتفاعليًا.</p>
+    </div>
+
+    <div class="glass card">
+      <div class="icon">🌍</div>
+      <h3>الهدف</h3>
+      <p class="muted">صناعة أدوات ومحتوى تقني يساعد الجيل الجديد على اكتشاف إمكانياته.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SETTINGS -->
 <section class="page" id="page-settings">
+  <h2 class="sectionTitle">الإعدادات ⚙️</h2>
 
-  <div class="section-head">
-    <div>
-      <div class="eyebrow">SYSTEM SETTINGS</div>
-      <h2>الإعدادات</h2>
+  <div class="settingsGrid">
+    <div class="glass setting">
+      <h3>الصوت</h3>
+
+      <div class="settingRow">
+        <span>صوت الدخول</span>
+        <button class="switch on" id="soundToggle" onclick="toggleSetting('sound')"><i></i></button>
+      </div>
+
+      <div class="settingRow">
+        <span>صوت NOVA</span>
+        <button class="switch on" id="novaVoiceToggle" onclick="toggleSetting('novaVoice')"><i></i></button>
+      </div>
     </div>
 
-    <p>
-      خصص تجربة VANTA حسب جهازك وطريقتك في التعلم.
-    </p>
+    <div class="glass setting">
+      <h3>الحركة</h3>
+
+      <div class="settingRow">
+        <span>التأثيرات الحركية</span>
+        <button class="switch on" id="motionToggle" onclick="toggleSetting('motion')"><i></i></button>
+      </div>
+
+      <div class="settingRow">
+        <span>تأثير Parallax</span>
+        <button class="switch on" id="parallaxToggle" onclick="toggleSetting('parallax')"><i></i></button>
+      </div>
+    </div>
+
+    <div class="glass setting">
+      <h3>الأداء</h3>
+
+      <div class="settingRow">
+        <span>الوضع منخفض الأداء</span>
+        <button class="switch" id="performanceToggle" onclick="toggleSetting('performance')"><i></i></button>
+      </div>
+
+      <p class="muted">يقلل النجوم والتأثيرات الخلفية على الأجهزة الضعيفة.</p>
+    </div>
+
+    <div class="glass setting">
+      <h3>المظهر</h3>
+
+      <div class="settingRow">
+        <span>الوضع الفاتح</span>
+        <button class="switch" id="lightToggle" onclick="toggleSetting('light')"><i></i></button>
+      </div>
+
+      <div class="settingRow">
+        <span>حجم النص</span>
+        <select class="input" id="textSize" onchange="changeTextSize(this.value)">
+          <option value="1">طبيعي</option>
+          <option value="1.1">كبير</option>
+          <option value="1.2">كبير جدًا</option>
+        </select>
+      </div>
+    </div>
   </div>
+</section>
 
-  <div class="settings">
-
-    <div class="setting glass">
-      <div class="setting-info">
-        <h3>الوضع النهاري</h3>
-        <p>تحويل الواجهة إلى نمط فاتح.</p>
+<!-- LOGIN -->
+<section class="page" id="page-login">
+  <div class="form">
+    <div class="glass">
+      <div class="tabs">
+        <button class="tab active" id="loginTab" onclick="authMode('login')">تسجيل الدخول</button>
+        <button class="tab" id="signupTab" onclick="authMode('signup')">إنشاء حساب</button>
       </div>
 
-      <label class="switch">
-        <input id="lightToggle" type="checkbox">
-        <span class="slider"></span>
-      </label>
-    </div>
-
-    <div class="setting glass">
-      <div class="setting-info">
-        <h3>الأصوات الروبوتية</h3>
-        <p>أصوات الواجهة المستقبلية الاختيارية.</p>
+      <div id="signupNameWrap" class="hidden">
+        <label>اسم العرض</label>
+        <input id="authName" class="input" placeholder="مثال: Ali">
       </div>
 
-      <label class="switch">
-        <input id="soundToggle" type="checkbox">
-        <span class="slider"></span>
-      </label>
+      <label>البريد الإلكتروني</label>
+      <input id="authEmail" class="input" type="email" autocomplete="email" placeholder="you@example.com">
+
+      <label>كلمة المرور</label>
+      <input id="authPassword" class="input" type="password" autocomplete="current-password" placeholder="••••••••">
+
+      <button class="glassBtn primary" style="width:100%;margin-top:12px" onclick="submitAuth()" id="authButton">
+        تسجيل الدخول
+      </button>
+
+      <button class="glassBtn" style="width:100%;margin-top:9px" onclick="logout()">
+        تسجيل الخروج
+      </button>
+
+      <p id="authStatus" class="muted" style="margin-top:15px"></p>
     </div>
-
-    <div class="setting glass">
-      <div class="setting-info">
-        <h3>تقليل الحركة</h3>
-        <p>تقليل الأنميشن لمن يفضل تجربة أكثر هدوءًا.</p>
-      </div>
-
-      <label class="switch">
-        <input id="motionToggle" type="checkbox">
-        <span class="slider"></span>
-      </label>
-    </div>
-
-    <div class="setting glass">
-      <div class="setting-info">
-        <h3>Performance Mode</h3>
-        <p>تقليل تأثيرات الخلفية والحركة للأجهزة الضعيفة.</p>
-      </div>
-
-      <label class="switch">
-        <input id="performanceToggle" type="checkbox">
-        <span class="slider"></span>
-      </label>
-    </div>
-
-    <div class="setting glass">
-      <div class="setting-info">
-        <h3>كثافة النجوم</h3>
-        <p>اختر كثافة خلفية الفضاء.</p>
-      </div>
-
-      <select id="densitySelect"
-        style="padding:9px;border-radius:10px;background:#11172d;color:white;border:1px solid var(--line)">
-        <option value="0.6">منخفضة</option>
-        <option value="1" selected>متوسطة</option>
-        <option value="1.5">عالية</option>
-      </select>
-    </div>
-
-    <div class="setting glass">
-      <div class="setting-info">
-        <h3>حجم النص</h3>
-        <p>تغيير حجم النص العام.</p>
-      </div>
-
-      <select id="textSize"
-        style="padding:9px;border-radius:10px;background:#11172d;color:white;border:1px solid var(--line)">
-        <option value="0.9">صغير</option>
-        <option value="1" selected>طبيعي</option>
-        <option value="1.12">كبير</option>
-      </select>
-    </div>
-
   </div>
-
 </section>
 
 </main>
 
-<!-- =========================
-     NOVA
-========================= -->
-
-<div class="nova">
-
-  <div class="nova-chat glass" id="novaChat">
-
-    <strong>✦ NOVA</strong>
-
-    <p id="novaReply">
-      أنا NOVA. اسألني عن البرمجة أو التقنية أو الدرس الذي تدرسه.
-    </p>
-
-    <input
-      id="novaInput"
-      placeholder="اسأل NOVA..."
-    >
-
-  </div>
-
-  <div class="nova-orb" id="novaOrb">
-
-    <div class="nova-core"></div>
-
-    <div class="nova-eyes">
-      <i></i><i></i>
-    </div>
-
-  </div>
-
-</div>
-
-<!-- =========================
-     ACCOUNT MODAL
-========================= -->
-
-<div class="modal" id="accountModal">
-
-  <div class="modal-box glass">
-
-    <button class="close" onclick="closeModal('accountModal')">×</button>
-
-    <h2>VANTA Account</h2>
-
-    <p style="color:var(--muted);font-size:12px;margin-bottom:18px">
-      سجّل دخولك لحفظ تقدمك على حسابك.
-    </p>
-
-    <input id="email" type="email" placeholder="البريد الإلكتروني">
-    <input id="password" type="password" placeholder="كلمة المرور">
-
-    <div class="modal-actions">
-
-      <button class="btn" onclick="signIn()">دخول</button>
-
-      <button class="btn secondary" onclick="signUp()">
-        إنشاء حساب
-      </button>
-
-      <button class="btn secondary" onclick="signOutUser()">
-        تسجيل الخروج
-      </button>
-
-    </div>
-
-    <p id="authStatus"
-       style="color:#7feeff;font-size:12px;margin-top:15px"></p>
-
-  </div>
-
-</div>
-
-<!-- =========================
-     NOVA MODAL
-========================= -->
-
-<div class="modal" id="novaModal">
-
-  <div class="modal-box glass">
-
-    <button class="close" onclick="closeModal('novaModal')">×</button>
-
-    <h2>✦ NOVA AI</h2>
-
-    <p style="color:var(--muted);line-height:1.8;font-size:13px">
-      NOVA يمكن ربطها بـ AI backend حقيقي عبر
-      <code>AI_ENDPOINT</code>.
-      لا تضع API key سري داخل GitHub Pages.
-    </p>
-
-    <button class="btn" style="margin-top:18px" onclick="openNovaChat()">
-      تشغيل NOVA
-    </button>
-
-  </div>
-
-</div>
-
-<div class="toast" id="toast"></div>
-
-<footer>
-
-  <div style="font-family:Orbitron;letter-spacing:3px;color:white">
-    VANTA
-  </div>
-
-  <p style="margin-top:8px">
-    Academy • Cyber Range • Technology
-  </p>
-
-  <div class="credits">
-
-    <span class="credit">
-      Founder / Developer:
-      <strong>Ali Yaser — علي ياسر</strong>
-    </span>
-
-    <span class="credit">
-      With appreciation to <strong>Faisal Rani</strong>
-    </span>
-
-    <span class="credit">
-      With appreciation to <strong>Mohammed Sami</strong>
-    </span>
-
-  </div>
-
-  <small>
-    Built with curiosity, code and a lot of late nights. ✦
-  </small>
-
+<footer class="footer">
+  <div>© <span id="year"></span> Ali Yaser — VANTA</div>
+  <div style="margin-top:8px">Technology • Programming • Cybersecurity</div>
 </footer>
 
-<!-- =========================
-     SUPABASE
-========================= -->
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div id="toast" class="toast"></div>
 
 <script>
 /* =========================================================
    VANTA CORE
 ========================================================= */
 
-/*
-  IMPORTANT:
-  For a real production AI backend, put your own secure
-  server endpoint here.
-
-  Never put a secret provider API key in this HTML.
-*/
-const AI_ENDPOINT = "/api/nova";
-
-/*
-  Supabase publishable configuration.
-*/
 const SUPABASE_URL = "https://mknbfymmwuesjffbmkmu.supabase.co";
 const SUPABASE_KEY = "sb_publishable_fLJzcNmcjgSYGh9-EspBuQ_nJlDnZby";
 
-let supabaseClient = null;
+const supabaseClient =
+  window.supabase?.createClient
+    ? window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY)
+    : null;
 
-try{
-  if(window.supabase){
-    supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
-  }
-}catch(e){
-  console.warn("Supabase unavailable:",e);
-}
-
-/* =========================
-   STATE
-========================= */
+const AI_ENDPOINT = "/api/nova";
 
 const state = {
   page:"home",
   xp:Number(localStorage.getItem("vanta_xp") || 0),
-  lessons:Number(localStorage.getItem("vanta_lessons") || 0),
-  badges:Number(localStorage.getItem("vanta_badges") || 0),
-  sound:localStorage.getItem("vanta_sound")==="1",
-  light:localStorage.getItem("vanta_light")==="1",
-  motion:localStorage.getItem("vanta_motion")!=="1",
-  performance:localStorage.getItem("vanta_performance")==="1",
-  density:Number(localStorage.getItem("vanta_density") || 1),
-  textSize:Number(localStorage.getItem("vanta_text") || 1),
-  user:null
+  lessons:JSON.parse(localStorage.getItem("vanta_lessons") || "[]"),
+  badges:JSON.parse(localStorage.getItem("vanta_badges") || "[]"),
+  user:null,
+  settings:JSON.parse(localStorage.getItem("vanta_settings") || JSON.stringify({
+    sound:true,
+    novaVoice:true,
+    motion:true,
+    parallax:true,
+    performance:false,
+    light:false,
+    textSize:1
+  })),
+  authMode:"login"
 };
 
-/* =========================
-   ELEMENTS
-========================= */
+const lessons = {
+  logic:{
+    title:"منطق البرمجة",
+    icon:"⌘",
+    xp:50,
+    body:`
+      <p>البرمجة ليست حفظ أوامر فقط. الفكرة الأساسية هي تحويل المشكلة
+      إلى خطوات واضحة يمكن للحاسوب تنفيذها.</p>
 
-const $ = s => document.querySelector(s);
-const $$ = s => [...document.querySelectorAll(s)];
+      <h3>1 — المدخلات</h3>
+      <p>ما المعلومات التي يحتاجها البرنامج؟</p>
 
-/* =========================
-   TOAST
-========================= */
+      <h3>2 — المعالجة</h3>
+      <p>ما العمليات التي يجب تنفيذها على هذه المعلومات؟</p>
 
-let toastTimer;
+      <h3>3 — المخرجات</h3>
+      <p>ما النتيجة التي سيعرضها البرنامج؟</p>
 
-function toast(message){
+      <div class="lessonCode">Input → Processing → Output</div>
 
-  const el = $("#toast");
+      <h3>مثال</h3>
+      <p>برنامج يحسب مجموع رقمين يحتاج إلى رقمين كمدخلات،
+      ثم يجمعهما، ثم يعرض الناتج.</p>
+    `,
+    question:"ما الترتيب الأساسي لفكرة البرنامج؟",
+    options:["Output → Input → Processing","Input → Processing → Output","Processing → Output → Input","Input → Output → Processing"],
+    answer:1
+  },
 
-  el.textContent = message;
-  el.classList.add("show");
+  js:{
+    title:"JavaScript — المتغيرات",
+    icon:"JS",
+    xp:60,
+    body:`
+      <p>المتغير هو مكان منطقي نخزن فيه قيمة يمكن للبرنامج استخدامها.</p>
 
-  clearTimeout(toastTimer);
+      <h3>مثال</h3>
+      <div class="lessonCode">let name = "Ali";
+let xp = 100;
 
-  toastTimer =
-    setTimeout(
-      ()=>el.classList.remove("show"),
-      2800
-    );
-}
+console.log(name);
+console.log(xp);</div>
 
-/* =========================
-   FUTURE ROBOTIC UI SOUND
-========================= */
+      <p><strong>let</strong> تستخدم لإنشاء متغير يمكن تغيير قيمته لاحقًا.</p>
 
-let audioCtx;
+      <h3>ملاحظة مهمة</h3>
+      <p>اسم المتغير يجب أن يكون واضحًا ويصف القيمة التي يخزنها.</p>
+    `,
+    question:"أي كلمة تستخدم هنا لإنشاء متغير قابل لتغيير قيمته؟",
+    options:["let","print","html","style"],
+    answer:0
+  },
 
-function robotSound(type="click"){
+  web:{
+    title:"أساسيات Web Development",
+    icon:"{ }",
+    xp:60,
+    body:`
+      <p>صفحة الويب تعتمد بشكل أساسي على ثلاثة أجزاء.</p>
 
-  if(!state.sound) return;
+      <h3>HTML</h3>
+      <p>يبني هيكل الصفحة والعناصر.</p>
 
-  try{
+      <h3>CSS</h3>
+      <p>يتحكم في المظهر والألوان والتخطيط والحركة.</p>
 
-    audioCtx =
-      audioCtx ||
-      new (window.AudioContext || window.webkitAudioContext)();
+      <h3>JavaScript</h3>
+      <p>يضيف المنطق والتفاعل.</p>
 
-    const osc =
-      audioCtx.createOscillator();
+      <div class="lessonCode">HTML = Structure
+CSS = Appearance
+JavaScript = Behavior</div>
+    `,
+    question:"أي تقنية مسؤولة أساسًا عن شكل وتصميم الصفحة؟",
+    options:["HTML","CSS","JavaScript","DNS"],
+    answer:1
+  },
 
-    const gain =
-      audioCtx.createGain();
+  ai:{
+    title:"مقدمة في الذكاء الاصطناعي",
+    icon:"🤖",
+    xp:70,
+    body:`
+      <p>الذكاء الاصطناعي مجال يهدف إلى بناء أنظمة تستطيع تنفيذ
+      مهام تتطلب عادةً قدرًا من الاستدلال أو التعرف أو التنبؤ.</p>
 
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+      <h3>Machine Learning</h3>
+      <p>في التعلم الآلي يتعلم النموذج أنماطًا من البيانات
+      بدل كتابة كل حالة يدويًا.</p>
 
-    const now =
-      audioCtx.currentTime;
+      <h3>النموذج</h3>
+      <p>النموذج هو النظام الرياضي/الحسابي الذي يستخدم ما تعلمه
+      لإنتاج تنبؤ أو نتيجة.</p>
+    `,
+    question:"ما الذي يعتمد عليه التعلم الآلي بشكل أساسي للتعلم؟",
+    options:["البيانات","الشاشة","لوحة المفاتيح","اسم المستخدم"],
+    answer:0
+  },
 
-    if(type==="click"){
-      osc.frequency.setValueAtTime(480,now);
-      osc.frequency.exponentialRampToValueAtTime(720,now+.08);
-    }else{
-      osc.frequency.setValueAtTime(170,now);
-      osc.frequency.exponentialRampToValueAtTime(720,now+.25);
-    }
+  network:{
+    title:"أساسيات الشبكات",
+    icon:"🌐",
+    xp:70,
+    body:`
+      <p>الشبكة تسمح للأجهزة بالتواصل وتبادل البيانات.</p>
 
-    gain.gain.setValueAtTime(.0001,now);
-    gain.gain.exponentialRampToValueAtTime(.055,now+.015);
-    gain.gain.exponentialRampToValueAtTime(.0001,now+.3);
+      <h3>IP Address</h3>
+      <p>عنوان منطقي يستخدم لتحديد جهاز أو واجهة على شبكة.</p>
 
-    osc.start(now);
-    osc.stop(now+.31);
+      <h3>DNS</h3>
+      <p>يساعد على تحويل اسم نطاق مثل example.com إلى عنوان IP.</p>
 
-  }catch(e){}
-}
+      <h3>HTTP</h3>
+      <p>بروتوكول يستخدم لنقل موارد الويب بين العميل والخادم.</p>
+    `,
+    question:"ما الوظيفة الأساسية لـ DNS؟",
+    options:["تشغيل الشاشة","تحويل أسماء النطاقات إلى عناوين IP","تشفير القرص","ضغط الصور"],
+    answer:1
+  },
 
-/* =========================================================
-   WELCOME VOICE
-========================================================= */
+  os:{
+    title:"أنظمة التشغيل",
+    icon:"🖥️",
+    xp:60,
+    body:`
+      <p>نظام التشغيل هو الطبقة الأساسية التي تدير موارد الحاسوب
+      وتوفر خدمات للبرامج.</p>
 
-let welcomePlayed = false;
+      <h3>من مهامه</h3>
+      <p>إدارة الذاكرة، العمليات، الملفات، الأجهزة، والصلاحيات.</p>
 
-function speakWelcome(){
-
-  if(welcomePlayed) return;
-
-  welcomePlayed = true;
-
-  try{
-
-    if(!("speechSynthesis" in window)) return;
-
-    window.speechSynthesis.cancel();
-
-    const utterance =
-      new SpeechSynthesisUtterance(
-        "Welcome to VANTA"
-      );
-
-    utterance.lang = "en-US";
-    utterance.rate = .82;
-    utterance.pitch = .72;
-    utterance.volume = 1;
-
-    const voices =
-      window.speechSynthesis.getVoices();
-
-    const english =
-      voices.find(v =>
-        /en-US|en-GB|English/i.test(v.lang+" "+v.name)
-      );
-
-    if(english)
-      utterance.voice = english;
-
-    window.speechSynthesis.speak(utterance);
-
-  }catch(e){
-    console.warn("Welcome voice unavailable:",e);
+      <div class="lessonCode">Application
+      ↓
+Operating System
+      ↓
+Hardware</div>
+    `,
+    question:"أي جزء يدير موارد الجهاز ويقدم خدمات للبرامج؟",
+    options:["نظام التشغيل","لوحة المفاتيح","المتصفح فقط","الشاحن"],
+    answer:0
   }
-}
-
-/* =========================================================
-   BOOT
-========================================================= */
-
-const bootStatus = $("#bootStatus");
-const bootBar = $("#bootBar");
-const bootActions = $("#bootActions");
-
-const bootMessages = [
-  "INITIALIZING SECURE ENVIRONMENT...",
-  "CONNECTING TO VANTA CORE...",
-  "CALIBRATING SOLAR NAVIGATION...",
-  "LOADING NOVA...",
-  "MAPPING LEARNING SYSTEM...",
-  "STARTING CYBER RANGE...",
-  "SYSTEM READY."
-];
-
-let bootProgress = 0;
-
-const bootTimer =
-  setInterval(()=>{
-
-    bootProgress += Math.random()*8+3;
-
-    if(bootProgress >= 100){
-
-      bootProgress = 100;
-
-      clearInterval(bootTimer);
-
-      bootActions.classList.add("show");
-
-    }
-
-    bootBar.style.width =
-      bootProgress+"%";
-
-    const index =
-      Math.min(
-        bootMessages.length-1,
-        Math.floor(bootProgress/15)
-      );
-
-    bootStatus.textContent =
-      bootMessages[index];
-
-  },180);
-
-function enterVanta(){
-
-  robotSound("boot");
-
-  /*
-    IMPORTANT:
-    The welcome voice is deliberately NOT dependent
-    on the optional Sound setting.
-  */
-  speakWelcome();
-
-  $("#boot").classList.add("hide");
-  $("#navbar").classList.add("ready");
-
-  setTimeout(()=>{
-    toast("Welcome to VANTA ✦");
-  },900);
-}
-
-$("#enterBtn").addEventListener(
-  "click",
-  enterVanta
-);
-
-$("#skipBtn").addEventListener(
-  "click",
-  enterVanta
-);
+};
 
 /* =========================================================
    NAVIGATION
 ========================================================= */
 
-function showPage(page){
+function go(page){
+  state.page=page;
 
-  if(page==="settings"){
-    page = "settings";
-  }
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelector("#page-"+page)?.classList.add("active");
 
-  $$(".page").forEach(p=>{
-    p.classList.remove("active");
+  document.querySelectorAll(".navBtn").forEach(b=>{
+    b.classList.toggle("active",b.dataset.page===page);
   });
 
-  const target =
-    $("#page-"+page);
+  updateUI();
 
-  if(target)
-    target.classList.add("active");
-
-  state.page = page;
-
-  $$(".nav-item").forEach(btn=>{
-    btn.classList.toggle(
-      "active",
-      btn.dataset.page===page
-    );
-  });
-
-  $$(".mobile-menu button").forEach(btn=>{
-    btn.classList.toggle(
-      "active",
-      btn.dataset.page===page
-    );
-  });
-
-  $("#mobileMenu").classList.remove("open");
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-  robotSound();
-
-  updateDashboard();
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-document.addEventListener("click",e=>{
-
-  const button =
-    e.target.closest("[data-page]");
-
-  if(!button) return;
-
-  const page =
-    button.dataset.page;
-
-  if(page){
-    showPage(page);
-  }
-
+document.querySelectorAll(".navBtn").forEach(btn=>{
+  btn.addEventListener("click",()=>go(btn.dataset.page));
 });
 
-/* =========================
-   MOBILE MENU
-========================= */
-
-$("#menuBtn").addEventListener(
-  "click",
-  ()=>{
-    $("#mobileMenu").classList.toggle("open");
-    robotSound();
-  }
-);
-
-$("#settingsBtn").addEventListener(
-  "click",
-  ()=>{
-    showPage("settings");
-    robotSound();
-  }
-);
-
-/* =========================
-   ACCOUNT
-========================= */
-
-$("#accountBtn").addEventListener(
-  "click",
-  ()=>{
-    $("#accountModal").classList.add("open");
-  }
-);
-
-function closeModal(id){
-  $("#"+id).classList.remove("open");
-}
-
 /* =========================================================
-   LESSON ENGINE
+   LESSONS
 ========================================================= */
 
-const lessons = {
+function renderLessons(){
+  const grid=document.getElementById("lessonGrid");
 
-python:{
+  const data=[
+    ["logic","منطق البرمجة","أساس التفكير البرمجي","⌘"],
+    ["js","JavaScript","المتغيرات والأساسيات","JS"],
+    ["web","Web Development","HTML + CSS + JavaScript","{ }"],
+    ["ai","Artificial Intelligence","مدخل إلى الذكاء الاصطناعي","🤖"],
+    ["network","Networking","IP وDNS وHTTP","🌐"],
+    ["os","Operating Systems","كيف يعمل نظام التشغيل","🖥️"]
+  ];
 
-title:"Python — من الصفر إلى أول مشروع",
-
-html:`
-
-<div class="eyebrow">VANTA • PYTHON 01</div>
-
-<h2>ما هي البرمجة؟ وما هي Python؟</h2>
-
-<p>
-البرمجة ببساطة هي كتابة مجموعة من التعليمات التي يستطيع
-الحاسوب تنفيذها. قبل أن تحفظ أوامر كثيرة، الأهم أن تتعلم
-كيف تفكر في المشكلة: ما البيانات التي أحتاجها؟ وما الخطوات
-التي يجب تنفيذها؟ وما النتيجة المطلوبة؟
-</p>
-
-<h3>1 — أول برنامج</h3>
-
-<p>
-في Python يمكن استخدام <b>print()</b> لإظهار نتيجة للمستخدم.
-هذا يبدو بسيطًا، لكنه يعرّفك على فكرة مهمة جدًا:
-البرنامج يأخذ تعليمات وينفذها بالترتيب.
-</p>
-
-<div class="code">print("Welcome to VANTA")</div>
-
-<h3>2 — المتغيرات</h3>
-
-<p>
-المتغير هو اسم نستخدمه للإشارة إلى قيمة. مثلًا يمكن تخزين
-اسم المستخدم أو نقاطه أو عمره.
-</p>
-
-<div class="code">name = "Ali"
-xp = 100
-level = 1
-
-print(name)
-print(xp)</div>
-
-<h3>3 — أنواع البيانات</h3>
-
-<ul>
-<li>String — نص.</li>
-<li>Integer — رقم صحيح.</li>
-<li>Float — رقم عشري.</li>
-<li>Boolean — True أو False.</li>
-<li>List — مجموعة مرتبة من العناصر.</li>
-<li>Dictionary — بيانات على شكل key/value.</li>
-</ul>
-
-<h3>4 — الشروط</h3>
-
-<p>
-الشروط تجعل البرنامج يتخذ قرارًا.
-</p>
-
-<div class="code">xp = 120
-
-if xp >= 100:
-    print("Level Up!")
-else:
-    print("Keep learning.")</div>
-
-<h3>5 — الحلقات</h3>
-
-<p>
-إذا احتجت تكرار عملية، يمكن استخدام loop.
-</p>
-
-<div class="code">for number in range(5):
-    print(number)</div>
-
-<h3>6 — الدوال</h3>
-
-<p>
-الدالة تجمع مجموعة تعليمات تحت اسم يمكن استدعاؤه أكثر من مرة.
-</p>
-
-<div class="code">def welcome(name):
-    return "Welcome " + name
-
-message = welcome("Ali")
-print(message)</div>
-
-<h3>مهمة VANTA</h3>
-
-<p>
-أنشئ متغيرًا اسمه <b>xp</b> وضع فيه رقمًا.
-إذا كان الرقم 100 أو أكثر اطبع:
-<code>VANTA LEVEL UP</code>.
-وإذا كان أقل اطبع:
-<code>KEEP LEARNING</code>.
-</p>
-
-<h3>ماذا تتعلم بعد ذلك؟</h3>
-
-<p>
-بعد إتقان الأساسيات انتقل إلى القوائم والقواميس،
-ثم الملفات والاستثناءات، وبعدها البرمجة الكائنية
-والمشاريع الصغيرة.
-</p>
-
-<div class="lesson-actions">
-<button class="btn" onclick="completeLesson('python')">
-أكملت الدرس ✓ +50 XP
-</button>
-<button class="btn secondary" onclick="showPage('learn')">
-العودة
-</button>
-</div>
-
-`
-
-},
-
-web:{
-
-title:"Web Development — كيف تُبنى صفحة ويب؟",
-
-html:`
-
-<div class="eyebrow">VANTA • WEB 01</div>
-
-<h2>HTML + CSS + JavaScript</h2>
-
-<p>
-الويب الحديث يعتمد على مجموعة تقنيات تعمل معًا.
-HTML يصف الهيكل والمحتوى، CSS يتحكم في الشكل والتخطيط،
-وJavaScript يضيف السلوك والتفاعل.
-</p>
-
-<h3>1 — HTML</h3>
-
-<p>
-HTML ليست لغة برمجة تقليدية؛ هي لغة توصيف للوثيقة.
-استخدم العناصر المناسبة للمعنى الصحيح.
-</p>
-
-<div class="code">&lt;main&gt;
-  &lt;h1&gt;VANTA&lt;/h1&gt;
-  &lt;p&gt;Learn technology.&lt;/p&gt;
-&lt;/main&gt;</div>
-
-<h3>2 — CSS</h3>
-
-<div class="code">body {
-  background: #050817;
-  color: white;
+  grid.innerHTML=data.map(([id,title,desc,icon])=>`
+    <article class="glass card course">
+      <div class="icon">${icon}</div>
+      <div class="grow">
+        <h3>${title}</h3>
+        <p class="muted">${desc}</p>
+        <span class="badge">+${lessons[id].xp} XP</span>
+        ${state.lessons.includes(id)?'<span class="badge">✓ مكتمل</span>':''}
+      </div>
+      <button class="glassBtn primary" onclick="startLesson('${id}')">
+        ${state.lessons.includes(id)?"مراجعة الدرس":"ابدأ الدرس"}
+      </button>
+    </article>
+  `).join("");
 }
 
-.card {
-  border-radius: 20px;
-  padding: 20px;
-}</div>
-
-<h3>3 — JavaScript</h3>
-
-<div class="code">const button =
-  document.querySelector("#start");
-
-button.addEventListener("click", () => {
-  alert("Welcome to VANTA");
-});</div>
-
-<h3>4 — DOM</h3>
-
-<p>
-المتصفح يحول صفحة HTML إلى DOM يمكن لـJavaScript
-التعامل معه. تستطيع قراءة العناصر وتغيير النصوص
-والخصائص وإضافة الأحداث.
-</p>
-
-<h3>5 — Responsive Design</h3>
-
-<p>
-الموقع الجيد لا يفترض أن المستخدم يمتلك شاشة كبيرة.
-استخدم CSS Grid وFlexbox وMedia Queries حتى تتكيف
-الواجهة مع الهاتف والكمبيوتر.
-</p>
-
-<h3>6 — Accessibility</h3>
-
-<p>
-استخدم عناصر HTML الصحيحة، labels واضحة، focus ظاهر،
-ألوان قابلة للقراءة، وأزرارًا حقيقية بدل تحويل كل شيء
-إلى div. الوصولية جزء من جودة الموقع، وليست إضافة ثانوية.
-</p>
-
-<h3>7 — Performance</h3>
-
-<p>
-الأنميشن جميل، لكن يجب ألا يتحول إلى سبب في بطء الموقع.
-قلل عدد العناصر المتحركة، أوقف الرسوم الثقيلة عندما
-تكون الصفحة مخفية، وراعِ الأجهزة الضعيفة.
-</p>
-
-<h3>مهمة VANTA</h3>
-
-<p>
-أنشئ بطاقة تحتوي على عنوان ووصف وزر.
-اجعلها Responsive، ثم استخدم JavaScript لتغيير
-نص البطاقة عند الضغط على الزر.
-</p>
-
-<div class="lesson-actions">
-<button class="btn" onclick="completeLesson('web')">
-أكملت الدرس ✓ +50 XP
-</button>
-<button class="btn secondary" onclick="showPage('learn')">
-العودة
-</button>
-</div>
-
-`
-
-},
-
-cyber:{
-
-title:"Cybersecurity — الأساس الذي يجب أن تعرفه",
-
-html:`
-
-<div class="eyebrow">VANTA • CYBER 01</div>
-
-<h2>ما هو الأمن السيبراني؟</h2>
-
-<p>
-الأمن السيبراني هو مجموعة الممارسات والتقنيات التي تهدف
-إلى حماية الأنظمة والبيانات والخدمات من الاستخدام أو
-التعديل أو التعطيل غير المصرح به.
-</p>
-
-<h3>1 — CIA Triad</h3>
-
-<ul>
-<li><b>Confidentiality</b> — منع الوصول غير المصرح به.</li>
-<li><b>Integrity</b> — الحفاظ على صحة البيانات وعدم تعديلها بشكل غير مصرح.</li>
-<li><b>Availability</b> — بقاء النظام والخدمة متاحين عند الحاجة.</li>
-</ul>
-
-<h3>2 — Authentication</h3>
-
-<p>
-Authentication يجيب عن سؤال:
-"من أنت؟"
-أما Authorization فيجيب عن:
-"ماذا يسمح لك أن تفعل؟"
-</p>
-
-<h3>3 — Hashing</h3>
-
-<p>
-الـHash دالة تنتج قيمة تمثل البيانات الداخلة.
-الاستخدام الأمني الشائع هو تخزين كلمات المرور
-بخوارزميات مخصصة لكلمات المرور مع salt مناسب.
-Hashing ليس مجرد "تشفير يمكن فكّه".
-</p>
-
-<h3>4 — Networking</h3>
-
-<p>
-قبل دراسة أمن الشبكات، افهم الأساسيات:
-IP، DNS، TCP، UDP، ports، HTTP وHTTPS.
-بدون هذه المفاهيم تصبح أدوات الأمن مجرد أوامر محفوظة.
-</p>
-
-<h3>5 — Web Security</h3>
-
-<p>
-تعلم كيف تحدث الأخطاء من خلال فهم المدخلات والثقة
-والجلسات والصلاحيات، ثم تعلم كيف تمنعها.
-VANTA تركز في المختبرات على بيئات تدريبية آمنة.
-</p>
-
-<h3>6 — الدفاع</h3>
-
-<ul>
-<li>تحديث الأنظمة.</li>
-<li>تقليل الصلاحيات.</li>
-<li>استخدام MFA عند توفره.</li>
-<li>تسجيل الأحداث المهمة.</li>
-<li>النسخ الاحتياطي.</li>
-<li>فصل الخدمات وتقليل سطح الهجوم.</li>
-</ul>
-
-<h3>مهمة VANTA</h3>
-
-<p>
-اشرح بنفسك الفرق بين Authentication وAuthorization
-مع مثال من موقع ألعاب أو منصة تعليمية.
-</p>
-
-<div class="lesson-actions">
-<button class="btn" onclick="completeLesson('cyber')">
-أكملت الدرس ✓ +50 XP
-</button>
-<button class="btn secondary" onclick="showPage('learn')">
-العودة
-</button>
-</div>
-
-`
-
-}
-
-};
-
-function openLesson(type){
-
-  const lesson =
-    lessons[type];
-
-  if(!lesson) return;
-
-  $("#lessonContent").innerHTML =
-    lesson.html;
-
-  showPage("lesson");
-
-}
-
-/* =========================
-   COMPLETE LESSON
-========================= */
-
-function completeLesson(type){
-
-  const key =
-    "lesson_"+type;
-
-  if(localStorage.getItem(key)==="1"){
-
-    toast("هذا الدرس مكتمل بالفعل ✦");
-
-    return;
-  }
-
-  localStorage.setItem(key,"1");
-
-  state.lessons++;
-  state.xp += 50;
-
-  localStorage.setItem(
-    "vanta_lessons",
-    state.lessons
-  );
-
-  localStorage.setItem(
-    "vanta_xp",
-    state.xp
-  );
-
-  toast("+50 XP — أحسنت! 🚀");
-
-  updateDashboard();
-}
-
-/* =========================================================
-   LABS
-========================================================= */
-
-$("#passInput").addEventListener(
-  "input",
-  e=>{
-
-    const value =
-      e.target.value;
-
-    let score=0;
-
-    if(value.length>=10) score++;
-    if(/[A-Z]/.test(value)) score++;
-    if(/[a-z]/.test(value)) score++;
-    if(/[0-9]/.test(value)) score++;
-    if(/[^A-Za-z0-9]/.test(value)) score++;
-
-    const labels=[
-      "أدخل كلمة تدريبية.",
-      "ضعيفة جدًا",
-      "ضعيفة",
-      "متوسطة",
-      "جيدة",
-      "قوية"
-    ];
-
-    $("#passResult").textContent =
-      labels[score];
-
-  }
-);
-
-function decodeBase(){
-
-  const input =
-    $("#baseInput").value.trim();
-
-  try{
-
-    const decoded =
-      atob(input);
-
-    $("#baseResult").textContent =
-      decoded;
-
-    state.xp += 5;
-    saveProgress();
-
-  }catch(e){
-
-    $("#baseResult").textContent =
-      "النص غير صالح لـ Base64.";
-
-  }
-
-}
-
-function caesarDecode(){
-
-  const text =
-    $("#caesarInput").value;
-
-  let result="";
-
-  for(const char of text){
-
-    if(/[A-Z]/.test(char)){
-
-      result +=
-        String.fromCharCode(
-          (char.charCodeAt(0)-65-3+26)%26+65
-        );
-
-    }else if(/[a-z]/.test(char)){
-
-      result +=
-        String.fromCharCode(
-          (char.charCodeAt(0)-97-3+26)%26+97
-        );
-
-    }else{
-
-      result += char;
-
-    }
-
-  }
-
-  $("#caesarResult").textContent =
-    result;
-
-}
-
-/* =========================
-   RANGE
-========================= */
-
-function openLab(type){
-
-  showPage("labs");
-
-  if(type==="hash")
-    toast("اذهب إلى مختبر Base64 لفهم الفرق بين encoding وhashing.");
-
-  if(type==="auth")
-    toast("تذكّر: Authentication = من أنت؟ Authorization = ماذا يسمح لك؟");
-
-  if(type==="phishing")
-    toast("ابحث عن النطاق، الروابط، الاستعجال، والطلبات غير المعتادة.");
-
-}
-
-/* =========================================================
-   CTF
-========================================================= */
-
-function checkCTF1(){
-
-  const answer =
-    $("#ctf1").value.trim();
-
-  if(answer==="VANTA{SAFE_LEARNING}"){
-
-    $("#ctf1").style.borderColor =
-      "#55f59a";
-
-    state.xp += 25;
-    saveProgress();
-
-    toast("+25 XP — Flag صحيح! 🚩");
-
-  }else{
-
-    toast("ليس صحيحًا. فك Base64 مرة أخرى.");
-
-  }
-
-}
-
-function checkCTF2(){
-
-  const answer =
-    $("#ctf2").value.trim().toUpperCase();
-
-  if(answer==="VANTA"){
-
-    state.xp += 25;
-    saveProgress();
-
-    toast("+25 XP — ممتاز! 🚩");
-
-  }else{
-
-    toast("فكر في إزاحة -3.");
-
-  }
-
-}
-
-function checkCTF3(){
-
-  const answer =
-    $("#ctf3").value.trim().toLowerCase();
-
-  if(answer==="true"){
-
-    state.xp += 25;
-    saveProgress();
-
-    toast("+25 XP — Logic solved! ⚡");
-
-  }else{
-
-    toast("راجع AND وNOT.");
-
-  }
-
-}
-
-/* =========================================================
-   QUIZ
-========================================================= */
-
-const quizQuestions = [
-
-{
-q:"أي عنصر HTML مناسب لعنوان رئيسي؟",
-options:["<div>","<h1>","<span>","<main>"],
-answer:"<h1>"
-},
-
-{
-q:"ما وظيفة CSS الأساسية؟",
-options:[
-"تخزين قاعدة البيانات",
-"تحديد شكل وتخطيط الصفحة",
-"إدارة DNS",
-"تشفير كلمات المرور"
-],
-answer:"تحديد شكل وتخطيط الصفحة"
-},
-
-{
-q:"Authentication تعني:",
-options:[
-"ماذا يسمح للمستخدم",
-"من هو المستخدم",
-"سرعة الشبكة",
-"نوع نظام التشغيل"
-],
-answer:"من هو المستخدم"
-},
-
-{
-q:"أي واحد يمثل Boolean؟",
-options:["42","Hello","true","3.14"],
-answer:"true"
-}
-
-];
-
-let quizIndex=0;
-
-function renderQuiz(){
-
-  const q =
-    quizQuestions[quizIndex];
-
-  if(!q) return;
-
-  $("#quizBox").innerHTML = `
-
-    <div class="eyebrow">
-      QUESTION ${quizIndex+1}/${quizQuestions.length}
-    </div>
-
-    <h2 style="margin:15px 0 25px">
-      ${q.q}
-    </h2>
-
-    <div style="display:grid;gap:10px">
-
-      ${q.options.map(option=>`
-
-        <button
-          class="card glass"
-          style="text-align:right"
-          onclick='answerQuiz(${JSON.stringify(option)})'
-        >
-          ${option}
-        </button>
-
-      `).join("")}
-
+function startLesson(id){
+  const l=lessons[id];
+  if(!l)return;
+
+  go("learn");
+
+  const c=document.getElementById("lessonContainer");
+  c.classList.remove("hidden");
+
+  c.innerHTML=`
+    <div class="lessonView glass card" style="margin-top:25px">
+      <button class="glassBtn" onclick="closeLesson()">← رجوع للدروس</button>
+
+      <div style="margin-top:25px">
+        <span class="badge">${l.icon} LESSON</span>
+        <h2>${l.title}</h2>
+        <div class="lessonBody">${l.body}</div>
+      </div>
+
+      <div class="quizBox">
+        <h3>اختبار الإكمال</h3>
+        <p>${l.question}</p>
+
+        <div id="quizChoices">
+          ${l.options.map((o,i)=>`
+            <button class="choice" onclick="answerLesson('${id}',${i},this)">
+              ${o}
+            </button>
+          `).join("")}
+        </div>
+
+        <p id="quizResult" class="muted"></p>
+      </div>
     </div>
   `;
 
+  c.scrollIntoView({behavior:"smooth"});
 }
 
-function answerQuiz(answer){
+function closeLesson(){
+  document.getElementById("lessonContainer").classList.add("hidden");
+  document.getElementById("lessonContainer").innerHTML="";
+}
 
-  const q =
-    quizQuestions[quizIndex];
+function answerLesson(id,index,button){
+  const l=lessons[id];
+  const result=document.getElementById("quizResult");
 
-  if(answer===q.answer){
-
-    state.xp += 20;
-
-    saveProgress();
-
-    toast("+20 XP — إجابة صحيحة! ✓");
-
-    quizIndex++;
-
-    if(quizIndex>=quizQuestions.length){
-
-      $("#quizBox").innerHTML = `
-        <div class="card-icon">🏆</div>
-        <h2>انتهى الاختبار!</h2>
-        <p style="color:var(--muted);margin-top:10px">
-          أحسنت. ارجع للدروس وجرّب التحديات.
-        </p>
-      `;
-
-      return;
-    }
-
-    renderQuiz();
-
-  }else{
-
-    toast("ليست الإجابة الصحيحة. حاول مرة أخرى.");
-
+  if(index!==l.answer){
+    button.classList.add("wrong");
+    result.textContent="الإجابة غير صحيحة. حاول مرة أخرى.";
+    return;
   }
 
-}
+  button.classList.add("correct");
 
-renderQuiz();
+  if(!state.lessons.includes(id)){
+    state.lessons.push(id);
+    state.xp+=l.xp;
+    saveProgress();
+    awardBadges();
+    result.textContent=`✓ تم إكمال الدرس وحصلت على +${l.xp} XP!`;
+    toast(`تم إكمال ${l.title} 🚀 +${l.xp} XP`);
+  }else{
+    result.textContent="✓ إجابة صحيحة. هذا الدرس مكتمل بالفعل.";
+  }
 
-/* =========================================================
-   COMMUNITY
-========================================================= */
-
-function postCommunity(){
-
-  const input =
-    $("#communityInput");
-
-  const text =
-    input.value.trim();
-
-  if(!text) return;
-
-  const posts =
-    JSON.parse(
-      localStorage.getItem("vanta_posts") || "[]"
-    );
-
-  posts.unshift({
-    text,
-    time:new Date().toLocaleString("ar-SA")
+  document.querySelectorAll("#quizChoices .choice").forEach(b=>{
+    b.disabled=true;
   });
 
-  localStorage.setItem(
-    "vanta_posts",
-    JSON.stringify(posts.slice(0,30))
-  );
-
-  input.value="";
-
-  renderCommunity();
-
+  updateUI();
 }
 
-function renderCommunity(){
+/* =========================================================
+   CYBER RANGE
+========================================================= */
 
-  const posts =
-    JSON.parse(
-      localStorage.getItem("vanta_posts") || "[]"
-    );
+function openRange(type){
+  const c=document.getElementById("rangeContainer");
+  c.classList.remove("hidden");
 
-  $("#communityPosts").innerHTML =
-    posts.map(post=>`
+  const data={
+    dns:{
+      title:"مختبر DNS",
+      text:"أنت تريد فتح example.com. ما الخدمة التي تساعد المتصفح في معرفة عنوان IP المرتبط باسم النطاق؟",
+      choices:["DNS","CSS","RAM","GPU"],
+      answer:"DNS"
+    },
+    password:{
+      title:"مختبر كلمات المرور",
+      text:"ما الطريقة المناسبة لتخزين كلمات المرور في نظام حقيقي بدل حفظها كنص صريح؟",
+      choices:["Plain text","Hash + Salt","اسم الملف","Base64 فقط"],
+      answer:"Hash + Salt"
+    },
+    defense:{
+      title:"مختبر الدفاع",
+      text:"ما الذي يتحكم عادةً في السماح أو منع اتصالات الشبكة وفق قواعد محددة؟",
+      choices:["Firewall","HTML","GPU","DNS Cache"],
+      answer:"Firewall"
+    }
+  }[type];
 
-      <div class="card glass" style="margin-bottom:10px">
-        <strong>VANTA Learner</strong>
-        <p style="margin-top:7px">
-          ${escapeHTML(post.text)}
-        </p>
-        <small style="color:#697594">
-          ${post.time}
-        </small>
-      </div>
+  c.innerHTML=`
+    <div class="lessonView glass card" style="margin-top:25px">
+      <button class="glassBtn" onclick="document.getElementById('rangeContainer').classList.add('hidden')">← إغلاق المختبر</button>
+      <h2 style="margin-top:25px">${data.title}</h2>
+      <p class="lessonBody">${data.text}</p>
 
-    `).join("");
+      ${data.choices.map(x=>`
+        <button class="choice" onclick="rangeAnswer(this,'${x}','${data.answer}')">${x}</button>
+      `).join("")}
 
+      <p id="rangeResult" class="muted"></p>
+    </div>
+  `;
+
+  c.scrollIntoView({behavior:"smooth"});
 }
 
-function escapeHTML(str){
+function rangeAnswer(btn,value,answer){
+  const result=document.getElementById("rangeResult");
 
-  return str
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
+  if(value===answer){
+    btn.classList.add("correct");
+    result.textContent="✓ صحيح. هذا المختبر اكتمل.";
+    state.xp+=25;
+    saveProgress();
+    awardBadges();
+    updateUI();
+  }else{
+    btn.classList.add("wrong");
+    result.textContent="ليست الإجابة الصحيحة. اقرأ السؤال وجرب مرة أخرى.";
+  }
 }
 
-renderCommunity();
+/* =========================================================
+   XP / BADGES
+========================================================= */
+
+function saveProgress(){
+  localStorage.setItem("vanta_xp",state.xp);
+  localStorage.setItem("vanta_lessons",JSON.stringify(state.lessons));
+  localStorage.setItem("vanta_badges",JSON.stringify(state.badges));
+}
+
+function awardBadges(){
+  const checks=[
+    ["first","🚀 أول خطوة","أكملت أول درس",state.lessons.length>=1],
+    ["five","⚡ متعلم سريع","أكملت 5 دروس",state.lessons.length>=5],
+    ["xp250","🌌 Explorer","جمعت 250 XP",state.xp>=250],
+    ["xp500","💫 VANTA Explorer","جمعت 500 XP",state.xp>=500]
+  ];
+
+  checks.forEach(([id,name,desc,condition])=>{
+    if(condition && !state.badges.includes(id)){
+      state.badges.push(id);
+      toast(`شارة جديدة: ${name} 🏆`);
+    }
+  });
+
+  saveProgress();
+}
+
+function level(){
+  return Math.floor(state.xp/250)+1;
+}
+
+function updateUI(){
+  const name=state.user?.user_metadata?.display_name || "Guest";
+  const lv=level();
+  const base=(lv-1)*250;
+  const progress=Math.min(100,((state.xp-base)/250)*100);
+
+  document.getElementById("userMini").textContent=name;
+  document.getElementById("dashWelcome").textContent=`مرحبًا ${name}`;
+  document.getElementById("statXP").textContent=state.xp;
+  document.getElementById("statLevel").textContent=lv;
+  document.getElementById("statLessons").textContent=state.lessons.length;
+  document.getElementById("statBadges").textContent=state.badges.length;
+
+  document.getElementById("levelBar").style.width=progress+"%";
+  document.getElementById("levelText").textContent=
+    `${state.xp-base} / 250 XP للمستوى التالي`;
+
+  document.getElementById("novaName").textContent=name;
+  document.getElementById("novaXP").textContent=state.xp;
+  document.getElementById("novaLessons").textContent=state.lessons.length;
+
+  const badgeNames={
+    first:"🚀 أول خطوة",
+    five:"⚡ متعلم سريع",
+    xp250:"🌌 Explorer",
+    xp500:"💫 VANTA Explorer"
+  };
+
+  document.getElementById("badgeList").innerHTML=
+    state.badges.length
+    ? state.badges.map(x=>`<span class="badge">${badgeNames[x]||x}</span>`).join("")
+    : `<span class="muted">أكمل الدروس لفتح أول شارة.</span>`;
+
+  renderLessons();
+}
 
 /* =========================================================
    NOVA
 ========================================================= */
 
-$("#novaOrb").addEventListener(
-  "click",
-  ()=>{
-    $("#novaChat").classList.toggle("open");
-    robotSound();
-  }
-);
-
-$("#novaBtn").addEventListener(
-  "click",
-  ()=>{
-    $("#novaModal").classList.add("open");
-  }
-);
-
-function openNovaChat(){
-
-  closeModal("novaModal");
-
-  $("#novaChat").classList.add("open");
-
+function addMessage(text,type){
+  const box=document.getElementById("messages");
+  const div=document.createElement("div");
+  div.className="msg "+type;
+  div.textContent=text;
+  box.appendChild(div);
+  box.scrollTop=box.scrollHeight;
 }
 
-$("#novaInput").addEventListener(
-  "keydown",
-  async e=>{
+async function sendNova(){
+  const input=document.getElementById("novaInput");
+  const message=input.value.trim();
 
-    if(e.key!=="Enter") return;
+  if(!message)return;
 
-    const question =
-      e.target.value.trim();
+  input.value="";
+  addMessage(message,"user");
 
-    if(!question) return;
+  const loading=document.createElement("div");
+  loading.className="msg ai";
+  loading.textContent="NOVA تعمل على الإجابة...";
+  loading.id="novaLoading";
+  document.getElementById("messages").appendChild(loading);
 
-    e.target.value="";
-
-    await novaAnswer(question);
-
-  }
-);
-
-async function novaAnswer(question){
-
-  if(AI_ENDPOINT){
-
-    try{
-
-      const response =
-        await fetch(
-          AI_ENDPOINT,
-          {
-            method:"POST",
-            headers:{
-              "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-              message:question,
-              context:{
-                product:"VANTA",
-                page:state.page,
-                xp: state.xp,
-lessons: state.lessons,
-badges: state.badges,
-user: state.user
-              }
-            })
+  try{
+    const response=await fetch(AI_ENDPOINT,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        message,
+        context:{
+          product:"VANTA",
+          page:state.page,
+          xp:state.xp,
+          lessons:state.lessons.length,
+          badges:state.badges.length,
+          user:{
+            name:state.user?.user_metadata?.display_name || ""
           }
-        );
+        }
+      })
+    });
 
-      const data =
-        await response.json();
+    const data=await response.json();
 
-      $("#novaReply").textContent =
-        data.reply ||
-        data.message ||
-        "لم يصل رد من الخادم.";
+    document.getElementById("novaLoading")?.remove();
 
+    if(!response.ok){
+      addMessage(data.error || "حدث خطأ في NOVA.","ai");
       return;
-
-    }catch(e){
-
-      console.warn(e);
-
     }
 
+    const reply=data.reply || "لم يصل رد من NOVA.";
+    addMessage(reply,"ai");
+
+    if(state.settings.novaVoice){
+      speak(reply);
+    }
+
+  }catch(error){
+    document.getElementById("novaLoading")?.remove();
+    addMessage("تعذر الاتصال بـ NOVA. تأكد أن /api/nova يعمل على Vercel.","ai");
+  }
+}
+
+function clearChat(){
+  document.getElementById("messages").innerHTML=
+    `<div class="msg ai">تم مسح المحادثة. أنا NOVA، جاهز 🚀</div>`;
+}
+
+document.getElementById("novaInput").addEventListener("keydown",e=>{
+  if(e.key==="Enter" && !e.shiftKey){
+    e.preventDefault();
+    sendNova();
+  }
+});
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+function authMode(mode){
+  state.authMode=mode;
+
+  document.getElementById("loginTab").classList.toggle("active",mode==="login");
+  document.getElementById("signupTab").classList.toggle("active",mode==="signup");
+
+  document.getElementById("signupNameWrap").classList.toggle("hidden",mode!=="signup");
+  document.getElementById("authButton").textContent=
+    mode==="login" ? "تسجيل الدخول" : "إنشاء الحساب";
+}
+
+async function submitAuth(){
+  if(!supabaseClient){
+    toast("Supabase غير متاح.");
+    return;
   }
 
-  /*
-    Local assistant fallback.
-    This is NOT pretending to be a real remote AI.
-  */
+  const email=document.getElementById("authEmail").value.trim();
+  const password=document.getElementById("authPassword").value;
+  const name=document.getElementById("authName").value.trim();
 
-  const q =
-    question.toLowerCase();
-
-  let answer =
-    "أنا NOVA في الوضع المحلي. اربطني بـ AI_ENDPOINT للحصول على نموذج ذكاء اصطناعي حقيقي.";
-
-  if(
-    q.includes("python") ||
-    q.includes("بايثون")
-  ){
-
-    answer =
-      "ابدأ في Python بالمتغيرات، الأنواع، الشروط، الحلقات والدوال. لا تنتقل للأشياء المتقدمة قبل فهم هذه الأساسيات.";
-
-  }else if(
-    q.includes("html") ||
-    q.includes("css")
-  ){
-
-    answer =
-      "ابدأ بـ HTML للهيكل، CSS للتصميم، ثم JavaScript للتفاعل. وبعدها تعلم Responsive Design وAccessibility وPerformance.";
-
-  }else if(
-    q.includes("امن") ||
-    q.includes("security") ||
-    q.includes("cyber")
-  ){
-
-    answer =
-      "ابدأ بالشبكات وLinux وAuthentication وAuthorization وCIA Triad، ثم انتقل إلى Web Security والدفاع.";
-
-  }else if(
-    q.includes("vanta")
-  ){
-
-    answer =
-      "VANTA مساحة تعليمية للبرمجة والتقنية والأمن السيبراني، وأنا NOVA المساعد داخلها.";
-
+  if(!email || !password){
+    toast("أدخل البريد وكلمة المرور.");
+    return;
   }
 
-  $("#novaReply").textContent =
-    answer;
+  const status=document.getElementById("authStatus");
+  status.textContent="جارٍ الاتصال...";
 
+  try{
+    if(state.authMode==="signup"){
+      if(!name){
+        status.textContent="اكتب اسم العرض.";
+        return;
+      }
+
+      const {data,error}=await supabaseClient.auth.signUp({
+        email,
+        password,
+        options:{
+          data:{
+            display_name:name
+          }
+        }
+      });
+
+      if(error)throw error;
+
+      state.user=data.user;
+      status.textContent=
+        "تم إنشاء الحساب. إذا كان تأكيد البريد مفعلًا، تحقق من بريدك الإلكتروني.";
+      toast("تم إنشاء حساب VANTA 🚀");
+      updateUI();
+
+    }else{
+      const {data,error}=await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if(error)throw error;
+
+      state.user=data.user;
+      status.textContent="تم تسجيل الدخول.";
+      toast("مرحبًا بك في VANTA ✦");
+      updateUI();
+      go("dashboard");
+    }
+
+  }catch(error){
+    status.textContent=error.message || "حدث خطأ.";
+  }
+}
+
+async function logout(){
+  if(!supabaseClient)return;
+
+  await supabaseClient.auth.signOut();
+  state.user=null;
+  updateUI();
+  toast("تم تسجيل الخروج.");
+}
+
+async function loadSession(){
+  if(!supabaseClient)return;
+
+  const {data}=await supabaseClient.auth.getSession();
+  state.user=data.session?.user || null;
+  updateUI();
+
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{
+    state.user=session?.user || null;
+    updateUI();
+  });
 }
 
 /* =========================================================
    SETTINGS
 ========================================================= */
 
+function saveSettings(){
+  localStorage.setItem("vanta_settings",JSON.stringify(state.settings));
+}
+
+function toggleSetting(key){
+  state.settings[key]=!state.settings[key];
+  saveSettings();
+  applySettings();
+}
+
+function changeTextSize(value){
+  state.settings.textSize=Number(value);
+  saveSettings();
+  applySettings();
+}
+
 function applySettings(){
+  document.body.classList.toggle("light",state.settings.light);
+  document.body.classList.toggle("reduced",!state.settings.motion);
+  document.body.classList.toggle("lowperf",state.settings.performance);
 
-  document.body.classList.toggle(
-    "light",
-    state.light
+  document.documentElement.style.setProperty(
+    "--scale",
+    state.settings.textSize
   );
 
-  document.body.classList.toggle(
-    "performance",
-    state.performance
-  );
-
-  document.documentElement
-    .style.setProperty(
-      "--scale",
-      state.textSize
-    );
-
-  if(state.motion){
-    document.documentElement
-      .style.setProperty(
-        "--motion",
-        "1"
-      );
-  }else{
-    document.documentElement
-      .style.setProperty(
-        "--motion",
-        "0"
-      );
-  }
-
-  $("#lightToggle").checked =
-    state.light;
-
-  $("#soundToggle").checked =
-    state.sound;
-
-  $("#motionToggle").checked =
-    !state.motion;
-
-  $("#performanceToggle").checked =
-    state.performance;
-
-  $("#densitySelect").value =
-    state.density;
-
-  $("#textSize").value =
-    state.textSize;
-
-}
-
-$("#lightToggle").addEventListener(
-  "change",
-  e=>{
-
-    state.light =
-      e.target.checked;
-
-    localStorage.setItem(
-      "vanta_light",
-      state.light ? "1":"0"
-    );
-
-    applySettings();
-
-  }
-);
-
-$("#soundToggle").addEventListener(
-  "change",
-  e=>{
-
-    state.sound =
-      e.target.checked;
-
-    localStorage.setItem(
-      "vanta_sound",
-      state.sound ? "1":"0"
-    );
-
-    robotSound();
-
-  }
-);
-
-$("#motionToggle").addEventListener(
-  "change",
-  e=>{
-
-    state.motion =
-      !e.target.checked;
-
-    localStorage.setItem(
-      "vanta_motion",
-      state.motion ? "0":"1"
-    );
-
-    applySettings();
-
-  }
-);
-
-$("#performanceToggle").addEventListener(
-  "change",
-  e=>{
-
-    state.performance =
-      e.target.checked;
-
-    localStorage.setItem(
-      "vanta_performance",
-      state.performance ? "1":"0"
-    );
-
-    applySettings();
-
-  }
-);
-
-$("#densitySelect").addEventListener(
-  "change",
-  e=>{
-
-    state.density =
-      Number(e.target.value);
-
-    localStorage.setItem(
-      "vanta_density",
-      state.density
-    );
-
-    rebuildSpace();
-
-  }
-);
-
-$("#textSize").addEventListener(
-  "change",
-  e=>{
-
-    state.textSize =
-      Number(e.target.value);
-
-    localStorage.setItem(
-      "vanta_text",
-      state.textSize
-    );
-
-    applySettings();
-
-  }
-);
-
-applySettings();
-
-/* =========================================================
-   PROGRESS
-========================================================= */
-
-function saveProgress(){
-
-  localStorage.setItem(
-    "vanta_xp",
-    state.xp
-  );
-
-  localStorage.setItem(
-    "vanta_lessons",
-    state.lessons
-  );
-
-  updateDashboard();
-
-}
-
-function updateDashboard(){
-
-  const xp =
-    state.xp;
-
-  const level =
-    Math.max(
-      1,
-      Math.floor(xp/100)+1
-    );
-
-  const progress =
-    xp%100;
-
-  $("#homeXP").textContent =
-    xp;
-
-  $("#homeLessons").textContent =
-    state.lessons;
-
-  $("#homeBadges").textContent =
-    state.badges;
-
-  $("#dashXP").textContent =
-    xp;
-
-  $("#dashLevel").textContent =
-    level;
-
-  $("#dashLessons").textContent =
-    state.lessons+" مكتمل";
-
-  $("#dashBadges").textContent =
-    state.badges ?
-      state.badges+" شارة" :
-      "لا توجد شارات بعد";
-
-  $("#xpBar").style.width =
-    progress+"%";
-
-  $("#dashActivity").textContent =
-    state.lessons ?
-      "استمر في مسارك التعليمي." :
-      "ابدأ أول درس.";
-
-}
-
-updateDashboard();
-
-/* =========================================================
-   LIBRARY SEARCH
-========================================================= */
-
-$("#librarySearch").addEventListener(
-  "input",
-  e=>{
-
-    const query =
-      e.target.value
-        .toLowerCase()
-        .trim();
-
-    $$(".library-item").forEach(item=>{
-
-      item.style.display =
-        item.innerText
-          .toLowerCase()
-          .includes(query)
-          ? ""
-          : "none";
-
-    });
-
-  }
-);
-
-/* =========================================================
-   SUPABASE AUTH
-========================================================= */
-
-async function signUp(){
-
-  if(!supabaseClient){
-
-    $("#authStatus").textContent =
-      "Supabase غير متاح حاليًا.";
-
-    return;
-
-  }
-
-  const email =
-    $("#email").value.trim();
-
-  const password =
-    $("#password").value;
-
-  if(!email || password.length<6){
-
-    $("#authStatus").textContent =
-      "أدخل بريدًا صحيحًا وكلمة مرور 6 أحرف على الأقل.";
-
-    return;
-
-  }
-
-  const {data,error} =
-    await supabaseClient.auth.signUp({
-      email,
-      password
-    });
-
-  if(error){
-
-    $("#authStatus").textContent =
-      error.message;
-
-    return;
-
-  }
-
-  $("#authStatus").textContent =
-    data.session
-      ? "تم إنشاء الحساب وتسجيل الدخول."
-      : "تم إنشاء الحساب. تحقق من بريدك إذا كان التحقق مطلوبًا.";
-
-}
-
-async function signIn(){
-
-  if(!supabaseClient) return;
-
-  const email =
-    $("#email").value.trim();
-
-  const password =
-    $("#password").value;
-
-  const {data,error} =
-    await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-
-  if(error){
-
-    $("#authStatus").textContent =
-      error.message;
-
-    return;
-
-  }
-
-  state.user =
-    data.user;
-
-  $("#authStatus").textContent =
-    "تم تسجيل الدخول ✓";
-
-  $("#profileName").textContent =
-    data.user.email;
-
-  toast("تم تسجيل الدخول إلى VANTA");
-
-}
-
-async function signOutUser(){
-
-  if(!supabaseClient) return;
-
-  const {error} =
-    await supabaseClient.auth.signOut();
-
-  if(error){
-
-    $("#authStatus").textContent =
-      error.message;
-
-    return;
-
-  }
-
-  state.user=null;
-
-  $("#authStatus").textContent =
-    "تم تسجيل الخروج.";
-
-  $("#profileName").textContent =
-    "زائر VANTA";
-
-}
-
-if(supabaseClient){
-
-  supabaseClient.auth
-    .getSession()
-    .then(({data})=>{
-
-      if(data.session){
-
-        state.user =
-          data.session.user;
-
-        $("#profileName").textContent =
-          state.user.email;
-
-      }
-
-    });
-
-  supabaseClient.auth
-    .onAuthStateChange(
-      (_event,session)=>{
-
-        state.user =
-          session?.user || null;
-
-        if(state.user){
-
-          $("#profileName").textContent =
-            state.user.email;
-
-        }else{
-
-          $("#profileName").textContent =
-            "زائر VANTA";
-
-        }
-
-      }
-    );
-
-}
-
-/* =========================================================
-   SPACE / SOLAR SYSTEM
-========================================================= */
-
-const canvas =
-  document.getElementById("space");
-
-const ctx =
-  canvas.getContext("2d");
-
-let W=0;
-let H=0;
-let dpr=1;
-
-let stars=[];
-let meteors=[];
-let planets=[];
-
-let spaceAnimation;
-
-let mouseX=0;
-let mouseY=0;
-
-const planetData = [
-
-  {
-    name:"Mercury",
-    size:5,
-    color:"#a8a29a",
-    distance:.11,
-    speed:.020
-  },
-
-  {
-    name:"Venus",
-    size:8,
-    color:"#d99a58",
-    distance:.16,
-    speed:.015
-  },
-
-  {
-    name:"Earth",
-    size:9,
-    color:"#3e8bd6",
-    distance:.22,
-    speed:.011
-  },
-
-  {
-    name:"Mars",
-    size:7,
-    color:"#b85038",
-    distance:.28,
-    speed:.009
-  },
-
-  {
-    name:"Jupiter",
-    size:18,
-    color:"#c99469",
-    distance:.37,
-    speed:.006
-  },
-
-  {
-    name:"Saturn",
-    size:15,
-    color:"#d5b477",
-    distance:.47,
-    speed:.0045
-  },
-
-  {
-    name:"Uranus",
-    size:11,
-    color:"#79d6d8",
-    distance:.57,
-    speed:.0035
-  },
-
-  {
-    name:"Neptune",
-    size:11,
-    color:"#486fd4",
-    distance:.66,
-    speed:.0028
-  }
-
-];
-
-function resizeSpace(){
-
-  dpr =
-    Math.min(
-      window.devicePixelRatio || 1,
-      1.5
-    );
-
-  W =
-    window.innerWidth;
-
-  H =
-    window.innerHeight;
-
-  canvas.width =
-    W*dpr;
-
-  canvas.height =
-    H*dpr;
-
-  canvas.style.width =
-    W+"px";
-
-  canvas.style.height =
-    H+"px";
-
-  ctx.setTransform(
-    dpr,0,0,dpr,0,0
-  );
-
-  rebuildSpace();
-
-}
-
-function rebuildSpace(){
-
-  const density =
-    state.performance
-      ? .35
-      : state.density;
-
-  const starCount =
-    Math.floor(
-      Math.min(
-        500,
-        Math.max(
-          130,
-          W*H/8500
-        )
-      ) * density
-    );
-
-  stars =
-    Array.from(
-      {length:starCount},
-      ()=>({
-        x:Math.random()*W,
-        y:Math.random()*H,
-        r:Math.random()*1.35+.15,
-        a:Math.random()*.7+.2,
-        tw:Math.random()*Math.PI*2
-      })
-    );
-
-  meteors =
-    state.performance
-      ? []
-      : Array.from(
-          {length:Math.max(3,Math.floor(8*state.density))},
-          ()=>newMeteor()
-        );
-
-  planets =
-    planetData.map(
-      p=>({
-        ...p,
-        angle:Math.random()*Math.PI*2
-      })
-    );
-
-}
-
-function newMeteor(){
-
-  return {
-    x:Math.random()*W,
-    y:Math.random()*H*.65,
-    vx:Math.random()*3+2,
-    vy:Math.random()*1.8+1,
-    life:Math.random(),
-    length:Math.random()*70+35
-  };
-
-}
-
-function drawStars(t){
-
-  for(const s of stars){
-
-    const alpha =
-      s.a +
-      Math.sin(
-        t*.001+s.tw
-      )*.18;
-
-    ctx.fillStyle =
-      `rgba(210,230,255,${Math.max(.08,alpha)})`;
-
-    ctx.beginPath();
-
-    ctx.arc(
-      s.x,
-      s.y,
-      s.r,
-      0,
-      Math.PI*2
-    );
-
-    ctx.fill();
-
-  }
-
-}
-
-function drawGalaxy(){
-
-  const g =
-    ctx.createRadialGradient(
-      W*.18,
-      H*.25,
-      0,
-      W*.18,
-      H*.25,
-      W*.45
-    );
-
-  g.addColorStop(
-    0,
-    "rgba(102,76,255,.10)"
-  );
-
-  g.addColorStop(
-    .35,
-    "rgba(255,70,210,.045)"
-  );
-
-  g.addColorStop(
-    1,
-    "rgba(0,0,0,0)"
-  );
-
-  ctx.fillStyle=g;
-
-  ctx.fillRect(
-    0,0,W,H
-  );
-
-}
-
-function drawSolarSystem(t){
-
-  /*
-    Keep the real-ish solar system visible on the right side
-    of the screen while keeping the effect lightweight.
-  */
-
-  const cx =
-    W*.73 +
-    mouseX*.018;
-
-  const cy =
-    H*.52 +
-    mouseY*.018;
-
-  const base =
-    Math.min(W,H)*.045;
-
-  const orbitScale =
-    Math.min(W,H)*.54;
-
-  ctx.save();
-
-  for(const p of planets){
-
-    const radius =
-      orbitScale*p.distance;
-
-    ctx.beginPath();
-
-    ctx.strokeStyle =
-      "rgba(170,190,255,.055)";
-
-    ctx.lineWidth=1;
-
-    ctx.arc(
-      cx,
-      cy,
-      radius,
-      0,
-      Math.PI*2
-    );
-
-    ctx.stroke();
-
-  }
-
-  /* Sun */
-
-  const sunGlow =
-    ctx.createRadialGradient(
-      cx,cy,0,
-      cx,cy,base*3.8
-    );
-
-  sunGlow.addColorStop(
-    0,
-    "rgba(255,242,160,.9)"
-  );
-
-  sunGlow.addColorStop(
-    .18,
-    "rgba(255,170,45,.32)"
-  );
-
-  sunGlow.addColorStop(
-    1,
-    "rgba(255,100,20,0)"
-  );
-
-  ctx.fillStyle =
-    sunGlow;
-
-  ctx.beginPath();
-
-  ctx.arc(
-    cx,
-    cy,
-    base*3.8,
-    0,
-    Math.PI*2
-  );
-
-  ctx.fill();
-
-  const sun =
-    ctx.createRadialGradient(
-      cx-base*.25,
-      cy-base*.3,
-      base*.1,
-      cx,
-      cy,
-      base*1.25
-    );
-
-  sun.addColorStop(0,"#fffbd0");
-  sun.addColorStop(.3,"#ffd166");
-  sun.addColorStop(.65,"#ff9d2e");
-  sun.addColorStop(1,"#e84b19");
-
-  ctx.fillStyle=sun;
-
-  ctx.beginPath();
-
-  ctx.arc(
-    cx,
-    cy,
-    base*1.15,
-    0,
-    Math.PI*2
-  );
-
-  ctx.fill();
-
-  planets.forEach((p,index)=>{
-
-    p.angle +=
-      p.speed *
-      (state.motion ? 1 : .05);
-
-    const radius =
-      orbitScale*p.distance;
-
-    const x =
-      cx+
-      Math.cos(p.angle)*radius;
-
-    const y =
-      cy+
-      Math.sin(p.angle)*radius*.55;
-
-    let size =
-      p.size *
-      Math.max(.72,Math.min(1.3,W/1200));
-
-    /*
-      Jupiter and Saturn have visible extra details.
-    */
-
-    if(p.name==="Jupiter"){
-
-      const grad =
-        ctx.createRadialGradient(
-          x-size*.35,
-          y-size*.35,
-          1,
-          x,
-          y,
-          size*1.5
-        );
-
-      grad.addColorStop(0,"#f3d5ae");
-      grad.addColorStop(.35,"#c99a72");
-      grad.addColorStop(.7,"#8c6048");
-      grad.addColorStop(1,"#4d362f");
-
-      ctx.fillStyle=grad;
-
-      ctx.beginPath();
-
-      ctx.arc(x,y,size,0,Math.PI*2);
-
-      ctx.fill();
-
-      ctx.strokeStyle="rgba(255,230,200,.18)";
-
-      for(let k=-2;k<=2;k++){
-
-        ctx.beginPath();
-
-        ctx.ellipse(
-          x,
-          y+k*size*.27,
-          size*.82,
-          size*.09,
-          0,
-          0,
-          Math.PI*2
-        );
-
-        ctx.stroke();
-
-      }
-
-    }else if(p.name==="Saturn"){
-
-      ctx.save();
-
-      ctx.translate(x,y);
-      ctx.rotate(-.22);
-
-      ctx.strokeStyle=
-        "rgba(224,196,139,.7)";
-
-      ctx.lineWidth=3;
-
-      ctx.beginPath();
-
-      ctx.ellipse(
-        0,0,
-        size*1.65,
-        size*.48,
-        0,
-        0,
-        Math.PI*2
-      );
-
-      ctx.stroke();
-
-      ctx.strokeStyle=
-        "rgba(255,232,185,.25)";
-
-      ctx.lineWidth=2;
-
-      ctx.beginPath();
-
-      ctx.ellipse(
-        0,0,
-        size*2,
-        size*.62,
-        0,
-        0,
-        Math.PI*2
-      );
-
-      ctx.stroke();
-
-      ctx.restore();
-
-      const grad =
-        ctx.createRadialGradient(
-          x-size*.3,
-          y-size*.35,
-          1,
-          x,
-          y,
-          size
-        );
-
-      grad.addColorStop(0,"#f4dca9");
-      grad.addColorStop(.5,"#c8a66d");
-      grad.addColorStop(1,"#69523a");
-
-      ctx.fillStyle=grad;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        x,y,size,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-
-    }else{
-
-      const grad =
-        ctx.createRadialGradient(
-          x-size*.35,
-          y-size*.4,
-          1,
-          x,
-          y,
-          size*1.35
-        );
-
-      grad.addColorStop(
-        0,
-        "#ffffff"
-      );
-
-      grad.addColorStop(
-        .07,
-        p.color
-      );
-
-      grad.addColorStop(
-        .65,
-        p.color
-      );
-
-      grad.addColorStop(
-        1,
-        "rgba(0,0,0,.7)"
-      );
-
-      ctx.fillStyle=grad;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        x,y,size,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-
-    }
-
+  [
+    ["soundToggle","sound"],
+    ["novaVoiceToggle","novaVoice"],
+    ["motionToggle","motion"],
+    ["parallaxToggle","parallax"],
+    ["performanceToggle","performance"],
+    ["lightToggle","light"]
+  ].forEach(([id,key])=>{
+    document.getElementById(id)?.classList.toggle("on",!!state.settings[key]);
   });
 
-  ctx.restore();
-
+  document.getElementById("textSize").value=String(state.settings.textSize);
 }
-
-function drawMeteors(){
-
-  for(const m of meteors){
-
-    const gradient =
-      ctx.createLinearGradient(
-        m.x,
-        m.y,
-        m.x-m.vx*m.length,
-        m.y-m.vy*m.length
-      );
-
-    gradient.addColorStop(
-      0,
-      "rgba(255,255,255,.9)"
-    );
-
-    gradient.addColorStop(
-      .3,
-      "rgba(57,231,255,.35)"
-    );
-
-    gradient.addColorStop(
-      1,
-      "rgba(57,231,255,0)"
-    );
-
-    ctx.strokeStyle=gradient;
-    ctx.lineWidth=1.5;
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      m.x,
-      m.y
-    );
-
-    ctx.lineTo(
-      m.x-m.vx*m.length,
-      m.y-m.vy*m.length
-    );
-
-    ctx.stroke();
-
-    if(state.motion){
-
-      m.x += m.vx;
-      m.y += m.vy;
-
-    }
-
-    if(
-      m.x>W+100 ||
-      m.y>H+100
-    ){
-
-      Object.assign(
-        m,
-        newMeteor()
-      );
-
-      m.x=-100;
-
-    }
-
-  }
-
-}
-
-function animateSpace(t){
-
-  ctx.clearRect(
-    0,0,W,H
-  );
-
-  drawGalaxy();
-  drawStars(t);
-  drawSolarSystem(t);
-  drawMeteors();
-
-  if(!document.hidden){
-
-    spaceAnimation =
-      requestAnimationFrame(
-        animateSpace
-      );
-
-  }
-
-}
-
-document.addEventListener(
-  "visibilitychange",
-  ()=>{
-
-    if(document.hidden){
-
-      cancelAnimationFrame(
-        spaceAnimation
-      );
-
-    }else{
-
-      spaceAnimation =
-        requestAnimationFrame(
-          animateSpace
-        );
-
-    }
-
-  }
-);
-
-window.addEventListener(
-  "resize",
-  resizeSpace
-);
-
-window.addEventListener(
-  "mousemove",
-  e=>{
-
-    mouseX =
-      e.clientX-W/2;
-
-    mouseY =
-      e.clientY-H/2;
-
-  }
-);
-
-window.addEventListener(
-  "touchmove",
-  e=>{
-
-    if(!e.touches[0]) return;
-
-    mouseX =
-      e.touches[0].clientX-W/2;
-
-    mouseY =
-      e.touches[0].clientY-H/2;
-
-  },
-  {passive:true}
-);
-
-resizeSpace();
-
-spaceAnimation =
-  requestAnimationFrame(
-    animateSpace
-  );
 
 /* =========================================================
-   SIMPLE 3D CARD PARALLAX
+   SPEECH
 ========================================================= */
 
-document.addEventListener(
-  "mousemove",
-  e=>{
+function speak(text){
+  if(!state.settings.sound || !("speechSynthesis" in window))return;
 
-    if(state.performance) return;
+  speechSynthesis.cancel();
 
-    const cards =
-      document.querySelectorAll(
-        ".card,.hero-panel"
-      );
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang="en-US";
+  u.rate=.88;
+  u.pitch=.72;
+  u.volume=.9;
 
-    cards.forEach(card=>{
+  const voices=speechSynthesis.getVoices();
 
-      const rect =
-        card.getBoundingClientRect();
+  const preferred=
+    voices.find(v=>/Microsoft.*David/i.test(v.name)) ||
+    voices.find(v=>/Google.*US English/i.test(v.name)) ||
+    voices.find(v=>/^en-US$/i.test(v.lang)) ||
+    voices.find(v=>/^en/i.test(v.lang));
 
-      if(
-        rect.top>window.innerHeight ||
-        rect.bottom<0
-      ) return;
+  if(preferred)u.voice=preferred;
 
-      const x =
-        (e.clientX-
-        (rect.left+rect.width/2))
-        /rect.width;
+  speechSynthesis.speak(u);
+}
 
-      const y =
-        (e.clientY-
-        (rect.top+rect.height/2))
-        /rect.height;
+/* =========================================================
+   BOOT
+========================================================= */
 
-      card.style.setProperty(
-        "--mx",
-        x
-      );
+let bootFinished=false;
 
-      card.style.setProperty(
-        "--my",
-        y
-      );
+function finishBoot(){
+  if(bootFinished)return;
+  bootFinished=true;
 
-    });
+  document.getElementById("boot").classList.add("hide");
+  document.getElementById("app").classList.add("ready");
 
+  if(state.settings.sound){
+    setTimeout(()=>{
+      speak("Welcome to VANTA.");
+    },450);
   }
-);
+}
+
+function runBoot(){
+  const progress=document.getElementById("bootProgress");
+  const line=document.getElementById("bootLine");
+
+  const steps=[
+    [12,"Scanning environment..."],
+    [28,"Loading VANTA core..."],
+    [45,"Synchronizing secure modules..."],
+    [63,"Initializing learning systems..."],
+    [78,"Activating NOVA interface..."],
+    [91,"✓ SYSTEM ACTIVATED"],
+    [100,"✓ جاري تسجيل الدخول"]
+  ];
+
+  let i=0;
+
+  const timer=setInterval(()=>{
+    if(i>=steps.length){
+      clearInterval(timer);
+      return;
+    }
+
+    progress.style.width=steps[i][0]+"%";
+    line.textContent=steps[i][1];
+    i++;
+
+    if(i===steps.length){
+      setTimeout(finishBoot,650);
+    }
+  },420);
+}
+
+document.getElementById("enterBtn").onclick=finishBoot;
+document.getElementById("skipBtn").onclick=finishBoot;
+
+runBoot();
+
+/* =========================================================
+   SPACE ENGINE
+========================================================= */
+
+const canvas=document.getElementById("space");
+const ctx=canvas.getContext("2d");
+
+let W=innerWidth;
+let H=innerHeight;
+let stars=[];
+let meteors=[];
+let ships=[];
+let nebulae=[];
+let raf=0;
+
+function resize(){
+  W=canvas.width=innerWidth*devicePixelRatio;
+  H=canvas.height=innerHeight*devicePixelRatio;
+  canvas.style.width=innerWidth+"px";
+  canvas.style.height=innerHeight+"px";
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+
+function random(a,b){
+  return Math.random()*(b-a)+a;
+}
+
+function createSpace(){
+  stars=[];
+  meteors=[];
+  ships=[];
+  nebulae=[];
+
+  const starCount=state.settings.performance?80:220;
+
+  for(let i=0;i<starCount;i++){
+    stars.push({
+      x:Math.random()*innerWidth,
+      y:Math.random()*innerHeight,
+      r:random(.3,2.1),
+      a:random(.2,1),
+      s:random(.001,.007),
+      p:random(0,Math.PI*2)
+    });
+  }
+
+  for(let i=0;i<5;i++){
+    nebulae.push({
+      x:random(-200,innerWidth+200),
+      y:random(-200,innerHeight+200),
+      r:random(120,300),
+      hue:i%2
+    });
+  }
+
+  for(let i=0;i<4;i++){
+    ships.push({
+      x:random(-300,innerWidth),
+      y:random(80,innerHeight-80),
+      speed:random(.25,.7),
+      scale:random(.45,1.15),
+      phase:random(0,Math.PI*2)
+    });
+  }
+
+  for(let i=0;i<7;i++){
+    meteors.push({
+      x:random(0,innerWidth),
+      y:random(0,innerHeight),
+      vx:random(2,5),
+      vy:random(1,3),
+      life:random(0,1)
+    });
+  }
+}
+
+let mouseX=innerWidth/2;
+let mouseY=innerHeight/2;
+
+window.addEventListener("pointermove",e=>{
+  mouseX=e.clientX;
+  mouseY=e.clientY;
+
+  if(state.settings.parallax){
+    const px=(mouseX/innerWidth-.5)*12;
+    const py=(mouseY/innerHeight-.5)*12;
+
+    document.getElementById("heroPlanet").style.transform=
+      `translate3d(${px}px,${py}px,0) rotateX(${-py*.35}deg) rotateY(${px*.35}deg)`;
+  }
+});
+
+function drawNebula(n){
+  const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r);
+
+  if(n.hue===0){
+    g.addColorStop(0,"rgba(38,157,255,.07)");
+    g.addColorStop(.45,"rgba(91,73,255,.035)");
+  }else{
+    g.addColorStop(0,"rgba(235,71,191,.06)");
+    g.addColorStop(.5,"rgba(123,57,255,.025)");
+  }
+
+  g.addColorStop(1,"transparent");
+
+  ctx.fillStyle=g;
+  ctx.beginPath();
+  ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+  ctx.fill();
+}
+
+function drawStar(s,t){
+  const a=s.a*(.65+.35*Math.sin(t*s.s+s.p));
+  ctx.fillStyle=`rgba(210,235,255,${a})`;
+  ctx.beginPath();
+  ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+  ctx.fill();
+
+  if(s.r>1.7){
+    ctx.strokeStyle=`rgba(110,220,255,${a*.25})`;
+    ctx.beginPath();
+    ctx.moveTo(s.x-s.r*5,s.y);
+    ctx.lineTo(s.x+s.r*5,s.y);
+    ctx.moveTo(s.x,s.y-s.r*5);
+    ctx.lineTo(s.x,s.y+s.r*5);
+    ctx.stroke();
+  }
+}
+
+function drawShip(s,t){
+  s.x+=s.speed;
+
+  if(s.x>innerWidth+250){
+    s.x=-250;
+    s.y=random(100,innerHeight-100);
+  }
+
+  const y=s.y+Math.sin(t*.0007+s.phase)*25;
+
+  ctx.save();
+  ctx.translate(s.x,y);
+  ctx.scale(s.scale,s.scale);
+
+  ctx.shadowBlur=16;
+  ctx.shadowColor="#51dfff";
+
+  ctx.fillStyle="rgba(185,230,255,.9)";
+  ctx.beginPath();
+  ctx.moveTo(-30,0);
+  ctx.lineTo(18,-8);
+  ctx.lineTo(38,0);
+  ctx.lineTo(18,8);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle="#7b5cff";
+  ctx.beginPath();
+  ctx.ellipse(3,0,14,5,0,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle="#55eaff";
+  ctx.beginPath();
+  ctx.arc(15,0,3,0,Math.PI*2);
+  ctx.fill();
+
+  ctx.shadowBlur=25;
+  ctx.fillStyle="rgba(255,125,53,.9)";
+  ctx.beginPath();
+  ctx.moveTo(-25,-3);
+  ctx.lineTo(-55,0);
+  ctx.lineTo(-25,3);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawMeteor(m){
+  m.x+=m.vx;
+  m.y+=m.vy;
+  m.life+=.004;
+
+  if(m.x>innerWidth+50 || m.y>innerHeight+50){
+    m.x=random(-100,innerWidth);
+    m.y=random(-100,innerHeight*.4);
+    m.life=0;
+  }
+
+  const len=25;
+
+  const g=ctx.createLinearGradient(m.x,m.y,m.x-len,m.y-len*.45);
+  g.addColorStop(0,"rgba(255,235,170,.95)");
+  g.addColorStop(1,"transparent");
+
+  ctx.strokeStyle=g;
+  ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.moveTo(m.x,m.y);
+  ctx.lineTo(m.x-len,m.y-len*.45);
+  ctx.stroke();
+}
+
+function animate(t){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+
+  nebulae.forEach(drawNebula);
+  stars.forEach(s=>drawStar(s,t));
+
+  if(!state.settings.performance){
+    meteors.forEach(drawMeteor);
+    ships.forEach(s=>drawShip(s,t));
+  }
+
+  raf=requestAnimationFrame(animate);
+}
+
+window.addEventListener("resize",()=>{
+  resize();
+  createSpace();
+});
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden){
+    cancelAnimationFrame(raf);
+  }else{
+    raf=requestAnimationFrame(animate);
+  }
+});
+
+resize();
+createSpace();
+raf=requestAnimationFrame(animate);
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+let toastTimer;
+
+function toast(text){
+  const el=document.getElementById("toast");
+  el.textContent=text;
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>{
+    el.classList.remove("show");
+  },2800);
+}
 
 /* =========================================================
    INIT
 ========================================================= */
 
-window.addEventListener(
-  "load",
-  ()=>{
+document.getElementById("year").textContent=new Date().getFullYear();
 
-    updateDashboard();
-    renderCommunity();
-    applySettings();
+applySettings();
+renderLessons();
+loadSession();
 
-  }
-);
-function editProfileName() {
-  const currentName =
-    localStorage.getItem("vanta_display_name") || "Ali VANTA";
-
-  const newName = prompt(
-    "اكتب اسمك الذي سيظهر في VANTA:",
-    currentName
-  );
-
-  if (newName === null) return;
-
-  const name = newName.trim();
-
-  if (!name) {
-    alert("اكتب اسمًا صحيحًا.");
-    return;
-  }
-
-  if (name.length > 30) {
-    alert("الاسم يجب ألا يتجاوز 30 حرفًا.");
-    return;
-  }
-
-  localStorage.setItem("vanta_display_name", name);
-
-  const profileName = document.getElementById("profileName");
-
-  if (profileName) {
-    profileName.textContent = name;
-  }
+if("speechSynthesis" in window){
+  speechSynthesis.onvoiceschanged=()=>{};
 }
 </script>
 
