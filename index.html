@@ -1821,22 +1821,85 @@ function addMessage(text,type){
   box.scrollTop=box.scrollHeight;
 }
 
-async function sendNova(){
-  const input=document.getElementById("novaInput");
-  const message=input.value.trim();
+async function sendNova() {
+  const input = document.getElementById("novaInput");
+  const message = input.value.trim();
 
-  if(!message)return;
+  if (!message) return;
 
-  input.value="";
-  addMessage(message,"user");
+  input.value = "";
 
-  const loading=document.createElement("div");
-  loading.className="msg ai";
-  loading.textContent="NOVA تعمل على الإجابة...";
-  loading.id="novaLoading";
+  addMessage(message, "user");
+
+  const loading = document.createElement("div");
+  loading.className = "msg ai";
+  loading.textContent = "NOVA تعمل على الإجابة... 🤖";
+  loading.id = "novaLoading";
+
   document.getElementById("messages").appendChild(loading);
 
-  try{
+  try {
+    const response = await fetch(AI_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message,
+        mode: "chat",
+        context: {
+          product: "VANTA",
+          page: state.page,
+          xp: state.xp,
+          lessons: Array.isArray(state.lessons)
+            ? state.lessons.length
+            : Number(state.lessons || 0),
+          badges: Array.isArray(state.badges)
+            ? state.badges.length
+            : Number(state.badges || 0),
+
+          user: {
+            name:
+              state.user?.user_metadata?.display_name || ""
+          }
+        }
+      })
+    });
+
+    const data = await response.json();
+
+    loading.remove();
+
+    if (!response.ok) {
+      addMessage(
+        "حصل خطأ في الاتصال بـ NOVA: " +
+        (data.error || "خطأ غير معروف"),
+        "ai"
+      );
+      return;
+    }
+
+    if (data.type === "chat") {
+      addMessage(data.reply || "لم يصل رد من NOVA.", "ai");
+      return;
+    }
+
+    addMessage(
+      data.reply || "NOVA أرسلت استجابة غير متوقعة.",
+      "ai"
+    );
+
+  } catch (error) {
+    console.error("NOVA error:", error);
+
+    loading.remove();
+
+    addMessage(
+      "تعذر الاتصال بـ NOVA. تأكد أن الموقع متصل بالإنترنت وأن Vercel يعمل.",
+      "ai"
+    );
+  }
+}
     const response=await fetch(AI_ENDPOINT,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
