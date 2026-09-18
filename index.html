@@ -2,78 +2,63 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#050509">
 
-<meta name="theme-color" content="#07070b">
-<meta name="description"
-      content="VANTA — منصة تعلم ذكية يقودها NOVA. Programming, Cybersecurity & Technology.">
+<title>VANTA — علي ياسر</title>
+<meta name="description" content="VANTA — منصة تعلم مستقبلية للبرمجة والأمن السيبراني والتقنية، من تطوير علي ياسر.">
 <meta name="author" content="Ali Yaser">
+<meta property="og:title" content="VANTA — Ali Yaser">
+<meta property="og:description" content="Learn. Build. Evolve.">
+<meta property="og:type" content="website">
 
-<title>VANTA — Learn Beyond Limits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
 
 <style>
-/* =========================================================
-   VANTA
-   Complete single-file frontend
-   ========================================================= */
-
 :root{
   --bg:#050509;
-  --bg2:#0b0b12;
-  --panel:rgba(255,255,255,.065);
-  --panel2:rgba(255,255,255,.095);
-  --line:rgba(255,255,255,.12);
-  --text:#f6f7fb;
-  --muted:#9da2b2;
-  --cyan:#6ee7ff;
-  --violet:#9b8cff;
-  --pink:#ff5f9f;
-  --blue:#4f8cff;
-  --red:#ff465d;
-  --green:#61e6a8;
-  --yellow:#ffd166;
-  --shadow:0 25px 80px rgba(0,0,0,.55);
+  --panel:rgba(20,20,29,.68);
+  --panel2:rgba(255,255,255,.055);
+  --line:rgba(255,255,255,.11);
+  --text:#f6f4ff;
+  --muted:#9693a7;
+  --cyan:#64e7ff;
+  --purple:#a978ff;
+  --pink:#ff5ea8;
+  --blue:#6687ff;
+  --green:#6df7bd;
+  --danger:#ff5f70;
   --radius:24px;
-  --max:1450px;
+  --shadow:0 25px 80px rgba(0,0,0,.45);
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html{
   scroll-behavior:smooth;
+  background:var(--bg);
 }
 
 body{
   margin:0;
-  min-height:100vh;
-  color:var(--text);
   background:
-    radial-gradient(circle at 15% 20%,rgba(91,65,255,.15),transparent 30%),
-    radial-gradient(circle at 85% 20%,rgba(255,30,110,.10),transparent 28%),
-    radial-gradient(circle at 50% 90%,rgba(0,190,255,.08),transparent 35%),
+    radial-gradient(circle at 15% 15%,rgba(100,231,255,.09),transparent 30%),
+    radial-gradient(circle at 85% 20%,rgba(169,120,255,.10),transparent 32%),
+    radial-gradient(circle at 50% 100%,rgba(255,94,168,.07),transparent 30%),
     var(--bg);
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Display",
-    "SF Pro Text",
-    "Segoe UI",
-    Arial,
-    sans-serif;
+  color:var(--text);
+  font-family:"Cairo",sans-serif;
+  min-height:100vh;
   overflow-x:hidden;
 }
 
-button,
-input,
-textarea,
-select{
+button,input{
   font:inherit;
 }
 
@@ -86,16 +71,16 @@ a{
   text-decoration:none;
 }
 
-/* =========================================================
-   SPACE
-   ========================================================= */
+::selection{
+  background:rgba(100,231,255,.25);
+}
 
 #space{
   position:fixed;
   inset:0;
-  pointer-events:none;
-  z-index:-10;
+  z-index:-5;
   overflow:hidden;
+  pointer-events:none;
 }
 
 .star{
@@ -104,93 +89,66 @@ a{
   height:2px;
   border-radius:50%;
   background:white;
-  opacity:.5;
-  animation:starPulse 3s ease-in-out infinite;
+  opacity:.45;
+  animation:twinkle 4s infinite ease-in-out;
 }
 
-@keyframes starPulse{
-  0%,100%{opacity:.2}
-  50%{opacity:.9}
+@keyframes twinkle{
+  0%,100%{opacity:.15;transform:scale(.7)}
+  50%{opacity:.9;transform:scale(1.5)}
 }
 
 .nebula{
   position:absolute;
-  width:500px;
-  height:500px;
   border-radius:50%;
-  filter:blur(90px);
+  filter:blur(70px);
   opacity:.12;
-  animation:floatNebula 18s ease-in-out infinite alternate;
 }
 
 .nebula.one{
-  background:#6b5cff;
-  top:-180px;
-  left:-180px;
+  width:400px;height:400px;
+  background:#704cff;
+  top:-180px;right:-120px;
 }
 
 .nebula.two{
-  background:#ff2277;
-  right:-180px;
-  top:25%;
-  animation-delay:-7s;
-}
-
-.nebula.three{
-  background:#00c8ff;
-  left:30%;
-  bottom:-300px;
-  animation-delay:-11s;
-}
-
-@keyframes floatNebula{
-  from{transform:translate3d(-30px,0,0) scale(1)}
-  to{transform:translate3d(60px,50px,0) scale(1.2)}
+  width:330px;height:330px;
+  background:#00cfff;
+  bottom:-160px;left:-100px;
 }
 
 .meteor{
   position:absolute;
-  width:130px;
+  width:120px;
   height:2px;
-  background:linear-gradient(90deg,transparent,#fff);
-  transform:rotate(-28deg);
+  background:linear-gradient(90deg,transparent,white,transparent);
+  transform:rotate(-35deg);
   opacity:0;
+  animation:meteor 7s linear infinite;
 }
 
-.meteor.go{
-  animation:meteor 2.2s linear;
-}
+.meteor:nth-child(2){animation-delay:2.5s}
+.meteor:nth-child(3){animation-delay:5s}
 
 @keyframes meteor{
-  0%{
-    transform:translate(0,0) rotate(-28deg);
-    opacity:0;
-  }
-  15%{opacity:.9}
-  100%{
-    transform:translate(-700px,400px) rotate(-28deg);
-    opacity:0;
-  }
+  0%{transform:translate(110vw,-10vh) rotate(-35deg);opacity:0}
+  8%{opacity:.9}
+  20%{transform:translate(50vw,35vh) rotate(-35deg);opacity:0}
+  100%{opacity:0}
 }
 
-/* =========================================================
-   CINEMATIC INTRO
-   ========================================================= */
+/* INTRO */
 
 #intro{
   position:fixed;
   inset:0;
   z-index:9999;
-  background:
-    radial-gradient(circle at center,rgba(50,45,80,.12),transparent 35%),
-    #020204;
+  background:#020205;
   display:flex;
   align-items:center;
   justify-content:center;
+  transition:opacity 1s,visibility 1s;
   overflow:hidden;
-  transition:
-    opacity 1s ease,
-    visibility 1s ease;
 }
 
 #intro.hidden{
@@ -199,331 +157,237 @@ a{
   pointer-events:none;
 }
 
-.intro-noise{
+.intro-grid{
   position:absolute;
-  inset:-20%;
-  opacity:.05;
-  background-image:
-    repeating-radial-gradient(
-      circle at 50% 50%,
-      transparent 0,
-      transparent 2px,
-      rgba(255,255,255,.15) 3px
-    );
-  animation:noiseMove .2s steps(2) infinite;
-}
-
-@keyframes noiseMove{
-  0%{transform:translate(0,0)}
-  25%{transform:translate(2%,-1%)}
-  50%{transform:translate(-1%,2%)}
-  75%{transform:translate(1%,1%)}
-  100%{transform:translate(0,0)}
+  inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:50px 50px;
+  mask-image:linear-gradient(to bottom,transparent,#000 25%,#000 75%,transparent);
 }
 
 .intro-content{
-  width:min(92vw,800px);
+  width:min(900px,92%);
   text-align:center;
   position:relative;
   z-index:2;
 }
 
-.intro-status{
-  color:#8f93a5;
-  letter-spacing:.22em;
+.intro-kicker{
+  color:#777487;
+  letter-spacing:6px;
   font-size:11px;
-  margin-bottom:30px;
-  text-transform:uppercase;
+  margin-bottom:25px;
+}
+
+.intro-title{
+  font-size:clamp(55px,13vw,150px);
+  line-height:.85;
+  margin:0;
+  font-weight:900;
+  letter-spacing:-7px;
+  background:linear-gradient(110deg,#fff,#a9a4ff,#66e9ff,#fff);
+  -webkit-background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 0 35px rgba(120,120,255,.18));
+}
+
+.intro-sub{
+  color:#888595;
+  margin:25px auto 35px;
+  max-width:620px;
+  font-size:14px;
 }
 
 .nova-intro{
-  width:min(90vw,480px);
-  height:480px;
-  margin:auto;
+  width:170px;
+  height:170px;
+  margin:0 auto 28px;
   position:relative;
-  perspective:900px;
+  filter:drop-shadow(0 0 40px rgba(140,90,255,.25));
+  animation:novaFloat 3.5s ease-in-out infinite;
 }
 
-.nova-shadow{
-  position:absolute;
-  left:50%;
-  bottom:40px;
-  width:230px;
-  height:55px;
-  transform:translateX(-50%);
-  background:#000;
-  filter:blur(25px);
-  opacity:.9;
-}
-
-.nova-body{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:240px;
-  height:310px;
-  transform:
-    translate(-50%,-50%)
-    rotateY(0deg);
-  border-radius:48% 52% 42% 58%;
-  background:
-    radial-gradient(circle at 38% 28%,rgba(255,255,255,.14),transparent 10%),
-    radial-gradient(circle at 65% 32%,rgba(255,30,90,.16),transparent 22%),
-    linear-gradient(
-      145deg,
-      #15151d,
-      #030305 55%,
-      #17131b
-    );
-  box-shadow:
-    inset -25px -35px 55px #000,
-    inset 15px 10px 30px rgba(255,255,255,.04),
-    0 0 80px rgba(80,40,130,.18);
-  animation:novaBreath 3.5s ease-in-out infinite;
-}
-
-@keyframes novaBreath{
-  0%,100%{
-    transform:translate(-50%,-50%) scale(1);
-  }
-  50%{
-    transform:translate(-50%,-50%) scale(1.025);
-  }
+@keyframes novaFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
 }
 
 .nova-head{
   position:absolute;
-  width:190px;
-  height:145px;
-  top:54px;
-  left:50%;
-  transform:translateX(-50%);
-  border-radius:48% 48% 43% 43%;
+  inset:25px;
   background:
-    radial-gradient(circle at 45% 25%,rgba(255,255,255,.12),transparent 15%),
-    linear-gradient(150deg,#1c1c25,#050507 65%);
+    radial-gradient(circle at 50% 25%,#303041,#0a0a10 60%);
+  clip-path:polygon(18% 12%,50% 0,82% 12%,100% 48%,84% 91%,50% 100%,16% 91%,0 48%);
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:inset 0 0 40px rgba(0,0,0,.8);
 }
 
 .nova-eye{
   position:absolute;
-  width:54px;
-  height:24px;
-  top:56px;
-  background:
-    radial-gradient(circle at center,#fff 0 5%,#ff234f 12%,#8b001f 42%,transparent 68%);
-  filter:
-    drop-shadow(0 0 8px #ff204f)
-    drop-shadow(0 0 25px #ff204f);
+  top:68px;
+  width:30px;
+  height:9px;
+  background:#fff;
+  box-shadow:0 0 15px #a978ff,0 0 35px #704cff;
+  transform:skewX(-25deg);
 }
 
-.nova-eye.left{
-  left:28px;
-  transform:rotate(12deg);
-}
-
-.nova-eye.right{
-  right:28px;
-  transform:rotate(-12deg);
-}
+.nova-eye.left{left:45px}
+.nova-eye.right{right:45px}
 
 .nova-mouth{
   position:absolute;
-  width:120px;
-  height:55px;
   left:50%;
-  top:92px;
+  bottom:43px;
   transform:translateX(-50%);
-  border-bottom:3px solid rgba(255,255,255,.4);
-  border-radius:0 0 60% 60%;
+  width:65px;
+  height:22px;
+  border-bottom:2px solid #ff5f9d;
+  border-radius:50%;
+  opacity:.8;
 }
 
-.nova-tendril{
+.tendril{
   position:absolute;
-  height:4px;
-  border-radius:999px;
-  background:
-    linear-gradient(90deg,
-      transparent,
-      rgba(255,255,255,.12),
-      #5d5d6c,
-      transparent);
-  filter:drop-shadow(0 0 8px rgba(130,100,255,.3));
-  transform-origin:left center;
+  width:80px;
+  height:2px;
+  background:linear-gradient(90deg,transparent,#8870ff,transparent);
+  transform-origin:center;
+  opacity:.5;
 }
 
-.t1{
-  width:190px;
-  left:-100px;
-  top:125px;
-  transform:rotate(135deg);
-}
+.t1{left:-20px;top:80px;transform:rotate(18deg)}
+.t2{right:-20px;top:80px;transform:rotate(-18deg)}
+.t3{left:20px;bottom:18px;transform:rotate(-35deg)}
+.t4{right:20px;bottom:18px;transform:rotate(35deg)}
 
-.t2{
-  width:210px;
-  right:-125px;
-  top:145px;
-  transform:rotate(42deg);
-}
-
-.t3{
-  width:160px;
-  left:-65px;
-  bottom:70px;
-  transform:rotate(-150deg);
-}
-
-.t4{
-  width:170px;
-  right:-80px;
-  bottom:80px;
-  transform:rotate(145deg);
-}
-
-.intro-title{
-  margin-top:5px;
-  font-size:clamp(35px,8vw,72px);
-  letter-spacing:.18em;
-  font-weight:800;
-}
-
-.intro-title span{
-  background:linear-gradient(
-    100deg,
-    #fff,
-    #9b8cff,
-    #ff5f9f,
-    #6ee7ff
-  );
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-
-.intro-message{
-  margin-top:10px;
-  color:#a6a8b4;
-  min-height:25px;
-}
-
-.intro-enter{
-  margin-top:35px;
+.intro-button{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.07);
+  color:#fff;
   padding:14px 28px;
   border-radius:999px;
-  border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.06);
-  color:white;
   backdrop-filter:blur(20px);
   transition:.25s;
 }
 
-.intro-enter:hover{
-  background:rgba(255,255,255,.12);
-  transform:translateY(-2px);
+.intro-button:hover{
+  transform:translateY(-3px);
+  border-color:rgba(100,231,255,.5);
+  box-shadow:0 15px 45px rgba(100,231,255,.12);
 }
 
-/* =========================================================
-   APP
-   ========================================================= */
+/* APP */
 
 #app{
   min-height:100vh;
   opacity:0;
-  transition:opacity 1s ease;
+  transform:translateY(10px);
+  transition:1s ease;
 }
 
 #app.ready{
   opacity:1;
+  transform:none;
 }
 
-.container{
-  width:min(var(--max),calc(100% - 30px));
-  margin:auto;
-}
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.header{
+.topbar{
   position:sticky;
   top:0;
-  z-index:1000;
-  padding:12px 0;
-  background:rgba(5,5,9,.58);
-  backdrop-filter:blur(25px) saturate(150%);
-  border-bottom:1px solid rgba(255,255,255,.07);
+  z-index:100;
+  padding:14px clamp(12px,3vw,35px);
+  backdrop-filter:blur(24px);
+  background:rgba(5,5,9,.62);
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
-.header-inner{
+.nav{
+  max-width:1450px;
+  margin:auto;
   display:flex;
   align-items:center;
   gap:18px;
 }
 
 .brand{
-  min-width:max-content;
-  font-weight:900;
-  letter-spacing:.14em;
-  font-size:20px;
-}
-
-.brand span{
-  color:var(--violet);
-}
-
-.nav{
   display:flex;
   align-items:center;
+  gap:10px;
+  min-width:max-content;
+}
+
+.brand-mark{
+  width:39px;
+  height:39px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#181823,#272040);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:inset 0 0 20px rgba(120,100,255,.1);
+}
+
+.brand-mark span{
+  width:15px;
+  height:15px;
+  transform:rotate(45deg);
+  border:2px solid #a88bff;
+}
+
+.brand-name{
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.brand-name small{
+  display:block;
+  color:#777487;
+  font-size:8px;
+  font-weight:600;
+  letter-spacing:1px;
+}
+
+.nav-scroll{
+  display:flex;
   gap:6px;
   overflow:auto;
   scrollbar-width:none;
   flex:1;
 }
 
-.nav::-webkit-scrollbar{
-  display:none;
-}
+.nav-scroll::-webkit-scrollbar{display:none}
 
-.nav button{
+.nav-btn{
   border:0;
   background:transparent;
-  color:#9296a5;
+  color:#8d8a99;
+  padding:9px 12px;
+  border-radius:12px;
   white-space:nowrap;
-  padding:10px 13px;
-  border-radius:14px;
   transition:.2s;
 }
 
-.nav button:hover,
-.nav button.active{
+.nav-btn:hover,
+.nav-btn.active{
+  color:#fff;
+  background:rgba(255,255,255,.065);
+}
+
+.profile-btn{
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);
   color:white;
-  background:rgba(255,255,255,.08);
+  border-radius:999px;
+  padding:8px 13px;
+  white-space:nowrap;
 }
-
-.user-mini{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  min-width:max-content;
-}
-
-.avatar{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:
-    linear-gradient(135deg,#7d67ff,#ff4e96);
-  font-weight:800;
-}
-
-/* =========================================================
-   MAIN
-   ========================================================= */
 
 main{
-  padding:34px 0 100px;
+  max-width:1450px;
+  margin:auto;
+  padding:35px clamp(14px,3vw,40px) 100px;
 }
 
 .page{
@@ -536,98 +400,147 @@ main{
 }
 
 @keyframes pageIn{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
 }
 
 .hero{
-  position:relative;
-  min-height:390px;
-  padding:48px;
-  border:1px solid var(--line);
-  border-radius:36px;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 80% 20%,rgba(135,100,255,.2),transparent 35%),
-    radial-gradient(circle at 10% 90%,rgba(255,70,120,.12),transparent 30%),
-    rgba(255,255,255,.035);
-  box-shadow:var(--shadow);
+  min-height:450px;
+  display:grid;
+  grid-template-columns:1.35fr .65fr;
+  gap:30px;
+  align-items:center;
 }
 
-.hero h1{
-  font-size:clamp(36px,6vw,76px);
-  line-height:1;
-  margin:0 0 20px;
-  max-width:850px;
+.hero-copy h1{
+  font-size:clamp(38px,6vw,76px);
+  line-height:1.05;
+  margin:0 0 18px;
+  letter-spacing:-3px;
 }
 
 .gradient-text{
-  background:
-    linear-gradient(
-      100deg,
-      #fff,
-      #a995ff 35%,
-      #ff70aa 65%,
-      #69eaff
-    );
+  background:linear-gradient(90deg,#fff,#a997ff,#67e5ff);
   -webkit-background-clip:text;
-  background-clip:text;
   color:transparent;
 }
 
-.hero p{
-  color:#a7aaba;
-  font-size:18px;
-  line-height:1.8;
-  max-width:700px;
+.hero-copy p{
+  color:var(--muted);
+  max-width:680px;
+  line-height:2;
 }
 
 .hero-actions{
   display:flex;
-  gap:12px;
+  gap:10px;
   flex-wrap:wrap;
   margin-top:28px;
 }
 
-.btn{
+.primary,
+.secondary,
+.danger{
+  border-radius:15px;
+  padding:12px 19px;
   border:1px solid var(--line);
   color:white;
-  background:rgba(255,255,255,.06);
-  padding:13px 20px;
-  border-radius:16px;
-  transition:.2s;
+  transition:.22s;
 }
 
-.btn:hover{
+.primary{
+  background:linear-gradient(135deg,rgba(120,90,255,.5),rgba(60,190,255,.22));
+}
+
+.secondary{
+  background:rgba(255,255,255,.055);
+}
+
+.danger{
+  background:rgba(255,80,100,.1);
+  border-color:rgba(255,80,100,.25);
+}
+
+.primary:hover,
+.secondary:hover,
+.danger:hover{
   transform:translateY(-2px);
-  background:rgba(255,255,255,.11);
+  border-color:rgba(255,255,255,.25);
 }
 
-.btn.primary{
-  border-color:transparent;
+.nova-card{
+  position:relative;
+  min-height:330px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:35px;
   background:
-    linear-gradient(135deg,#7564ff,#e7478f);
-  box-shadow:
-    0 12px 35px rgba(117,100,255,.25);
+    radial-gradient(circle at 50% 30%,rgba(110,75,255,.16),transparent 45%),
+    rgba(255,255,255,.025);
+  overflow:hidden;
+  display:grid;
+  place-items:center;
 }
 
-.btn.danger{
-  background:rgba(255,50,80,.09);
-  border-color:rgba(255,70,90,.25);
+.nova-card::before{
+  content:"";
+  position:absolute;
+  inset:-60px;
+  background:conic-gradient(from 0deg,transparent,rgba(120,80,255,.15),transparent,rgba(50,220,255,.1),transparent);
+  animation:spin 13s linear infinite;
 }
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.nova-big{
+  width:220px;
+  height:220px;
+  position:relative;
+  z-index:2;
+}
+
+.nova-big .nova-head{
+  inset:28px;
+}
+
+.nova-big .nova-eye{
+  top:89px;
+  width:40px;
+}
+
+.nova-big .nova-eye.left{left:57px}
+.nova-big .nova-eye.right{right:57px}
+
+.nova-big .nova-mouth{
+  bottom:55px;
+  width:82px;
+}
+
+.status-dot{
+  position:absolute;
+  bottom:18px;
+  right:18px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#777487;
+  font-size:11px;
+}
+
+.dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#6df7bd;
+  box-shadow:0 0 12px #6df7bd;
+}
+
+/* CARDS */
 
 .section-title{
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  gap:20px;
-  margin:42px 0 18px;
+  align-items:end;
+  margin:55px 0 18px;
 }
 
 .section-title h2{
@@ -635,476 +548,357 @@ main{
   font-size:25px;
 }
 
-.section-title span{
+.section-title p{
+  margin:5px 0 0;
   color:var(--muted);
-  font-size:13px;
+  font-size:12px;
 }
-
-/* =========================================================
-   GRID / CARDS
-   ========================================================= */
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-
-.grid.two{
-  grid-template-columns:repeat(2,1fr);
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
 }
 
 .card{
+  background:linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.025));
   border:1px solid var(--line);
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.075),
-      rgba(255,255,255,.025)
-    );
   border-radius:var(--radius);
-  padding:22px;
-  box-shadow:0 15px 45px rgba(0,0,0,.25);
+  padding:20px;
+  box-shadow:var(--shadow);
   backdrop-filter:blur(18px);
 }
 
-.card.interactive{
-  transition:.25s;
-}
-
-.card.interactive:hover{
-  transform:translateY(-5px);
-  border-color:rgba(160,140,255,.3);
-}
-
-.icon{
-  width:46px;
-  height:46px;
-  border-radius:15px;
-  display:grid;
-  place-items:center;
-  background:rgba(255,255,255,.07);
-  font-size:21px;
-  margin-bottom:17px;
-}
-
 .card h3{
-  margin:0 0 8px;
+  margin:0 0 7px;
 }
 
 .card p{
   color:var(--muted);
-  line-height:1.7;
+  font-size:13px;
+  line-height:1.8;
   margin:0;
 }
 
-.tag{
-  display:inline-flex;
-  padding:6px 9px;
-  border-radius:999px;
-  background:rgba(255,255,255,.07);
-  color:#b9bdca;
-  font-size:11px;
-  margin-top:15px;
-}
-
-/* =========================================================
-   NOVA FRAGMENTS
-   ========================================================= */
-
-.nova-fragment{
-  position:fixed;
-  pointer-events:none;
-  z-index:5;
-  opacity:.42;
-  filter:
-    drop-shadow(0 0 15px rgba(255,50,90,.2));
-}
-
-.nova-eye-fragment{
-  width:55px;
-  height:25px;
-  border-radius:70% 30%;
-  background:
-    radial-gradient(circle,#fff 0 4%,#ff1f4d 12%,#5d0018 48%,transparent 70%);
-}
-
-.nova-claw{
-  width:80px;
-  height:130px;
-  border-left:3px solid rgba(255,255,255,.13);
-  border-radius:50%;
-  transform:rotate(25deg);
-}
-
-.fragment-left{
-  left:5px;
-  top:40%;
-}
-
-.fragment-right{
-  right:8px;
-  bottom:18%;
-  transform:scaleX(-1);
-}
-
-.nova-tendril-page{
-  position:absolute;
-  width:260px;
-  height:3px;
-  background:
-    linear-gradient(90deg,
-      transparent,
-      rgba(255,255,255,.18),
-      rgba(130,110,255,.65),
-      transparent);
-  filter:blur(.2px);
-  transform:rotate(-25deg);
-  pointer-events:none;
-}
-
-/* =========================================================
-   STATS
-   ========================================================= */
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:20px;
-}
-
 .stat{
-  padding:20px;
-  border:1px solid var(--line);
-  border-radius:20px;
-  background:rgba(255,255,255,.045);
+  min-height:125px;
 }
 
-.stat small{
-  color:var(--muted);
+.stat .number{
+  font-size:34px;
+  font-weight:900;
+  margin-bottom:5px;
 }
 
-.stat strong{
-  display:block;
-  margin-top:6px;
-  font-size:28px;
-}
-
-/* =========================================================
-   PROGRESS
-   ========================================================= */
-
-.progress{
-  height:9px;
-  background:rgba(255,255,255,.07);
-  border-radius:999px;
-  overflow:hidden;
-  margin-top:15px;
-}
-
-.progress > div{
-  height:100%;
-  border-radius:inherit;
-  background:
-    linear-gradient(90deg,#7061ff,#ff5f9f,#6ee7ff);
-  transition:width .6s ease;
-}
-
-/* =========================================================
-   LEARNING
-   ========================================================= */
-
-.lesson-card{
-  position:relative;
-  overflow:hidden;
-}
-
-.lesson-card .difficulty{
-  color:#a7aaba;
+.stat .label{
+  color:#8e8a99;
   font-size:12px;
 }
 
-.lesson-card .xp{
-  color:#ffd166;
-  font-weight:700;
+.icon-box{
+  width:45px;
+  height:45px;
+  display:grid;
+  place-items:center;
+  border-radius:15px;
+  margin-bottom:15px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
 }
 
-/* =========================================================
-   EXAM
-   ========================================================= */
+/* LEARNING */
+
+.learning-layout{
+  display:grid;
+  grid-template-columns:1fr 330px;
+  gap:20px;
+}
+
+.lesson-list{
+  display:grid;
+  gap:12px;
+}
+
+.lesson{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:18px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:rgba(255,255,255,.035);
+  cursor:pointer;
+  transition:.2s;
+}
+
+.lesson:hover{
+  transform:translateX(-3px);
+  background:rgba(255,255,255,.06);
+}
+
+.lesson-icon{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,rgba(120,90,255,.2),rgba(60,210,255,.1));
+}
+
+.lesson-info{
+  flex:1;
+}
+
+.lesson-info strong{
+  display:block;
+}
+
+.lesson-info span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.progress{
+  height:6px;
+  background:rgba(255,255,255,.07);
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.progress i{
+  display:block;
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#8b70ff,#5de3ff);
+  border-radius:999px;
+}
+
+/* EXAM */
 
 .exam-shell{
-  max-width:900px;
+  max-width:850px;
   margin:auto;
 }
 
 .exam-top{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:15px;
-  margin-bottom:18px;
+  gap:10px;
+  margin-bottom:20px;
 }
 
 .exam-question{
-  padding:28px;
+  padding:30px;
   border:1px solid var(--line);
-  border-radius:26px;
+  border-radius:28px;
   background:rgba(255,255,255,.045);
 }
 
-.question-number{
-  color:#a89cff;
-  font-size:13px;
-  margin-bottom:14px;
-}
-
 .exam-question h2{
-  margin:0;
-  font-size:clamp(22px,4vw,34px);
-  line-height:1.5;
-}
-
-.options{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:14px;
-  margin-top:20px;
-}
-
-.option{
-  width:100%;
-  min-height:72px;
-  padding:18px 20px;
-  text-align:right;
-  color:#f4f5f9;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(255,255,255,.065),
-      rgba(255,255,255,.025)
-    );
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:20px;
-  transition:
-    transform .18s,
-    border-color .18s,
-    background .18s;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  line-height:1.6;
-}
-
-.option:hover{
-  transform:translateY(-2px);
-  background:rgba(255,255,255,.09);
-}
-
-.option.selected{
-  border-color:#8d7dff;
-  background:
-    linear-gradient(
-      135deg,
-      rgba(126,102,255,.2),
-      rgba(255,77,150,.09)
-    );
-  box-shadow:
-    0 0 0 1px rgba(141,125,255,.12),
-    0 15px 35px rgba(90,70,220,.12);
-}
-
-.option-key{
-  flex:0 0 38px;
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  background:rgba(255,255,255,.08);
-  color:#bfc2d0;
-  font-weight:800;
-}
-
-.exam-actions{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  margin-top:20px;
-}
-
-/* =========================================================
-   AUTH
-   ========================================================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:5000;
-  background:rgba(0,0,0,.72);
-  backdrop-filter:blur(18px);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-}
-
-.modal.show{
-  display:flex;
-}
-
-.auth-box{
-  width:min(100%,440px);
-  border:1px solid var(--line);
-  border-radius:30px;
-  padding:28px;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(25,25,35,.94),
-      rgba(7,7,12,.96)
-    );
-  box-shadow:var(--shadow);
-}
-
-.auth-box h2{
+  line-height:1.7;
   margin-top:0;
 }
 
-.field{
-  margin:14px 0;
+.answers{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+  margin-top:22px;
 }
 
-.field label{
+.answer{
+  min-height:80px;
+  text-align:right;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;
+  background:rgba(255,255,255,.035);
+  color:#eee;
+  padding:17px;
+  transition:.2s;
+}
+
+.answer:hover{
+  border-color:rgba(120,220,255,.4);
+  background:rgba(100,200,255,.06);
+}
+
+.answer.selected{
+  border-color:#8b70ff;
+  background:rgba(130,100,255,.13);
+}
+
+.exam-result{
+  text-align:center;
+  padding:45px 25px;
+}
+
+/* PROFILE */
+
+.profile-header{
+  display:flex;
+  gap:20px;
+  align-items:center;
+  margin-bottom:25px;
+}
+
+.avatar{
+  width:90px;
+  height:90px;
+  border-radius:28px;
+  display:grid;
+  place-items:center;
+  font-size:30px;
+  font-weight:900;
+  background:linear-gradient(135deg,#201938,#102934);
+  border:1px solid rgba(255,255,255,.12);
+}
+
+.profile-header h1{
+  margin:0;
+}
+
+.profile-header p{
+  color:var(--muted);
+}
+
+/* SETTINGS */
+
+.settings{
+  max-width:900px;
+}
+
+.setting-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  padding:19px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.setting-row:last-child{
+  border-bottom:0;
+}
+
+.setting-row strong{
   display:block;
-  margin-bottom:7px;
-  color:#bfc1cc;
-  font-size:13px;
 }
 
-.field input,
-.field textarea,
-.field select{
-  width:100%;
-  border:1px solid var(--line);
-  outline:none;
-  border-radius:16px;
-  padding:13px 14px;
-  color:white;
-  background:rgba(255,255,255,.055);
+.setting-row span{
+  color:var(--muted);
+  font-size:11px;
 }
 
-.field input:focus,
-.field textarea:focus,
-.field select:focus{
-  border-color:rgba(135,120,255,.6);
+.toggle{
+  width:50px;
+  height:28px;
+  border:0;
+  border-radius:999px;
+  background:#33323c;
+  padding:3px;
 }
 
-/* =========================================================
-   NOVA CHAT
-   ========================================================= */
-
-.nova-chat{
-  position:fixed;
-  left:20px;
-  bottom:20px;
-  z-index:900;
-}
-
-.nova-orb{
-  width:65px;
-  height:65px;
+.toggle i{
+  display:block;
+  width:22px;
+  height:22px;
   border-radius:50%;
-  border:1px solid rgba(255,255,255,.15);
-  background:
-    radial-gradient(
-      circle at 40% 35%,
-      #ff4668,
-      #4a0920 30%,
-      #09070c 65%
-    );
-  box-shadow:
-    0 0 30px rgba(255,40,90,.18),
-    0 20px 50px rgba(0,0,0,.5);
-  position:relative;
+  background:white;
+  transition:.2s;
 }
 
-.nova-orb::before,
-.nova-orb::after{
+.toggle.on{
+  background:#705bff;
+}
+
+.toggle.on i{
+  transform:translateX(-22px);
+}
+
+/* NOVA PANEL */
+
+#nova-fab{
+  position:fixed;
+  left:24px;
+  bottom:24px;
+  z-index:200;
+  width:62px;
+  height:62px;
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.16);
+  background:rgba(20,18,32,.82);
+  backdrop-filter:blur(20px);
+  color:white;
+  box-shadow:0 20px 50px rgba(0,0,0,.4);
+}
+
+#nova-fab::before{
   content:"";
   position:absolute;
-  top:23px;
-  width:14px;
-  height:6px;
-  border-radius:50%;
-  background:#fff;
-  box-shadow:0 0 12px #ff375d;
+  inset:-5px;
+  border-radius:25px;
+  border:1px solid rgba(140,100,255,.22);
+  animation:pulse 2.4s infinite;
 }
 
-.nova-orb::before{
-  left:15px;
-  transform:rotate(15deg);
+@keyframes pulse{
+  0%,100%{opacity:.3;transform:scale(1)}
+  50%{opacity:.9;transform:scale(1.07)}
 }
 
-.nova-orb::after{
-  right:15px;
-  transform:rotate(-15deg);
-}
-
-.nova-chat-panel{
-  position:absolute;
-  bottom:80px;
-  left:0;
-  width:min(90vw,390px);
-  height:520px;
-  border:1px solid var(--line);
-  border-radius:26px;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(17,17,25,.96),
-      rgba(5,5,9,.97)
-    );
-  backdrop-filter:blur(30px);
-  box-shadow:var(--shadow);
+#nova-panel{
+  position:fixed;
+  left:24px;
+  bottom:98px;
+  z-index:199;
+  width:min(420px,calc(100vw - 30px));
+  height:min(650px,calc(100vh - 120px));
+  background:rgba(9,8,15,.92);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:28px;
+  backdrop-filter:blur(28px);
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
   display:none;
   flex-direction:column;
   overflow:hidden;
 }
 
-.nova-chat-panel.show{
+#nova-panel.open{
   display:flex;
+  animation:novaPanel .25s ease;
 }
 
-.chat-head{
-  padding:16px 18px;
-  border-bottom:1px solid var(--line);
+@keyframes novaPanel{
+  from{opacity:0;transform:translateY(12px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+
+.nova-header{
+  padding:17px;
+  border-bottom:1px solid rgba(255,255,255,.07);
   display:flex;
+  justify-content:space-between;
   align-items:center;
-  gap:12px;
 }
 
-.chat-head .nova-dot{
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#ff3f61;
-  box-shadow:0 0 15px #ff3f61;
+.nova-header small{
+  color:#8b8798;
 }
 
-.chat-messages{
+.nova-messages{
   flex:1;
   overflow:auto;
-  padding:16px;
+  padding:17px;
 }
 
 .msg{
-  max-width:85%;
+  max-width:88%;
   padding:12px 14px;
   border-radius:17px;
   margin-bottom:10px;
-  line-height:1.7;
+  font-size:13px;
+  line-height:1.8;
   white-space:pre-wrap;
 }
 
@@ -1115,46 +909,107 @@ main{
 
 .msg.user{
   margin-right:auto;
-  background:
-    linear-gradient(135deg,#5f54c9,#a23f72);
+  background:rgba(110,85,255,.15);
+  border:1px solid rgba(130,100,255,.2);
 }
 
-.chat-input{
-  padding:12px;
-  border-top:1px solid var(--line);
+.nova-input{
   display:flex;
   gap:8px;
+  padding:12px;
+  border-top:1px solid rgba(255,255,255,.07);
 }
 
-.chat-input input{
-  min-width:0;
+.nova-input input{
   flex:1;
+  min-width:0;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.05);
   color:white;
-  background:rgba(255,255,255,.06);
-  border:1px solid var(--line);
-  border-radius:15px;
-  padding:11px;
+  padding:11px 13px;
+  border-radius:14px;
   outline:none;
 }
 
-/* =========================================================
-   TOAST
-   ========================================================= */
+.nova-input button{
+  width:46px;
+  border:0;
+  border-radius:14px;
+  background:#755fff;
+  color:white;
+}
+
+/* AUTH */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(15px);
+  display:none;
+  place-items:center;
+  padding:20px;
+}
+
+.modal.open{
+  display:grid;
+}
+
+.auth-box{
+  width:min(430px,100%);
+  border-radius:28px;
+  border:1px solid rgba(255,255,255,.12);
+  background:#0d0c14;
+  padding:27px;
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
+}
+
+.auth-box h2{
+  margin-top:0;
+}
+
+.auth-box input{
+  width:100%;
+  margin:7px 0;
+  padding:13px;
+  color:white;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;
+  outline:none;
+}
+
+.auth-actions{
+  display:grid;
+  gap:9px;
+  margin-top:12px;
+}
+
+.auth-message{
+  color:#ff8c9a;
+  min-height:22px;
+  font-size:12px;
+  margin-top:10px;
+}
+
+/* TOAST */
 
 #toast{
   position:fixed;
-  top:85px;
+  top:90px;
   left:50%;
   transform:translateX(-50%) translateY(-20px);
-  z-index:8000;
+  z-index:2000;
+  padding:12px 18px;
+  border-radius:999px;
+  background:rgba(20,18,30,.9);
+  border:1px solid rgba(255,255,255,.12);
+  backdrop-filter:blur(20px);
   opacity:0;
   pointer-events:none;
-  padding:12px 17px;
-  border:1px solid var(--line);
-  border-radius:15px;
-  background:rgba(15,15,22,.92);
-  backdrop-filter:blur(20px);
-  transition:.3s;
+  transition:.25s;
+  font-size:12px;
 }
 
 #toast.show{
@@ -1162,143 +1017,124 @@ main{
   transform:translateX(-50%) translateY(0);
 }
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
+/* FOOTER */
 
-.footer{
-  margin-top:80px;
-  padding:30px 0;
-  border-top:1px solid rgba(255,255,255,.07);
-  color:#7f8290;
-  text-align:center;
+footer{
+  max-width:1450px;
+  margin:auto;
+  padding:30px clamp(14px,3vw,40px) 55px;
+  border-top:1px solid rgba(255,255,255,.06);
 }
 
-.footer strong{
-  color:#ddd;
+.footer-grid{
+  display:flex;
+  justify-content:space-between;
+  gap:30px;
+  flex-wrap:wrap;
 }
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
+.footer-brand strong{
+  font-size:20px;
+}
 
-@media(max-width:900px){
+.footer-brand p{
+  color:var(--muted);
+  font-size:11px;
+  max-width:420px;
+  line-height:1.9;
+}
 
-  .grid,
-  .grid.two{
+.footer-note{
+  color:#686574;
+  font-size:11px;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
+  .grid{
     grid-template-columns:1fr 1fr;
   }
 
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
   .hero{
-    padding:30px 23px;
+    grid-template-columns:1fr;
+    min-height:auto;
+    padding-top:30px;
   }
 
-  .header-inner{
-    flex-wrap:wrap;
+  .nova-card{
+    min-height:280px;
   }
 
-  .nav{
-    order:3;
-    width:100%;
-    flex-basis:100%;
+  .learning-layout{
+    grid-template-columns:1fr;
   }
 }
 
 @media(max-width:650px){
+  .topbar{
+    padding:10px;
+  }
 
-  .container{
-    width:min(100% - 20px,var(--max));
+  .nav{
+    gap:8px;
+  }
+
+  .brand-name{
+    display:none;
+  }
+
+  .profile-btn{
+    font-size:11px;
+    padding:7px 10px;
   }
 
   main{
-    padding-top:20px;
+    padding:20px 12px 80px;
   }
 
-  .grid,
-  .grid.two{
+  .grid{
     grid-template-columns:1fr;
   }
 
-  .hero{
-    min-height:430px;
-    border-radius:27px;
-    padding:25px 19px;
+  .hero-copy h1{
+    font-size:42px;
+    letter-spacing:-2px;
   }
 
-  .hero h1{
-    font-size:43px;
+  .hero-copy p{
+    font-size:13px;
   }
 
-  .hero p{
-    font-size:15px;
-  }
-
-  .stats{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .stat{
-    padding:15px;
-  }
-
-  .stat strong{
-    font-size:23px;
+  .answers{
+    grid-template-columns:1fr;
   }
 
   .exam-question{
-    padding:20px 16px;
-    border-radius:22px;
+    padding:20px;
   }
 
-  .option{
-    min-height:78px;
-    padding:16px 13px;
-    border-radius:18px;
+  .answer{
+    min-height:72px;
   }
 
-  .option-key{
-    flex-basis:34px;
-    width:34px;
-    height:34px;
+  #nova-fab{
+    left:14px;
+    bottom:14px;
   }
 
-  .exam-actions{
-    position:sticky;
-    bottom:8px;
-    padding:8px;
-    border-radius:18px;
-    background:rgba(5,5,9,.8);
-    backdrop-filter:blur(18px);
+  #nova-panel{
+    left:10px;
+    bottom:88px;
+    width:calc(100vw - 20px);
   }
 
-  .nova-chat{
-    left:12px;
-    bottom:12px;
+  .section-title{
+    margin-top:38px;
   }
 
-  .nova-chat-panel{
-    width:calc(100vw - 24px);
-    height:min(70vh,520px);
-  }
-
-  .fragment-left,
-  .fragment-right{
-    opacity:.15;
-  }
-}
-
-@media(prefers-reduced-motion:reduce){
-  *,
-  *::before,
-  *::after{
-    animation-duration:.01ms !important;
-    animation-iteration-count:1 !important;
-    transition-duration:.01ms !important;
-    scroll-behavior:auto !important;
+  .profile-header{
+    align-items:flex-start;
   }
 }
 </style>
@@ -1306,1070 +1142,861 @@ main{
 
 <body>
 
-<!-- =========================================================
-     SPACE BACKGROUND
-     ========================================================= -->
-
 <div id="space">
   <div class="nebula one"></div>
   <div class="nebula two"></div>
-  <div class="nebula three"></div>
-
-  <div class="meteor" id="meteor1"></div>
-  <div class="meteor" id="meteor2"></div>
+  <div class="meteor"></div>
+  <div class="meteor"></div>
+  <div class="meteor"></div>
 </div>
 
-<!-- =========================================================
-     CINEMATIC INTRO
-     ========================================================= -->
+<!-- INTRO -->
 
 <section id="intro">
-
-  <div class="intro-noise"></div>
+  <div class="intro-grid"></div>
 
   <div class="intro-content">
-
-    <div class="intro-status" id="introStatus">
-      VANTA SYSTEM // INITIALIZING
-    </div>
+    <div class="intro-kicker">VANTA / SYSTEM AWAKENING</div>
 
     <div class="nova-intro">
-
-      <div class="nova-shadow"></div>
-
-      <div class="nova-body">
-
-        <div class="nova-head">
-
-          <div class="nova-eye left"></div>
-          <div class="nova-eye right"></div>
-
-          <div class="nova-mouth"></div>
-
-        </div>
-
-        <div class="nova-tendril t1"></div>
-        <div class="nova-tendril t2"></div>
-        <div class="nova-tendril t3"></div>
-        <div class="nova-tendril t4"></div>
-
-      </div>
-
+      <div class="tendril t1"></div>
+      <div class="tendril t2"></div>
+      <div class="tendril t3"></div>
+      <div class="tendril t4"></div>
+      <div class="nova-head"></div>
+      <div class="nova-eye left"></div>
+      <div class="nova-eye right"></div>
+      <div class="nova-mouth"></div>
     </div>
 
-    <div class="intro-title">
-      <span>VANTA</span>
-    </div>
+    <h1 class="intro-title">VANTA</h1>
 
-    <div class="intro-message" id="introMessage">
+    <p class="intro-sub">
       NOVA تستيقظ...
-    </div>
+      <br>
+      المعرفة ليست مكانًا آمنًا. لكنها المكان الذي نتطور فيه.
+    </p>
 
-    <button
-      class="intro-enter"
-      id="enterBtn"
-      onclick="enterVanta()">
+    <button class="intro-button" id="enterBtn">
       دخول إلى VANTA
     </button>
-
   </div>
 </section>
 
-<!-- =========================================================
-     APP
-     ========================================================= -->
+<!-- APP -->
 
 <div id="app">
 
-  <!-- NOVA distributed fragments -->
+<header class="topbar">
+  <nav class="nav">
 
-  <div class="nova-fragment nova-eye-fragment fragment-left"></div>
-  <div class="nova-fragment nova-claw fragment-right"></div>
-
-  <!-- HEADER -->
-
-  <header class="header">
-
-    <div class="container header-inner">
-
-      <div class="brand">
-        VANTA<span>×</span>
+    <a class="brand" href="#" onclick="go('home');return false">
+      <div class="brand-mark"><span></span></div>
+      <div class="brand-name">
+        VANTA
+        <small>ALI YASER</small>
       </div>
+    </a>
 
-      <nav class="nav" id="nav">
-
-        <button onclick="go('home')" data-page="home">
-          الرئيسية
-        </button>
-
-        <button onclick="go('learn')" data-page="learn">
-          التعلم
-        </button>
-
-        <button onclick="go('cyber')" data-page="cyber">
-          Cyber Range
-        </button>
-
-        <button onclick="go('labs')" data-page="labs">
-          Labs
-        </button>
-
-        <button onclick="go('challenges')" data-page="challenges">
-          Challenges
-        </button>
-
-        <button onclick="go('programming')" data-page="programming">
-          Programming
-        </button>
-
-        <button onclick="go('technology')" data-page="technology">
-          Technology
-        </button>
-
-        <button onclick="go('library')" data-page="library">
-          Library
-        </button>
-
-        <button onclick="go('quiz')" data-page="quiz">
-          Quiz
-        </button>
-
-        <button onclick="go('roadmap')" data-page="roadmap">
-          Roadmap
-        </button>
-
-        <button onclick="go('dashboard')" data-page="dashboard">
-          Dashboard
-        </button>
-
-        <button onclick="go('settings')" data-page="settings">
-          Settings
-        </button>
-
-      </nav>
-
-      <div class="user-mini">
-
-        <div
-          class="avatar"
-          id="avatar">
-          A
-        </div>
-
-        <button
-          class="btn"
-          id="authBtn"
-          onclick="openAuth()">
-          دخول
-        </button>
-
-      </div>
-
+    <div class="nav-scroll">
+      <button class="nav-btn active" data-page="home">الرئيسية</button>
+      <button class="nav-btn" data-page="learn">التعلم</button>
+      <button class="nav-btn" data-page="cyber">Cyber Range</button>
+      <button class="nav-btn" data-page="labs">المختبرات</button>
+      <button class="nav-btn" data-page="challenges">التحديات</button>
+      <button class="nav-btn" data-page="programming">البرمجة</button>
+      <button class="nav-btn" data-page="technology">التقنية</button>
+      <button class="nav-btn" data-page="library">المكتبة</button>
+      <button class="nav-btn" data-page="quiz">اختبار</button>
+      <button class="nav-btn" data-page="roadmap">الخارطة</button>
+      <button class="nav-btn" data-page="dashboard">لوحتي</button>
+      <button class="nav-btn" data-page="settings">الإعدادات</button>
     </div>
 
-  </header>
+    <button class="profile-btn" id="authBtn">دخول</button>
 
-  <!-- MAIN -->
+  </nav>
+</header>
 
-  <main class="container">
+<main>
 
-    <!-- =====================================================
-         HOME
-         ===================================================== -->
+<!-- HOME -->
 
-    <section class="page active" id="page-home">
+<section class="page active" id="page-home">
 
-      <div class="hero">
+  <div class="hero">
 
-        <div class="nova-tendril-page"
-             style="right:-100px;top:70px;"></div>
+    <div class="hero-copy">
+      <div class="intro-kicker">THE NEXT LEARNING SYSTEM</div>
 
-        <div class="nova-tendril-page"
-             style="left:-130px;bottom:70px;transform:rotate(25deg);"></div>
+      <h1>
+        تعلّم.
+        <br>
+        <span class="gradient-text">ابنِ.</span>
+        <br>
+        تطوّر.
+      </h1>
 
-        <div class="tag">
-          NOVA CORE ONLINE
-        </div>
+      <p>
+        VANTA ليست مجرد مكتبة دروس.
+        إنها مساحة تعليمية تتغير مع مستواك، أخطائك، تقدمك،
+        والمهارات التي تريد بناءها.
+      </p>
 
-        <h1>
-          تعلّم.
-          <br>
-          تطوّر.
-          <br>
-          <span class="gradient-text">
-            واجعل NOVA تعرف مستواك.
-          </span>
-        </h1>
+      <div class="hero-actions">
+        <button class="primary" onclick="go('learn')">
+          ابدأ التعلم
+        </button>
 
-        <p>
-          VANTA ليست مكتبة دروس ثابتة.
-          كل إجابة وكل خطأ وكل درس تكمله يجعل NOVA تفهم طريقة تعلمك
-          وتعيد بناء تجربتك التعليمية حولك.
-        </p>
+        <button class="secondary" onclick="generateLesson()">
+          دع NOVA تختار لي
+        </button>
 
-        <div class="hero-actions">
-
-          <button
-            class="btn primary"
-            onclick="go('learn')">
-            ابدأ التعلم
-          </button>
-
-          <button
-            class="btn"
-            onclick="startAdaptiveExam()">
-            اختبار تكيفي
-          </button>
-
-          <button
-            class="btn danger"
-            onclick="openNova()">
-            تحدث مع NOVA
-          </button>
-
-        </div>
-
+        <button class="secondary" onclick="go('cyber')">
+          ادخل Cyber Range
+        </button>
       </div>
-
-      <div class="stats">
-
-        <div class="stat">
-          <small>المستوى</small>
-          <strong id="homeLevel">1</strong>
-        </div>
-
-        <div class="stat">
-          <small>XP</small>
-          <strong id="homeXp">0</strong>
-        </div>
-
-        <div class="stat">
-          <small>الدروس</small>
-          <strong id="homeLessons">0</strong>
-        </div>
-
-        <div class="stat">
-          <small>Streak</small>
-          <strong id="homeStreak">0</strong>
-        </div>
-
-      </div>
-
-      <div class="section-title">
-        <h2>ماذا تفعل NOVA الآن؟</h2>
-        <span>النواة التعليمية</span>
-      </div>
-
-      <div class="grid">
-
-        <div class="card interactive">
-          <div class="icon">🧠</div>
-          <h3>Mastery Engine</h3>
-          <p>
-            تتابع NOVA إتقانك لكل موضوع بدل الاعتماد على مستوى عام فقط.
-          </p>
-        </div>
-
-        <div class="card interactive">
-          <div class="icon">🩸</div>
-          <h3>Mistake Intelligence</h3>
-          <p>
-            الأخطاء ليست مجرد أخطاء؛ تتحول إلى معلومات تستخدمها NOVA
-            لبناء التدريب القادم.
-          </p>
-        </div>
-
-        <div class="card interactive">
-          <div class="icon">⏳</div>
-          <h3>Spaced Repetition</h3>
-          <p>
-            المفاهيم التي بدأت تنساها تعود إليك في الوقت المناسب.
-          </p>
-        </div>
-
-        <div class="card interactive">
-          <div class="icon">⚡</div>
-          <h3>Adaptive Questions</h3>
-          <p>
-            مستوى السؤال يتغير حسب أدائك بدل إعطائك نفس الأسئلة للجميع.
-          </p>
-        </div>
-
-        <div class="card interactive">
-          <div class="icon">🧬</div>
-          <h3>Dynamic Curriculum</h3>
-          <p>
-            مسارك الدراسي يتغير مع تقدمك وأهدافك ونقاط ضعفك.
-          </p>
-        </div>
-
-        <div class="card interactive">
-          <div class="icon">👁️</div>
-          <h3>NOVA Memory</h3>
-          <p>
-            NOVA تبني صورة تعليمية طويلة المدى عن تقدمك.
-          </p>
-        </div>
-
-      </div>
-
-      <div class="section-title">
-        <h2>مسارك الحالي</h2>
-        <span id="homeFocus">لم تحدد هدفًا بعد</span>
-      </div>
-
-      <div class="card">
-
-        <h3 id="goalTitle">
-          ابدأ ببناء مسارك
-        </h3>
-
-        <p id="goalText">
-          دع NOVA تحدد نقطة البداية المناسبة لك.
-        </p>
-
-        <div class="progress">
-          <div id="goalProgress" style="width:0%"></div>
-        </div>
-
-        <div class="hero-actions">
-
-          <button
-            class="btn primary"
-            onclick="generatePath()">
-            اجعل NOVA تبني مساري
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         LEARN
-         ===================================================== -->
-
-    <section class="page" id="page-learn">
-
-      <div class="section-title">
-        <h2>التعلم</h2>
-        <span>دروس مولدة حسب مستواك</span>
-      </div>
-
-      <div class="grid">
-
-        <div class="card interactive"
-             onclick="generateLesson('Programming')">
-
-          <div class="icon">⌘</div>
-
-          <h3>Programming</h3>
-
-          <p>
-            Python، JavaScript، Algorithms، Data Structures
-            وغيرها.
-          </p>
-
-          <span class="tag">
-            Generate Lesson
-          </span>
-
-        </div>
-
-        <div class="card interactive"
-             onclick="generateLesson('Cybersecurity')">
-
-          <div class="icon">🛡️</div>
-
-          <h3>Cybersecurity</h3>
-
-          <p>
-            Networking، Web Security، Hashing، Authentication
-            والدفاع السيبراني.
-          </p>
-
-          <span class="tag">
-            Generate Lesson
-          </span>
-
-        </div>
-
-        <div class="card interactive"
-             onclick="generateLesson('Technology')">
-
-          <div class="icon">◈</div>
-
-          <h3>Technology</h3>
-
-          <p>
-            AI، Cloud، Operating Systems، Databases
-            وتقنيات حديثة.
-          </p>
-
-          <span class="tag">
-            Generate Lesson
-          </span>
-
-        </div>
-
-      </div>
-
-      <div class="section-title">
-        <h2>درس NOVA القادم</h2>
-        <span>يتم تحديده من ذاكرتك</span>
-      </div>
-
-      <div id="lessonArea">
-
-        <div class="card">
-          <h3>لم يتم توليد درس بعد</h3>
-          <p>
-            اضغط على أحد المجالات أعلاه ودع NOVA تبني درسًا جديدًا.
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         CYBER
-         ===================================================== -->
-
-    <section class="page" id="page-cyber">
-
-      <div class="hero">
-
-        <div class="tag">DEFENSIVE CYBER RANGE</div>
-
-        <h1>
-          تعلّم الأمن السيبراني
-          <span class="gradient-text">
-            بدون تدمير شيء.
-          </span>
-        </h1>
-
-        <p>
-          مختبرات VANTA مصممة للتعلم والدفاع والفهم:
-          كلمات المرور، Hashing، الشبكات، التصيد، Web Security
-          وغيرها.
-        </p>
-
-        <div class="hero-actions">
-
-          <button
-            class="btn primary"
-            onclick="generateCyberLab()">
-            افتح مختبرًا جديدًا
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="section-title">
-        <h2>Cyber Labs</h2>
-        <span>تتغير مع مستواك</span>
-      </div>
-
-      <div id="cyberArea">
-
-        <div class="grid">
-
-          <div class="card interactive"
-               onclick="generateCyberLab('Password Security')">
-            <div class="icon">🔐</div>
-            <h3>Password Security</h3>
-            <p>افهم لماذا تختلف قوة كلمات المرور.</p>
-          </div>
-
-          <div class="card interactive"
-               onclick="generateCyberLab('Hashing')">
-            <div class="icon">#</div>
-            <h3>Hashing</h3>
-            <p>افهم التجزئة والتحقق من سلامة البيانات.</p>
-          </div>
-
-          <div class="card interactive"
-               onclick="generateCyberLab('Phishing Awareness')">
-            <div class="icon">🎣</div>
-            <h3>Phishing Awareness</h3>
-            <p>تعلم اكتشاف الرسائل والمواقع الاحتيالية.</p>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         LABS
-         ===================================================== -->
-
-    <section class="page" id="page-labs">
-
-      <div class="section-title">
-        <h2>Labs</h2>
-        <span>تطبيق عملي</span>
-      </div>
-
-      <div id="labsArea">
-
-        <div class="grid">
-
-          <div class="card interactive"
-               onclick="generateCyberLab('Networking Lab')">
-            <div class="icon">🌐</div>
-            <h3>Networking Lab</h3>
-            <p>حلل المفاهيم الأساسية للشبكات.</p>
-          </div>
-
-          <div class="card interactive"
-               onclick="generateCyberLab('Web Security Lab')">
-            <div class="icon">🌍</div>
-            <h3>Web Security Lab</h3>
-            <p>تعلم مفاهيم أمان تطبيقات الويب بشكل دفاعي.</p>
-          </div>
-
-          <div class="card interactive"
-               onclick="generateCyberLab('Linux Lab')">
-            <div class="icon">🐧</div>
-            <h3>Linux Lab</h3>
-            <p>تدرب على مفاهيم Linux والأنظمة.</p>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         CHALLENGES
-         ===================================================== -->
-
-    <section class="page" id="page-challenges">
-
-      <div class="section-title">
-        <h2>Challenges / CTF</h2>
-        <span>اختبر فهمك</span>
-      </div>
-
-      <div class="hero">
-
-        <div class="tag">NOVA GENERATED</div>
-
-        <h1>
-          لا تحفظ.
-          <span class="gradient-text">
-            حل.
-          </span>
-        </h1>
-
-        <p>
-          NOVA تستطيع إنشاء تحديات جديدة بناءً على مستواك
-          ونقاط ضعفك.
-        </p>
-
-        <div class="hero-actions">
-
-          <button
-            class="btn primary"
-            onclick="generateChallenge()">
-            تحدي جديد
-          </button>
-
-        </div>
-
-      </div>
-
-      <div id="challengeArea" style="margin-top:20px"></div>
-
-    </section>
-
-    <!-- =====================================================
-         PROGRAMMING
-         ===================================================== -->
-
-    <section class="page" id="page-programming">
-
-      <div class="section-title">
-        <h2>Programming</h2>
-        <span>بناء مهارات حقيقية</span>
-      </div>
-
-      <div class="grid">
-
-        <div class="card interactive"
-             onclick="generateLesson('Python')">
-          <div class="icon">🐍</div>
-          <h3>Python</h3>
-          <p>من الأساسيات إلى البرمجة المتقدمة.</p>
-        </div>
-
-        <div class="card interactive"
-             onclick="generateLesson('JavaScript')">
-          <div class="icon">JS</div>
-          <h3>JavaScript</h3>
-          <p>Web، DOM، APIs، Async والمزيد.</p>
-        </div>
-
-        <div class="card interactive"
-             onclick="generateLesson('Algorithms')">
-          <div class="icon">∑</div>
-          <h3>Algorithms</h3>
-          <p>حل المشكلات والتفكير الخوارزمي.</p>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         TECHNOLOGY
-         ===================================================== -->
-
-    <section class="page" id="page-technology">
-
-      <div class="section-title">
-        <h2>Technology</h2>
-        <span>تقنيات العالم الحديث</span>
-      </div>
-
-      <div class="grid">
-
-        <div class="card interactive"
-             onclick="generateLesson('Artificial Intelligence')">
-          <div class="icon">🤖</div>
-          <h3>Artificial Intelligence</h3>
-          <p>أساسيات الذكاء الاصطناعي والنماذج الحديثة.</p>
-        </div>
-
-        <div class="card interactive"
-             onclick="generateLesson('Cloud Computing')">
-          <div class="icon">☁️</div>
-          <h3>Cloud</h3>
-          <p>الحوسبة السحابية والبنية الحديثة.</p>
-        </div>
-
-        <div class="card interactive"
-             onclick="generateLesson('Databases')">
-          <div class="icon">🗄️</div>
-          <h3>Databases</h3>
-          <p>قواعد البيانات والتعامل مع البيانات.</p>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         LIBRARY
-         ===================================================== -->
-
-    <section class="page" id="page-library">
-
-      <div class="section-title">
-        <h2>Library</h2>
-        <span>مصادر التعلم</span>
-      </div>
-
-      <div class="grid">
-
-        <div class="card">
-          <div class="icon">📚</div>
-          <h3>Courses</h3>
-          <p>
-            الدورات والمسارات التي تبنيها NOVA حسب احتياجك.
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="icon">▶</div>
-          <h3>YouTube</h3>
-          <p>
-            مساحة للمصادر التعليمية المرئية.
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="icon">📖</div>
-          <h3>Books</h3>
-          <p>
-            الكتب والمراجع التعليمية.
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="icon">🌐</div>
-          <h3>Web Knowledge</h3>
-          <p>
-            مصادر الويب التي يتم ربطها لاحقًا بطبقة البحث.
-          </p>
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         QUIZ / EXAM
-         ===================================================== -->
-
-    <section class="page" id="page-quiz">
-
-      <div class="section-title">
-        <h2>Quiz / Adaptive Exams</h2>
-        <span>NOVA تقرر مستوى الاختبار</span>
-      </div>
-
-      <div class="card">
-
-        <h3>اختبار جديد</h3>
-
-        <p>
-          NOVA ستبني الاختبار اعتمادًا على مستواك،
-          المواضيع الضعيفة، والأداء السابق.
-        </p>
-
-        <div class="hero-actions">
-
-          <button
-            class="btn primary"
-            onclick="startAdaptiveExam()">
-            ابدأ الاختبار
-          </button>
-
-        </div>
-
-      </div>
-
-      <div
-        id="examArea"
-        style="margin-top:22px">
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         ROADMAP
-         ===================================================== -->
-
-    <section class="page" id="page-roadmap">
-
-      <div class="section-title">
-        <h2>Roadmap</h2>
-        <span>المسار الذي تبنيه NOVA</span>
-      </div>
-
-      <div id="roadmapArea">
-
-        <div class="card">
-
-          <h3>لا يوجد مسار بعد</h3>
-
-          <p>
-            NOVA تستطيع إنشاء مسار مخصص لك.
-          </p>
-
-          <div class="hero-actions">
-
-            <button
-              class="btn primary"
-              onclick="generatePath()">
-              إنشاء المسار
-            </button>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- =====================================================
-         DASHBOARD
-         ===================================================== -->
-
-    <section class="page" id="page-dashboard">
-
-      <div class="section-title">
-        <h2>Dashboard</h2>
-        <span>بيانات تقدمك</span>
-      </div>
-
-      <div class="stats">
-
-        <div class="stat">
-          <small>Level</small>
-          <strong id="dashLevel">1</strong>
-        </div>
-
-        <div class="stat">
-          <small>XP</small>
-          <strong id="dashXp">0</strong>
-        </div>
-
-        <div class="stat">
-          <small>Lessons</small>
-          <strong id="dashLessons">0</strong>
-        </div>
-
-        <div class="stat">
-          <small>Badges</small>
-          <strong id="dashBadges">0</strong>
-        </div>
-
-      </div>
-
-      <div class="section-title">
-        <h2>Mastery</h2>
-        <span>إتقان المواضيع</span>
-      </div>
-
-      <div id="masteryArea"></div>
-
-    </section>
-
-    <!-- =====================================================
-         SETTINGS
-         ===================================================== -->
-
-    <section class="page" id="page-settings">
-
-      <div class="section-title">
-        <h2>Settings</h2>
-        <span>تحكم في VANTA</span>
-      </div>
-
-      <div class="grid two">
-
-        <div class="card">
-
-          <h3>اسم الطالب</h3>
-
-          <div class="field">
-            <input
-              id="settingsName"
-              placeholder="اسمك">
-          </div>
-
-          <button
-            class="btn primary"
-            onclick="saveSettings()">
-            حفظ
-          </button>
-
-        </div>
-
-        <div class="card">
-
-          <h3>NOVA Voice</h3>
-
-          <p>
-            صوت NOVA والترحيب السينمائي.
-          </p>
-
-          <div class="hero-actions">
-
-            <button
-              class="btn"
-              onclick="speakNova('مرحبًا بك في VANTA. أنا NOVA. لنبدأ.')">
-              اختبار صوت NOVA
-            </button>
-
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <h3>Account</h3>
-
-          <p id="accountState">
-            غير مسجل الدخول.
-          </p>
-
-          <div class="hero-actions">
-
-            <button
-              class="btn danger"
-              onclick="logout()">
-              تسجيل الخروج
-            </button>
-
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <h3>VANTA</h3>
-
-          <p>
-            Founded & Developed by
-            <strong>Ali Yaser — علي ياسر</strong>
-          </p>
-
-          <p style="margin-top:8px">
-            Instagram:
-            <strong>ali_yr_1</strong>
-          </p>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- FOOTER -->
-
-    <footer class="footer">
-
-      <strong>VANTA</strong>
-
-      <br>
-
-      Founded & Developed by
-      <strong>Ali Yaser — علي ياسر</strong>
-
-      <br>
-
-      <span>
-        ali_yr_1
-      </span>
-
-      <br><br>
-
-      Thanks to Mohammed Adel Abbas,
-      Faisal Rani and Mohammed Sami.
-
-    </footer>
-
-  </main>
-
-</div>
-
-<!-- =========================================================
-     NOVA CHAT
-     ========================================================= -->
-
-<div class="nova-chat">
-
-  <button
-    class="nova-orb"
-    onclick="openNova()"
-    aria-label="NOVA">
-  </button>
-
-  <div
-    class="nova-chat-panel"
-    id="novaPanel">
-
-    <div class="chat-head">
-
-      <div class="nova-dot"></div>
-
-      <div>
-        <strong>NOVA</strong>
-        <div style="font-size:11px;color:#858998">
-          VANTA CORE
-        </div>
-      </div>
-
     </div>
 
-    <div
-      class="chat-messages"
-      id="chatMessages">
+    <div class="nova-card">
 
-      <div class="msg nova">
-        أنا NOVA.
-        أخبرني ماذا تريد أن تتعلم، وسأحدد لك الخطوة التالية.
+      <div class="nova-big">
+        <div class="tendril t1"></div>
+        <div class="tendril t2"></div>
+        <div class="tendril t3"></div>
+        <div class="tendril t4"></div>
+        <div class="nova-head"></div>
+        <div class="nova-eye left"></div>
+        <div class="nova-eye right"></div>
+        <div class="nova-mouth"></div>
       </div>
 
-    </div>
-
-    <div class="chat-input">
-
-      <input
-        id="chatInput"
-        placeholder="اكتب لـ NOVA..."
-        onkeydown="if(event.key==='Enter')sendChat()">
-
-      <button
-        class="btn primary"
-        onclick="sendChat()">
-        إرسال
-      </button>
+      <div class="status-dot">
+        <span class="dot"></span>
+        NOVA ONLINE
+      </div>
 
     </div>
 
   </div>
 
+  <div class="section-title">
+    <div>
+      <h2>مركز القيادة</h2>
+      <p>تقدمك الحالي في VANTA</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card stat">
+      <div class="number" id="xpValue">0</div>
+      <div class="label">XP</div>
+    </div>
+
+    <div class="card stat">
+      <div class="number" id="streakValue">0</div>
+      <div class="label">أيام متتالية</div>
+    </div>
+
+    <div class="card stat">
+      <div class="number" id="lessonsValue">0</div>
+      <div class="label">دروس مكتملة</div>
+    </div>
+
+    <div class="card stat">
+      <div class="number" id="levelValue">1</div>
+      <div class="label">المستوى</div>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    <div>
+      <h2>مهمتك الحالية</h2>
+      <p>مهمة واحدة واضحة أفضل من عشر مهام مهجورة.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="icon-box">◈</div>
+    <h3 id="missionTitle">دع NOVA تحدد أول مهمة لك</h3>
+    <p id="missionText">
+      سجّل الدخول ثم ابدأ أول درس ليتمكن النظام من بناء مسارك التعليمي.
+    </p>
+    <br>
+    <button class="primary" onclick="generateLesson()">ابدأ المهمة</button>
+  </div>
+
+  <div class="section-title">
+    <div>
+      <h2>من يقف خلف VANTA؟</h2>
+      <p>المشروع له وجه حقيقي.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Ali Yaser — علي ياسر</h3>
+    <p>
+      مؤسس ومطور ومالك VANTA.
+      الفكرة بسيطة: بناء مساحة تعليمية حديثة تجعل التقنية شيئًا
+      يُمارس ويُفهم، وليس مجرد معلومات تُنسى بعد الامتحان.
+    </p>
+    <br>
+    <button class="secondary" onclick="openAli()">اكتشف رحلة VANTA</button>
+  </div>
+
+</section>
+
+<!-- LEARN -->
+
+<section class="page" id="page-learn">
+
+  <div class="section-title">
+    <div>
+      <h2>التعلم</h2>
+      <p>المحتوى يتغير مع مستواك.</p>
+    </div>
+
+    <button class="primary" onclick="generateLesson()">
+      NOVA: أنشئ درسًا
+    </button>
+  </div>
+
+  <div class="learning-layout">
+
+    <div class="lesson-list" id="lessonList">
+
+      <div class="lesson" onclick="generateLesson('programming')">
+        <div class="lesson-icon">⌘</div>
+        <div class="lesson-info">
+          <strong>البرمجة</strong>
+          <span>أساسيات → منطق → مشاريع</span>
+          <div class="progress"><i style="width:12%"></i></div>
+        </div>
+      </div>
+
+      <div class="lesson" onclick="generateLesson('cybersecurity')">
+        <div class="lesson-icon">◉</div>
+        <div class="lesson-info">
+          <strong>الأمن السيبراني</strong>
+          <span>دفاع، شبكات، مفاهيم أمنية</span>
+          <div class="progress"><i style="width:8%"></i></div>
+        </div>
+      </div>
+
+      <div class="lesson" onclick="generateLesson('technology')">
+        <div class="lesson-icon">✦</div>
+        <div class="lesson-info">
+          <strong>التقنية الحديثة</strong>
+          <span>AI، Cloud، Systems، Web</span>
+          <div class="progress"><i style="width:5%"></i></div>
+        </div>
+      </div>
+
+      <div class="lesson" onclick="generateLesson('networks')">
+        <div class="lesson-icon">⌁</div>
+        <div class="lesson-info">
+          <strong>الشبكات</strong>
+          <span>Protocols، IP، DNS، HTTP</span>
+          <div class="progress"><i style="width:3%"></i></div>
+        </div>
+      </div>
+
+    </div>
+
+    <aside class="card">
+      <h3>NOVA Learning Engine</h3>
+      <p>
+        بعد كل إجابة، يستطيع النظام تعديل مستوى السؤال،
+        تسجيل الأخطاء، واختيار الموضوع التالي بناءً على أدائك.
+      </p>
+
+      <br>
+
+      <button class="primary" onclick="generateQuestion()">
+        سؤال جديد
+      </button>
+
+      <button class="secondary" onclick="generateExam()" style="margin-top:8px;width:100%">
+        اختبار متكيف
+      </button>
+    </aside>
+
+  </div>
+
+</section>
+
+<!-- CYBER -->
+
+<section class="page" id="page-cyber">
+
+  <div class="section-title">
+    <div>
+      <h2>Cyber Range</h2>
+      <p>تدريب دفاعي آمن داخل بيئة تعليمية.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="icon-box">🔐</div>
+      <h3>قوة كلمات المرور</h3>
+      <p>افهم لماذا تختلف كلمات المرور القوية عن الضعيفة.</p>
+      <br>
+      <button class="secondary" onclick="startCyber('password')">ابدأ</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">#</div>
+      <h3>Hashing</h3>
+      <p>تعلم فكرة التجزئة واستخداماتها الأمنية.</p>
+      <br>
+      <button class="secondary" onclick="startCyber('hashing')">ابدأ</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">◌</div>
+      <h3>Phishing Awareness</h3>
+      <p>تعلم اكتشاف الرسائل والروابط المشبوهة.</p>
+      <br>
+      <button class="secondary" onclick="startCyber('phishing')">ابدأ</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">⌁</div>
+      <h3>Network Defense</h3>
+      <p>مفاهيم أساسية لفهم حماية الشبكات.</p>
+      <br>
+      <button class="secondary" onclick="startCyber('network')">ابدأ</button>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- LABS -->
+
+<section class="page" id="page-labs">
+
+  <div class="section-title">
+    <div>
+      <h2>المختبرات</h2>
+      <p>حوّل المعرفة إلى ممارسة.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="icon-box">01</div>
+      <h3>Web Fundamentals</h3>
+      <p>HTML وCSS وJavaScript ومفاهيم الويب.</p>
+      <br>
+      <button class="primary" onclick="generateLab('web')">فتح المختبر</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">02</div>
+      <h3>Python Lab</h3>
+      <p>تدريبات برمجية متدرجة.</p>
+      <br>
+      <button class="primary" onclick="generateLab('python')">فتح المختبر</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">03</div>
+      <h3>Security Lab</h3>
+      <p>مفاهيم دفاعية وتمارين تحليل.</p>
+      <br>
+      <button class="primary" onclick="generateLab('security')">فتح المختبر</button>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CHALLENGES -->
+
+<section class="page" id="page-challenges">
+
+  <div class="section-title">
+    <div>
+      <h2>التحديات</h2>
+      <p>اختبر فهمك بدل حفظ الإجابات.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>تحدي NOVA</h3>
+    <p>
+      تحدٍ يتم توليده حسب مستواك الحالي.
+      لا يوجد مسار ثابت للجميع.
+    </p>
+    <br>
+    <button class="primary" onclick="generateChallenge()">
+      ولّد تحديًا
+    </button>
+  </div>
+
+</section>
+
+<!-- PROGRAMMING -->
+
+<section class="page" id="page-programming">
+
+  <div class="section-title">
+    <div>
+      <h2>Programming</h2>
+      <p>ابنِ الأساس الذي تعتمد عليه كل التقنيات الأخرى.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="icon-box">Py</div>
+      <h3>Python</h3>
+      <p>من الأساسيات إلى بناء المشاريع.</p>
+      <br>
+      <button class="secondary" onclick="generateLesson('python')">تعلم</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">&lt;/&gt;</div>
+      <h3>JavaScript</h3>
+      <p>لغة أساسية لبناء الويب الحديث.</p>
+      <br>
+      <button class="secondary" onclick="generateLesson('javascript')">تعلم</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">C</div>
+      <h3>Computer Science</h3>
+      <p>المنطق، الخوارزميات، وهياكل البيانات.</p>
+      <br>
+      <button class="secondary" onclick="generateLesson('computer science')">تعلم</button>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- TECHNOLOGY -->
+
+<section class="page" id="page-technology">
+
+  <div class="section-title">
+    <div>
+      <h2>Technology</h2>
+      <p>افهم العالم التقني الذي تعمل داخله.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="icon-box">AI</div>
+      <h3>Artificial Intelligence</h3>
+      <p>نماذج الذكاء الاصطناعي، الاستخدامات، والمفاهيم الأساسية.</p>
+      <br>
+      <button class="secondary" onclick="generateLesson('artificial intelligence')">استكشف</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">☁</div>
+      <h3>Cloud</h3>
+      <p>الخدمات السحابية والبنية التحتية الحديثة.</p>
+      <br>
+      <button class="secondary" onclick="generateLesson('cloud computing')">استكشف</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">WEB</div>
+      <h3>Modern Web</h3>
+      <p>كيف تعمل تطبيقات الويب الحديثة.</p>
+      <br>
+      <button class="secondary" onclick="generateLesson('modern web')">استكشف</button>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- LIBRARY -->
+
+<section class="page" id="page-library">
+
+  <div class="section-title">
+    <div>
+      <h2>المكتبة</h2>
+      <p>مكان واحد لمصادر رحلتك التعليمية.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="icon-box">▤</div>
+      <h3>الدروس</h3>
+      <p>دروس يتم توليدها وتخصيصها حسب احتياجك.</p>
+      <br>
+      <button class="secondary" onclick="generateLesson()">فتح</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">▶</div>
+      <h3>الفيديوهات</h3>
+      <p>يمكن ربط المصادر الخارجية لاحقًا بمحرك المصادر.</p>
+      <br>
+      <button class="secondary" onclick="toast('قسم المصادر يتوسع مع VANTA')">استكشف</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">B</div>
+      <h3>الكتب</h3>
+      <p>مراجع تساعدك على بناء فهم أعمق.</p>
+      <br>
+      <button class="secondary" onclick="toast('سيتم تنظيم الكتب داخل مكتبة VANTA')">استكشف</button>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- QUIZ -->
+
+<section class="page" id="page-quiz">
+
+  <div class="exam-shell">
+
+    <div class="section-title">
+      <div>
+        <h2>اختبار NOVA</h2>
+        <p>الأسئلة تتكيف مع أدائك.</p>
+      </div>
+    </div>
+
+    <div id="quizArea">
+
+      <div class="card" style="text-align:center;padding:50px 25px">
+        <h3>جاهز؟</h3>
+        <p>
+          سيولد NOVA اختبارًا مناسبًا لمستواك الحالي.
+        </p>
+        <br>
+        <button class="primary" onclick="generateExam()">
+          ابدأ الاختبار
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ROADMAP -->
+
+<section class="page" id="page-roadmap">
+
+  <div class="section-title">
+    <div>
+      <h2>Roadmap</h2>
+      <p>طريقك من المبتدئ إلى بناء الأشياء فعليًا.</p>
+    </div>
+
+    <button class="primary" onclick="generateRoadmap()">
+      ابنِ خارطتي
+    </button>
+  </div>
+
+  <div id="roadmapArea" class="grid">
+
+    <div class="card">
+      <div class="icon-box">01</div>
+      <h3>Foundation</h3>
+      <p>أساسيات الحاسب والمنطق والبرمجة.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">02</div>
+      <h3>Build</h3>
+      <p>مشاريع عملية وتطبيق المفاهيم.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">03</div>
+      <h3>Security</h3>
+      <p>مفاهيم الأمن والدفاع الرقمي.</p>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">04</div>
+      <h3>Advanced</h3>
+      <p>مواضيع متقدمة حسب أدائك.</p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- DASHBOARD -->
+
+<section class="page" id="page-dashboard">
+
+  <div class="section-title">
+    <div>
+      <h2>لوحتي</h2>
+      <p>الصورة الكاملة لتقدمك.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>المستوى</h3>
+      <p id="dashLevel">1</p>
+    </div>
+
+    <div class="card">
+      <h3>XP</h3>
+      <p id="dashXp">0</p>
+    </div>
+
+    <div class="card">
+      <h3>الدروس</h3>
+      <p id="dashLessons">0</p>
+    </div>
+
+    <div class="card">
+      <h3>السلسلة</h3>
+      <p id="dashStreak">0</p>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    <div>
+      <h2>تحليل NOVA</h2>
+      <p>ما الذي يحتاج إلى عمل؟</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <p id="novaAnalysis">
+      سجّل الدخول وابدأ التدريب حتى يتمكن NOVA من تحليل تقدمك.
+    </p>
+  </div>
+
+</section>
+
+<!-- SETTINGS -->
+
+<section class="page" id="page-settings">
+
+  <div class="section-title">
+    <div>
+      <h2>الإعدادات</h2>
+      <p>تحكم في تجربة VANTA.</p>
+    </div>
+  </div>
+
+  <div class="card settings">
+
+    <div class="setting-row">
+      <div>
+        <strong>المؤثرات الصوتية</strong>
+        <span>أصوات VANTA وNOVA</span>
+      </div>
+      <button class="toggle on" id="soundToggle" onclick="toggleSetting('sound')">
+        <i></i>
+      </button>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <strong>ترحيب NOVA الصوتي</strong>
+        <span>عند تشغيل VANTA</span>
+      </div>
+      <button class="toggle on" id="voiceToggle" onclick="toggleSetting('voice')">
+        <i></i>
+      </button>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <strong>المؤثرات الفضائية</strong>
+        <span>النجوم والشهب والحركة الخلفية</span>
+      </div>
+      <button class="toggle on" id="spaceToggle" onclick="toggleSetting('space')">
+        <i></i>
+      </button>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <strong>حساب VANTA</strong>
+        <span id="accountStatus">غير مسجل</span>
+      </div>
+      <button class="secondary" onclick="openAuth()">الحساب</button>
+    </div>
+
+    <div class="setting-row">
+      <div>
+        <strong>تسجيل الخروج</strong>
+        <span>إنهاء جلسة Firebase الحالية</span>
+      </div>
+      <button class="danger" onclick="logout()">خروج</button>
+    </div>
+
+  </div>
+
+  <div class="section-title">
+    <div>
+      <h2>عن VANTA</h2>
+      <p>الملكية والتطوير.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>VANTA</h3>
+    <p>
+      © 2026 Ali Yaser — جميع الحقوق محفوظة.
+      <br>
+      المؤسس والمطور والمالك: Ali Yaser / علي ياسر
+      <br>
+      Instagram: ali_yr_1
+    </p>
+  </div>
+
+  <div class="section-title">
+    <div>
+      <h2>شكر</h2>
+      <p>الأشخاص الذين كانوا جزءًا من الرحلة.</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Mohammed Adel Abbas</h3>
+      <p>شكرًا لكونك جزءًا من رحلة VANTA.</p>
+    </div>
+
+    <div class="card">
+      <h3>Faisal Rani</h3>
+      <p>شكرًا لكونك جزءًا من الرحلة.</p>
+    </div>
+
+    <div class="card">
+      <h3>Mohammed Sami</h3>
+      <p>شكرًا لكونك جزءًا من الرحلة.</p>
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+
+  <div class="footer-grid">
+
+    <div class="footer-brand">
+      <strong>VANTA</strong>
+      <p>
+        منصة تعلم مستقبلية من تطوير
+        <b>Ali Yaser — علي ياسر</b>.
+        <br>
+        Instagram: ali_yr_1
+      </p>
+    </div>
+
+    <div class="footer-note">
+      © 2026 Ali Yaser. VANTA.
+    </div>
+
+  </div>
+
+</footer>
+
 </div>
 
-<!-- =========================================================
-     AUTH MODAL
-     ========================================================= -->
+<!-- NOVA -->
+
+<button id="nova-fab" onclick="toggleNova()" aria-label="NOVA">
+  ◈
+</button>
+
+<div id="nova-panel">
+
+  <div class="nova-header">
+    <div>
+      <strong>NOVA</strong>
+      <small> — VANTA AI</small>
+    </div>
+    <button class="secondary" onclick="toggleNova()">×</button>
+  </div>
+
+  <div class="nova-messages" id="novaMessages">
+
+    <div class="msg nova">
+      أنا NOVA.
+      إذا كنت هنا للتعلم، فابدأ.
+      لا تقلق... سأجعل الأمر أصعب عندما تصبح مستعدًا.
+    </div>
+
+  </div>
+
+  <div class="nova-input">
+
+    <input
+      id="novaInput"
+      placeholder="اسأل NOVA..."
+      onkeydown="if(event.key==='Enter')sendNova()"
+    >
+
+    <button onclick="sendNova()">↑</button>
+
+  </div>
+
+</div>
+
+<!-- AUTH -->
 
 <div class="modal" id="authModal">
 
   <div class="auth-box">
 
-    <h2>دخول إلى VANTA</h2>
+    <h2>دخول VANTA</h2>
 
-    <p style="color:var(--muted)">
-      NOVA تحتاج إلى حساب حتى تحفظ تقدمك وذاكرتك.
+    <p style="color:#858190;font-size:12px">
+      استخدم حسابك لحفظ تقدمك عبر الأجهزة.
     </p>
 
-    <div class="field">
-      <label>الاسم</label>
-      <input
-        id="authName"
-        placeholder="Ali">
-    </div>
+    <input id="authEmail" type="email" placeholder="البريد الإلكتروني">
+    <input id="authPassword" type="password" placeholder="كلمة المرور">
 
-    <div class="field">
-      <label>Email</label>
-      <input
-        id="authEmail"
-        type="email"
-        placeholder="you@example.com">
-    </div>
+    <div class="auth-actions">
 
-    <div class="field">
-      <label>Password</label>
-      <input
-        id="authPassword"
-        type="password"
-        placeholder="••••••••">
-    </div>
-
-    <div class="hero-actions">
-
-      <button
-        class="btn primary"
-        onclick="signUp()">
-        إنشاء حساب
-      </button>
-
-      <button
-        class="btn"
-        onclick="signIn()">
+      <button class="primary" onclick="login()">
         تسجيل الدخول
       </button>
 
-      <button
-        class="btn"
-        onclick="closeAuth()">
-        إغلاق
+      <button class="secondary" onclick="signup()">
+        إنشاء حساب
+      </button>
+
+      <button class="secondary" onclick="closeAuth()">
+        إلغاء
       </button>
 
     </div>
+
+    <div class="auth-message" id="authMessage"></div>
 
   </div>
 
@@ -2380,11 +2007,9 @@ main{
 <script>
 /* =========================================================
    VANTA CORE
-   ========================================================= */
+========================================================= */
 
-/* ---------------- Firebase ---------------- */
-
-const firebaseConfig = {
+const FIREBASE_CONFIG = {
   apiKey: "AIzaSyDwPdYkuRjugCD21tChOoSLldQG5raA-ps",
   authDomain: "vanta-9c0bb.firebaseapp.com",
   projectId: "vanta-9c0bb",
@@ -2394,555 +2019,300 @@ const firebaseConfig = {
   measurementId: "G-10C7TQPCZB"
 };
 
-firebase.initializeApp(firebaseConfig);
+const AI_ENDPOINT = "/api/nova";
+
+firebase.initializeApp(FIREBASE_CONFIG);
 
 const auth = firebase.auth();
 
-/* ---------------- API ---------------- */
-
-const AI_ENDPOINT = "/api/nova";
-
-/* ---------------- Local state ---------------- */
-
-const DEFAULT_STATE = {
-  page:"home",
-  name:"",
-  xp:0,
-  level:1,
-  lessons:0,
-  badges:[],
-  focus:"",
-  streak:0,
-  gems:0,
-  studyMinutes:0,
-  mastery:{},
-  weakTopics:[],
-  strengths:[],
-  mistakes:[],
-  recentScores:[],
-  recentTopics:[],
-  history:[],
-  learningPath:[],
-  seenQuestionIds:[],
-  completedLessons:[],
-  settings:{
-    language:"ar",
-    personality:"adaptive",
-    voice:true
-  }
-};
-
-let state = loadState();
-
 let currentUser = null;
 
-let exam = null;
+let state = {
+  xp: 0,
+  level: 1,
+  lessons: 0,
+  streak: 0,
+  sound: true,
+  voice: true,
+  space: true
+};
 
-let examIndex = 0;
-
-let selectedAnswer = null;
+let currentQuiz = null;
 
 /* =========================================================
-   STATE
-   ========================================================= */
+   LOCAL STATE
+========================================================= */
 
 function loadState(){
 
   try{
+    const saved = localStorage.getItem("VANTA_STATE");
 
-    const raw =
-      localStorage.getItem("VANTA_STATE");
-
-    if(!raw){
-      return structuredClone(DEFAULT_STATE);
+    if(saved){
+      state = {
+        ...state,
+        ...JSON.parse(saved)
+      };
     }
+  }catch(e){}
 
-    return {
-      ...structuredClone(DEFAULT_STATE),
-      ...JSON.parse(raw)
-    };
-
-  }catch{
-
-    return structuredClone(DEFAULT_STATE);
-
-  }
-
+  renderState();
 }
 
 function saveState(){
-
-  localStorage.setItem(
-    "VANTA_STATE",
-    JSON.stringify(state)
-  );
-
-  renderAll();
-
+  localStorage.setItem("VANTA_STATE",JSON.stringify(state));
+  renderState();
 }
 
-function renderAll(){
+function renderState(){
 
-  const fields = {
-
-    homeLevel:
-      state.level,
-
-    homeXp:
-      state.xp,
-
-    homeLessons:
-      state.lessons,
-
-    homeStreak:
-      state.streak,
-
-    dashLevel:
-      state.level,
-
-    dashXp:
-      state.xp,
-
-    dashLessons:
-      state.lessons,
-
-    dashBadges:
-      state.badges.length
-
+  const ids = {
+    xpValue: state.xp,
+    streakValue: state.streak,
+    lessonsValue: state.lessons,
+    levelValue: state.level,
+    dashXp: state.xp,
+    dashStreak: state.streak,
+    dashLessons: state.lessons,
+    dashLevel: state.level
   };
 
-  Object.entries(fields).forEach(
-    ([id,value])=>{
-
-      const el =
-        document.getElementById(id);
-
-      if(el) el.textContent=value;
-
-    }
-  );
-
-  const avatar =
-    document.getElementById("avatar");
-
-  if(avatar){
-
-    avatar.textContent =
-      (state.name || "A")
-      .charAt(0)
-      .toUpperCase();
-
-  }
-
-  const settingsName =
-    document.getElementById("settingsName");
-
-  if(settingsName &&
-     document.activeElement !== settingsName){
-
-    settingsName.value =
-      state.name || "";
-
-  }
-
-  const focus =
-    document.getElementById("homeFocus");
-
-  if(focus){
-
-    focus.textContent =
-      state.focus ||
-      "لم تحدد هدفًا بعد";
-
-  }
-
-  renderMastery();
-
-  updateAuthUI();
-
-}
-
-/* =========================================================
-   NAVIGATION
-   ========================================================= */
-
-function go(page){
-
-  state.page = page;
-
-  document
-    .querySelectorAll(".page")
-    .forEach(p=>p.classList.remove("active"));
-
-  const target =
-    document.getElementById(
-      "page-" + page
-    );
-
-  if(target){
-    target.classList.add("active");
-  }
-
-  document
-    .querySelectorAll(".nav button")
-    .forEach(btn=>{
-
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === page
-      );
-
-    });
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
+  Object.entries(ids).forEach(([id,value])=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
   });
 
-  saveState();
+  const status = document.getElementById("accountStatus");
+
+  if(status){
+    status.textContent =
+      currentUser
+        ? currentUser.email
+        : "غير مسجل";
+  }
+
+  document.getElementById("soundToggle")?.classList.toggle("on",state.sound);
+  document.getElementById("voiceToggle")?.classList.toggle("on",state.voice);
+  document.getElementById("spaceToggle")?.classList.toggle("on",state.space);
 }
 
 /* =========================================================
    INTRO
-   ========================================================= */
+========================================================= */
 
-let introTimer = null;
+const intro = document.getElementById("intro");
+const app = document.getElementById("app");
 
-function startIntro(){
+document.getElementById("enterBtn").addEventListener("click",()=>{
 
-  const status =
-    document.getElementById("introStatus");
-
-  const message =
-    document.getElementById("introMessage");
-
-  const enter =
-    document.getElementById("enterBtn");
-
-  enter.style.opacity="0";
-
-  const sequence = [
-
-    ["VANTA SYSTEM // INITIALIZING",
-     "النظام يستيقظ..."],
-
-    ["UNKNOWN ENTITY // DETECTED",
-     "هناك شيء آخر هنا..."],
-
-    ["NOVA CORE // ONLINE",
-     "NOVA تستيقظ..."],
-
-    ["EYE CONTACT // ESTABLISHED",
-     "إنها تنظر إليك."],
-
-    ["CONNECTION // ESTABLISHED",
-     "لقد دخلت VANTA."]
-
-  ];
-
-  let i=0;
-
-  introTimer =
-    setInterval(()=>{
-
-      if(i >= sequence.length){
-
-        clearInterval(introTimer);
-
-        enter.style.opacity="1";
-
-        return;
-
-      }
-
-      status.textContent =
-        sequence[i][0];
-
-      message.textContent =
-        sequence[i][1];
-
-      if(i===3){
-
-        document
-          .querySelector(".nova-body")
-          .style.transform =
-            "translate(-50%,-50%) scale(1.08)";
-
-        horrorSound();
-
-      }
-
-      i++;
-
-    },1200);
-
-}
-
-function enterVanta(){
-
-  clearInterval(introTimer);
-
-  const intro =
-    document.getElementById("intro");
-
-  intro.classList.add("hidden");
-
-  document
-    .getElementById("app")
-    .classList.add("ready");
+  playHorrorSound();
 
   setTimeout(()=>{
 
-    speakNova(
-      state.name
-      ? `مرحبًا ${state.name}. أنا NOVA. لقد عدت إلى VANTA.`
-      : "مرحبًا بك في VANTA. أنا NOVA. لنبدأ."
-    );
+    intro.classList.add("hidden");
+    app.classList.add("ready");
 
-  },900);
+    if(state.voice){
+      setTimeout(()=>{
+        speakArabic("أهلًا بك في VANTA. أنا NOVA. لنبدأ.");
+      },500);
+    }
 
-  meteor();
+  },700);
 
+});
+
+/* =========================================================
+   SPACE
+========================================================= */
+
+function createStars(){
+
+  const space = document.getElementById("space");
+
+  for(let i=0;i<130;i++){
+
+    const star = document.createElement("div");
+
+    star.className = "star";
+
+    star.style.left = Math.random()*100+"%";
+    star.style.top = Math.random()*100+"%";
+    star.style.animationDelay = Math.random()*5+"s";
+
+    space.appendChild(star);
+  }
 }
 
-function horrorSound(){
+createStars();
 
-  /*
-   * لا نحتاج ملف صوت خارجي.
-   * نستخدم Web Audio API لصنع نبضة صوتية مظلمة.
-   */
+function updateSpace(){
+
+  document.querySelectorAll(".star,.meteor,.nebula").forEach(el=>{
+    el.style.display = state.space ? "" : "none";
+  });
+}
+
+/* =========================================================
+   SOUND
+========================================================= */
+
+function playHorrorSound(){
+
+  if(!state.sound) return;
 
   try{
 
-    const C =
-      window.AudioContext ||
-      window.webkitAudioContext;
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-    if(!C) return;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
 
-    const ctx = new C();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(90,ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(35,ctx.currentTime+1.2);
 
-    const osc =
-      ctx.createOscillator();
-
-    const gain =
-      ctx.createGain();
-
-    osc.type="sawtooth";
-
-    osc.frequency.setValueAtTime(
-      75,
-      ctx.currentTime
-    );
-
-    osc.frequency.exponentialRampToValueAtTime(
-      28,
-      ctx.currentTime + .8
-    );
-
-    gain.gain.setValueAtTime(
-      .0001,
-      ctx.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .18,
-      ctx.currentTime + .05
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-      .0001,
-      ctx.currentTime + .8
-    );
+    gain.gain.setValueAtTime(.0001,ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(.08,ctx.currentTime+.1);
+    gain.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+1.5);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start();
-    osc.stop(ctx.currentTime+.8);
+    osc.stop(ctx.currentTime+1.5);
 
-  }catch{}
+  }catch(e){}
+}
 
+function speakArabic(text){
+
+  if(!state.voice) return;
+
+  if(!("speechSynthesis" in window)) return;
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = "ar-SA";
+  utterance.rate = .9;
+  utterance.pitch = .55;
+
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utterance);
 }
 
 /* =========================================================
-   METEORS / SPACE
-   ========================================================= */
+   NAVIGATION
+========================================================= */
 
-function meteor(){
+function go(page){
 
-  const ids=[
-    "meteor1",
-    "meteor2"
-  ];
+  document.querySelectorAll(".page").forEach(el=>{
+    el.classList.remove("active");
+  });
 
-  const id =
-    ids[Math.floor(
-      Math.random()*ids.length
-    )];
+  const target = document.getElementById("page-"+page);
 
-  const el =
-    document.getElementById(id);
+  if(target){
+    target.classList.add("active");
+  }
 
-  if(!el) return;
+  document.querySelectorAll(".nav-btn").forEach(btn=>{
+    btn.classList.toggle(
+      "active",
+      btn.dataset.page === page
+    );
+  });
 
-  el.style.left =
-    Math.random()*100+"%";
-
-  el.style.top =
-    Math.random()*50+"%";
-
-  el.classList.remove("go");
-
-  void el.offsetWidth;
-
-  el.classList.add("go");
-
-  setTimeout(
-    meteor,
-    3500+Math.random()*7000
-  );
-
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
+
+document.querySelectorAll(".nav-btn").forEach(btn=>{
+
+  btn.addEventListener("click",()=>{
+
+    go(btn.dataset.page);
+
+  });
+
+});
 
 /* =========================================================
    AUTH
-   ========================================================= */
+========================================================= */
+
+document.getElementById("authBtn").addEventListener("click",openAuth);
 
 function openAuth(){
-
-  document
-    .getElementById("authModal")
-    .classList.add("show");
-
+  document.getElementById("authModal").classList.add("open");
 }
 
 function closeAuth(){
-
-  document
-    .getElementById("authModal")
-    .classList.remove("show");
-
+  document.getElementById("authModal").classList.remove("open");
+  document.getElementById("authMessage").textContent="";
 }
 
-async function signUp(){
+async function signup(){
 
-  const name =
-    document.getElementById("authName")
-    .value.trim();
-
-  const email =
-    document.getElementById("authEmail")
-    .value.trim();
-
-  const password =
-    document.getElementById("authPassword")
-    .value;
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
 
   if(!email || password.length < 6){
 
-    toast(
-      "اكتب بريدًا صحيحًا وكلمة مرور من 6 أحرف على الأقل."
-    );
-
+    showAuthError("أدخل بريدًا صحيحًا وكلمة مرور من 6 أحرف على الأقل.");
     return;
-
   }
 
   try{
 
-    const cred =
-      await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      );
+    await auth.createUserWithEmailAndPassword(
+      email,
+      password
+    );
 
-    currentUser =
-      cred.user;
-
-    state.name =
-      name ||
-      email.split("@")[0];
-
-    await cred.user.updateProfile({
-      displayName:state.name
-    });
-
-    saveState();
+    toast("تم إنشاء حساب VANTA");
 
     closeAuth();
 
-    toast(
-      "تم إنشاء حساب VANTA."
-    );
-
-    await syncNova("chat","احفظ أنني سجلت حسابًا جديدًا.");
-
   }catch(error){
 
-    toast(
-      firebaseError(error)
-    );
+    showAuthError(firebaseError(error));
 
   }
-
 }
 
-async function signIn(){
+async function login(){
 
-  const email =
-    document.getElementById("authEmail")
-    .value.trim();
-
-  const password =
-    document.getElementById("authPassword")
-    .value;
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
 
   if(!email || !password){
 
-    toast("أدخل البريد وكلمة المرور.");
-
+    showAuthError("أدخل البريد وكلمة المرور.");
     return;
-
   }
 
   try{
 
-    const cred =
-      await auth.signInWithEmailAndPassword(
-        email,
-        password
-      );
+    await auth.signInWithEmailAndPassword(
+      email,
+      password
+    );
 
-    currentUser =
-      cred.user;
-
-    if(cred.user.displayName){
-
-      state.name =
-        cred.user.displayName;
-
-      saveState();
-
-    }
+    toast("مرحبًا بك من جديد في VANTA");
 
     closeAuth();
 
-    toast("مرحبًا بك مجددًا.");
-
-    await syncNova(
-      "show_progress",
-      "استرجع تقدمي وذاكرتي."
-    );
+    await loadRemoteMemory();
 
   }catch(error){
 
-    toast(
-      firebaseError(error)
-    );
+    showAuthError(firebaseError(error));
 
   }
-
 }
 
 async function logout(){
@@ -2951,1757 +2321,758 @@ async function logout(){
 
     await auth.signOut();
 
-    currentUser=null;
+    currentUser = null;
 
-    toast(
-      "تم تسجيل الخروج."
-    );
+    toast("تم تسجيل الخروج");
 
-    updateAuthUI();
+    renderState();
 
-  }catch{
+  }catch(error){
 
-    toast(
-      "تعذر تسجيل الخروج."
-    );
+    toast("تعذر تسجيل الخروج");
 
   }
-
 }
 
-function firebaseError(error){
+auth.onAuthStateChanged(async user=>{
 
-  const code =
-    error?.code || "";
+  currentUser = user;
 
-  const map = {
+  const btn = document.getElementById("authBtn");
 
-    "auth/email-already-in-use":
-      "هذا البريد مستخدم بالفعل.",
+  if(user){
 
-    "auth/invalid-email":
-      "البريد الإلكتروني غير صحيح.",
+    btn.textContent = "حسابي";
 
-    "auth/weak-password":
-      "كلمة المرور ضعيفة.",
-
-    "auth/user-not-found":
-      "الحساب غير موجود.",
-
-    "auth/wrong-password":
-      "كلمة المرور غير صحيحة.",
-
-    "auth/invalid-credential":
-      "بيانات الدخول غير صحيحة.",
-
-    "auth/too-many-requests":
-      "محاولات كثيرة. حاول لاحقًا."
-
-  };
-
-  return map[code] ||
-    "حدث خطأ أثناء المصادقة.";
-
-}
-
-auth.onAuthStateChanged(
-  async user=>{
-
-    currentUser=user;
-
-    if(user){
-
-      state.name =
-        user.displayName ||
-        state.name ||
-        user.email?.split("@")[0] ||
-        "Student";
-
-      saveState();
-
-      try{
-
-        await syncNova(
-          "show_progress",
-          "Load my VANTA memory."
-        );
-
-      }catch{}
-
-    }
-
-    updateAuthUI();
-
-  }
-);
-
-function updateAuthUI(){
-
-  const btn =
-    document.getElementById("authBtn");
-
-  const account =
-    document.getElementById("accountState");
-
-  if(currentUser){
-
-    btn.textContent =
-      state.name || "حسابي";
-
-    account.textContent =
-      currentUser.email || "مسجل الدخول";
+    await loadRemoteMemory();
 
   }else{
 
-    btn.textContent =
-      "دخول";
-
-    account.textContent =
-      "غير مسجل الدخول.";
+    btn.textContent = "دخول";
 
   }
 
+  renderState();
+
+});
+
+function firebaseError(error){
+
+  const code = error?.code || "";
+
+  const map = {
+    "auth/email-already-in-use":"هذا البريد مستخدم بالفعل.",
+    "auth/invalid-email":"البريد الإلكتروني غير صحيح.",
+    "auth/weak-password":"كلمة المرور ضعيفة.",
+    "auth/user-not-found":"لا يوجد حساب بهذا البريد.",
+    "auth/wrong-password":"كلمة المرور غير صحيحة.",
+    "auth/invalid-credential":"بيانات الدخول غير صحيحة."
+  };
+
+  return map[code] || "حدث خطأ. حاول مرة أخرى.";
+}
+
+function showAuthError(message){
+
+  document.getElementById("authMessage").textContent = message;
 }
 
 /* =========================================================
    NOVA API
-   ========================================================= */
+========================================================= */
 
-function novaContext(){
-
-  return {
-
-    product:"VANTA",
-
-    page:state.page,
-
-    student:{
-
-      name:state.name,
-
-      level:state.level,
-
-      xp:state.xp,
-
-      lessons:state.lessons,
-
-      streak:state.streak,
-
-      focus:state.focus,
-
-      mastery:state.mastery,
-
-      weakTopics:state.weakTopics,
-
-      strengths:state.strengths,
-
-      mistakes:state.mistakes,
-
-      recentScores:state.recentScores,
-
-      recentTopics:state.recentTopics,
-
-      learningPath:state.learningPath
-
-    },
-
-    settings:state.settings
-
-  };
-
-}
-
-async function callNova(
-  action,
-  message="",
-  extra={}
-){
+async function novaRequest(action, payload={}){
 
   if(!currentUser){
 
-    throw new Error(
-      "سجل الدخول أولًا حتى تستطيع NOVA حفظ تقدمك."
-    );
+    toast("سجّل الدخول أولًا");
+    openAuth();
 
+    throw new Error("AUTH_REQUIRED");
   }
 
-  const token =
-    await currentUser.getIdToken();
+  const token = await currentUser.getIdToken(true);
 
-  const response =
-    await fetch(
-      AI_ENDPOINT,
-      {
-        method:"POST",
+  const response = await fetch(AI_ENDPOINT,{
 
-        headers:{
-          "Content-Type":
-            "application/json",
+    method:"POST",
 
-          "Authorization":
-            `Bearer ${token}`
-        },
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":"Bearer "+token
+    },
 
-        body:JSON.stringify({
+    body:JSON.stringify({
+      action,
+      ...payload
+    })
 
-          action,
+  });
 
-          message,
+  let data = {};
 
-          context:
-            novaContext(),
-
-          ...extra
-
-        })
-
-      }
-    );
-
-  const data =
-    await response
-      .json()
-      .catch(()=>({}));
+  try{
+    data = await response.json();
+  }catch(e){}
 
   if(!response.ok){
 
     throw new Error(
       data.error ||
-      "NOVA API error"
+      "NOVA لم تستطع معالجة الطلب."
     );
-
   }
 
   return data;
-
-}
-
-async function syncNova(
-  action,
-  message="",
-  extra={}
-){
-
-  const data =
-    await callNova(
-      action,
-      message,
-      extra
-    );
-
-  applyNovaData(data);
-
-  return data;
-
-}
-
-function applyNovaData(data){
-
-  if(!data) return;
-
-  if(data.memory){
-
-    const m=data.memory;
-
-    state.level =
-      Number(m.level ?? state.level);
-
-    state.xp =
-      Number(m.xp ?? state.xp);
-
-    state.lessons =
-      Number(m.lessons ?? state.lessons);
-
-    state.streak =
-      Number(m.streak ?? state.streak);
-
-    state.focus =
-      m.focus ?? state.focus;
-
-    state.mastery =
-      m.mastery ?? state.mastery;
-
-    state.weakTopics =
-      m.weak_topics ??
-      m.weakTopics ??
-      state.weakTopics;
-
-    state.strengths =
-      m.strengths ??
-      state.strengths;
-
-    state.mistakes =
-      m.mistakes ??
-      state.mistakes;
-
-  }
-
-  if(data.memoryPatch){
-
-    Object.assign(
-      state,
-      normalizeMemoryPatch(
-        data.memoryPatch
-      )
-    );
-
-  }
-
-  saveState();
-
-}
-
-function normalizeMemoryPatch(patch){
-
-  const result={};
-
-  if(
-    Number.isFinite(
-      Number(patch.xp)
-    )
-  ){
-
-    result.xp =
-      Number(patch.xp);
-
-  }
-
-  if(
-    Number.isFinite(
-      Number(patch.level)
-    )
-  ){
-
-    result.level =
-      Number(patch.level);
-
-  }
-
-  if(
-    Number.isFinite(
-      Number(patch.lessons)
-    )
-  ){
-
-    result.lessons =
-      Number(patch.lessons);
-
-  }
-
-  if(
-    Number.isFinite(
-      Number(patch.streak)
-    )
-  ){
-
-    result.streak =
-      Number(patch.streak);
-
-  }
-
-  if(patch.mastery){
-
-    result.mastery =
-      patch.mastery;
-
-  }
-
-  return result;
-
 }
 
 /* =========================================================
-   CHAT
-   ========================================================= */
+   NOVA CHAT
+========================================================= */
 
-function openNova(){
+function toggleNova(){
 
-  document
-    .getElementById("novaPanel")
-    .classList.toggle("show");
+  document.getElementById("nova-panel")
+    .classList.toggle("open");
 
 }
 
-async function sendChat(){
+async function sendNova(){
 
-  const input =
-    document.getElementById("chatInput");
-
-  const text =
-    input.value.trim();
+  const input = document.getElementById("novaInput");
+  const text = input.value.trim();
 
   if(!text) return;
 
-  if(!currentUser){
-
-    openAuth();
-
-    return;
-
-  }
+  addMessage(text,"user");
 
   input.value="";
 
-  addMessage(
-    text,
-    "user"
-  );
-
-  addMessage(
-    "NOVA تفكر...",
-    "nova",
-    "typing"
-  );
+  const loading = addMessage("NOVA تفكر...","nova");
 
   try{
 
-    const data =
-      await callNova(
-        "chat",
-        text
-      );
-
-    removeTyping();
-
-    const answer =
-      data.answer ||
-      data.message ||
-      "لم يصل رد من NOVA.";
-
-    addMessage(
-      answer,
-      "nova"
-    );
-
-    applyNovaData(data);
-
-  }catch(error){
-
-    removeTyping();
-
-    addMessage(
-      error.message,
-      "nova"
-    );
-
-  }
-
-}
-
-function addMessage(
-  text,
-  type,
-  extraClass=""
-){
-
-  const box =
-    document.getElementById(
-      "chatMessages"
-    );
-
-  const el =
-    document.createElement("div");
-
-  el.className =
-    `msg ${type} ${extraClass}`;
-
-  el.textContent=text;
-
-  box.appendChild(el);
-
-  box.scrollTop =
-    box.scrollHeight;
-
-}
-
-function removeTyping(){
-
-  document
-    .querySelectorAll(".msg.typing")
-    .forEach(el=>el.remove());
-
-}
-
-/* =========================================================
-   LESSONS
-   ========================================================= */
-
-async function generateLesson(topic){
-
-  if(!currentUser){
-
-    openAuth();
-
-    return;
-
-  }
-
-  const area =
-    document.getElementById(
-      "lessonArea"
-    );
-
-  area.innerHTML=`
-
-    <div class="card">
-      <h3>NOVA تبني الدرس...</h3>
-      <p>
-        تحلل مستواك ونقاط ضعفك قبل التوليد.
-      </p>
-    </div>
-
-  `;
-
-  try{
-
-    const data =
-      await callNova(
-        "generate_lesson",
-        `أنشئ درسًا جديدًا في ${topic}.`
-      );
-
-    renderLesson(
-      data.lesson ||
-      data
-    );
-
-    applyNovaData(data);
-
-  }catch(error){
-
-    area.innerHTML=`
-
-      <div class="card">
-        <h3>تعذر توليد الدرس</h3>
-        <p>${escapeHtml(error.message)}</p>
-      </div>
-
-    `;
-
-  }
-
-}
-
-function renderLesson(lesson){
-
-  const area =
-    document.getElementById(
-      "lessonArea"
-    );
-
-  const title =
-    lesson.title ||
-    "درس NOVA";
-
-  const intro =
-    lesson.introduction ||
-    lesson.description ||
-    "";
-
-  const sections =
-    Array.isArray(lesson.sections)
-      ? lesson.sections
-      : [];
-
-  area.innerHTML=`
-
-    <div class="card lesson-card">
-
-      <div class="tag">
-        NOVA GENERATED
-      </div>
-
-      <h2 style="margin-top:15px">
-        ${escapeHtml(title)}
-      </h2>
-
-      <p>
-        ${escapeHtml(intro)}
-      </p>
-
-      ${
-        sections.map(
-          (s,i)=>`
-
-            <div
-              class="card"
-              style="margin-top:15px">
-
-              <h3>
-                ${escapeHtml(
-                  s.title ||
-                  `الجزء ${i+1}`
-                )}
-              </h3>
-
-              <p>
-                ${escapeHtml(
-                  s.content ||
-                  s.explanation ||
-                  ""
-                )}
-              </p>
-
-            </div>
-
-          `
-        ).join("")
-      }
-
-      <div class="hero-actions">
-
-        <button
-          class="btn primary"
-          onclick="completeGeneratedLesson()">
-          أكملت الدرس
-        </button>
-
-        <button
-          class="btn"
-          onclick="startAdaptiveExam()">
-          اختبر فهمي
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-}
-
-async function completeGeneratedLesson(){
-
-  state.lessons++;
-
-  state.xp+=100;
-
-  state.gems+=10;
-
-  if(state.lessons===1){
-
-    state.badges.push(
-      "FIRST SIGNAL"
-    );
-
-  }
-
-  if(
-    state.lessons>=5 &&
-    !state.badges.includes("NOVA RUNNER")
-  ){
-
-    state.badges.push(
-      "NOVA RUNNER"
-    );
-
-  }
-
-  recalculateLevel();
-
-  saveState();
-
-  toast(
-    "+100 XP — أحسنت."
-  );
-
-  try{
-
-    await syncNova(
-      "analyze_result",
-      "أكملت الدرس.",
+    const result = await novaRequest(
+      "chat",
       {
-        result:{
-          type:"lesson_completion",
-          score:100,
-          completed:true
-        }
+        message:text
       }
     );
 
-  }catch{}
+    loading.remove();
 
-}
-
-function recalculateLevel(){
-
-  state.level =
-    Math.max(
-      1,
-      Math.floor(
-        state.xp / 500
-      )+1
+    addMessage(
+      result.answer ||
+      "لم يصل رد من NOVA.",
+      "nova"
     );
-
-}
-
-/* =========================================================
-   PATH
-   ========================================================= */
-
-async function generatePath(){
-
-  if(!currentUser){
-
-    openAuth();
-
-    return;
-
-  }
-
-  go("roadmap");
-
-  const area =
-    document.getElementById(
-      "roadmapArea"
-    );
-
-  area.innerHTML=`
-
-    <div class="card">
-
-      <h3>NOVA تبني مسارك...</h3>
-
-      <p>
-        تستخدم مستواك وإتقانك وأخطاءك وأهدافك.
-      </p>
-
-    </div>
-
-  `;
-
-  try{
-
-    const data =
-      await callNova(
-        "generate_learning_path",
-        "ابنِ لي مسار تعلم مخصص."
-      );
-
-    const path =
-      data.learning_path ||
-      data.path ||
-      data;
-
-    state.learningPath =
-      Array.isArray(path.steps)
-        ? path.steps
-        : Array.isArray(path)
-          ? path
-          : [];
-
-    state.focus =
-      path.goal ||
-      state.focus ||
-      "Personalized Learning";
-
-    saveState();
-
-    renderPath(path);
 
   }catch(error){
 
-    area.innerHTML=`
+    loading.remove();
 
-      <div class="card">
-        <h3>تعذر بناء المسار</h3>
-        <p>${escapeHtml(error.message)}</p>
-      </div>
-
-    `;
-
-  }
-
-}
-
-function renderPath(path){
-
-  const area =
-    document.getElementById(
-      "roadmapArea"
+    addMessage(
+      "تعذر الاتصال بـ NOVA: "+error.message,
+      "nova"
     );
 
-  const steps =
-    Array.isArray(path.steps)
-      ? path.steps
-      : state.learningPath;
+  }
+}
 
-  area.innerHTML=`
+function addMessage(text,type){
 
-    <div class="card">
+  const box = document.getElementById("novaMessages");
 
-      <div class="tag">
-        PERSONALIZED BY NOVA
-      </div>
+  const msg = document.createElement("div");
 
-      <h2 style="margin-top:15px">
-        ${escapeHtml(
-          path.goal ||
-          "مسارك الشخصي"
-        )}
-      </h2>
+  msg.className = "msg "+type;
+  msg.textContent = text;
 
-      <p>
-        ${escapeHtml(
-          path.reason ||
-          "تم بناء المسار اعتمادًا على بياناتك الحالية."
-        )}
-      </p>
+  box.appendChild(msg);
 
-    </div>
+  box.scrollTop = box.scrollHeight;
 
-    <div class="grid" style="margin-top:16px">
-
-      ${
-        steps.map(
-          (step,i)=>`
-
-            <div class="card interactive">
-
-              <div class="icon">
-                ${i+1}
-              </div>
-
-              <h3>
-                ${escapeHtml(
-                  step.title ||
-                  step.topic ||
-                  `مرحلة ${i+1}`
-                )}
-              </h3>
-
-              <p>
-                ${escapeHtml(
-                  step.description ||
-                  step.goal ||
-                  ""
-                )}
-              </p>
-
-              <span class="tag">
-                ${escapeHtml(
-                  step.status ||
-                  "NEXT"
-                )}
-              </span>
-
-            </div>
-
-          `
-        ).join("")
-      }
-
-    </div>
-
-  `;
-
+  return msg;
 }
 
 /* =========================================================
-   EXAMS
-   ========================================================= */
+   LEARNING
+========================================================= */
 
-async function startAdaptiveExam(){
+async function generateLesson(topic=""){
 
-  if(!currentUser){
+  go("learn");
 
-    openAuth();
+  try{
 
-    return;
+    toast("NOVA تبني الدرس...");
+
+    const result = await novaRequest(
+      "generate_lesson",
+      {
+        topic
+      }
+    );
+
+    showGeneratedLesson(result);
+
+  }catch(error){
+
+    toast(error.message);
 
   }
+}
+
+function showGeneratedLesson(data){
+
+  const list = document.getElementById("lessonList");
+
+  const lesson = document.createElement("div");
+
+  lesson.className="card";
+
+  lesson.innerHTML=`
+    <div class="icon-box">N</div>
+    <h3>${escapeHTML(data.title || "درس NOVA")}</h3>
+    <p>${escapeHTML(data.explanation || data.content || "")}</p>
+    <br>
+    <button class="primary" onclick="generateQuestion('${escapeAttr(data.topic || "")}')">
+      اختبر فهمك
+    </button>
+  `;
+
+  list.prepend(lesson);
+
+  toast("تم إنشاء درس جديد");
+}
+
+async function generateQuestion(topic=""){
 
   go("quiz");
 
-  const area =
-    document.getElementById(
-      "examArea"
-    );
+  const area = document.getElementById("quizArea");
 
   area.innerHTML=`
-
-    <div class="card">
-
-      <h3>NOVA تبني الاختبار...</h3>
-
-      <p>
-        يتم اختيار مستوى الأسئلة من بياناتك الحالية.
-      </p>
-
+    <div class="card" style="text-align:center;padding:45px">
+      <h3>NOVA تعمل...</h3>
+      <p>يتم اختيار السؤال حسب مستواك.</p>
     </div>
-
   `;
 
   try{
 
-    const data =
-      await callNova(
-        "generate_exam",
-        "أنشئ اختبارًا تكيفيًا جديدًا.",
-        {
-          exam:{
-            count:10
-          }
-        }
-      );
+    const result = await novaRequest(
+      "generate_question",
+      {
+        topic
+      }
+    );
 
-    const questions =
-      data.exam?.questions ||
-      data.questions ||
-      [];
-
-    if(!questions.length){
-
-      throw new Error(
-        "لم يتم إنشاء أسئلة."
-      );
-
-    }
-
-    exam = {
-      questions,
-      answers:[],
-      score:null
-    };
-
-    examIndex=0;
-
-    selectedAnswer=null;
-
-    renderExam();
+    renderQuestion(result);
 
   }catch(error){
 
     area.innerHTML=`
-
       <div class="card">
-
-        <h3>تعذر إنشاء الاختبار</h3>
-
-        <p>
-          ${escapeHtml(error.message)}
-        </p>
-
+        <h3>تعذر إنشاء السؤال</h3>
+        <p>${escapeHTML(error.message)}</p>
       </div>
-
     `;
 
   }
-
 }
 
-function renderExam(){
+function renderQuestion(q){
 
-  const area =
-    document.getElementById(
-      "examArea"
-    );
+  currentQuiz = q;
 
-  const q =
-    exam.questions[examIndex];
+  const area = document.getElementById("quizArea");
 
-  if(!q){
-
-    finishExam();
-
-    return;
-
-  }
-
-  const options =
-    q.options ||
-    [];
-
-  selectedAnswer =
-    exam.answers[examIndex] ??
-    null;
+  const options = Array.isArray(q.options)
+    ? q.options
+    : [];
 
   area.innerHTML=`
 
-    <div class="exam-shell">
+    <div class="exam-question">
 
       <div class="exam-top">
+        <span>سؤال NOVA</span>
+        <span>المستوى ${escapeHTML(String(q.level || state.level))}</span>
+      </div>
 
-        <div>
-          السؤال
-          ${examIndex+1}
-          /
-          ${exam.questions.length}
-        </div>
+      <h2>${escapeHTML(q.question || "")}</h2>
 
-        <div style="color:#9b8cff">
-          Level ${state.level}
-        </div>
+      <div class="answers">
+
+        ${options.map((option,index)=>`
+
+          <button
+            class="answer"
+            onclick="selectAnswer(this,${index})"
+          >
+            ${escapeHTML(option)}
+          </button>
+
+        `).join("")}
 
       </div>
 
-      <div class="progress">
-        <div
-          style="width:${
-            ((examIndex+1) /
-            exam.questions.length)*100
-          }%">
-        </div>
-      </div>
-
-      <div class="exam-question"
-           style="margin-top:18px">
-
-        <div class="question-number">
-          NOVA QUESTION ENGINE
-        </div>
-
-        <h2>
-          ${escapeHtml(
-            q.question ||
-            q.prompt ||
-            ""
-          )}
-        </h2>
-
-        <div class="options">
-
-          ${
-            options.map(
-              (option,i)=>`
-
-                <button
-                  class="option ${
-                    selectedAnswer===i
-                      ? "selected"
-                      : ""
-                  }"
-                  onclick="selectAnswer(${i})">
-
-                  <span class="option-key">
-                    ${String.fromCharCode(65+i)}
-                  </span>
-
-                  <span>
-                    ${escapeHtml(
-                      typeof option==="string"
-                        ? option
-                        : option.label ||
-                          option.text ||
-                          ""
-                    )}
-                  </span>
-
-                </button>
-
-              `
-            ).join("")
-          }
-
-        </div>
-
-      </div>
-
-      <div class="exam-actions">
-
-        <button
-          class="btn"
-          onclick="previousQuestion()"
-          ${examIndex===0 ? "disabled":""}>
-          السابق
-        </button>
-
-        <button
-          class="btn primary"
-          onclick="${
-            examIndex===exam.questions.length-1
-              ? "finishExam()"
-              : "nextQuestion()"
-          }">
-
-          ${
-            examIndex===exam.questions.length-1
-              ? "إنهاء الاختبار"
-              : "التالي"
-          }
-
-        </button>
-
-      </div>
+      <div id="questionActions" style="margin-top:18px"></div>
 
     </div>
-
   `;
-
 }
 
-function selectAnswer(index){
+function selectAnswer(button,index){
 
-  selectedAnswer=index;
+  document
+    .querySelectorAll(".answer")
+    .forEach(el=>el.classList.remove("selected"));
 
-  exam.answers[examIndex]=index;
+  button.classList.add("selected");
 
-  renderExam();
+  const actions =
+    document.getElementById("questionActions");
 
+  actions.innerHTML=`
+    <button class="primary" onclick="submitAnswer(${index})">
+      تأكيد الإجابة
+    </button>
+  `;
 }
 
-function nextQuestion(){
+async function submitAnswer(index){
 
-  exam.answers[examIndex]=
-    selectedAnswer;
+  if(!currentQuiz) return;
 
-  if(
-    examIndex <
-    exam.questions.length-1
-  ){
+  const actions =
+    document.getElementById("questionActions");
 
-    examIndex++;
+  actions.innerHTML="<p style='color:#888'>NOVA تتحقق...</p>";
 
-    renderExam();
+  try{
 
-  }
-
-}
-
-function previousQuestion(){
-
-  exam.answers[examIndex]=
-    selectedAnswer;
-
-  if(examIndex>0){
-
-    examIndex--;
-
-    renderExam();
-
-  }
-
-}
-
-async function finishExam(){
-
-  if(!exam) return;
-
-  let correct=0;
-
-  exam.questions.forEach(
-    (q,i)=>{
-
-      const expected =
-        Number(
-          q.correctIndex ??
-          q.answerIndex ??
-          -1
-        );
-
-      if(
-        exam.answers[i] === expected
-      ){
-
-        correct++;
-
+    const result = await novaRequest(
+      "check_answer",
+      {
+        questionId:currentQuiz.id || crypto.randomUUID(),
+        question:currentQuiz.question,
+        options:currentQuiz.options,
+        selectedIndex:index,
+        correctIndex:currentQuiz.correctIndex,
+        topic:currentQuiz.topic || "general"
       }
-
-    }
-  );
-
-  const total =
-    exam.questions.length;
-
-  const score =
-    Math.round(
-      (correct/total)*100
     );
 
-  exam.score=score;
+    if(result.correct){
 
-  state.recentScores.unshift(score);
+      state.xp += Number(result.xpAwarded || 10);
 
-  state.recentScores =
-    state.recentScores.slice(0,20);
+      if(result.level){
+        state.level = result.level;
+      }
 
-  if(score<50){
+      state.lessons += result.completed ? 1 : 0;
 
-    state.xp+=25;
+      saveState();
 
-  }else if(score<70){
+    }
 
-    state.xp+=60;
+    actions.innerHTML=`
+      <div class="card" style="margin-top:15px">
+        <h3>${result.correct ? "إجابة صحيحة." : "ليست صحيحة."}</h3>
+        <p>${escapeHTML(result.explanation || "")}</p>
+        <br>
+        <button class="primary" onclick="generateQuestion('${escapeAttr(currentQuiz.topic || "")}')">
+          سؤال جديد
+        </button>
+      </div>
+    `;
 
-  }else if(score<85){
+  }catch(error){
 
-    state.xp+=100;
-
-  }else{
-
-    state.xp+=150;
+    actions.innerHTML=`
+      <p style="color:#ff7c8b">${escapeHTML(error.message)}</p>
+    `;
 
   }
+}
 
-  recalculateLevel();
+/* =========================================================
+   EXAM
+========================================================= */
+
+async function generateExam(){
+
+  go("quiz");
+
+  const area=document.getElementById("quizArea");
+
+  area.innerHTML=`
+    <div class="card" style="text-align:center;padding:50px">
+      <h3>NOVA تبني اختبارك...</h3>
+      <p>سيتم اختيار الأسئلة حسب مستوى الطالب.</p>
+    </div>
+  `;
+
+  try{
+
+    const result = await novaRequest(
+      "generate_exam",
+      {
+        count:5
+      }
+    );
+
+    renderExam(result);
+
+  }catch(error){
+
+    area.innerHTML=`
+      <div class="card">
+        <h3>تعذر إنشاء الاختبار</h3>
+        <p>${escapeHTML(error.message)}</p>
+      </div>
+    `;
+
+  }
+}
+
+function renderExam(data){
+
+  const questions =
+    Array.isArray(data.questions)
+      ? data.questions
+      : [];
+
+  if(!questions.length){
+
+    toast("لم يتم إنشاء اختبار.");
+    return;
+  }
+
+  let index=0;
+  let score=0;
+
+  function show(){
+
+    const q=questions[index];
+
+    const area=document.getElementById("quizArea");
+
+    area.innerHTML=`
+
+      <div class="exam-question">
+
+        <div class="exam-top">
+          <span>السؤال ${index+1} / ${questions.length}</span>
+          <span>النتيجة ${score}</span>
+        </div>
+
+        <h2>${escapeHTML(q.question)}</h2>
+
+        <div class="answers">
+
+          ${q.options.map((o,i)=>`
+
+            <button
+              class="answer"
+              onclick="examAnswer(${i})"
+            >
+              ${escapeHTML(o)}
+            </button>
+
+          `).join("")}
+
+        </div>
+
+      </div>
+    `;
+
+    window.examAnswer=function(choice){
+
+      if(choice === q.correctIndex){
+        score++;
+      }
+
+      index++;
+
+      if(index >= questions.length){
+
+        finishExam(score,questions.length);
+
+      }else{
+
+        show();
+
+      }
+    };
+  }
+
+  show();
+}
+
+function finishExam(score,total){
+
+  state.xp += score * 10;
+  state.lessons += 1;
 
   saveState();
 
-  const area =
-    document.getElementById(
-      "examArea"
-    );
+  document.getElementById("quizArea").innerHTML=`
 
-  area.innerHTML=`
+    <div class="exam-result card">
 
-    <div class="card"
-         style="text-align:center">
-
-      <div class="tag">
-        NOVA ANALYSIS
+      <div class="icon-box" style="margin:auto auto 20px">
+        ✦
       </div>
 
-      <h2 style="font-size:50px">
-        ${score}%
-      </h2>
+      <h2>انتهى الاختبار</h2>
 
       <p>
-        ${correct}
-        من
-        ${total}
-        إجابات صحيحة.
+        نتيجتك: ${score} / ${total}
       </p>
 
-      <div class="hero-actions"
-           style="justify-content:center">
+      <br>
 
-        <button
-          class="btn primary"
-          onclick="analyzeExam()">
-          تحليل NOVA
-        </button>
-
-        <button
-          class="btn"
-          onclick="startAdaptiveExam()">
-          اختبار جديد
-        </button>
-
-      </div>
+      <button class="primary" onclick="generateExam()">
+        اختبار جديد
+      </button>
 
     </div>
-
   `;
+
+}
+
+/* =========================================================
+   ROADMAP
+========================================================= */
+
+async function generateRoadmap(){
+
+  go("roadmap");
 
   try{
 
-    await syncNova(
-      "analyze_result",
-      "حللت اختبارًا جديدًا.",
+    const result = await novaRequest(
+      "generate_roadmap",
+      {}
+    );
+
+    const area=document.getElementById("roadmapArea");
+
+    const items =
+      Array.isArray(result.roadmap)
+        ? result.roadmap
+        : [];
+
+    if(!items.length){
+
+      toast("لم تصل خارطة من NOVA");
+      return;
+    }
+
+    area.innerHTML=items.map((item,index)=>`
+
+      <div class="card">
+
+        <div class="icon-box">
+          ${String(index+1).padStart(2,"0")}
+        </div>
+
+        <h3>${escapeHTML(item.title || "")}</h3>
+
+        <p>${escapeHTML(item.description || "")}</p>
+
+      </div>
+
+    `).join("");
+
+  }catch(error){
+
+    toast(error.message);
+
+  }
+}
+
+/* =========================================================
+   CYBER / LABS / CHALLENGES
+========================================================= */
+
+async function startCyber(topic){
+
+  try{
+
+    const result = await novaRequest(
+      "generate_question",
       {
-        result:{
-          type:"exam",
-          score,
-          correct,
-          total,
-          questions:
-            exam.questions.map(
-              (q,i)=>({
-
-                topic:
-                  q.topic ||
-                  q.subject ||
-                  "General",
-
-                correct:
-                  exam.answers[i] ===
-                  Number(
-                    q.correctIndex ??
-                    q.answerIndex ??
-                    -1
-                  )
-
-              })
-            )
-        }
+        topic:"cybersecurity defensive "+topic
       }
     );
 
-  }catch{}
+    go("quiz");
 
-}
-
-async function analyzeExam(){
-
-  if(!exam) return;
-
-  const area =
-    document.getElementById(
-      "examArea"
-    );
-
-  area.innerHTML += `
-
-    <div
-      class="card"
-      id="examAnalysis"
-      style="margin-top:16px">
-
-      <h3>
-        NOVA تحلل أداءك...
-      </h3>
-
-    </div>
-
-  `;
-
-  try{
-
-    const data =
-      await callNova(
-        "analyze_result",
-        "حلل نتيجة الاختبار بعمق وحدد نقاط القوة والضعف.",
-        {
-          result:{
-            type:"exam",
-            score:exam.score,
-            answers:exam.answers
-          }
-        }
-      );
-
-    const analysis =
-      data.analysis ||
-      data.answer ||
-      data.message ||
-      "تم تحليل النتيجة.";
-
-    document.getElementById(
-      "examAnalysis"
-    ).innerHTML=`
-
-      <h3>
-        تحليل NOVA
-      </h3>
-
-      <p>
-        ${escapeHtml(analysis)}
-      </p>
-
-    `;
-
-    applyNovaData(data);
+    renderQuestion(result);
 
   }catch(error){
 
-    document.getElementById(
-      "examAnalysis"
-    ).innerHTML=`
-
-      <h3>
-        تعذر التحليل
-      </h3>
-
-      <p>
-        ${escapeHtml(error.message)}
-      </p>
-
-    `;
+    toast(error.message);
 
   }
-
 }
 
-/* =========================================================
-   CYBER LAB
-   ========================================================= */
-
-async function generateCyberLab(topic="Cybersecurity Lab"){
-
-  if(!currentUser){
-
-    openAuth();
-
-    return;
-
-  }
-
-  const area =
-    document.getElementById(
-      "cyberArea"
-    ) ||
-    document.getElementById(
-      "labsArea"
-    );
-
-  if(!area) return;
-
-  area.innerHTML=`
-
-    <div class="card">
-
-      <h3>
-        NOVA تبني المختبر...
-      </h3>
-
-      <p>
-        ${escapeHtml(topic)}
-      </p>
-
-    </div>
-
-  `;
+async function generateLab(topic){
 
   try{
 
-    const data =
-      await callNova(
-        "generate_challenge",
-        `أنشئ مختبرًا تعليميًا دفاعيًا عن ${topic}.`
-      );
+    const result = await novaRequest(
+      "generate_lesson",
+      {
+        topic:"lab "+topic
+      }
+    );
 
-    const content =
-      data.challenge ||
-      data.lab ||
-      data;
+    go("labs");
 
-    area.innerHTML=`
+    toast("تم إنشاء المختبر");
 
-      <div class="card">
+    const area=document.getElementById("page-labs");
 
-        <div class="tag">
-          DEFENSIVE LAB
-        </div>
+    const card=document.createElement("div");
 
-        <h2>
-          ${escapeHtml(
-            content.title ||
-            topic
-          )}
-        </h2>
+    card.className="card";
 
-        <p>
-          ${escapeHtml(
-            content.description ||
-            content.instructions ||
-            ""
-          )}
-        </p>
-
-        <div class="card"
-             style="margin-top:16px">
-
-          <h3>
-            المهمة
-          </h3>
-
-          <p>
-            ${escapeHtml(
-              content.task ||
-              content.objective ||
-              "ابدأ بتحليل الحالة."
-            )}
-          </p>
-
-        </div>
-
-      </div>
-
+    card.innerHTML=`
+      <h3>${escapeHTML(result.title || "مختبر NOVA")}</h3>
+      <p>${escapeHTML(result.content || result.explanation || "")}</p>
     `;
+
+    area.appendChild(card);
 
   }catch(error){
 
-    area.innerHTML=`
-
-      <div class="card">
-
-        <h3>
-          تعذر إنشاء المختبر
-        </h3>
-
-        <p>
-          ${escapeHtml(error.message)}
-        </p>
-
-      </div>
-
-    `;
+    toast(error.message);
 
   }
-
 }
-
-/* =========================================================
-   CHALLENGE
-   ========================================================= */
 
 async function generateChallenge(){
 
-  if(!currentUser){
-
-    openAuth();
-
-    return;
-
-  }
-
-  const area =
-    document.getElementById(
-      "challengeArea"
-    );
-
-  area.innerHTML=`
-
-    <div class="card">
-      <h3>NOVA تولد تحديًا...</h3>
-    </div>
-
-  `;
-
   try{
 
-    const data =
-      await callNova(
-        "generate_challenge",
-        "أنشئ تحديًا جديدًا مناسبًا لمستواي."
-      );
+    const result = await novaRequest(
+      "generate_challenge",
+      {}
+    );
 
-    const challenge =
-      data.challenge ||
-      data;
+    go("challenges");
 
-    area.innerHTML=`
+    const area=document.getElementById("page-challenges");
 
-      <div class="card">
+    const card=document.createElement("div");
 
-        <div class="tag">
-          CHALLENGE GENERATED
-        </div>
+    card.className="card";
 
-        <h2>
-          ${escapeHtml(
-            challenge.title ||
-            "NOVA Challenge"
-          )}
-        </h2>
-
-        <p>
-          ${escapeHtml(
-            challenge.description ||
-            challenge.objective ||
-            ""
-          )}
-        </p>
-
-        <div class="hero-actions">
-
-          <button
-            class="btn primary"
-            onclick="toast('التحدي جاهز في النسخة الحالية.')">
-            ابدأ التحدي
-          </button>
-
-        </div>
-
-      </div>
-
+    card.innerHTML=`
+      <h3>${escapeHTML(result.title || "تحدي NOVA")}</h3>
+      <p>${escapeHTML(result.description || result.content || "")}</p>
     `;
+
+    area.appendChild(card);
 
   }catch(error){
 
-    area.innerHTML=`
-
-      <div class="card">
-        <p>
-          ${escapeHtml(error.message)}
-        </p>
-      </div>
-
-    `;
+    toast(error.message);
 
   }
-
 }
 
 /* =========================================================
-   DASHBOARD
-   ========================================================= */
+   MEMORY
+========================================================= */
 
-function renderMastery(){
+async function loadRemoteMemory(){
 
-  const area =
-    document.getElementById(
-      "masteryArea"
+  try{
+
+    const result = await novaRequest(
+      "progress",
+      {}
     );
 
-  if(!area) return;
+    if(result.memory){
 
-  const entries =
-    Object.entries(
-      state.mastery || {}
-    );
+      state.xp =
+        Number(result.memory.xp ?? state.xp);
 
-  if(!entries.length){
+      state.level =
+        Number(result.memory.level ?? state.level);
 
-    area.innerHTML=`
+      state.lessons =
+        Number(result.memory.lessons ?? state.lessons);
 
-      <div class="card">
+      state.streak =
+        Number(result.memory.streak ?? state.streak);
 
-        <h3>
-          NOVA لم تجمع بيانات كافية بعد.
-        </h3>
+      saveState();
+    }
 
-        <p>
-          ابدأ بالدروس والاختبارات حتى يبدأ Mastery Engine
-          في بناء خريطتك.
-        </p>
+  }catch(error){
 
-      </div>
-
-    `;
-
-    return;
+    console.warn("Memory load:",error.message);
 
   }
-
-  area.innerHTML = entries
-    .map(
-      ([topic,value])=>{
-
-        const n =
-          Math.max(
-            0,
-            Math.min(
-              100,
-              Number(value)||0
-            )
-          );
-
-        return `
-
-          <div class="card"
-               style="margin-bottom:12px">
-
-            <div style="
-              display:flex;
-              justify-content:space-between;
-              gap:10px">
-
-              <strong>
-                ${escapeHtml(topic)}
-              </strong>
-
-              <span>
-                ${n}%
-              </span>
-
-            </div>
-
-            <div class="progress">
-
-              <div
-                style="width:${n}%">
-              </div>
-
-            </div>
-
-          </div>
-
-        `;
-
-      }
-    )
-    .join("");
-
 }
 
 /* =========================================================
    SETTINGS
-   ========================================================= */
+========================================================= */
 
-async function saveSettings(){
+function toggleSetting(name){
 
-  const name =
-    document.getElementById(
-      "settingsName"
-    ).value.trim();
-
-  state.name=name;
-
-  if(currentUser){
-
-    try{
-
-      await currentUser.updateProfile({
-        displayName:name
-      });
-
-    }catch{}
-
-  }
+  state[name]=!state[name];
 
   saveState();
 
-  toast(
-    "تم حفظ إعداداتك."
-  );
-
-}
-
-/* =========================================================
-   VOICE
-   ========================================================= */
-
-function speakNova(text){
-
-  if(
-    !state.settings.voice ||
-    !("speechSynthesis" in window)
-  ){
-
-    return;
-
+  if(name==="space"){
+    updateSpace();
   }
 
-  window.speechSynthesis.cancel();
-
-  const utterance =
-    new SpeechSynthesisUtterance(text);
-
-  utterance.lang="ar-SA";
-
-  utterance.rate=.88;
-
-  utterance.pitch=.65;
-
-  window.speechSynthesis.speak(
-    utterance
+  toast(
+    state[name]
+      ? "تم التفعيل"
+      : "تم التعطيل"
   );
-
 }
 
 /* =========================================================
-   TOAST
-   ========================================================= */
+   EXTRA
+========================================================= */
 
-let toastTimer=null;
+function openAli(){
+
+  go("settings");
+
+  toast("Ali Yaser — مؤسس ومطور ومالك VANTA");
+}
 
 function toast(message){
 
-  const el =
-    document.getElementById(
-      "toast"
-    );
+  const el=document.getElementById("toast");
 
   el.textContent=message;
 
   el.classList.add("show");
 
-  clearTimeout(toastTimer);
+  clearTimeout(window.__toast);
 
-  toastTimer =
-    setTimeout(
-      ()=>el.classList.remove("show"),
-      3000
-    );
-
+  window.__toast=setTimeout(()=>{
+    el.classList.remove("show");
+  },2600);
 }
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
-function escapeHtml(value){
+function escapeHTML(value){
 
   return String(value ?? "")
     .replaceAll("&","&amp;")
@@ -4709,60 +3080,21 @@ function escapeHtml(value){
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
+}
 
+function escapeAttr(value){
+
+  return String(value ?? "")
+    .replaceAll("\\","\\\\")
+    .replaceAll("'","\\'");
 }
 
 /* =========================================================
-   INIT
-   ========================================================= */
+   START
+========================================================= */
 
-document.addEventListener(
-  "DOMContentLoaded",
-  ()=>{
-
-    renderAll();
-
-    startIntro();
-
-    meteor();
-
-    /*
-     * النجوم
-     */
-
-    const space =
-      document.getElementById(
-        "space"
-      );
-
-    for(let i=0;i<150;i++){
-
-      const star =
-        document.createElement(
-          "div"
-        );
-
-      star.className="star";
-
-      star.style.left =
-        Math.random()*100+"%";
-
-      star.style.top =
-        Math.random()*100+"%";
-
-      star.style.opacity =
-        (.15+
-        Math.random()*.7);
-
-      star.style.animationDelay =
-        Math.random()*4+"s";
-
-      space.appendChild(star);
-
-    }
-
-  }
-);
+loadState();
+updateSpace();
 
 </script>
 
