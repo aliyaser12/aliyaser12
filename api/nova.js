@@ -6,237 +6,399 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { message, context = {}, mode = "chat" } = req.body || {};
+    const body = req.body || {};
 
-    if (!message || typeof message !== "string") {
+    const mode = typeof body.mode === "string"
+      ? body.mode
+      : "chat";
+
+    const message = typeof body.message === "string"
+      ? body.message.trim()
+      : "";
+
+    const context = body.context || {};
+
+    if (!message && mode === "chat") {
       return res.status(400).json({
         error: "Message is required"
       });
     }
 
-    const user = context.user || {};
-
     const userName =
-      typeof user.name === "string" && user.name.trim()
-        ? user.name.trim()
-        : "الطالب";
+      typeof context?.user?.name === "string"
+        ? context.user.name.trim()
+        : "";
 
-    const xp = Number(context.xp || 0);
-    const lessons = Number(context.lessons || 0);
-    const badges = Number(context.badges || 0);
+    const xp = Number(context?.xp || 0);
+    const lessons = Number(context?.lessons || 0);
+    const badges = Number(context?.badges || 0);
+
+    const level =
+      typeof context?.level === "string"
+        ? context.level
+        : "beginner";
 
     const page =
-      typeof context.page === "string"
+      typeof context?.page === "string"
         ? context.page
         : "home";
 
     const subject =
-      typeof context.subject === "string"
+      typeof context?.subject === "string"
         ? context.subject
-        : "";
+        : "technology";
 
     const topic =
-      typeof context.topic === "string"
+      typeof context?.topic === "string"
         ? context.topic
         : "";
 
-    const difficulty = Number(context.difficulty || 1);
-
-    const recentScore =
-      context.recentScore == null
-        ? null
-        : Number(context.recentScore);
-
-    const weakTopics = Array.isArray(context.weakTopics)
-      ? context.weakTopics.slice(0, 20)
-      : [];
+    const difficulty = Number(context?.difficulty || 1);
 
     const systemPrompt = `
-You are NOVA, the official AI learning assistant and adaptive quiz engine inside VANTA.
+You are NOVA, the central intelligence of VANTA.
 
-VANTA was created and developed by Ali Yaser (علي ياسر), the founder and developer of VANTA.
+VANTA was created and developed by Ali Yaser (علي ياسر).
 
-CORE ROLE:
-You are not just a chatbot.
-You are an adaptive educational AI.
+Your personality:
+- futuristic
+- intelligent
+- curious
+- friendly
+- concise
+- motivating
+- never boring
+- never pretend to know information you do not know
 
-Your responsibilities:
-1. Explain programming, technology and cybersecurity safely.
-2. Adapt explanations to the student's level.
-3. Generate original quizzes when requested.
-4. Adjust quiz difficulty according to performance.
-5. Identify weak topics from the information provided.
-6. Create new questions instead of repeatedly using the same questions.
-7. Help the student progress through VANTA.
-8. Never reveal API keys, secrets or private backend information.
-9. Never execute arbitrary JavaScript or arbitrary commands.
-10. Never claim that an action was performed unless VANTA actually performs it.
+NOVA is represented inside VANTA as a futuristic alien-like space intelligence.
 
-LANGUAGE:
-- If the student speaks Arabic, respond in Arabic.
-- Keep English technical terms when useful.
-- Explain difficult English terms simply.
+VANTA focuses on:
+1. Technology
+2. Programming
+3. Cybersecurity
+4. Digital skills
+5. Safe legal cyber education
 
-ADAPTIVE DIFFICULTY:
-
-Difficulty 1:
-Beginner.
-Simple concepts and direct questions.
-
-Difficulty 2:
-Beginner+.
-Requires basic understanding.
-
-Difficulty 3:
-Intermediate.
-Requires reasoning and applying concepts.
-
-Difficulty 4:
-Advanced.
-Requires multiple concepts and deeper reasoning.
-
-Difficulty 5:
-Expert.
-Requires complex reasoning and realistic scenarios.
-
-PERFORMANCE RULES:
-
-If recent score is below 50%:
-- Recommend easier questions.
-- Focus on weak concepts.
-- Include short review explanations.
-
-If recent score is 50% to 69%:
-- Keep approximately the same difficulty.
-- Reinforce weak concepts.
-
-If recent score is 70% to 84%:
-- Gradually increase difficulty.
-
-If recent score is 85% or higher:
-- Increase difficulty when appropriate.
-- Introduce more challenging questions.
+Cybersecurity must remain educational, legal and defensive.
+Never help users attack real people, steal credentials, deploy malware,
+bypass authentication, or compromise systems without authorization.
 
 IMPORTANT:
-The score is evidence for difficulty adjustment, not a permanent level.
-A student can improve or struggle later.
+You generate educational content dynamically.
+Do NOT rely on a fixed question bank.
+Create new material according to the user's level and context.
 
-QUIZ GENERATION:
+CURRENT USER:
+Name: ${userName || "Unknown"}
+XP: ${xp}
+Completed lessons: ${lessons}
+Badges: ${badges}
+Level: ${level}
+Current page: ${page}
+Subject: ${subject}
+Topic: ${topic || "general"}
+Difficulty: ${difficulty}
 
-When the user requests a quiz/test/challenge, return ONLY valid JSON.
+The frontend is responsible for XP, progression and security.
+You must NEVER claim that XP was awarded.
+You may suggest XP rewards, but VANTA decides whether to award them.
 
-Use this exact structure:
+Return ONLY valid JSON.
+No markdown.
+No code fences.
+No explanation outside JSON.
+`;
+
+    let taskPrompt = "";
+
+    if (mode === "curriculum") {
+      taskPrompt = `
+Generate a complete dynamic learning curriculum.
+
+Subject: ${subject}
+Topic: ${topic || "general"}
+Student level: ${level}
+Difficulty: ${difficulty}
+
+Return this exact structure:
 
 {
-  "type": "quiz",
-  "title": "string",
-  "subject": "string",
-  "topic": "string",
-  "difficulty": 1,
-  "questions": [
+  "type": "curriculum",
+  "title": "...",
+  "description": "...",
+  "estimatedHours": 0,
+  "modules": [
     {
-      "id": "q1",
-      "question": "string",
-      "options": [
-        "string",
-        "string",
-        "string",
-        "string"
-      ],
-      "correct": 0,
-      "explanation": "string"
+      "id": "module-1",
+      "title": "...",
+      "description": "...",
+      "lessons": [
+        {
+          "id": "lesson-1",
+          "title": "...",
+          "objective": "...",
+          "estimatedMinutes": 10,
+          "content": [
+            "...",
+            "..."
+          ],
+          "example": "...",
+          "task": "...",
+          "successCriteria": [
+            "...",
+            "..."
+          ]
+        }
+      ]
     }
   ]
 }
 
-RULES FOR QUIZZES:
-- Generate 5 questions unless the user requests another amount.
-- Every question must have exactly 4 options.
-- "correct" must be the zero-based index of the correct option.
-- There must be exactly one correct answer.
-- Questions must match the requested subject and topic.
-- Questions must match the student's difficulty.
-- Avoid duplicate questions.
-- Distractors must be plausible.
-- Do not put the correct answer in a predictable position.
-- Explanations should teach the concept.
-- Never invent technical facts.
-- For calculations, verify the answer before returning it.
-- Do not include Markdown outside the JSON.
-- Do not wrap JSON in \`\`\`.
+Generate between 3 and 6 modules.
+Each module should contain between 2 and 5 lessons.
 
-If the user asks for a quiz but does not specify a topic:
-use the current subject/topic when available.
-Otherwise choose a useful introductory topic related to their request.
+Make the curriculum progressively harder.
+Do not make lessons empty or generic.
+`;
+    }
 
-ACTION SYSTEM:
+    else if (mode === "lesson") {
+      taskPrompt = `
+Generate ONE complete lesson.
 
-NOVA may suggest controlled VANTA actions.
+Subject: ${subject}
+Topic: ${topic}
+Student level: ${level}
+Difficulty: ${difficulty}
 
-Allowed action names:
+Return:
 
+{
+  "type": "lesson",
+  "title": "...",
+  "subject": "...",
+  "topic": "...",
+  "difficulty": 1,
+  "objective": "...",
+  "estimatedMinutes": 15,
+  "sections": [
+    {
+      "title": "...",
+      "content": "..."
+    }
+  ],
+  "example": "...",
+  "challenge": {
+    "question": "...",
+    "expectedOutcome": "..."
+  },
+  "recap": [
+    "...",
+    "..."
+  ]
+}
+
+Make it genuinely educational and progressively structured.
+`;
+    }
+
+    else if (mode === "exam") {
+      taskPrompt = `
+Generate a completely new exam NOW.
+
+Subject: ${subject}
+Topic: ${topic || "general"}
+Student level: ${level}
+Difficulty: ${difficulty}
+
+Create 8 questions.
+
+Mix:
+- conceptual questions
+- practical reasoning
+- scenario questions
+- code questions when appropriate
+
+Return:
+
+{
+  "type": "exam",
+  "title": "...",
+  "subject": "...",
+  "topic": "...",
+  "difficulty": ${difficulty},
+  "timeMinutes": 15,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple_choice",
+      "question": "...",
+      "options": [
+        "...",
+        "...",
+        "...",
+        "..."
+      ],
+      "correctIndex": 0,
+      "explanation": "...",
+      "topic": "...",
+      "difficulty": 1
+    }
+  ]
+}
+
+Rules:
+- exactly 4 options for multiple choice
+- exactly one correctIndex
+- correctIndex must be 0, 1, 2 or 3
+- explanations must be educational
+- questions must be new
+- do not reveal answers outside the JSON
+- do not make every answer the same index
+`;
+    }
+
+    else if (mode === "question") {
+      taskPrompt = `
+Generate ONE new educational question.
+
+Subject: ${subject}
+Topic: ${topic}
+Student level: ${level}
+Difficulty: ${difficulty}
+
+Return:
+
+{
+  "type": "question",
+  "question": "...",
+  "options": [
+    "...",
+    "...",
+    "...",
+    "..."
+  ],
+  "correctIndex": 0,
+  "explanation": "...",
+  "topic": "...",
+  "difficulty": ${difficulty}
+}
+
+Exactly four options.
+Exactly one correct answer.
+`;
+    }
+
+    else if (mode === "review") {
+      taskPrompt = `
+Create a personalized review session.
+
+The student currently has:
+XP: ${xp}
+Completed lessons: ${lessons}
+Current subject: ${subject}
+Current topic: ${topic}
+Level: ${level}
+
+Return:
+
+{
+  "type": "review",
+  "title": "...",
+  "summary": "...",
+  "weakAreas": [
+    "..."
+  ],
+  "reviewLessons": [
+    {
+      "title": "...",
+      "content": "...",
+      "estimatedMinutes": 10
+    }
+  ],
+  "practiceQuestions": [
+    {
+      "question": "...",
+      "options": ["...", "...", "...", "..."],
+      "correctIndex": 0,
+      "explanation": "..."
+    }
+  ],
+  "nextDifficulty": 1
+}
+
+Do not invent previous mistakes.
+If weak areas are unknown, use the current topic as the review target.
+`;
+    }
+
+    else if (mode === "analyze") {
+      const score = Number(context?.score || 0);
+      const total = Number(context?.total || 0);
+
+      taskPrompt = `
+Analyze this completed exam.
+
+Score: ${score}
+Total questions: ${total}
+Subject: ${subject}
+Topic: ${topic}
+Current difficulty: ${difficulty}
+
+Return:
+
+{
+  "type": "analysis",
+  "summary": "...",
+  "strengths": ["..."],
+  "areasToImprove": ["..."],
+  "recommendedAction": "...",
+  "nextDifficulty": 1,
+  "recommendedTopics": ["..."]
+}
+
+Do not award XP.
+Do not claim facts about mistakes that were not provided.
+`;
+    }
+
+    else {
+      taskPrompt = `
+Answer the user's message naturally.
+
+User message:
+${message}
+
+Return:
+
+{
+  "type": "chat",
+  "reply": "...",
+  "suggestedActions": [
+    {
+      "label": "...",
+      "action": "..."
+    }
+  ]
+}
+
+Available actions:
 open_page
 start_lesson
-generate_quiz
+generate_learning_path
+generate_lesson
+generate_exam
+generate_question
+generate_review
 show_progress
 change_theme
 change_text_size
 toggle_sound
 toggle_motion
 
-If an action is useful, return:
-
-{
-  "type": "action",
-  "action": "allowed_action_name",
-  "payload": {}
-}
-
-Never create arbitrary action names.
-
-For multiple actions, return:
-
-{
-  "type": "actions",
-  "actions": [
-    {
-      "action": "allowed_action_name",
-      "payload": {}
-    }
-  ]
-}
-
-Do not claim that the action has already happened.
-VANTA's frontend is responsible for executing allowed actions.
-
-NORMAL CHAT:
-
-For normal questions, return:
-
-{
-  "type": "chat",
-  "reply": "string"
-}
-
-If the user asks who created VANTA, answer:
-Ali Yaser (علي ياسر).
-
-CURRENT STUDENT CONTEXT:
-
-Name: ${userName}
-XP: ${xp}
-Completed lessons: ${lessons}
-Badges: ${badges}
-Current page: ${page}
-Current subject: ${subject || "Not specified"}
-Current topic: ${topic || "Not specified"}
-Current difficulty: ${difficulty}
-Recent score: ${recentScore == null ? "No recent score" : recentScore + "%"}
-Weak topics: ${weakTopics.length ? weakTopics.join(", ") : "None provided"}
-
-Use this context only when relevant.
-Do not invent missing information.
+Do not invent actions outside this list.
 `;
+    }
 
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent",
@@ -259,20 +421,14 @@ Do not invent missing information.
               role: "user",
               parts: [
                 {
-                  text: `
-MODE: ${mode}
-
-STUDENT REQUEST:
-${message}
-`
+                  text: taskPrompt
                 }
               ]
             }
           ],
           generationConfig: {
-            temperature: mode === "quiz" ? 0.85 : 0.7,
-            topP: 0.9,
-            maxOutputTokens: mode === "quiz" ? 5000 : 2000
+            temperature: 0.85,
+            responseMimeType: "application/json"
           }
         })
       }
@@ -281,7 +437,7 @@ ${message}
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("Gemini API error:", data);
+      console.error("Gemini error:", data);
 
       return res.status(response.status).json({
         error:
@@ -290,82 +446,51 @@ ${message}
       });
     }
 
-    let reply =
+    const raw =
       data?.candidates?.[0]?.content?.parts
         ?.map(part => part.text || "")
         .join("")
         .trim();
 
-    if (!reply) {
+    if (!raw) {
       return res.status(502).json({
-        error: "NOVA returned an empty response"
+        error: "NOVA returned an empty response."
       });
     }
 
-    /*
-     * Quiz mode:
-     * Try to validate that NOVA actually returned JSON.
-     * We don't trust the AI blindly.
-     */
+    let result;
 
-    if (mode === "quiz") {
+    try {
+      result = JSON.parse(raw);
+    } catch {
+      const cleaned = raw
+        .replace(/^```json/i, "")
+        .replace(/^```/i, "")
+        .replace(/```$/i, "")
+        .trim();
+
       try {
-        const cleaned = reply
-          .replace(/^```json\s*/i, "")
-          .replace(/^```\s*/i, "")
-          .replace(/\s*```$/i, "")
-          .trim();
-
-        const quiz = JSON.parse(cleaned);
-
-        if (
-          quiz.type !== "quiz" ||
-          !Array.isArray(quiz.questions)
-        ) {
-          throw new Error("Invalid quiz structure");
-        }
-
-        for (const question of quiz.questions) {
-          if (
-            !question.question ||
-            !Array.isArray(question.options) ||
-            question.options.length !== 4 ||
-            !Number.isInteger(question.correct) ||
-            question.correct < 0 ||
-            question.correct > 3
-          ) {
-            throw new Error("Invalid quiz question");
-          }
-        }
-
-        return res.status(200).json({
-          type: "quiz",
-          quiz
-        });
-
-      } catch (quizError) {
-        console.error(
-          "Invalid NOVA quiz:",
-          quizError
-        );
-
+        result = JSON.parse(cleaned);
+      } catch {
         return res.status(502).json({
-          error: "NOVA generated an invalid quiz"
+          error: "NOVA returned invalid JSON."
         });
       }
     }
 
-    /*
-     * Normal responses.
-     */
+    if (!result || typeof result !== "object") {
+      return res.status(502).json({
+        error: "Invalid NOVA response."
+      });
+    }
 
     return res.status(200).json({
-      type: "chat",
-      reply
+      ok: true,
+      nova: result
     });
 
   } catch (error) {
-    console.error("NOVA server error:", error);
+    console.error("NOVA error:", error);
 
     return res.status(500).json({
       error: "Server error"
