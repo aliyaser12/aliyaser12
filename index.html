@@ -2244,7 +2244,7 @@ document.querySelectorAll(".nav-btn").forEach(btn=>{
    AUTH
 ========================================================= */
 
-document.getElementById("authBtn").addEventListener("click",openAuth);
+document.getElementById("authBtn").addEventListener("click", openAuth);
 
 function openAuth(){
   document.getElementById("authModal").classList.add("open");
@@ -2252,9 +2252,8 @@ function openAuth(){
 
 function closeAuth(){
   document.getElementById("authModal").classList.remove("open");
-  document.getElementById("authMessage").textContent="";
+  document.getElementById("authMessage").textContent = "";
 }
-
 async function signup(){
 
   const email = document.getElementById("authEmail").value.trim();
