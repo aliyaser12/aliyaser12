@@ -2334,23 +2334,26 @@ async function logout(){
   }
 }
 
-auth.onAuthStateChanged(async user=>{
+let authReady = false;
 
-  currentUser = user;
+auth.onAuthStateChanged(async user => {
+  currentuser = user;
+  authReady = true;
 
   const btn = document.getElementById("authBtn");
 
-  if(user){
+  if (user) {
+    if (btn) btn.textContent = "حسابي";
 
-    btn.textContent = "حسابي";
-
-    await loadRemoteMemory();
-
-  }else{
-
-    btn.textContent = "دخول";
-
+    try {
+      await loadRemoteMemory();
+    } catch (error) {
+      console.error("Failed to load remote memory:", error);
+    }
+  } else {
+    if (btn) btn.textContent = "تسجيل الدخول";
   }
+});
 
   renderState();
 
