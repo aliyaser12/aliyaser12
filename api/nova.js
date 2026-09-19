@@ -4,20 +4,42 @@
  Firebase Authentication
  Supabase Memory
  Gemini AI
+ Automatic Gemini Fallback
  Vercel Serverless Function
 =========================================================
 */
 
 const crypto = require("crypto");
 
-/* =====================================================
+/* =======================================================
    ENVIRONMENT
-===================================================== */
+======================================================= */
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 const GEMINI_MODEL =
   process.env.GEMINI_MODEL || "gemini-3.6-flash";
+
+/*
+  ترتيب النماذج:
+  1. النموذج الموجود في GEMINI_MODEL
+  2. Gemini 3.5 Flash
+  3. Gemini 3.5 Flash Lite
+  4. Gemini 3.1 Flash Lite
+
+  إذا كان نموذج مشغولًا أو يعطي 429/503/502
+  ينتقل NOVA تلقائيًا للنموذج التالي.
+*/
+
+const GEMINI_FALLBACK_MODELS = [
+  GEMINI_MODEL,
+  "gemini-3.5-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-3.1-flash-lite"
+].filter(
+  (model, index, array) =>
+    model && array.indexOf(model) === index
+);
 
 const SUPABASE_URL =
   process.env.SUPABASE_URL ||
@@ -30,25 +52,47 @@ const FIREBASE_API_KEY =
   process.env.FIREBASE_API_KEY ||
   "AIzaSyDwPdYkuRjugCD21tChOoSLldQG5raA-ps";
 
-const MEMORY_TABLE = "student_memory_firebase";
+const MEMORY_TABLE =
+  "student_memory_firebase";
 
-/* =====================================================
-   BASIC HELPERS
-===================================================== */
+
+/* =======================================================
+   RESPONSE HELPERS
+======================================================= */
 
 function json(res, status, data) {
   res.status(status);
-  res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("Cache-Control", "no-store");
-  return res.end(JSON.stringify(data));
+
+  res.setHeader(
+    "Content-Type",
+    "application/json; charset=utf-8"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "no-store"
+  );
+
+  return res.end(
+    JSON.stringify(data)
+  );
 }
 
+
+/* =======================================================
+   BASIC HELPERS
+======================================================= */
+
 function cleanString(value, max = 10000) {
-  return String(value ?? "").trim().slice(0, max);
+  return String(value ?? "")
+    .trim()
+    .slice(0, max);
 }
 
 function safeArray(value, max = 100) {
-  return Array.isArray(value) ? value.slice(0, max) : [];
+  return Array.isArray(value)
+    ? value.slice(0, max)
+    : [];
 }
 
 function nowISO() {
@@ -56,12 +100,16 @@ function nowISO() {
 }
 
 function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
+  return Math.max(
+    min,
+    Math.min(max, value)
+  );
 }
 
-/* =====================================================
+
+/* =======================================================
    FIREBASE AUTH
-===================================================== */
+======================================================= */
 
 async function verifyFirebaseToken(idToken) {
   if (!idToken) {
@@ -69,7 +117,9 @@ async function verifyFirebaseToken(idToken) {
   }
 
   if (!FIREBASE_API_KEY) {
-    throw new Error("FIREBASE_API_KEY_MISSING");
+    throw new Error(
+      "FIREBASE_API_KEY_MISSING"
+    );
   }
 
   const response = await fetch(
@@ -78,68 +128,90 @@ async function verifyFirebaseToken(idToken) {
     )}`,
     {
       method: "POST",
+
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type":
+          "application/json"
       },
+
       body: JSON.stringify({
         idToken
       })
     }
   );
 
-  const data = await response.json().catch(() => ({}));
+  const data =
+    await response.json()
+      .catch(() => ({}));
 
   if (!response.ok) {
     throw new Error(
-      data?.error?.message || "FIREBASE_TOKEN_INVALID"
+      data?.error?.message ||
+      "FIREBASE_TOKEN_INVALID"
     );
   }
 
-  const user = data?.users?.[0];
+  const user =
+    data?.users?.[0];
 
   if (!user?.localId) {
-    throw new Error("FIREBASE_USER_NOT_FOUND");
+    throw new Error(
+      "FIREBASE_USER_NOT_FOUND"
+    );
   }
 
   return {
     uid: user.localId,
     email: user.email || "",
-    displayName: user.displayName || ""
+    displayName:
+      user.displayName || ""
   };
 }
 
-/* =====================================================
-   SUPABASE REST
-===================================================== */
+
+/* =======================================================
+   SUPABASE
+======================================================= */
 
 async function supabaseRequest(
   path,
   options = {}
 ) {
   if (!SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error("SUPABASE_SERVICE_ROLE_KEY_MISSING");
+    throw new Error(
+      "SUPABASE_SERVICE_ROLE_KEY_MISSING"
+    );
   }
 
   const response = await fetch(
     `${SUPABASE_URL}${path}`,
     {
       ...options,
+
       headers: {
-        apikey: SUPABASE_SERVICE_ROLE_KEY,
+        apikey:
+          SUPABASE_SERVICE_ROLE_KEY,
+
         Authorization:
           `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-        "Content-Type": "application/json",
+
+        "Content-Type":
+          "application/json",
+
         ...(options.headers || {})
       }
     }
   );
 
-  const text = await response.text();
+  const text =
+    await response.text();
 
   let data = null;
 
   try {
-    data = text ? JSON.parse(text) : null;
+    data = text
+      ? JSON.parse(text)
+      : null;
   } catch {
     data = text;
   }
@@ -152,101 +224,152 @@ async function supabaseRequest(
       text ||
       "SUPABASE_ERROR";
 
-    throw new Error(message);
+    throw new Error(
+      `Supabase error ${response.status}: ${message}`
+    );
   }
 
   return data;
 }
 
-/* =====================================================
-   DEFAULT MEMORY
-===================================================== */
 
 function defaultMemory(user) {
   return {
-    firebase_uid: user.uid,
-    email: user.email || "",
-    name: user.displayName || "",
+    firebase_uid:
+      user.uid,
+
+    email:
+      user.email || "",
+
+    name:
+      user.displayName || "",
+
     level: 1,
+
     xp: 0,
+
     lessons: 0,
+
     badges: 0,
+
     focus: "general",
+
     streak: 0,
+
     study_minutes: 0,
+
     mastery: {},
+
     recent_scores: [],
+
     recent_topics: [],
+
     weak_topics: [],
+
     strengths: [],
+
     mistakes: [],
+
     history: [],
+
     seen_question_ids: [],
-    created_at: nowISO(),
-    updated_at: nowISO()
+
+    created_at:
+      nowISO(),
+
+    updated_at:
+      nowISO()
   };
 }
 
-/* =====================================================
-   MEMORY LOAD
-===================================================== */
 
 async function getMemory(user) {
-  const encodedUID = encodeURIComponent(user.uid);
+  const encodedUID =
+    encodeURIComponent(
+      user.uid
+    );
 
-  const rows = await supabaseRequest(
-    `/rest/v1/${MEMORY_TABLE}?firebase_uid=eq.${encodedUID}&limit=1`,
-    {
-      method: "GET"
-    }
-  );
+  const rows =
+    await supabaseRequest(
+      `/rest/v1/${MEMORY_TABLE}?firebase_uid=eq.${encodedUID}&limit=1`,
+      {
+        method: "GET"
+      }
+    );
 
-  if (Array.isArray(rows) && rows.length > 0) {
+  if (
+    Array.isArray(rows) &&
+    rows.length > 0
+  ) {
     return rows[0];
   }
 
-  const memory = defaultMemory(user);
+  const memory =
+    defaultMemory(user);
 
   await supabaseRequest(
     `/rest/v1/${MEMORY_TABLE}`,
     {
       method: "POST",
+
       headers: {
-        Prefer: "return=representation"
+        Prefer:
+          "return=representation"
       },
-      body: JSON.stringify(memory)
+
+      body:
+        JSON.stringify(memory)
     }
   );
 
   return memory;
 }
 
-/* =====================================================
-   MEMORY SAVE
-===================================================== */
 
-async function saveMemory(user, patch) {
+async function saveMemory(
+  user,
+  patch
+) {
   const cleanPatch = {
     ...patch,
-    firebase_uid: user.uid,
-    email: user.email || patch.email || "",
-    updated_at: nowISO()
+
+    firebase_uid:
+      user.uid,
+
+    email:
+      user.email ||
+      patch.email ||
+      "",
+
+    updated_at:
+      nowISO()
   };
 
-  const encodedUID = encodeURIComponent(user.uid);
+  const encodedUID =
+    encodeURIComponent(
+      user.uid
+    );
 
-  const rows = await supabaseRequest(
-    `/rest/v1/${MEMORY_TABLE}?firebase_uid=eq.${encodedUID}`,
-    {
-      method: "PATCH",
-      headers: {
-        Prefer: "return=representation"
-      },
-      body: JSON.stringify(cleanPatch)
-    }
-  );
+  const rows =
+    await supabaseRequest(
+      `/rest/v1/${MEMORY_TABLE}?firebase_uid=eq.${encodedUID}`,
+      {
+        method: "PATCH",
 
-  if (Array.isArray(rows) && rows.length > 0) {
+        headers: {
+          Prefer:
+            "return=representation"
+        },
+
+        body:
+          JSON.stringify(cleanPatch)
+      }
+    );
+
+  if (
+    Array.isArray(rows) &&
+    rows.length > 0
+  ) {
     return rows[0];
   }
 
@@ -255,47 +378,68 @@ async function saveMemory(user, patch) {
   };
 }
 
-/* =====================================================
-   MEMORY UPDATE
-===================================================== */
 
-function buildMemoryPatch(memory, changes = {}) {
+function buildMemoryPatch(
+  memory,
+  changes = {}
+) {
   return {
     level:
       changes.level !== undefined
-        ? clamp(Number(changes.level) || 1, 1, 100)
+        ? clamp(
+            Number(changes.level) || 1,
+            1,
+            100
+          )
         : memory.level,
 
     xp:
       changes.xp !== undefined
-        ? Math.max(0, Number(changes.xp) || 0)
+        ? Math.max(
+            0,
+            Number(changes.xp) || 0
+          )
         : memory.xp,
 
     lessons:
       changes.lessons !== undefined
-        ? Math.max(0, Number(changes.lessons) || 0)
+        ? Math.max(
+            0,
+            Number(changes.lessons) || 0
+          )
         : memory.lessons,
 
     badges:
       changes.badges !== undefined
-        ? Math.max(0, Number(changes.badges) || 0)
+        ? Math.max(
+            0,
+            Number(changes.badges) || 0
+          )
         : memory.badges,
 
     focus:
       changes.focus !== undefined
-        ? cleanString(changes.focus, 120)
+        ? cleanString(
+            changes.focus,
+            120
+          )
         : memory.focus,
 
     streak:
       changes.streak !== undefined
-        ? Math.max(0, Number(changes.streak) || 0)
+        ? Math.max(
+            0,
+            Number(changes.streak) || 0
+          )
         : memory.streak,
 
     study_minutes:
       changes.study_minutes !== undefined
         ? Math.max(
             0,
-            Number(changes.study_minutes) || 0
+            Number(
+              changes.study_minutes
+            ) || 0
           )
         : memory.study_minutes,
 
@@ -306,141 +450,375 @@ function buildMemoryPatch(memory, changes = {}) {
 
     recent_scores:
       changes.recent_scores !== undefined
-        ? safeArray(changes.recent_scores)
-        : safeArray(memory.recent_scores),
+        ? safeArray(
+            changes.recent_scores
+          )
+        : safeArray(
+            memory.recent_scores
+          ),
 
     recent_topics:
       changes.recent_topics !== undefined
-        ? safeArray(changes.recent_topics)
-        : safeArray(memory.recent_topics),
+        ? safeArray(
+            changes.recent_topics
+          )
+        : safeArray(
+            memory.recent_topics
+          ),
 
     weak_topics:
       changes.weak_topics !== undefined
-        ? safeArray(changes.weak_topics)
-        : safeArray(memory.weak_topics),
+        ? safeArray(
+            changes.weak_topics
+          )
+        : safeArray(
+            memory.weak_topics
+          ),
 
     strengths:
       changes.strengths !== undefined
-        ? safeArray(changes.strengths)
-        : safeArray(memory.strengths),
+        ? safeArray(
+            changes.strengths
+          )
+        : safeArray(
+            memory.strengths
+          ),
 
     mistakes:
       changes.mistakes !== undefined
-        ? safeArray(changes.mistakes)
-        : safeArray(memory.mistakes),
+        ? safeArray(
+            changes.mistakes
+          )
+        : safeArray(
+            memory.mistakes
+          ),
 
     history:
       changes.history !== undefined
-        ? safeArray(changes.history)
-        : safeArray(memory.history),
+        ? safeArray(
+            changes.history
+          )
+        : safeArray(
+            memory.history
+          ),
 
     seen_question_ids:
       changes.seen_question_ids !== undefined
-        ? safeArray(changes.seen_question_ids)
-        : safeArray(memory.seen_question_ids)
+        ? safeArray(
+            changes.seen_question_ids
+          )
+        : safeArray(
+            memory.seen_question_ids
+          )
   };
 }
 
-/* =====================================================
-   GEMINI
-===================================================== */
 
-async function gemini(prompt, options = {}) {
-  if (!GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY_MISSING");
+/* =======================================================
+   GEMINI ERROR DETECTION
+======================================================= */
+
+function isRetryableGeminiError(
+  status,
+  message
+) {
+  const text =
+    String(message || "")
+      .toLowerCase();
+
+  /*
+    429 = rate limit / high demand
+    500 = temporary server problem
+    502 = bad gateway
+    503 = service unavailable
+    504 = gateway timeout
+  */
+
+  if (
+    [429, 500, 502, 503, 504]
+      .includes(status)
+  ) {
+    return true;
   }
 
-  const model =
-    options.model ||
-    GEMINI_MODEL;
+  if (
+    text.includes(
+      "high demand"
+    ) ||
+    text.includes(
+      "temporarily unavailable"
+    ) ||
+    text.includes(
+      "service unavailable"
+    ) ||
+    text.includes(
+      "resource exhausted"
+    ) ||
+    text.includes(
+      "rate limit"
+    ) ||
+    text.includes(
+      "overloaded"
+    )
+  ) {
+    return true;
+  }
 
-  const url =
-    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
-      model
-    )}:generateContent?key=${encodeURIComponent(
-      GEMINI_API_KEY
-    )}`;
+  return false;
+}
 
-  const body = {
-    contents: [
-      {
-        role: "user",
-        parts: [
-          {
-            text: prompt
-          }
-        ]
-      }
-    ],
-    generationConfig: {
-      temperature:
-        options.temperature ?? 0.75,
-      maxOutputTokens:
-        options.maxOutputTokens ?? 5000,
-      responseMimeType:
-        options.json === false
-          ? "text/plain"
-          : "application/json"
-    }
-  };
 
-  const response = await fetch(
-    url,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    }
-  );
+/* =======================================================
+   GEMINI
+======================================================= */
 
-  const data =
-    await response.json().catch(() => ({}));
-
-  if (!response.ok) {
+async function gemini(
+  prompt,
+  options = {}
+) {
+  if (!GEMINI_API_KEY) {
     throw new Error(
-      data?.error?.message ||
-      `GEMINI_HTTP_${response.status}`
+      "GEMINI_API_KEY_MISSING"
     );
   }
 
-  const text =
-    data?.candidates?.[0]?.content?.parts
-      ?.map(part => part.text || "")
-      .join("")
-      .trim();
+  let lastError =
+    null;
 
-  if (!text) {
-    throw new Error("GEMINI_EMPTY_RESPONSE");
+  for (
+    let i = 0;
+    i < GEMINI_FALLBACK_MODELS.length;
+    i++
+  ) {
+    const model =
+      GEMINI_FALLBACK_MODELS[i];
+
+    try {
+      const url =
+        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
+          model
+        )}:generateContent?key=${encodeURIComponent(
+          GEMINI_API_KEY
+        )}`;
+
+      const generationConfig = {
+        maxOutputTokens:
+          options.maxOutputTokens ??
+          5000
+      };
+
+      /*
+        Gemini 3.x has changed sampling
+        behavior, so we intentionally do
+        not send temperature/top_p/top_k.
+      */
+
+      if (options.json === false) {
+        generationConfig.responseMimeType =
+          "text/plain";
+      } else {
+        generationConfig.responseMimeType =
+          "application/json";
+      }
+
+      const response =
+        await fetch(
+          url,
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify({
+                contents: [
+                  {
+                    role: "user",
+
+                    parts: [
+                      {
+                        text:
+                          prompt
+                      }
+                    ]
+                  }
+                ],
+
+                generationConfig
+              })
+          }
+        );
+
+      const data =
+        await response.json()
+          .catch(() => ({}));
+
+      if (!response.ok) {
+        const message =
+          data?.error?.message ||
+          `GEMINI_HTTP_${response.status}`;
+
+        /*
+          If model is overloaded,
+          automatically try next model.
+        */
+
+        if (
+          isRetryableGeminiError(
+            response.status,
+            message
+          )
+        ) {
+          console.warn(
+            `NOVA: Gemini model ${model} unavailable. Trying fallback.`
+          );
+
+          lastError =
+            new Error(
+              `GEMINI_${response.status}: ${message}`
+            );
+
+          continue;
+        }
+
+        /*
+          Model doesn't exist /
+          API key doesn't allow it /
+          invalid request.
+        */
+
+        throw new Error(
+          `GEMINI_${response.status}: ${message}`
+        );
+      }
+
+      const text =
+        data?.candidates?.[0]
+          ?.content?.parts
+          ?.map(
+            part =>
+              part.text || ""
+          )
+          .join("")
+          .trim();
+
+      if (!text) {
+        lastError =
+          new Error(
+            `GEMINI_EMPTY_RESPONSE_${model}`
+          );
+
+        continue;
+      }
+
+      console.log(
+        `NOVA: Gemini response generated using ${model}`
+      );
+
+      if (
+        options.json === false
+      ) {
+        return text;
+      }
+
+      return parseJSON(text);
+
+    } catch (error) {
+      lastError = error;
+
+      const message =
+        error?.message || "";
+
+      /*
+        Network/temporary problems:
+        continue to next model.
+      */
+
+      if (
+        message.includes(
+          "GEMINI_429"
+        ) ||
+        message.includes(
+          "GEMINI_500"
+        ) ||
+        message.includes(
+          "GEMINI_502"
+        ) ||
+        message.includes(
+          "GEMINI_503"
+        ) ||
+        message.includes(
+          "GEMINI_504"
+        ) ||
+        message
+          .toLowerCase()
+          .includes(
+            "high demand"
+          )
+      ) {
+        console.warn(
+          `NOVA: fallback after ${model}`
+        );
+
+        continue;
+      }
+
+      throw error;
+    }
   }
 
-  if (options.json === false) {
-    return text;
-  }
+  /*
+    Every available model failed.
+  */
 
-  return parseJSON(text);
+  throw new Error(
+    `GEMINI_ALL_MODELS_FAILED: ${
+      lastError?.message ||
+      "No Gemini model available"
+    }`
+  );
 }
 
-/* =====================================================
+
+/* =======================================================
    JSON PARSER
-===================================================== */
+======================================================= */
 
 function parseJSON(text) {
-  let cleaned = String(text || "").trim();
+  let cleaned =
+    String(text || "")
+      .trim();
 
-  cleaned = cleaned
-    .replace(/^```json\s*/i, "")
-    .replace(/^```\s*/i, "")
-    .replace(/\s*```$/i, "")
-    .trim();
+  cleaned =
+    cleaned
+      .replace(
+        /^```json\s*/i,
+        ""
+      )
+      .replace(
+        /^```\s*/i,
+        ""
+      )
+      .replace(
+        /\s*```$/i,
+        ""
+      )
+      .trim();
 
   try {
-    return JSON.parse(cleaned);
+    return JSON.parse(
+      cleaned
+    );
   } catch {}
 
-  const firstObject = cleaned.indexOf("{");
-  const lastObject = cleaned.lastIndexOf("}");
+  const firstObject =
+    cleaned.indexOf("{");
+
+  const lastObject =
+    cleaned.lastIndexOf("}");
 
   if (
     firstObject !== -1 &&
@@ -456,8 +834,11 @@ function parseJSON(text) {
     } catch {}
   }
 
-  const firstArray = cleaned.indexOf("[");
-  const lastArray = cleaned.lastIndexOf("]");
+  const firstArray =
+    cleaned.indexOf("[");
+
+  const lastArray =
+    cleaned.lastIndexOf("]");
 
   if (
     firstArray !== -1 &&
@@ -473,12 +854,15 @@ function parseJSON(text) {
     } catch {}
   }
 
-  throw new Error("GEMINI_INVALID_JSON");
+  throw new Error(
+    "GEMINI_INVALID_JSON"
+  );
 }
 
-/* =====================================================
-   NOVA SYSTEM PROMPT
-===================================================== */
+
+/* =======================================================
+   NOVA SYSTEM
+======================================================= */
 
 function novaSystem(memory) {
   return `
@@ -508,23 +892,49 @@ Ali Yaser — علي ياسر.
 9. تحويل الأخطاء إلى فرص تعلم.
 
 الطالب الحالي:
-المستوى: ${memory.level}
-XP: ${memory.xp}
-الدروس المكتملة: ${memory.lessons}
-السلسلة: ${memory.streak}
-التركيز: ${memory.focus}
-المواضيع الأخيرة: ${JSON.stringify(
-    safeArray(memory.recent_topics)
-  )}
-نقاط الضعف: ${JSON.stringify(
-    safeArray(memory.weak_topics)
-  )}
-نقاط القوة: ${JSON.stringify(
-    safeArray(memory.strengths)
-  )}
-الأخطاء الأخيرة: ${JSON.stringify(
-    safeArray(memory.mistakes)
-  )}
+
+المستوى:
+${memory.level}
+
+XP:
+${memory.xp}
+
+الدروس المكتملة:
+${memory.lessons}
+
+السلسلة:
+${memory.streak}
+
+التركيز:
+${memory.focus}
+
+المواضيع الأخيرة:
+${JSON.stringify(
+  safeArray(
+    memory.recent_topics
+  )
+)}
+
+نقاط الضعف:
+${JSON.stringify(
+  safeArray(
+    memory.weak_topics
+  )
+)}
+
+نقاط القوة:
+${JSON.stringify(
+  safeArray(
+    memory.strengths
+  )
+)}
+
+الأخطاء الأخيرة:
+${JSON.stringify(
+  safeArray(
+    memory.mistakes
+  )
+)}
 
 عند إنشاء محتوى تعليمي:
 - لا تجعل كل سؤال مباشرًا وسهلًا.
@@ -540,15 +950,25 @@ XP: ${memory.xp}
 `;
 }
 
-/* =====================================================
-   CHAT
-===================================================== */
 
-async function actionChat(body, memory) {
-  const message = cleanString(body.message, 5000);
+/* =======================================================
+   CHAT
+======================================================= */
+
+async function actionChat(
+  body,
+  memory
+) {
+  const message =
+    cleanString(
+      body.message,
+      5000
+    );
 
   if (!message) {
-    throw new Error("EMPTY_MESSAGE");
+    throw new Error(
+      "EMPTY_MESSAGE"
+    );
   }
 
   const prompt = `
@@ -558,28 +978,44 @@ ${novaSystem(memory)}
 ${message}
 
 أجب بالعربية بوضوح.
-إذا كان السؤال تقنيًا، أعط شرحًا عمليًا.
-إذا كان السؤال تعليميًا، ساعد الطالب على الفهم بدل إعطائه الحل فقط.
+
+إذا كان السؤال تقنيًا:
+أعط شرحًا عمليًا.
+
+إذا كان السؤال تعليميًا:
+ساعد الطالب على الفهم بدل إعطائه الحل فقط.
+
+لا تذكر تفاصيل البنية الداخلية للسيرفر.
 `;
 
-  const answer = await gemini(prompt, {
-    json: false,
-    temperature: 0.75,
-    maxOutputTokens: 2500
-  });
+  const answer =
+    await gemini(
+      prompt,
+      {
+        json: false,
+        maxOutputTokens: 2500
+      }
+    );
 
   return {
     answer
   };
 }
 
-/* =====================================================
-   LESSON
-===================================================== */
 
-async function actionGenerateLesson(body, memory) {
+/* =======================================================
+   LESSON
+======================================================= */
+
+async function actionGenerateLesson(
+  body,
+  memory
+) {
   const topic =
-    cleanString(body.topic, 200) ||
+    cleanString(
+      body.topic,
+      200
+    ) ||
     memory.focus ||
     "general technology";
 
@@ -591,6 +1027,9 @@ ${novaSystem(memory)}
 الموضوع:
 ${topic}
 
+مستوى الطالب:
+${memory.level}
+
 أعد JSON فقط بهذا الشكل:
 
 {
@@ -599,7 +1038,11 @@ ${topic}
   "level": 1,
   "explanation": "شرح تعليمي متدرج",
   "content": "الدرس كاملًا باختصار مفيد",
-  "keyPoints": ["نقطة", "نقطة", "نقطة"],
+  "keyPoints": [
+    "نقطة",
+    "نقطة",
+    "نقطة"
+  ],
   "practice": "تمرين عملي",
   "estimatedMinutes": 15
 }
@@ -607,35 +1050,46 @@ ${topic}
 لا تستخدم Markdown داخل قيم JSON.
 `;
 
-  return await gemini(prompt, {
-    json: true,
-    temperature: 0.72,
-    maxOutputTokens: 5000
-  });
+  return await gemini(
+    prompt,
+    {
+      json: true,
+      maxOutputTokens: 5000
+    }
+  );
 }
 
-/* =====================================================
-   QUESTION
-===================================================== */
 
-async function actionGenerateQuestion(body, memory) {
+/* =======================================================
+   QUESTION
+======================================================= */
+
+async function actionGenerateQuestion(
+  body,
+  memory
+) {
   const topic =
-    cleanString(body.topic, 200) ||
+    cleanString(
+      body.topic,
+      200
+    ) ||
     memory.focus ||
     "technology";
 
-  const seen = safeArray(
-    memory.seen_question_ids,
-    50
-  );
+  const seen =
+    safeArray(
+      memory.seen_question_ids,
+      50
+    );
 
-  const questionId = crypto
-    .createHash("sha256")
-    .update(
-      `${memory.firebase_uid}:${Date.now()}:${Math.random()}`
-    )
-    .digest("hex")
-    .slice(0, 16);
+  const questionId =
+    crypto
+      .createHash("sha256")
+      .update(
+        `${memory.firebase_uid}:${Date.now()}:${Math.random()}`
+      )
+      .digest("hex")
+      .slice(0, 16);
 
   const prompt = `
 ${novaSystem(memory)}
@@ -678,16 +1132,23 @@ ${JSON.stringify(seen)}
 - لا تضع Markdown داخل JSON.
 `;
 
-  const result = await gemini(prompt, {
-    json: true,
-    temperature: 0.85,
-    maxOutputTokens: 3500
-  });
+  const result =
+    await gemini(
+      prompt,
+      {
+        json: true,
+        maxOutputTokens: 3500
+      }
+    );
 
-  result.id = result.id || questionId;
+  result.id =
+    result.id ||
+    questionId;
 
   if (
-    !Array.isArray(result.options) ||
+    !Array.isArray(
+      result.options
+    ) ||
     result.options.length !== 4
   ) {
     throw new Error(
@@ -697,7 +1158,9 @@ ${JSON.stringify(seen)}
 
   result.correctIndex =
     clamp(
-      Number(result.correctIndex) || 0,
+      Number(
+        result.correctIndex
+      ) || 0,
       0,
       3
     );
@@ -705,19 +1168,24 @@ ${JSON.stringify(seen)}
   return result;
 }
 
-/* =====================================================
-   EXAM
-===================================================== */
 
-async function actionGenerateExam(body, memory) {
+/* =======================================================
+   EXAM
+======================================================= */
+
+async function actionGenerateExam(
+  body,
+  memory
+) {
   const requestedCount =
     Number(body.count) || 5;
 
-  const count = clamp(
-    requestedCount,
-    3,
-    10
-  );
+  const count =
+    clamp(
+      requestedCount,
+      3,
+      10
+    );
 
   const prompt = `
 ${novaSystem(memory)}
@@ -732,8 +1200,10 @@ ${memory.focus}
 
 نقاط الضعف:
 ${JSON.stringify(
-    safeArray(memory.weak_topics)
-  )}
+  safeArray(
+    memory.weak_topics
+  )
+)}
 
 أعد JSON فقط:
 
@@ -758,51 +1228,77 @@ ${JSON.stringify(
 }
 
 يجب أن يكون عدد الأسئلة ${count} بالضبط.
+
 كل سؤال له أربعة خيارات بالضبط.
+
 كل سؤال له إجابة صحيحة واحدة فقط.
+
 لا تكرر نفس الفكرة.
 `;
 
-  const result = await gemini(prompt, {
-    json: true,
-    temperature: 0.82,
-    maxOutputTokens: 7000
-  });
+  const result =
+    await gemini(
+      prompt,
+      {
+        json: true,
+        maxOutputTokens: 7000
+      }
+    );
 
-  if (!Array.isArray(result.questions)) {
-    throw new Error("INVALID_EXAM");
+  if (
+    !Array.isArray(
+      result.questions
+    )
+  ) {
+    throw new Error(
+      "INVALID_EXAM"
+    );
   }
 
   result.questions =
     result.questions
       .slice(0, count)
-      .filter(q =>
-        q &&
-        typeof q.question === "string" &&
-        Array.isArray(q.options) &&
-        q.options.length === 4
+      .filter(
+        q =>
+          q &&
+          typeof q.question ===
+            "string" &&
+          Array.isArray(q.options) &&
+          q.options.length === 4
       )
       .map(q => ({
         ...q,
-        correctIndex: clamp(
-          Number(q.correctIndex) || 0,
-          0,
-          3
-        )
+
+        correctIndex:
+          clamp(
+            Number(
+              q.correctIndex
+            ) || 0,
+            0,
+            3
+          )
       }));
 
-  if (result.questions.length < 1) {
-    throw new Error("EMPTY_EXAM");
+  if (
+    result.questions.length < 1
+  ) {
+    throw new Error(
+      "EMPTY_EXAM"
+    );
   }
 
   return result;
 }
 
-/* =====================================================
-   ROADMAP
-===================================================== */
 
-async function actionRoadmap(body, memory) {
+/* =======================================================
+   ROADMAP
+======================================================= */
+
+async function actionRoadmap(
+  body,
+  memory
+) {
   const prompt = `
 ${novaSystem(memory)}
 
@@ -816,13 +1312,17 @@ ${memory.focus}
 
 نقاط القوة:
 ${JSON.stringify(
-    safeArray(memory.strengths)
-  )}
+  safeArray(
+    memory.strengths
+  )
+)}
 
 نقاط الضعف:
 ${JSON.stringify(
-    safeArray(memory.weak_topics)
-  )}
+  safeArray(
+    memory.weak_topics
+  )
+)}
 
 أعد JSON فقط:
 
@@ -831,7 +1331,10 @@ ${JSON.stringify(
     {
       "title": "اسم المرحلة",
       "description": "وصف قصير",
-      "topics": ["موضوع", "موضوع"],
+      "topics": [
+        "موضوع",
+        "موضوع"
+      ],
       "reason": "لماذا هذه المرحلة مناسبة"
     }
   ]
@@ -840,18 +1343,24 @@ ${JSON.stringify(
 أنشئ 6 مراحل منطقية.
 `;
 
-  return await gemini(prompt, {
-    json: true,
-    temperature: 0.7,
-    maxOutputTokens: 4500
-  });
+  return await gemini(
+    prompt,
+    {
+      json: true,
+      maxOutputTokens: 4500
+    }
+  );
 }
 
-/* =====================================================
-   CHALLENGE
-===================================================== */
 
-async function actionChallenge(body, memory) {
+/* =======================================================
+   CHALLENGE
+======================================================= */
+
+async function actionChallenge(
+  body,
+  memory
+) {
   const prompt = `
 ${novaSystem(memory)}
 
@@ -881,70 +1390,115 @@ ${memory.focus}
 }
 `;
 
-  return await gemini(prompt, {
-    json: true,
-    temperature: 0.78,
-    maxOutputTokens: 4000
-  });
+  return await gemini(
+    prompt,
+    {
+      json: true,
+      maxOutputTokens: 4000
+    }
+  );
 }
 
-/* =====================================================
-   CHECK ANSWER
-===================================================== */
 
-async function actionCheckAnswer(body, user, memory) {
+/* =======================================================
+   CHECK ANSWER
+======================================================= */
+
+async function actionCheckAnswer(
+  body,
+  user,
+  memory
+) {
   const questionId =
-    cleanString(body.questionId, 100);
+    cleanString(
+      body.questionId,
+      100
+    );
 
   const question =
-    cleanString(body.question, 5000);
+    cleanString(
+      body.question,
+      5000
+    );
 
   const options =
-    safeArray(body.options, 4);
+    safeArray(
+      body.options,
+      4
+    );
 
   const selectedIndex =
-    Number(body.selectedIndex);
+    Number(
+      body.selectedIndex
+    );
 
   const correctIndex =
-    Number(body.correctIndex);
+    Number(
+      body.correctIndex
+    );
 
   const topic =
-    cleanString(body.topic, 200) ||
+    cleanString(
+      body.topic,
+      200
+    ) ||
     "general";
 
   if (
     !question ||
     options.length !== 4 ||
-    !Number.isInteger(selectedIndex) ||
-    !Number.isInteger(correctIndex)
+    !Number.isInteger(
+      selectedIndex
+    ) ||
+    !Number.isInteger(
+      correctIndex
+    )
   ) {
-    throw new Error("INVALID_ANSWER_DATA");
+    throw new Error(
+      "INVALID_ANSWER_DATA"
+    );
   }
 
   const correct =
-    selectedIndex === correctIndex;
+    selectedIndex ===
+    correctIndex;
 
-  const xpAwarded = correct
-    ? Math.max(
-        5,
-        10 + Math.floor(memory.level * 1.5)
-      )
-    : 0;
+  const xpAwarded =
+    correct
+      ? Math.max(
+          5,
+          10 +
+            Math.floor(
+              memory.level *
+                1.5
+            )
+        )
+      : 0;
 
   const history =
-    safeArray(memory.history);
+    safeArray(
+      memory.history
+    );
 
   const mistakes =
-    safeArray(memory.mistakes);
+    safeArray(
+      memory.mistakes
+    );
 
   const recentScores =
-    safeArray(memory.recent_scores);
+    safeArray(
+      memory.recent_scores
+    );
 
   const recentTopics =
-    safeArray(memory.recent_topics);
+    safeArray(
+      memory.recent_topics
+    );
 
   const seenIds =
-    safeArray(memory.seen_question_ids);
+    safeArray(
+      memory.seen_question_ids
+    );
 
   history.unshift({
     questionId,
@@ -953,35 +1507,45 @@ async function actionCheckAnswer(body, user, memory) {
     selectedIndex,
     correctIndex,
     xp: xpAwarded,
-    timestamp: nowISO()
+    timestamp:
+      nowISO()
   });
 
   recentScores.unshift(
     correct ? 1 : 0
   );
 
-  recentTopics.unshift(topic);
+  recentTopics.unshift(
+    topic
+  );
 
   if (!correct) {
     mistakes.unshift({
       questionId,
       topic,
-      timestamp: nowISO()
+      timestamp:
+        nowISO()
     });
   }
 
   if (questionId) {
-    seenIds.unshift(questionId);
+    seenIds.unshift(
+      questionId
+    );
   }
 
-  let newXP =
-    Math.max(0, Number(memory.xp) || 0)
-    + xpAwarded;
+  const newXP =
+    Math.max(
+      0,
+      Number(memory.xp) || 0
+    ) + xpAwarded;
 
-  let newLevel =
+  const newLevel =
     Math.max(
       1,
-      Math.floor(newXP / 100) + 1
+      Math.floor(
+        newXP / 100
+      ) + 1
     );
 
   const patch =
@@ -989,17 +1553,38 @@ async function actionCheckAnswer(body, user, memory) {
       memory,
       {
         xp: newXP,
+
         level: newLevel,
+
         recent_scores:
-          recentScores.slice(0, 30),
+          recentScores.slice(
+            0,
+            30
+          ),
+
         recent_topics:
-          recentTopics.slice(0, 30),
+          recentTopics.slice(
+            0,
+            30
+          ),
+
         mistakes:
-          mistakes.slice(0, 30),
+          mistakes.slice(
+            0,
+            30
+          ),
+
         history:
-          history.slice(0, 100),
+          history.slice(
+            0,
+            100
+          ),
+
         seen_question_ids:
-          seenIds.slice(0, 200)
+          seenIds.slice(
+            0,
+            200
+          )
       }
     );
 
@@ -1011,9 +1596,15 @@ async function actionCheckAnswer(body, user, memory) {
 
   return {
     correct,
+
     xpAwarded,
-    level: updated.level,
-    xp: updated.xp,
+
+    level:
+      updated.level,
+
+    xp:
+      updated.xp,
+
     explanation:
       cleanString(
         body.explanation,
@@ -1024,52 +1615,109 @@ async function actionCheckAnswer(body, user, memory) {
           ? "إجابة صحيحة. استمر."
           : "راجع الفكرة وحاول مرة أخرى."
       ),
-    completed: correct
+
+    completed:
+      correct
   };
 }
 
-/* =====================================================
-   PROGRESS
-===================================================== */
 
-async function actionProgress(memory) {
+/* =======================================================
+   PROGRESS
+======================================================= */
+
+async function actionProgress(
+  memory
+) {
   return {
     memory: {
-      level: Number(memory.level) || 1,
-      xp: Number(memory.xp) || 0,
+      level:
+        Number(
+          memory.level
+        ) || 1,
+
+      xp:
+        Number(
+          memory.xp
+        ) || 0,
+
       lessons:
-        Number(memory.lessons) || 0,
+        Number(
+          memory.lessons
+        ) || 0,
+
       badges:
-        Number(memory.badges) || 0,
+        Number(
+          memory.badges
+        ) || 0,
+
       streak:
-        Number(memory.streak) || 0,
+        Number(
+          memory.streak
+        ) || 0,
+
       study_minutes:
-        Number(memory.study_minutes) || 0,
+        Number(
+          memory.study_minutes
+        ) || 0,
+
       focus:
-        memory.focus || "general",
+        memory.focus ||
+        "general",
+
       mastery:
-        memory.mastery || {},
+        memory.mastery ||
+        {},
+
       recent_scores:
-        safeArray(memory.recent_scores),
+        safeArray(
+          memory.recent_scores
+        ),
+
       recent_topics:
-        safeArray(memory.recent_topics),
+        safeArray(
+          memory.recent_topics
+        ),
+
       weak_topics:
-        safeArray(memory.weak_topics),
+        safeArray(
+          memory.weak_topics
+        ),
+
       strengths:
-        safeArray(memory.strengths),
+        safeArray(
+          memory.strengths
+        ),
+
       mistakes:
-        safeArray(memory.mistakes)
+        safeArray(
+          memory.mistakes
+        )
     }
   };
 }
 
-/* =====================================================
-   GENERIC SAFE RESPONSE
-===================================================== */
 
-async function actionExplain(body, memory) {
+/* =======================================================
+   EXPLAIN
+======================================================= */
+
+async function actionExplain(
+  body,
+  memory
+) {
   const text =
-    cleanString(body.text || body.question, 5000);
+    cleanString(
+      body.text ||
+        body.question,
+      5000
+    );
+
+  if (!text) {
+    throw new Error(
+      "EMPTY_EXPLANATION"
+    );
+  }
 
   const prompt = `
 ${novaSystem(memory)}
@@ -1082,231 +1730,357 @@ ${text}
 `;
 
   return {
-    answer: await gemini(prompt, {
-      json: false,
-      temperature: 0.65,
-      maxOutputTokens: 3000
-    })
+    answer:
+      await gemini(
+        prompt,
+        {
+          json: false,
+          maxOutputTokens: 3000
+        }
+      )
   };
 }
 
-/* =====================================================
+
+/* =======================================================
    MAIN HANDLER
-===================================================== */
+======================================================= */
 
-module.exports = async function handler(req, res) {
-  try {
+module.exports =
+  async function handler(
+    req,
+    res
+  ) {
+    try {
 
-    /* CORS */
+      /* -----------------------------
+         CORS
+      ----------------------------- */
 
-    res.setHeader(
-      "Access-Control-Allow-Origin",
-      "*"
-    );
-
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
-    );
-
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "POST, OPTIONS"
-    );
-
-    if (req.method === "OPTIONS") {
-      return res.status(204).end();
-    }
-
-    if (req.method !== "POST") {
-      return json(
-        res,
-        405,
-        {
-          error: "METHOD_NOT_ALLOWED"
-        }
+      res.setHeader(
+        "Access-Control-Allow-Origin",
+        "*"
       );
-    }
 
-    /* Body */
-
-    const body =
-      typeof req.body === "object"
-        ? req.body
-        : {};
-
-    const action =
-      cleanString(body.action, 100);
-
-    if (!action) {
-      return json(
-        res,
-        400,
-        {
-          error: "ACTION_REQUIRED"
-        }
+      res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization"
       );
-    }
 
-    /* Firebase */
-
-    const authorization =
-      req.headers.authorization || "";
-
-    if (
-      !authorization.startsWith("Bearer ")
-    ) {
-      return json(
-        res,
-        401,
-        {
-          error: "AUTH_REQUIRED"
-        }
+      res.setHeader(
+        "Access-Control-Allow-Methods",
+        "POST, OPTIONS"
       );
-    }
 
-    const idToken =
-      authorization
-        .slice("Bearer ".length)
-        .trim();
 
-    const user =
-      await verifyFirebaseToken(idToken);
+      /* -----------------------------
+         OPTIONS
+      ----------------------------- */
 
-    /* Memory */
+      if (
+        req.method ===
+        "OPTIONS"
+      ) {
+        return res
+          .status(204)
+          .end();
+      }
 
-    const memory =
-      await getMemory(user);
 
-    /* Action */
+      /* -----------------------------
+         METHOD
+      ----------------------------- */
 
-    let result;
+      if (
+        req.method !==
+        "POST"
+      ) {
+        return json(
+          res,
+          405,
+          {
+            error:
+              "METHOD_NOT_ALLOWED"
+          }
+        );
+      }
 
-    switch (action) {
 
-      case "chat":
-        result =
-          await actionChat(
-            body,
-            memory
-          );
-        break;
+      /* -----------------------------
+         BODY
+      ----------------------------- */
 
-      case "generate_lesson":
-        result =
-          await actionGenerateLesson(
-            body,
-            memory
-          );
-        break;
+      const body =
+        typeof req.body ===
+        "object"
+          ? req.body
+          : {};
 
-      case "generate_question":
-        result =
-          await actionGenerateQuestion(
-            body,
-            memory
-          );
-        break;
 
-      case "generate_exam":
-        result =
-          await actionGenerateExam(
-            body,
-            memory
-          );
-        break;
+      /* -----------------------------
+         ACTION
+      ----------------------------- */
 
-      case "generate_roadmap":
-        result =
-          await actionRoadmap(
-            body,
-            memory
-          );
-        break;
+      const action =
+        cleanString(
+          body.action,
+          100
+        );
 
-      case "generate_challenge":
-        result =
-          await actionChallenge(
-            body,
-            memory
-          );
-        break;
-
-      case "check_answer":
-        result =
-          await actionCheckAnswer(
-            body,
-            user,
-            memory
-          );
-        break;
-
-      case "progress":
-        result =
-          await actionProgress(
-            memory
-          );
-        break;
-
-      case "explain":
-        result =
-          await actionExplain(
-            body,
-            memory
-          );
-        break;
-
-      default:
+      if (!action) {
         return json(
           res,
           400,
           {
             error:
-              `UNKNOWN_ACTION: ${action}`
+              "ACTION_REQUIRED"
           }
         );
-    }
-
-    return json(
-      res,
-      200,
-      result
-    );
-
-  } catch (error) {
-
-    console.error(
-      "NOVA ERROR:",
-      error
-    );
-
-    const message =
-      error?.message ||
-      "NOVA_SERVER_ERROR";
-
-    let status = 500;
-
-    if (
-      message === "AUTH_REQUIRED" ||
-      message.includes("TOKEN_INVALID") ||
-      message.includes("USER_NOT_FOUND")
-    ) {
-      status = 401;
-    }
-
-    if (
-      message === "UNKNOWN_ACTION" ||
-      message.startsWith("UNKNOWN_ACTION:")
-    ) {
-      status = 400;
-    }
-
-    return json(
-      res,
-      status,
-      {
-        error: message
       }
-    );
-  }
-};
+
+
+      /* -----------------------------
+         AUTHORIZATION
+      ----------------------------- */
+
+      const authorization =
+        req.headers
+          .authorization ||
+        "";
+
+      if (
+        !authorization.startsWith(
+          "Bearer "
+        )
+      ) {
+        return json(
+          res,
+          401,
+          {
+            error:
+              "AUTH_REQUIRED"
+          }
+        );
+      }
+
+      const idToken =
+        authorization
+          .slice(
+            "Bearer ".length
+          )
+          .trim();
+
+
+      /* -----------------------------
+         FIREBASE
+      ----------------------------- */
+
+      const user =
+        await verifyFirebaseToken(
+          idToken
+        );
+
+
+      /* -----------------------------
+         MEMORY
+      ----------------------------- */
+
+      const memory =
+        await getMemory(
+          user
+        );
+
+
+      /* -----------------------------
+         ACTION ROUTER
+      ----------------------------- */
+
+      let result;
+
+      switch (action) {
+
+        case "chat":
+
+          result =
+            await actionChat(
+              body,
+              memory
+            );
+
+          break;
+
+
+        case "generate_lesson":
+
+          result =
+            await actionGenerateLesson(
+              body,
+              memory
+            );
+
+          break;
+
+
+        case "generate_question":
+
+          result =
+            await actionGenerateQuestion(
+              body,
+              memory
+            );
+
+          break;
+
+
+        case "generate_exam":
+
+          result =
+            await actionGenerateExam(
+              body,
+              memory
+            );
+
+          break;
+
+
+        case "generate_roadmap":
+
+          result =
+            await actionRoadmap(
+              body,
+              memory
+            );
+
+          break;
+
+
+        case "generate_challenge":
+
+          result =
+            await actionChallenge(
+              body,
+              memory
+            );
+
+          break;
+
+
+        case "check_answer":
+
+          result =
+            await actionCheckAnswer(
+              body,
+              user,
+              memory
+            );
+
+          break;
+
+
+        case "progress":
+
+          result =
+            await actionProgress(
+              memory
+            );
+
+          break;
+
+
+        case "explain":
+
+          result =
+            await actionExplain(
+              body,
+              memory
+            );
+
+          break;
+
+
+        default:
+
+          return json(
+            res,
+            400,
+            {
+              error:
+                `UNKNOWN_ACTION: ${action}`
+            }
+          );
+      }
+
+
+      /* -----------------------------
+         SUCCESS
+      ----------------------------- */
+
+      return json(
+        res,
+        200,
+        result
+      );
+
+    } catch (error) {
+
+      console.error(
+        "NOVA ERROR:",
+        error
+      );
+
+      const message =
+        error?.message ||
+        "NOVA_SERVER_ERROR";
+
+      let status = 500;
+
+
+      /* -----------------------------
+         AUTH ERRORS
+      ----------------------------- */
+
+      if (
+        message ===
+          "AUTH_REQUIRED" ||
+        message.includes(
+          "TOKEN_INVALID"
+        ) ||
+        message.includes(
+          "USER_NOT_FOUND"
+        )
+      ) {
+        status = 401;
+      }
+
+
+      /* -----------------------------
+         CLIENT ERRORS
+      ----------------------------- */
+
+      if (
+        message ===
+          "UNKNOWN_ACTION" ||
+        message.startsWith(
+          "UNKNOWN_ACTION:"
+        ) ||
+        message ===
+          "EMPTY_MESSAGE"
+      ) {
+        status = 400;
+      }
+
+
+      /* -----------------------------
+         RESPONSE
+      ----------------------------- */
+
+      return json(
+        res,
+        status,
+        {
+          error:
+            message
+        }
+      );
+    }
+  };
