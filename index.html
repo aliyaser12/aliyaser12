@@ -3,4836 +3,1394 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#07070c">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>VANTA — Ali Yaser</title>
+<meta name="theme-color" content="#070812">
+<meta name="description" content="VANTA — Cyber Learning, Labs, NOVA & VANTABOOK">
+<meta name="author" content="Ali Yaser">
+<title>VANTA</title>
 
 <style>
-/* =========================================================
-   VANTA 2.0 — SINGLE FILE
-========================================================= */
-
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
 :root{
-  --bg:#06070b;
-  --bg2:#0b0c13;
-  --panel:rgba(18,19,29,.78);
-  --panel2:rgba(24,25,37,.88);
-  --line:rgba(255,255,255,.09);
-  --line2:rgba(255,255,255,.15);
-  --text:#f8f8fc;
-  --muted:#9295a5;
-  --purple:#8b5cf6;
-  --violet:#a78bfa;
-  --cyan:#22d3ee;
-  --pink:#ec4899;
-  --blue:#60a5fa;
-  --green:#34d399;
-  --red:#fb7185;
-  --shadow:0 25px 80px rgba(0,0,0,.42);
+ --bg:#060711;--panel:rgba(18,20,38,.72);--panel2:rgba(255,255,255,.08);
+ --line:rgba(255,255,255,.12);--txt:#f7f8ff;--muted:#9ea5c2;
+ --cyan:#61e8ff;--blue:#6d8cff;--purple:#ae7cff;--pink:#ff76c8;
+ --green:#63efad;--yellow:#ffd86b;--red:#ff6680;
+ --r:24px;--shadow:0 25px 80px rgba(0,0,0,.45)
 }
-
-html{
-  scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{
-  min-height:100vh;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 10% 0%,rgba(139,92,246,.13),transparent 28%),
-    radial-gradient(circle at 90% 12%,rgba(34,211,238,.08),transparent 25%),
-    radial-gradient(circle at 50% 100%,rgba(236,72,153,.06),transparent 30%),
-    var(--bg);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif;
-  overflow-x:hidden;
+ min-height:100vh;background:
+ radial-gradient(circle at 15% 10%,#3344a52c,transparent 30%),
+ radial-gradient(circle at 90% 20%,#a342b02b,transparent 28%),
+ radial-gradient(circle at 50% 100%,#22cde51c,transparent 35%),var(--bg);
+ color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
+ "Segoe UI",Arial,sans-serif;overflow-x:hidden
 }
-
-button,
-input,
-textarea{
-  font:inherit;
+button,input,textarea{font:inherit}
+button{cursor:pointer;border:0;color:inherit}
+button:disabled{opacity:.5;cursor:not-allowed}
+.hidden{display:none!important}
+#space{position:fixed;inset:0;z-index:-10;overflow:hidden;pointer-events:none}
+.stars{
+ position:absolute;inset:-30%;background-image:
+ radial-gradient(circle,#fff 0 1px,transparent 1.5px);
+ background-size:91px 103px;opacity:.55;animation:drift 100s linear infinite
 }
+.stars.b{background-size:151px 171px;opacity:.28;animation-duration:150s}
+.stars.c{background-size:227px 211px;opacity:.2;animation-duration:200s}
+.nebula{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18}
+.n1{width:420px;height:420px;background:#516aff;top:-100px;left:-130px}
+.n2{width:400px;height:400px;background:#d04cff;right:-150px;top:25%}
+.n3{width:500px;height:300px;background:#1bdfff;left:35%;bottom:-180px}
+.planet{position:absolute;border-radius:50%;box-shadow:inset -25px -20px 35px #0008,0 0 50px #7b8dff2b}
+.p1{width:82px;height:82px;right:6%;top:22%;background:linear-gradient(135deg,#ffd36c,#ff6c9f 55%,#744cff);animation:float 8s ease-in-out infinite}
+.p2{width:43px;height:43px;left:7%;top:58%;background:linear-gradient(135deg,#75efff,#456bff);animation:float 7s ease-in-out infinite reverse}
+.p3{width:27px;height:27px;right:23%;bottom:15%;background:linear-gradient(135deg,#ffe18b,#ff629b);animation:float 6s infinite}
+.saturn{position:absolute;width:155px;height:120px;left:3%;bottom:7%;animation:float 12s ease-in-out infinite}
+.saturn i{position:absolute;display:block}
+.saturn .ring{width:150px;height:42px;border:7px solid #e3c38b99;border-radius:50%;top:39px;left:2px;transform:rotate(-13deg)}
+.saturn .body{width:70px;height:70px;border-radius:50%;top:25px;left:42px;background:repeating-linear-gradient(#e8c58b 0 8px,#9d74ce 8px 14px);box-shadow:inset -15px -12px 20px #0008}
+@keyframes drift{to{transform:translate(5%,4%)}}
+@keyframes float{50%{transform:translateY(-16px) rotate(3deg)}}
+@keyframes pulse{50%{box-shadow:0 0 45px #61e8ff55}}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-button{
-  cursor:pointer;
+/* BOOT */
+#boot{
+ position:fixed;inset:0;z-index:9999;display:grid;place-items:center;
+ background:#05060e;transition:.7s
 }
-
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+.bootbox{text-align:center;width:min(430px,88vw)}
+.logo{
+ width:82px;height:82px;margin:auto auto 22px;border-radius:25px;
+ display:grid;place-items:center;font-size:35px;font-weight:900;
+ background:linear-gradient(135deg,#5de8ff,#7186ff 48%,#b56cff);
+ box-shadow:0 0 70px #647dff66;animation:pulse 2s infinite
 }
-
-/* =========================================================
-   BACKGROUND
-========================================================= */
-
-.space{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:-1;
-  overflow:hidden;
+.boottitle{font-size:42px;font-weight:900;letter-spacing:7px}
+.bootsub{color:var(--muted);margin:10px 0 28px}
+.progress{height:5px;background:#ffffff12;border-radius:99px;overflow:hidden}
+.progress i{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));transition:.2s}
+.bootrow{display:flex;gap:10px;justify-content:center;margin-top:22px}
+.btn{
+ padding:12px 18px;border-radius:15px;background:var(--panel2);
+ border:1px solid var(--line);transition:.2s
 }
+.btn:hover{transform:translateY(-2px);background:#ffffff13}
+.btn.primary{background:linear-gradient(135deg,#5de8ff,#777cff);color:#06101a;font-weight:800}
+.btn.danger{background:#ff668014;color:#ff8ca0}
+.bootrow .btn{min-width:110px}
 
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  border-radius:50%;
-  background:white;
-  opacity:.4;
-  animation:twinkle 3s infinite ease-in-out;
+/* APP */
+#app{display:none;min-height:100vh}
+header{
+ position:fixed;top:12px;left:12px;right:12px;z-index:100;
+ height:64px;border:1px solid var(--line);background:#0b0d18b8;
+ backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);
+ border-radius:21px;display:flex;align-items:center;padding:8px 12px;
+ box-shadow:var(--shadow)
 }
-
-.star:nth-child(1){top:12%;left:8%;animation-delay:.2s}
-.star:nth-child(2){top:23%;left:24%;animation-delay:1.2s}
-.star:nth-child(3){top:9%;left:67%;animation-delay:.7s}
-.star:nth-child(4){top:35%;left:87%;animation-delay:2s}
-.star:nth-child(5){top:66%;left:12%;animation-delay:1.7s}
-.star:nth-child(6){top:78%;left:74%;animation-delay:.9s}
-.star:nth-child(7){top:52%;left:55%;animation-delay:2.4s}
-.star:nth-child(8){top:91%;left:39%;animation-delay:.5s}
-.star:nth-child(9){top:18%;left:93%;animation-delay:1.5s}
-.star:nth-child(10){top:43%;left:4%;animation-delay:2.1s}
-
-@keyframes twinkle{
-  0%,100%{opacity:.2;transform:scale(.8)}
-  50%{opacity:.9;transform:scale(1.5)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;min-width:150px}
+.brandmark{
+ width:43px;height:43px;border-radius:14px;display:grid;place-items:center;
+ background:linear-gradient(135deg,#5de8ff,#697eff,#b36cff);font-weight:1000
 }
-
-.orbit{
-  position:absolute;
-  width:520px;
-  height:520px;
-  border:1px solid rgba(139,92,246,.07);
-  border-radius:50%;
-  top:-250px;
-  right:-150px;
+.brand span{font-size:20px;letter-spacing:2px}
+nav{display:flex;align-items:center;justify-content:center;gap:5px;flex:1;overflow:auto}
+nav button{
+ white-space:nowrap;padding:10px 14px;border-radius:13px;background:transparent;
+ color:var(--muted);transition:.2s
 }
-
-.orbit2{
-  position:absolute;
-  width:760px;
-  height:760px;
-  border:1px solid rgba(34,211,238,.045);
-  border-radius:50%;
-  bottom:-480px;
-  left:-260px;
+nav button:hover,nav button.active{background:#ffffff0e;color:#fff}
+nav button.active{box-shadow:inset 0 -2px var(--cyan)}
+.head-actions{display:flex;gap:7px}
+.iconbtn{
+ width:42px;height:42px;border-radius:14px;background:#ffffff09;
+ border:1px solid var(--line);display:grid;place-items:center
 }
+main{width:min(1240px,calc(100% - 28px));margin:0 auto;padding:102px 0 80px}
+.page{display:none;animation:pageIn .35s ease}
+.page.active{display:block}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-/* =========================================================
-   BOOT SCREEN
-========================================================= */
-
-.boot-screen{
-  position:fixed;
-  inset:0;
-  z-index:10000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at center,rgba(139,92,246,.12),transparent 30%),
-    #05060a;
-  transition:opacity .65s ease,visibility .65s ease;
+.hero{
+ min-height:520px;border:1px solid var(--line);border-radius:34px;
+ background:linear-gradient(135deg,#ffffff0c,#ffffff03);
+ backdrop-filter:blur(12px);padding:58px;position:relative;overflow:hidden;
+ display:flex;align-items:center
 }
-
-.boot-screen.hide{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
+.hero:after{
+ content:"";position:absolute;width:500px;height:500px;border-radius:50%;
+ background:#6577ff12;filter:blur(30px);right:-170px;top:-170px
 }
-
-.boot-inner{
-  width:min(420px,88%);
-  text-align:center;
+.hero-copy{max-width:700px;position:relative;z-index:2}
+.eyebrow{color:var(--cyan);font-weight:800;letter-spacing:2px;margin-bottom:14px}
+.hero h1{font-size:clamp(45px,7vw,88px);line-height:.98;margin-bottom:20px}
+.gradient{background:linear-gradient(90deg,#fff,#6feaff,#b789ff,#ff8bcf);-webkit-background-clip:text;color:transparent}
+.hero p{font-size:18px;line-height:1.8;color:var(--muted);max-width:650px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.nova-orb{
+ position:absolute;left:8%;width:190px;height:190px;border-radius:38px;
+ transform:rotate(45deg);background:linear-gradient(135deg,#61e8ff33,#a875ff44);
+ border:1px solid #ffffff28;box-shadow:0 0 100px #7084ff44;
+ animation:orb 6s ease-in-out infinite
 }
-
-.boot-logo{
-  width:92px;
-  height:92px;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  border-radius:29px;
-  font-size:44px;
-  font-weight:950;
-  background:
-    linear-gradient(135deg,#8b5cf6,#ec4899);
-  box-shadow:
-    0 0 80px rgba(139,92,246,.28),
-    inset 0 0 25px rgba(255,255,255,.16);
-  animation:bootFloat 2.4s infinite ease-in-out;
+.nova-orb:after{
+ content:"N";position:absolute;inset:22px;border-radius:26px;transform:rotate(-45deg);
+ display:grid;place-items:center;font-size:75px;font-weight:1000;
+ background:linear-gradient(135deg,#61e8ff,#a875ff,#ff76c8);
+ -webkit-background-clip:text;color:transparent
 }
+@keyframes orb{50%{transform:rotate(55deg) translateY(-15px)}}
 
-@keyframes bootFloat{
-  0%,100%{transform:translateY(0) rotate(0)}
-  50%{transform:translateY(-9px) rotate(3deg)}
-}
-
-.boot-title{
-  margin-top:25px;
-  font-size:28px;
-  letter-spacing:5px;
-  font-weight:950;
-}
-
-.boot-sub{
-  margin-top:9px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.boot-progress{
-  margin:28px auto 12px;
-  height:4px;
-  width:100%;
-  border-radius:99px;
-  background:rgba(255,255,255,.08);
-  overflow:hidden;
-}
-
-.boot-progress i{
-  display:block;
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,var(--purple),var(--pink),var(--cyan));
-  animation:bootProgress 2.7s ease forwards;
-}
-
-@keyframes bootProgress{
-  to{width:100%}
-}
-
-.boot-status{
-  color:#777b8b;
-  font-size:11px;
-  min-height:17px;
-}
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.app-shell{
-  min-height:100vh;
-}
-
-.main-header{
-  position:sticky;
-  top:0;
-  z-index:500;
-  height:72px;
-  display:flex;
-  align-items:center;
-  gap:25px;
-  padding:0 24px;
-  background:rgba(6,7,11,.74);
-  backdrop-filter:blur(28px) saturate(150%);
-  -webkit-backdrop-filter:blur(28px) saturate(150%);
-  border-bottom:1px solid var(--line);
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  min-width:max-content;
-  cursor:pointer;
-}
-
-.brand-logo{
-  width:40px;
-  height:40px;
-  display:grid;
-  place-items:center;
-  border-radius:13px;
-  font-weight:950;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  box-shadow:0 8px 28px rgba(139,92,246,.24);
-}
-
-.brand-name{
-  font-size:18px;
-  font-weight:950;
-  letter-spacing:3px;
-}
-
-.main-nav{
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:4px;
-  overflow:auto;
-  scrollbar-width:none;
-}
-
-.main-nav::-webkit-scrollbar{
-  display:none;
-}
-
-.main-nav button{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  white-space:nowrap;
-  padding:10px 14px;
-  border-radius:11px;
-  transition:.2s;
-}
-
-.main-nav button:hover,
-.main-nav button.active{
-  color:#fff;
-  background:rgba(255,255,255,.07);
-}
-
-.header-actions{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.header-icon{
-  width:40px;
-  height:40px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:rgba(255,255,255,.035);
-  color:white;
-}
-
-.header-avatar{
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  font-weight:900;
-  background:linear-gradient(135deg,#252536,#11121a);
-  border:1px solid var(--line);
-  cursor:pointer;
-}
-
-/* =========================================================
-   MAIN
-========================================================= */
-
-main{
-  width:min(1360px,100%);
-  margin:auto;
-  padding:34px 24px 100px;
-}
-
-.view{
-  display:none;
-  animation:viewIn .3s ease;
-}
-
-.view.active{
-  display:block;
-}
-
-@keyframes viewIn{
-  from{
-    opacity:0;
-    transform:translateY(8px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-/* =========================================================
-   COMMON
-========================================================= */
-
-.eyebrow{
-  color:var(--cyan);
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:1.5px;
-  margin-bottom:17px;
-}
-
-.page-title{
-  margin-bottom:27px;
-}
-
-.page-title h1{
-  font-size:42px;
-  letter-spacing:-1.5px;
-}
-
-.page-title p{
-  color:var(--muted);
-  margin-top:7px;
-}
-
-.gradient{
-  background:linear-gradient(90deg,var(--purple),var(--pink),var(--cyan));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-
-.primary{
-  border:0;
-  color:#fff;
-  background:linear-gradient(135deg,#8b5cf6,#6d28d9);
-  padding:12px 17px;
-  border-radius:12px;
-  box-shadow:0 10px 30px rgba(109,40,217,.2);
-}
-
-.secondary{
-  border:1px solid var(--line);
-  color:#fff;
-  background:rgba(255,255,255,.045);
-  padding:12px 17px;
-  border-radius:12px;
-}
-
-.danger{
-  border:1px solid rgba(251,113,133,.25);
-  color:#fecdd3;
-  background:rgba(251,113,133,.07);
-  padding:11px 15px;
-  border-radius:11px;
-}
-
-.primary:hover,
-.secondary:hover,
-.danger:hover{
-  transform:translateY(-1px);
-}
-
+.section-title{display:flex;align-items:end;justify-content:space-between;margin:38px 2px 17px}
+.section-title h2{font-size:28px}
+.section-title p{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
 .card{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:20px;
-  padding:21px;
+ border:1px solid var(--line);background:var(--panel);border-radius:var(--r);
+ padding:22px;box-shadow:0 15px 50px #0002;backdrop-filter:blur(18px)
 }
-
+.card:hover{border-color:#ffffff22}
 .card-icon{
-  width:46px;
-  height:46px;
-  display:grid;
-  place-items:center;
-  border-radius:14px;
-  background:rgba(139,92,246,.11);
-  color:#c4b5fd;
-  font-weight:900;
-  margin-bottom:16px;
+ width:47px;height:47px;border-radius:15px;display:grid;place-items:center;
+ background:linear-gradient(135deg,#61e8ff22,#a875ff2c);font-size:22px;margin-bottom:16px
 }
+.card h3{margin-bottom:8px}.card p{color:var(--muted);line-height:1.65}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:15px}
+.stat{padding:20px;border:1px solid var(--line);border-radius:20px;background:#ffffff06}
+.stat b{font-size:27px;display:block}.stat span{color:var(--muted);font-size:13px}
 
-.card h3{
-  margin-bottom:7px;
+/* LEARNING */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.search{
+ flex:1;min-width:220px;background:#ffffff08;border:1px solid var(--line);
+ border-radius:15px;padding:13px 15px;color:#fff;outline:0
 }
+.search:focus{border-color:#61e8ff66}
+.course{position:relative;overflow:hidden}
+.course .tag{display:inline-block;font-size:12px;padding:6px 9px;border-radius:9px;background:#61e8ff12;color:var(--cyan);margin-bottom:12px}
+.bar{height:6px;background:#fff0d;border-radius:99px;margin:17px 0 8px;overflow:hidden}
+.bar i{height:100%;display:block;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:99px}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
 
-.card p{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.8;
+/* LABS */
+.lab-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.lab{
+ min-height:220px;display:flex;flex-direction:column;justify-content:space-between
 }
+.lab .safe{color:var(--green);font-size:12px}
 
-.grid-3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
-
-/* =========================================================
-   HOME
-========================================================= */
-
-.home-hero{
-  display:grid;
-  grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);
-  gap:17px;
-}
-
-.hero-main{
-  min-height:485px;
-  position:relative;
-  overflow:hidden;
-  border:1px solid var(--line);
-  border-radius:28px;
-  padding:48px;
-  background:
-    radial-gradient(circle at 80% 10%,rgba(139,92,246,.19),transparent 30%),
-    radial-gradient(circle at 5% 90%,rgba(34,211,238,.08),transparent 25%),
-    linear-gradient(145deg,#151621,#0c0d12);
-  box-shadow:var(--shadow);
-}
-
-.hero-main:after{
-  content:"";
-  position:absolute;
-  width:370px;
-  height:370px;
-  border-radius:50%;
-  border:1px solid rgba(255,255,255,.045);
-  right:-190px;
-  bottom:-200px;
-}
-
-.hero-main h1{
-  max-width:800px;
-  font-size:clamp(45px,6vw,76px);
-  line-height:1;
-  letter-spacing:-4px;
-  margin-bottom:23px;
-}
-
-.hero-main p{
-  max-width:690px;
-  color:var(--muted);
-  line-height:1.95;
-  font-size:15px;
-}
-
-.hero-actions{
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-  margin-top:30px;
-}
-
-.nova-card{
-  min-height:485px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  border:1px solid var(--line);
-  border-radius:28px;
-  padding:30px;
-  background:
-    radial-gradient(circle at center 30%,rgba(34,211,238,.11),transparent 35%),
-    var(--panel);
-}
-
+/* NOVA */
+.nova-layout{display:grid;grid-template-columns:310px 1fr;gap:15px}
+.nova-side{text-align:center}
 .nova-crystal{
-  width:150px;
-  height:150px;
-  position:relative;
-  display:grid;
-  place-items:center;
-  margin-bottom:27px;
-  border-radius:38px;
-  transform:rotate(30deg);
-  background:linear-gradient(135deg,#8b5cf6,#22d3ee);
-  box-shadow:
-    0 0 80px rgba(139,92,246,.22),
-    inset 0 0 35px rgba(255,255,255,.18);
+ width:145px;height:145px;margin:10px auto 20px;transform:rotate(45deg);
+ border-radius:35px;background:linear-gradient(135deg,#5de8ff,#7380ff 50%,#c16eff);
+ box-shadow:0 0 70px #7380ff45;display:grid;place-items:center;
+ animation:orb 6s infinite
 }
-
-.nova-crystal:before{
-  content:"";
-  position:absolute;
-  inset:19px;
-  border:2px solid rgba(255,255,255,.3);
-  border-radius:26px;
+.nova-crystal span{transform:rotate(-45deg);font-size:60px;font-weight:1000}
+.mood{color:var(--cyan);font-weight:800}
+.chat{
+ height:650px;border:1px solid var(--line);background:#090b16cc;
+ border-radius:26px;display:flex;flex-direction:column;overflow:hidden
 }
+.chat-head{padding:17px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+.messages{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:11px}
+.msg{max-width:78%;padding:12px 15px;border-radius:18px;line-height:1.65;white-space:pre-wrap}
+.msg.bot{align-self:flex-start;background:#ffffff09;border:1px solid var(--line)}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,#586dff,#9d6cff)}
+.typing{display:flex;gap:4px;padding:10px 14px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#fff;animation:bounce 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{50%{transform:translateY(-5px);opacity:.4}}
+.chat-bottom{padding:12px;border-top:1px solid var(--line);display:flex;gap:8px}
+.chat-input{flex:1;min-height:46px;max-height:120px;resize:none;border-radius:15px;border:1px solid var(--line);background:#fff07;color:#fff;padding:12px;outline:0}
+.quick{display:flex;gap:7px;overflow:auto;padding:10px 15px 0}
+.quick button{white-space:nowrap;background:#ffffff08;border:1px solid var(--line);border-radius:12px;padding:8px 11px;font-size:12px}
 
-.nova-crystal span{
-  position:relative;
-  z-index:2;
-  transform:rotate(-30deg);
-  font-size:39px;
-  font-weight:950;
+/* VANTABOOK */
+.vb-top{
+ display:flex;align-items:center;justify-content:space-between;gap:10px;
+ margin-bottom:16px
 }
-
-.nova-card h2{
-  font-size:29px;
+.vb-brand{font-size:30px;font-weight:950}
+.vb-brand span{color:var(--pink)}
+.vb-nav{display:flex;gap:6px;overflow:auto}
+.vb-nav button{padding:9px 13px;border-radius:12px;background:#fff07;color:var(--muted);white-space:nowrap}
+.vb-nav button.active{background:#ffffff13;color:#fff}
+.vb-layout{display:grid;grid-template-columns:1fr 290px;gap:15px}
+.story-row{display:flex;gap:10px;overflow:auto;padding-bottom:4px;margin-bottom:15px}
+.story{
+ min-width:82px;height:112px;border-radius:19px;padding:8px;display:flex;align-items:end;
+ background:linear-gradient(160deg,#637aff,#d46cff);border:1px solid #ffffff22
 }
-
-.nova-card p{
-  color:var(--muted);
-  line-height:1.8;
-  font-size:14px;
-  margin-top:7px;
+.story.add{background:#ffffff07;align-items:center;justify-content:center;text-align:center}
+.post{margin-bottom:15px}
+.post-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.avatar{
+ width:42px;height:42px;border-radius:50%;display:grid;place-items:center;
+ background:linear-gradient(135deg,#61e8ff,#a875ff);font-weight:900
 }
-
-.section{
-  margin-top:32px;
-}
-
-.section-head{
-  display:flex;
-  align-items:end;
-  justify-content:space-between;
-  gap:15px;
-  margin-bottom:15px;
-}
-
-.section-head h2{
-  font-size:22px;
-}
-
-.section-head p{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:5px;
-}
-
-.text-button{
-  border:0;
-  background:transparent;
-  color:var(--cyan);
-}
-
-/* =========================================================
-   LEARNING / LABS
-========================================================= */
-
-.filters{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
-
-.filter{
-  border:1px solid var(--line);
-  background:transparent;
-  color:var(--muted);
-  padding:9px 13px;
-  border-radius:10px;
-}
-
-.filter.active{
-  background:white;
-  color:#08080b;
-}
-
-.progress{
-  height:5px;
-  border-radius:99px;
-  background:#292a33;
-  overflow:hidden;
-  margin-top:18px;
-}
-
-.progress i{
-  display:block;
-  height:100%;
-  background:linear-gradient(90deg,var(--purple),var(--cyan));
-}
-
-.meta{
-  display:flex;
-  justify-content:space-between;
-  color:var(--muted);
-  font-size:11px;
-  margin-top:10px;
-}
-
-.lab-badge{
-  display:inline-block;
-  color:var(--green);
-  background:rgba(52,211,153,.08);
-  border:1px solid rgba(52,211,153,.12);
-  padding:5px 8px;
-  border-radius:7px;
-  font-size:10px;
-  margin-bottom:14px;
-}
-
-/* =========================================================
-   VANTABOOK APP
-========================================================= */
-
-.book-shell{
-  min-height:720px;
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:rgba(10,11,17,.64);
-  overflow:hidden;
-  box-shadow:var(--shadow);
-}
-
-.book-header{
-  height:68px;
-  display:flex;
-  align-items:center;
-  gap:18px;
-  padding:0 18px;
-  border-bottom:1px solid var(--line);
-  background:rgba(13,14,21,.8);
-  backdrop-filter:blur(20px);
-}
-
-.book-brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:max-content;
-}
-
-.book-logo{
-  width:38px;
-  height:38px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-  font-weight:950;
-}
-
-.book-brand strong{
-  letter-spacing:1px;
-}
-
-.book-search{
-  flex:1;
-  max-width:400px;
-  margin:auto;
-  position:relative;
-}
-
-.book-search input{
-  width:100%;
-  border:1px solid var(--line);
-  outline:0;
-  color:white;
-  background:rgba(255,255,255,.045);
-  border-radius:12px;
-  padding:10px 14px;
-}
-
-.book-head-actions{
-  display:flex;
-  gap:7px;
-}
-
-.book-head-actions button{
-  width:38px;
-  height:38px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:white;
-  border-radius:11px;
-}
-
-.book-body{
-  display:grid;
-  grid-template-columns:205px minmax(0,650px) 245px;
-  justify-content:center;
-  gap:17px;
-  padding:20px;
-}
-
-.book-left,
-.book-right{
-  min-width:0;
-}
-
-.book-left{
-  position:sticky;
-  top:90px;
-  height:max-content;
-}
-
-.book-right{
-  position:sticky;
-  top:90px;
-  height:max-content;
-}
-
-.book-side-card{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:18px;
-  padding:11px;
-  margin-bottom:12px;
-}
-
-.book-side-item{
-  width:100%;
-  border:0;
-  background:transparent;
-  color:#c7c8d2;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:11px;
-  border-radius:11px;
-  text-align:right;
-}
-
-.book-side-item:hover,
-.book-side-item.active{
-  color:#fff;
-  background:rgba(255,255,255,.065);
-}
-
-.book-side-icon{
-  width:31px;
-  height:31px;
-  display:grid;
-  place-items:center;
-  border-radius:9px;
-  background:rgba(255,255,255,.05);
-}
-
-.book-center{
-  min-width:0;
-}
-
-.stories-row{
-  display:flex;
-  gap:9px;
-  overflow:auto;
-  scrollbar-width:none;
-  padding:1px 1px 8px;
-}
-
-.stories-row::-webkit-scrollbar{
-  display:none;
-}
-
-.story-item{
-  flex:0 0 70px;
-  border:0;
-  background:none;
-  color:white;
-  text-align:center;
-}
-
-.story-circle{
-  width:61px;
-  height:61px;
-  padding:2px;
-  margin:auto auto 5px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--purple),var(--pink),var(--cyan));
-}
-
-.story-circle-inner{
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  border-radius:50%;
-  background:#171820;
-  border:3px solid #0c0d13;
-  font-weight:900;
-}
-
-.story-item small{
-  display:block;
-  color:var(--muted);
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
-.book-composer{
-  margin-top:10px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:18px;
-  padding:15px;
-}
-
-.composer-top{
-  display:flex;
-  gap:10px;
-}
-
-.mini-avatar{
-  flex:0 0 39px;
-  width:39px;
-  height:39px;
-  border-radius:12px;
-  display:grid;
-  place-items:center;
-  font-weight:900;
-  background:linear-gradient(135deg,#292b3b,#14151e);
-}
-
-.book-composer textarea{
-  width:100%;
-  min-height:64px;
-  resize:none;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:white;
-  line-height:1.7;
-}
-
-.composer-preview{
-  display:none;
-  overflow:hidden;
-  border-radius:14px;
-  margin-top:10px;
-  border:1px solid var(--line);
-  background:#050507;
-}
-
-.composer-preview img,
-.composer-preview video{
-  display:block;
-  width:100%;
-  max-height:380px;
-  object-fit:contain;
-}
-
-.composer-bottom{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:8px;
-  border-top:1px solid var(--line);
-  padding-top:10px;
-  margin-top:7px;
-}
-
-.media-actions{
-  display:flex;
-  gap:5px;
-}
-
-.media-button{
-  border:0;
-  background:rgba(255,255,255,.05);
-  color:#ddd;
-  border-radius:9px;
-  padding:8px 9px;
-}
-
-.file-input{
-  display:none;
-}
-
-.book-post{
-  margin-top:12px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:18px;
-  padding:17px;
-}
-
-.post-head{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.post-info{
-  flex:1;
-}
-
-.post-info strong{
-  display:block;
-}
-
-.post-info small{
-  display:block;
-  color:var(--muted);
-  margin-top:2px;
-}
-
-.post-more{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  font-size:18px;
-}
-
-.post-text{
-  color:#e6e6ec;
-  line-height:1.85;
-  white-space:pre-wrap;
-  word-break:break-word;
-  margin-top:13px;
-}
-
+.post-head small{display:block;color:var(--muted);margin-top:3px}
+.post-text{line-height:1.7;margin-bottom:13px}
 .post-media{
-  margin-top:13px;
-  border-radius:15px;
-  overflow:hidden;
-  background:#050507;
-  border:1px solid var(--line);
+ width:100%;max-height:520px;object-fit:cover;border-radius:18px;
+ background:#05060d;border:1px solid var(--line)
 }
-
-.post-media img,
-.post-media video{
-  width:100%;
-  max-height:620px;
-  display:block;
-  object-fit:contain;
+.post-actions{display:flex;gap:7px;margin-top:10px}
+.post-actions button{background:#fff06;padding:9px 12px;border-radius:12px;color:var(--muted)}
+.post-actions button.active{color:var(--pink);background:#ff76c812}
+.comments{margin-top:10px;display:none}
+.comments.open{display:block}
+.comment{padding:9px;background:#ffffff06;border-radius:11px;margin-top:5px;font-size:13px}
+.vb-side .card{margin-bottom:12px}
+.login-box{text-align:center;padding:30px}
+.create{
+ border:1px solid var(--line);background:var(--panel);border-radius:var(--r);
+ padding:15px;margin-bottom:15px
 }
+.create textarea{width:100%;resize:none;min-height:75px;background:transparent;border:0;outline:0;color:#fff}
+.create-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.file-label{padding:9px 12px;background:#fff08;border:1px solid var(--line);border-radius:11px;cursor:pointer}
+.file-label input{display:none}
 
-.post-actions{
-  display:flex;
-  gap:3px;
-  margin-top:13px;
-  padding-top:10px;
-  border-top:1px solid var(--line);
+/* PROFILE */
+.profile-head{display:flex;align-items:center;gap:20px;padding:30px}
+.bigavatar{
+ width:100px;height:100px;border-radius:30px;display:grid;place-items:center;
+ font-size:38px;font-weight:900;background:linear-gradient(135deg,#61e8ff,#a875ff,#ff76c8)
 }
-
-.post-actions button{
-  flex:1;
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  border-radius:9px;
-  padding:9px 4px;
+.profile-info h1{font-size:32px}.profile-info p{color:var(--muted);margin-top:5px}
+.form{display:grid;gap:12px}
+.form input,.form textarea{
+ width:100%;padding:13px 15px;border-radius:14px;background:#ffffff07;
+ border:1px solid var(--line);outline:0;color:#fff
 }
+.form textarea{min-height:100px;resize:vertical}
 
-.post-actions button:hover{
-  background:rgba(255,255,255,.045);
-  color:#fff;
-}
-
-.post-actions .liked{
-  color:var(--red);
-}
-
-.empty-book{
-  margin-top:12px;
-  padding:35px 15px;
-  text-align:center;
-  color:var(--muted);
-  border:1px dashed var(--line);
-  border-radius:17px;
-}
-
-.book-right h3{
-  font-size:14px;
-  margin-bottom:12px;
-}
-
-.mini-user{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  padding:8px 0;
-}
-
-.mini-user .mini-avatar{
-  width:34px;
-  height:34px;
-  flex-basis:34px;
-  border-radius:10px;
-}
-
-.mini-user strong{
-  font-size:13px;
-}
-
-.mini-user small{
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  margin-top:2px;
-}
-
-/* =========================================================
-   NOVA
-========================================================= */
-
-.nova-layout{
-  display:grid;
-  grid-template-columns:290px minmax(0,1fr);
-  gap:17px;
-}
-
-.nova-profile{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:24px;
-  padding:27px;
-  text-align:center;
-}
-
-.nova-profile .nova-crystal{
-  width:125px;
-  height:125px;
-  margin:0 auto 24px;
-}
-
-.nova-profile p{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.8;
-  margin-top:8px;
-}
-
-.nova-chat{
-  min-height:650px;
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:24px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.nova-chat-head{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:15px 18px;
-  border-bottom:1px solid var(--line);
-}
-
-.online-dot{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px rgba(52,211,153,.5);
-}
-
-.messages{
-  flex:1;
-  min-height:500px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-  padding:19px;
-  overflow:auto;
-}
-
-.message{
-  max-width:78%;
-  padding:11px 14px;
-  border-radius:15px;
-  line-height:1.75;
-  white-space:pre-wrap;
-  font-size:14px;
-}
-
-.message.nova{
-  align-self:flex-start;
-  background:#191a23;
-  color:#ddd;
-}
-
-.message.user{
-  align-self:flex-end;
-  background:#6d28d9;
-  color:white;
-}
-
-.nova-input{
-  display:flex;
-  gap:7px;
-  padding:12px;
-  border-top:1px solid var(--line);
-}
-
-.nova-input input{
-  flex:1;
-  min-width:0;
-  border:1px solid var(--line);
-  outline:0;
-  background:#090a0f;
-  color:white;
-  padding:12px;
-  border-radius:12px;
-}
-
-.nova-input button{
-  width:48px;
-  border:0;
-  border-radius:12px;
-  color:white;
-  background:var(--purple);
-}
-
-/* =========================================================
-   PROFILE
-========================================================= */
-
-.profile-card{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:24px;
-  padding:27px;
-}
-
-.profile-top{
-  display:flex;
-  align-items:center;
-  gap:17px;
-}
-
-.big-avatar{
-  width:96px;
-  height:96px;
-  border-radius:28px;
-  display:grid;
-  place-items:center;
-  font-size:32px;
-  font-weight:950;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-}
-
-.profile-top p{
-  color:var(--muted);
-  margin-top:5px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:9px;
-  margin-top:19px;
-}
-
-.stat{
-  padding:16px;
-  border:1px solid var(--line);
-  border-radius:15px;
-  background:rgba(255,255,255,.025);
-}
-
-.stat strong{
-  display:block;
-  font-size:23px;
-}
-
-.stat span{
-  color:var(--muted);
-  font-size:11px;
-}
-
-/* =========================================================
-   SETTINGS
-========================================================= */
-
-.settings-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:13px;
-}
-
-.setting-card{
-  border:1px solid var(--line);
-  background:var(--panel);
-  border-radius:19px;
-  padding:18px;
-}
-
-.setting-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-}
-
-.setting-row p{
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.7;
-  margin-top:5px;
-}
-
-.toggle{
-  width:46px;
-  height:26px;
-  position:relative;
-  border:0;
-  border-radius:99px;
-  background:#333541;
-}
-
-.toggle i{
-  position:absolute;
-  top:3px;
-  right:3px;
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:white;
-  transition:.2s;
-}
-
-.toggle.on{
-  background:var(--purple);
-}
-
-.toggle.on i{
-  right:23px;
-}
-
-/* =========================================================
-   MODAL
-========================================================= */
-
+/* MODAL */
 .modal{
-  position:fixed;
-  inset:0;
-  z-index:9000;
-  display:none;
-  place-items:center;
-  padding:17px;
-  background:rgba(0,0,0,.75);
-  backdrop-filter:blur(14px);
+ position:fixed;inset:0;z-index:500;background:#0009;backdrop-filter:blur(12px);
+ display:none;align-items:center;justify-content:center;padding:18px
 }
-
-.modal.show{
-  display:grid;
-}
-
+.modal.open{display:flex}
 .modal-box{
-  width:min(520px,100%);
-  max-height:90vh;
-  overflow:auto;
-  border:1px solid var(--line2);
-  border-radius:23px;
-  padding:23px;
-  background:#11121a;
-  box-shadow:var(--shadow);
+ width:min(600px,100%);max-height:90vh;overflow:auto;border:1px solid var(--line);
+ background:#0c0e1bdF;border-radius:27px;padding:23px;box-shadow:var(--shadow)
 }
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 
-.modal-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:14px;
-}
-
-.close{
-  width:36px;
-  height:36px;
-  border:0;
-  border-radius:10px;
-  color:white;
-  background:rgba(255,255,255,.06);
-}
-
-.modal-box p{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.8;
-}
-
-.modal-input{
-  width:100%;
-  border:1px solid var(--line);
-  outline:0;
-  background:#090a0f;
-  color:white;
-  padding:12px;
-  border-radius:12px;
-  margin-top:10px;
-}
-
-/* =========================================================
-   VANTABOOK LOGIN
-   IMPORTANT: NOT SHOWN ON VANTA STARTUP
-========================================================= */
-
-.book-login-overlay{
-  position:fixed;
-  inset:0;
-  z-index:8000;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  background:
-    radial-gradient(circle at 30% 20%,rgba(139,92,246,.15),transparent 30%),
-    radial-gradient(circle at 75% 80%,rgba(236,72,153,.11),transparent 28%),
-    rgba(4,5,9,.96);
-  backdrop-filter:blur(30px);
-}
-
-.book-login-overlay.show{
-  display:flex;
-}
-
-.login-card{
-  width:min(470px,100%);
-  position:relative;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:30px;
-  padding:31px;
-  background:
-    linear-gradient(145deg,rgba(25,26,38,.94),rgba(12,13,20,.97));
-  box-shadow:
-    0 35px 100px rgba(0,0,0,.65),
-    0 0 80px rgba(139,92,246,.08);
-  animation:loginIn .4s ease;
-}
-
-@keyframes loginIn{
-  from{
-    opacity:0;
-    transform:translateY(18px) scale(.97);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.login-close{
-  position:absolute;
-  top:17px;
-  left:17px;
-  width:35px;
-  height:35px;
-  border:1px solid var(--line);
-  border-radius:10px;
-  color:#fff;
-  background:rgba(255,255,255,.05);
-}
-
-.login-brand{
-  text-align:center;
-}
-
-.login-logo{
-  width:70px;
-  height:70px;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  border-radius:22px;
-  font-size:30px;
-  font-weight:950;
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-  box-shadow:0 15px 45px rgba(139,92,246,.25);
-}
-
-.login-brand h1{
-  margin-top:17px;
-  font-size:27px;
-}
-
-.login-brand p{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.7;
-  margin-top:6px;
-}
-
-.social-login{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:24px;
-}
-
-.social-btn{
-  height:48px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:9px;
-  border:1px solid var(--line2);
-  border-radius:13px;
-  color:white;
-  background:rgba(255,255,255,.045);
-}
-
-.social-icon{
-  width:21px;
-  height:21px;
-  display:grid;
-  place-items:center;
-  font-weight:900;
-}
-
-.divider{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  color:#686b78;
-  font-size:11px;
-  margin:22px 0;
-}
-
-.divider:before,
-.divider:after{
-  content:"";
-  flex:1;
-  height:1px;
-  background:var(--line);
-}
-
-.login-form{
-  display:grid;
-  gap:10px;
-}
-
-.login-label{
-  color:#c9cad2;
-  font-size:12px;
-  margin-bottom:-4px;
-}
-
-.login-form input{
-  width:100%;
-  height:47px;
-  border:1px solid var(--line);
-  outline:0;
-  color:white;
-  background:#090a0f;
-  border-radius:12px;
-  padding:0 13px;
-}
-
-.login-form input:focus{
-  border-color:rgba(139,92,246,.55);
-  box-shadow:0 0 0 3px rgba(139,92,246,.08);
-}
-
-.login-submit{
-  width:100%;
-  height:48px;
-  margin-top:4px;
-  border:0;
-  border-radius:13px;
-  color:#fff;
-  font-weight:700;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-}
-
-.login-note{
-  color:#6f7280;
-  text-align:center;
-  font-size:10px;
-  line-height:1.7;
-  margin-top:17px;
-}
-
-.login-error{
-  display:none;
-  color:#fecdd3;
-  background:rgba(251,113,133,.07);
-  border:1px solid rgba(251,113,133,.15);
-  border-radius:10px;
-  padding:9px;
-  font-size:11px;
-  margin-bottom:2px;
-}
-
-.login-error.show{
-  display:block;
-}
-
-/* =========================================================
-   VANTABOOK LOADING
-========================================================= */
-
-.book-loader{
-  position:fixed;
-  inset:0;
-  z-index:8500;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:#07080d;
-}
-
-.book-loader.show{
-  display:flex;
-}
-
-.book-loader-inner{
-  width:min(350px,85%);
-  text-align:center;
-}
-
-.book-loader-logo{
-  width:78px;
-  height:78px;
-  display:grid;
-  place-items:center;
-  margin:auto;
-  border-radius:25px;
-  font-size:34px;
-  font-weight:950;
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-  animation:loaderPulse 1.4s infinite ease-in-out;
-}
-
-@keyframes loaderPulse{
-  0%,100%{
-    transform:scale(1);
-    box-shadow:0 0 25px rgba(236,72,153,.14);
-  }
-  50%{
-    transform:scale(1.06);
-    box-shadow:0 0 65px rgba(139,92,246,.28);
-  }
-}
-
-.book-loader h2{
-  margin-top:20px;
-  letter-spacing:2px;
-}
-
-.book-loader p{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:6px;
-}
-
-.book-loader-bar{
-  height:4px;
-  background:rgba(255,255,255,.07);
-  border-radius:99px;
-  overflow:hidden;
-  margin-top:23px;
-}
-
-.book-loader-bar i{
-  display:block;
-  width:0;
-  height:100%;
-  background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan));
-}
-
-/* =========================================================
-   TOAST
-========================================================= */
-
+/* TOAST */
 #toast{
-  position:fixed;
-  z-index:12000;
-  bottom:24px;
-  left:50%;
-  transform:translate(-50%,20px);
-  opacity:0;
-  pointer-events:none;
-  max-width:90%;
-  text-align:center;
-  padding:12px 17px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:#191a23;
-  color:white;
-  transition:.25s;
+ position:fixed;z-index:900;bottom:22px;left:50%;transform:translate(-50%,20px);
+ opacity:0;pointer-events:none;background:#151827eF;border:1px solid var(--line);
+ backdrop-filter:blur(18px);padding:12px 18px;border-radius:15px;transition:.3s
+}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* MOBILE */
+@media(max-width:900px){
+ header{height:auto;min-height:62px;flex-wrap:wrap}
+ .brand{min-width:auto}
+ .brand span{display:none}
+ nav{order:3;width:100%;justify-content:flex-start}
+ nav button{padding:8px 10px;font-size:12px}
+ main{padding-top:125px}
+ .hero{padding:35px 25px;min-height:550px}
+ .nova-orb{left:-30px;opacity:.45}
+ .grid{grid-template-columns:1fr 1fr}
+ .stats{grid-template-columns:1fr 1fr}
+ .nova-layout,.vb-layout{grid-template-columns:1fr}
+ .nova-side{display:none}
+ .lab-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+ .hero h1{font-size:48px}
+ .hero p{font-size:15px}
+ .hero-actions .btn{width:100%}
+ .grid{grid-template-columns:1fr}
+ .stats{grid-template-columns:1fr 1fr}
+ .section-title{display:block}
+ .section-title p{margin-top:5px}
+ .head-actions .iconbtn:first-child{display:none}
+ .chat{height:calc(100vh - 210px);min-height:500px}
+ .msg{max-width:88%}
+ .profile-head{flex-direction:column;text-align:center}
+ .vb-top{display:block}.vb-nav{margin-top:12px}
 }
 
-#toast.show{
-  opacity:1;
-  transform:translate(-50%,0);
+/* LIGHT ACCENT */
+body.light{
+ --bg:#edf2ff;--panel:rgba(255,255,255,.72);--panel2:rgba(0,0,0,.05);
+ --line:rgba(0,0,0,.1);--txt:#101323;--muted:#5f6680
 }
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:1100px){
-
-  .book-body{
-    grid-template-columns:185px minmax(0,650px);
-  }
-
-  .book-right{
-    display:none;
-  }
-
-  .home-hero{
-    grid-template-columns:1fr;
-  }
-
-  .nova-layout{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:760px){
-
-  .main-header{
-    height:auto;
-    min-height:68px;
-    padding:10px 13px;
-    flex-wrap:wrap;
-    gap:8px;
-  }
-
-  .main-nav{
-    order:3;
-    width:100%;
-    justify-content:flex-start;
-  }
-
-  .header-icon{
-    display:none;
-  }
-
-  main{
-    padding:21px 12px 80px;
-  }
-
-  .hero-main{
-    min-height:440px;
-    padding:31px 23px;
-    border-radius:22px;
-  }
-
-  .hero-main h1{
-    font-size:45px;
-    letter-spacing:-2.5px;
-  }
-
-  .nova-card{
-    min-height:400px;
-    border-radius:22px;
-  }
-
-  .grid-3{
-    grid-template-columns:1fr;
-  }
-
-  .page-title h1{
-    font-size:34px;
-  }
-
-  .book-shell{
-    border-radius:20px;
-    border-left:0;
-    border-right:0;
-  }
-
-  .book-header{
-    height:auto;
-    min-height:65px;
-    padding:10px;
-    flex-wrap:wrap;
-  }
-
-  .book-search{
-    order:3;
-    width:100%;
-    max-width:none;
-  }
-
-  .book-body{
-    display:block;
-    padding:11px;
-  }
-
-  .book-left{
-    display:none;
-  }
-
-  .stats{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .profile-top{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .settings-grid{
-    grid-template-columns:1fr;
-  }
-
-  .social-login{
-    grid-template-columns:1fr;
-  }
-
-  .login-card{
-    padding:26px 20px;
-    border-radius:24px;
-  }
-
-  .composer-bottom{
-    align-items:flex-end;
-    flex-direction:column;
-  }
-
-  .media-actions{
-    width:100%;
-  }
-
-  .media-button{
-    flex:1;
-  }
-}
+body.light #space{opacity:.35}
+body.light header{background:#ffffffc7}
 </style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     SPACE BACKGROUND
-========================================================= -->
-
-<div class="space">
-  <div class="orbit"></div>
-  <div class="orbit2"></div>
-  <i class="star"></i>
-  <i class="star"></i>
-  <i class="star"></i>
-  <i class="star"></i>
-  <i class="star"></i>
-  <i class="star"></i>
-  <i class="star"></i>
-  <i class="star"></i>
-  <i class="star"></i>
-  <i class="star"></i>
+<div id="space">
+ <div class="stars"></div><div class="stars b"></div><div class="stars c"></div>
+ <div class="nebula n1"></div><div class="nebula n2"></div><div class="nebula n3"></div>
+ <div class="planet p1"></div><div class="planet p2"></div><div class="planet p3"></div>
+ <div class="saturn"><i class="ring"></i><i class="body"></i></div>
 </div>
 
-<!-- =========================================================
-     VANTA STARTUP BOOT
-     THIS IS NOT LOGIN
-========================================================= -->
-
-<div class="boot-screen" id="bootScreen">
-  <div class="boot-inner">
-    <div class="boot-logo">V</div>
-    <div class="boot-title">VANTA</div>
-    <div class="boot-sub">CYBER • LEARN • BUILD • CONNECT</div>
-
-    <div class="boot-progress">
-      <i></i>
-    </div>
-
-    <div class="boot-status" id="bootStatus">
-      Initializing VANTA...
-    </div>
+<!-- BOOT -->
+<div id="boot">
+ <div class="bootbox">
+  <div class="logo">V</div>
+  <div class="boottitle">VANTA</div>
+  <div class="bootsub">CYBER • LEARNING • INTELLIGENCE</div>
+  <div class="progress"><i id="progress"></i></div>
+  <div id="bootStatus" class="bootsub">Initializing VANTA...</div>
+  <div class="bootrow">
+   <button class="btn primary" id="enterBtn">ENTER</button>
+   <button class="btn" id="skipBtn">SKIP</button>
   </div>
+ </div>
 </div>
 
-<!-- =========================================================
-     MAIN APP
-========================================================= -->
+<div id="app">
 
-<div class="app-shell">
+<header>
+ <a class="brand" href="#" onclick="go('home');return false">
+  <div class="brandmark">V</div><span>VANTA</span>
+ </a>
 
-<header class="main-header">
+ <nav id="mainNav">
+  <button data-page="home" class="active">⌂ الرئيسية</button>
+  <button data-page="learning">◈ التعلم</button>
+  <button data-page="labs">⌁ المختبرات</button>
+  <button data-page="library">▣ المكتبة</button>
+  <button data-page="nova">✦ NOVA</button>
+  <button data-page="book">◎ VANTABOOK</button>
+  <button data-page="profile">◉ الملف</button>
+ </nav>
 
-  <div class="brand" onclick="go('home')">
-    <div class="brand-logo">V</div>
-    <div class="brand-name">VANTA</div>
-  </div>
-
-  <nav class="main-nav">
-
-    <button data-page="home" class="active">
-      الرئيسية
-    </button>
-
-    <button data-page="learn">
-      التعلم
-    </button>
-
-    <button data-page="labs">
-      المختبرات
-    </button>
-
-    <button data-page="nova">
-      NOVA
-    </button>
-
-    <button data-page="book">
-      VANTABOOK
-    </button>
-
-  </nav>
-
-  <div class="header-actions">
-
-    <button
-      class="header-icon"
-      onclick="go('settings')"
-      title="الإعدادات"
-    >
-      ⚙
-    </button>
-
-    <div
-      class="header-avatar"
-      onclick="go('profile')"
-    >
-      A
-    </div>
-
-  </div>
-
+ <div class="head-actions">
+  <button class="iconbtn" id="themeBtn" title="المظهر">☼</button>
+  <button class="iconbtn" id="settingsBtn" title="الإعدادات">⚙</button>
+ </div>
 </header>
 
 <main>
 
-<!-- =========================================================
-     HOME
-========================================================= -->
-
-<section id="home" class="view active">
-
-  <div class="home-hero">
-
-    <div class="hero-main">
-
-      <div class="eyebrow">
-        VANTA CYBER PLATFORM
-      </div>
-
-      <h1>
-        ابنِ مستقبلك
-        <span class="gradient">
-          في عالم التقنية.
-        </span>
-      </h1>
-
-      <p>
-        VANTA تجمع التعلم العملي، الأمن السيبراني،
-        المختبرات، NOVA ومجتمع VANTABOOK في تجربة واحدة.
-      </p>
-
-      <div class="hero-actions">
-
-        <button
-          class="primary"
-          onclick="go('learn')"
-        >
-          ابدأ التعلم
-        </button>
-
-        <button
-          class="secondary"
-          onclick="enterBook()"
-        >
-          افتح VANTABOOK
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="nova-card">
-
-      <div class="nova-crystal">
-        <span>N</span>
-      </div>
-
-      <h2>NOVA</h2>
-
-      <p>
-        رفيقك الذكي داخل VANTA.
-      </p>
-
-      <button
-        class="secondary"
-        style="margin-top:20px"
-        onclick="go('nova')"
-      >
-        تحدث مع NOVA
-      </button>
-
-    </div>
-
+<!-- HOME -->
+<section class="page active" id="home">
+ <div class="hero">
+  <div class="hero-copy">
+   <div class="eyebrow">WELCOME TO THE NEXT LAYER</div>
+   <h1>مرحبًا بك في<br><span class="gradient">VANTA</span></h1>
+   <p>
+    مساحة واحدة للتعلّم، الأمن السيبراني، المختبرات، المعرفة،
+    وNOVA — مع VANTABOOK كمساحة اجتماعية مستقلة داخل المنظومة.
+   </p>
+   <div class="hero-actions">
+    <button class="btn primary" onclick="go('learning')">ابدأ التعلم →</button>
+    <button class="btn" onclick="go('nova')">تحدث مع NOVA ✦</button>
+    <button class="btn" onclick="go('book')">افتح VANTABOOK ◎</button>
+   </div>
   </div>
+  <div class="nova-orb"></div>
+ </div>
 
-  <div class="section">
+ <div class="stats">
+  <div class="stat"><b>12</b><span>دورة تعليمية</span></div>
+  <div class="stat"><b>9</b><span>Cyber Labs</span></div>
+  <div class="stat"><b id="homeXP">0</b><span>XP</span></div>
+  <div class="stat"><b id="homeDays">1</b><span>يوم متتالي</span></div>
+ </div>
 
-    <div class="section-head">
+ <div class="section-title">
+  <div><h2>منظومة VANTA</h2><p>كل شيء تحتاجه في مكان واحد.</p></div>
+ </div>
 
-      <div>
-        <h2>استمر من هنا</h2>
-        <p>مسارات تعليمية جاهزة لك.</p>
-      </div>
-
-      <button
-        class="text-button"
-        onclick="go('learn')"
-      >
-        عرض الكل
-      </button>
-
-    </div>
-
-    <div class="grid-3">
-
-      <div class="card">
-        <div class="card-icon">01</div>
-        <h3>Cybersecurity Fundamentals</h3>
-        <p>
-          الأساسيات التي تحتاجها لبناء قاعدة قوية.
-        </p>
-
-        <div class="progress">
-          <i style="width:72%"></i>
-        </div>
-
-        <div class="meta">
-          <span>72%</span>
-          <span>18 درس</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">02</div>
-        <h3>Networking</h3>
-        <p>
-          DNS وTCP/IP والمنافذ والبروتوكولات.
-        </p>
-
-        <div class="progress">
-          <i style="width:41%"></i>
-        </div>
-
-        <div class="meta">
-          <span>41%</span>
-          <span>24 درس</span>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">03</div>
-        <h3>Web Security</h3>
-        <p>
-          أساسيات حماية تطبيقات الويب.
-        </p>
-
-        <div class="progress">
-          <i style="width:19%"></i>
-        </div>
-
-        <div class="meta">
-          <span>19%</span>
-          <span>30 درس</span>
-        </div>
-      </div>
-
-    </div>
-
+ <div class="grid">
+  <div class="card" onclick="go('learning')" style="cursor:pointer">
+   <div class="card-icon">◈</div><h3>Learning</h3>
+   <p>تعلم البرمجة والأمن السيبراني والتقنية من الأساسيات حتى المستويات المتقدمة.</p>
   </div>
-
-  <div class="section">
-
-    <div class="section-head">
-
-      <div>
-        <h2>VANTABOOK</h2>
-        <p>شبكة VANTA الاجتماعية.</p>
-      </div>
-
-      <button
-        class="text-button"
-        onclick="enterBook()"
-      >
-        دخول
-      </button>
-
-    </div>
-
-    <div class="grid-3">
-
-      <div class="card">
-        <div class="card-icon">📸</div>
-        <h3>Stories</h3>
-        <p>
-          شارك الصور والفيديوهات في Stories.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">🎥</div>
-        <h3>Videos</h3>
-        <p>
-          فيديوهات ومحتوى من مجتمع VANTA.
-        </p>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">👥</div>
-        <h3>Communities</h3>
-        <p>
-          مجتمعات للنقاش والتعلم والمشاركة.
-        </p>
-      </div>
-
-    </div>
-
+  <div class="card" onclick="go('labs')" style="cursor:pointer">
+   <div class="card-icon">⌁</div><h3>Cyber Range</h3>
+   <p>مختبرات دفاعية آمنة للتدرب على مفاهيم الأمن والتحليل والحماية.</p>
   </div>
-
+  <div class="card" onclick="go('nova')" style="cursor:pointer">
+   <div class="card-icon">✦</div><h3>NOVA</h3>
+   <p>رفيقك الذكي داخل VANTA. يتفاعل مع رسالتك وسياقك ومزاجك بدل الردود المبرمجة.</p>
+  </div>
+  <div class="card" onclick="go('book')" style="cursor:pointer">
+   <div class="card-icon">◎</div><h3>VANTABOOK</h3>
+   <p>مساحة اجتماعية مستقلة للمنشورات والصور والفيديوهات والمجتمعات والقصص.</p>
+  </div>
+  <div class="card" onclick="go('library')" style="cursor:pointer">
+   <div class="card-icon">▣</div><h3>Library</h3>
+   <p>مصادر وملخصات وأدوات تعليمية تساعدك في رحلتك التقنية.</p>
+  </div>
+  <div class="card" onclick="go('profile')" style="cursor:pointer">
+   <div class="card-icon">◉</div><h3>Profile</h3>
+   <p>احفظ مستواك وXP واهتماماتك وتقدمك ليستخدمها NOVA في محادثاتك.</p>
+  </div>
+ </div>
 </section>
 
-<!-- =========================================================
-     LEARN
-========================================================= -->
+<!-- LEARNING -->
+<section class="page" id="learning">
+ <div class="section-title">
+  <div><h2>Learning</h2><p>طوّر مهاراتك خطوة بخطوة.</p></div>
+  <button class="btn primary" onclick="showToast('تمت إضافة XP بعد إكمال الدرس')">+ تدريب سريع</button>
+ </div>
 
-<section id="learn" class="view">
+ <div class="toolbar">
+  <input id="courseSearch" class="search" placeholder="ابحث عن دورة أو موضوع...">
+  <button class="btn" onclick="filterCourses('all')">الكل</button>
+  <button class="btn" onclick="filterCourses('cyber')">Cyber</button>
+  <button class="btn" onclick="filterCourses('code')">Code</button>
+ </div>
 
-  <div class="page-title">
-    <h1>التعلم</h1>
-    <p>
-      من الأساسيات إلى المستويات المتقدمة.
-    </p>
-  </div>
-
-  <div class="filters">
-
-    <button class="filter active">الكل</button>
-    <button class="filter">Cybersecurity</button>
-    <button class="filter">Networking</button>
-    <button class="filter">Linux</button>
-    <button class="filter">Web</button>
-    <button class="filter">Defense</button>
-
-  </div>
-
-  <div class="grid-3">
-
-    <div class="card">
-      <div class="card-icon">01</div>
-      <h3>Cybersecurity Fundamentals</h3>
-      <p>
-        مقدمة كاملة في الأمن السيبراني.
-      </p>
-      <div class="progress">
-        <i style="width:72%"></i>
-      </div>
-      <div class="meta">
-        <span>72%</span>
-        <span>18 درس</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">02</div>
-      <h3>Networking</h3>
-      <p>
-        فهم الشبكات من البداية.
-      </p>
-      <div class="progress">
-        <i style="width:41%"></i>
-      </div>
-      <div class="meta">
-        <span>41%</span>
-        <span>24 درس</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">03</div>
-      <h3>Linux</h3>
-      <p>
-        الطرفية والملفات والصلاحيات والعمليات.
-      </p>
-      <div class="progress">
-        <i style="width:25%"></i>
-      </div>
-      <div class="meta">
-        <span>25%</span>
-        <span>20 درس</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">04</div>
-      <h3>Web Security</h3>
-      <p>
-        مفاهيم أمن تطبيقات الويب.
-      </p>
-      <div class="progress">
-        <i style="width:12%"></i>
-      </div>
-      <div class="meta">
-        <span>12%</span>
-        <span>30 درس</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">05</div>
-      <h3>Cryptography</h3>
-      <p>
-        Hashing وEncryption والمفاهيم الأساسية.
-      </p>
-      <div class="progress">
-        <i style="width:0"></i>
-      </div>
-      <div class="meta">
-        <span>لم تبدأ</span>
-        <span>16 درس</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-icon">06</div>
-      <h3>Blue Team</h3>
-      <p>
-        المراقبة والحماية والاستجابة للحوادث.
-      </p>
-      <div class="progress">
-        <i style="width:0"></i>
-      </div>
-      <div class="meta">
-        <span>لم تبدأ</span>
-        <span>21 درس</span>
-      </div>
-    </div>
-
-  </div>
-
+ <div class="grid" id="courses"></div>
 </section>
 
-<!-- =========================================================
-     LABS
-========================================================= -->
-
-<section id="labs" class="view">
-
-  <div class="page-title">
-    <h1>Cyber Labs</h1>
-    <p>
-      تطبيق المفاهيم بشكل عملي وآمن.
-    </p>
+<!-- LABS -->
+<section class="page" id="labs">
+ <div class="section-title">
+  <div><h2>Cyber Range</h2><p>تدريب دفاعي وآمن.</p></div>
+ </div>
+ <div class="lab-grid">
+  <div class="card lab">
+   <div><div class="safe">● DEFENSIVE LAB</div><div class="card-icon">🔐</div>
+   <h3>اختبار قوة كلمة المرور</h3><p>افهم كيف تؤثر الطول والتنوع وإعادة الاستخدام على قوة كلمات المرور.</p></div>
+   <button class="btn primary" onclick="openLab('password')">ابدأ المختبر</button>
   </div>
-
-  <div class="grid-3">
-
-    <div class="card">
-      <span class="lab-badge">BEGINNER</span>
-      <h3>Password Security</h3>
-      <p>
-        افهم خصائص كلمات المرور القوية.
-      </p>
-      <button
-        class="primary"
-        style="margin-top:16px"
-        onclick="openLab('Password Security')"
-      >
-        تشغيل المختبر
-      </button>
-    </div>
-
-    <div class="card">
-      <span class="lab-badge">BEGINNER</span>
-      <h3>Hashing</h3>
-      <p>
-        افهم فكرة Hashing واستخداماتها.
-      </p>
-      <button
-        class="primary"
-        style="margin-top:16px"
-        onclick="openLab('Hashing')"
-      >
-        تشغيل المختبر
-      </button>
-    </div>
-
-    <div class="card">
-      <span class="lab-badge">INTERMEDIATE</span>
-      <h3>Phishing Awareness</h3>
-      <p>
-        تعلم اكتشاف علامات التصيد.
-      </p>
-      <button
-        class="primary"
-        style="margin-top:16px"
-        onclick="openLab('Phishing Awareness')"
-      >
-        تشغيل المختبر
-      </button>
-    </div>
-
-    <div class="card">
-      <span class="lab-badge">INTERMEDIATE</span>
-      <h3>Network Analysis</h3>
-      <p>
-        أساسيات تحليل حركة البيانات.
-      </p>
-      <button
-        class="primary"
-        style="margin-top:16px"
-        onclick="openLab('Network Analysis')"
-      >
-        تشغيل المختبر
-      </button>
-    </div>
-
+  <div class="card lab">
+   <div><div class="safe">● CONCEPT LAB</div><div class="card-icon">#</div>
+   <h3>Hashing</h3><p>تعرّف على فكرة التجزئة ولماذا لا يجب تخزين كلمات المرور كنص صريح.</p></div>
+   <button class="btn primary" onclick="openLab('hash')">ابدأ المختبر</button>
   </div>
-
+  <div class="card lab">
+   <div><div class="safe">● AWARENESS LAB</div><div class="card-icon">✉</div>
+   <h3>Phishing Awareness</h3><p>تعلم ملاحظة الإشارات الشائعة في رسائل التصيد الاحتيالي.</p></div>
+   <button class="btn primary" onclick="openLab('phishing')">ابدأ المختبر</button>
+  </div>
+  <div class="card lab">
+   <div><div class="safe">● WEB SAFETY</div><div class="card-icon">◉</div>
+   <h3>HTTP Security</h3><p>تعرف على مفهوم HTTPS وSecurity Headers وأهميتها.</p></div>
+   <button class="btn primary" onclick="openLab('web')">ابدأ المختبر</button>
+  </div>
+ </div>
 </section>
 
-<!-- =========================================================
-     VANTABOOK
-     Separate internal application
-========================================================= -->
-
-<section id="book" class="view">
-
-  <div class="book-shell">
-
-    <div class="book-header">
-
-      <div class="book-brand">
-        <div class="book-logo">B</div>
-        <strong>VANTABOOK</strong>
-      </div>
-
-      <div class="book-search">
-        <input
-          id="bookSearch"
-          type="search"
-          placeholder="ابحث في VANTABOOK..."
-          oninput="searchBook(this.value)"
-        >
-      </div>
-
-      <div class="book-head-actions">
-
-        <button
-          onclick="toast('الإشعارات الحقيقية تحتاج Backend.')"
-          title="الإشعارات"
-        >
-          ♡
-        </button>
-
-        <button
-          onclick="bookSettings()"
-          title="الإعدادات"
-        >
-          ⚙
-        </button>
-
-        <button
-          onclick="leaveBook()"
-          title="العودة إلى VANTA"
-        >
-          ←
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="book-body">
-
-      <aside class="book-left">
-
-        <div class="book-side-card">
-
-          <button
-            class="book-side-item active"
-            data-book-tab="feed"
-            onclick="bookTab('feed',this)"
-          >
-            <span class="book-side-icon">⌂</span>
-            الرئيسية
-          </button>
-
-          <button
-            class="book-side-item"
-            data-book-tab="explore"
-            onclick="bookTab('explore',this)"
-          >
-            <span class="book-side-icon">⌕</span>
-            استكشاف
-          </button>
-
-          <button
-            class="book-side-item"
-            data-book-tab="videos"
-            onclick="bookTab('videos',this)"
-          >
-            <span class="book-side-icon">▶</span>
-            الفيديوهات
-          </button>
-
-          <button
-            class="book-side-item"
-            data-book-tab="communities"
-            onclick="bookTab('communities',this)"
-          >
-            <span class="book-side-icon">♟</span>
-            المجتمعات
-          </button>
-
-          <button
-            class="book-side-item"
-            onclick="go('profile')"
-          >
-            <span class="book-side-icon">●</span>
-            ملفي
-          </button>
-
-        </div>
-
-      </aside>
-
-      <div class="book-center">
-
-        <div
-          class="stories-row"
-          id="storiesRow"
-        ></div>
-
-        <div class="book-composer">
-
-          <div class="composer-top">
-
-            <div class="mini-avatar">
-              A
-            </div>
-
-            <textarea
-              id="postText"
-              placeholder="ماذا تريد أن تشارك؟"
-            ></textarea>
-
-          </div>
-
-          <div
-            class="composer-preview"
-            id="composerPreview"
-          ></div>
-
-          <div class="composer-bottom">
-
-            <div class="media-actions">
-
-              <label class="media-button">
-                📷 صورة
-                <input
-                  id="imageInput"
-                  class="file-input"
-                  type="file"
-                  accept="image/*"
-                  onchange="selectMedia(this,'image')"
-                >
-              </label>
-
-              <label class="media-button">
-                🎥 فيديو
-                <input
-                  id="videoInput"
-                  class="file-input"
-                  type="file"
-                  accept="video/*"
-                  onchange="selectMedia(this,'video')"
-                >
-              </label>
-
-              <button
-                class="media-button"
-                onclick="createStory()"
-              >
-                ⭕ Story
-              </button>
-
-            </div>
-
-            <button
-              class="primary"
-              onclick="publishPost()"
-            >
-              نشر
-            </button>
-
-          </div>
-
-        </div>
-
-        <div id="bookContent"></div>
-
-      </div>
-
-      <aside class="book-right">
-
-        <div class="book-side-card">
-
-          <h3>اقتراحات لك</h3>
-
-          <div class="mini-user">
-            <div class="mini-avatar">N</div>
-            <div>
-              <strong>NOVA</strong>
-              <small>VANTA AI</small>
-            </div>
-          </div>
-
-          <div class="mini-user">
-            <div class="mini-avatar">C</div>
-            <div>
-              <strong>Cyber Hub</strong>
-              <small>Security</small>
-            </div>
-          </div>
-
-          <div class="mini-user">
-            <div class="mini-avatar">L</div>
-            <div>
-              <strong>Linux</strong>
-              <small>Community</small>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="book-side-card">
-
-          <h3>المجتمعات</h3>
-
-          <p style="color:var(--muted);font-size:12px;line-height:2">
-            Cybersecurity<br>
-            Linux<br>
-            Programming<br>
-            Minecraft
-          </p>
-
-        </div>
-
-      </aside>
-
-    </div>
-
-  </div>
-
+<!-- LIBRARY -->
+<section class="page" id="library">
+ <div class="section-title">
+  <div><h2>Library</h2><p>مصادر VANTA.</p></div>
+ </div>
+ <div class="grid">
+  <div class="card"><div class="card-icon">📘</div><h3>Cybersecurity Basics</h3><p>المفاهيم الأساسية: التهديدات، الدفاع، المصادقة، التشفير والخصوصية.</p><br><button class="btn primary" onclick="readResource('أساسيات الأمن السيبراني')">قراءة</button></div>
+  <div class="card"><div class="card-icon">💻</div><h3>Programming</h3><p>مسار عملي لفهم البرمجة والمنطق وهياكل البيانات.</p><br><button class="btn primary" onclick="readResource('البرمجة')">قراءة</button></div>
+  <div class="card"><div class="card-icon">🌐</div><h3>Web Technology</h3><p>HTML وCSS وJavaScript والويب الحديث.</p><br><button class="btn primary" onclick="readResource('تقنيات الويب')">قراءة</button></div>
+  <div class="card"><div class="card-icon">🧠</div><h3>Learning Methods</h3><p>طرق بناء عادة تعلم تقنية مستمرة وقياس التقدم.</p><br><button class="btn primary" onclick="readResource('طرق التعلم')">قراءة</button></div>
+  <div class="card"><div class="card-icon">🛡</div><h3>Defensive Security</h3><p>مبادئ حماية الحسابات والأجهزة والبيانات.</p><br><button class="btn primary" onclick="readResource('الحماية')">قراءة</button></div>
+  <div class="card"><div class="card-icon">🚀</div><h3>Roadmap</h3><p>خارطة طريق عامة تساعدك على تحديد خطوتك القادمة.</p><br><button class="btn primary" onclick="readResource('خارطة الطريق')">فتح</button></div>
+ </div>
 </section>
 
-<!-- =========================================================
-     NOVA
-========================================================= -->
+<!-- NOVA -->
+<section class="page" id="nova">
+ <div class="section-title">
+  <div><h2>NOVA</h2><p>AI companion داخل VANTA.</p></div>
+ </div>
 
-<section id="nova" class="view">
+ <div class="nova-layout">
+  <aside class="card nova-side">
+   <div class="nova-crystal"><span>N</span></div>
+   <h2>NOVA</h2>
+   <p style="margin:8px 0 18px;color:var(--muted)">VANTA Companion</p>
+   <div class="mood" id="novaMood">جاهزة للتحدث ✦</div>
+   <br>
+   <button class="btn" onclick="clearChat()">مسح المحادثة</button>
+   <div style="margin-top:20px;text-align:right">
+    <small style="color:var(--muted)">السياق المستخدم</small>
+    <p id="novaContext" style="margin-top:7px;font-size:13px">لا يوجد ملف شخصي محفوظ بعد.</p>
+   </div>
+  </aside>
 
-  <div class="nova-layout">
-
-    <div class="nova-profile">
-
-      <div class="nova-crystal">
-        <span>N</span>
-      </div>
-
-      <h1>NOVA</h1>
-
-      <p>
-        المساعد الذكي داخل VANTA.
-        هذه النسخة تعمل محليًا.
-        ربط AI الحقيقي يتم لاحقًا عبر Backend.
-      </p>
-
-      <button
-        class="secondary"
-        style="margin-top:20px"
-        onclick="clearNova()"
-      >
-        محادثة جديدة
-      </button>
-
-    </div>
-
-    <div class="nova-chat">
-
-      <div class="nova-chat-head">
-        <span class="online-dot"></span>
-        <strong>NOVA Online</strong>
-      </div>
-
-      <div
-        class="messages"
-        id="messages"
-      >
-        <div class="message nova">
-          أهلًا بك في VANTA.
-          أنا NOVA. اسألني عن Linux أو الشبكات أو الأمن السيبراني.
-        </div>
-      </div>
-
-      <div class="nova-input">
-
-        <input
-          id="novaInput"
-          placeholder="اكتب سؤالك..."
-          onkeydown="if(event.key==='Enter')sendNova()"
-        >
-
-        <button onclick="sendNova()">
-          ➤
-        </button>
-
-      </div>
-
-    </div>
-
+  <div class="chat">
+   <div class="chat-head">
+    <div><b>NOVA</b><div style="font-size:12px;color:var(--green)">● Online</div></div>
+    <button class="iconbtn" onclick="clearChat()">↻</button>
+   </div>
+   <div class="quick">
+    <button onclick="quickAsk('ما الذي تنصحني أن أتعلمه اليوم؟')">خطة اليوم</button>
+    <button onclick="quickAsk('اشرح لي hashing بطريقة سهلة')">Hashing</button>
+    <button onclick="quickAsk('أريد تعلم الأمن السيبراني من الصفر')">Cyber من الصفر</button>
+    <button onclick="quickAsk('ساعدني في البرمجة')">Programming</button>
+   </div>
+   <div class="messages" id="messages"></div>
+   <div class="chat-bottom">
+    <textarea id="chatInput" class="chat-input" placeholder="اكتب لـ NOVA..." rows="1"></textarea>
+    <button class="btn primary" id="sendBtn">إرسال</button>
+   </div>
   </div>
-
+ </div>
 </section>
 
-<!-- =========================================================
-     PROFILE
-========================================================= -->
-
-<section id="profile" class="view">
-
-  <div class="page-title">
-    <h1>صفحتي</h1>
-    <p>
-      مساحة Ali Yaser داخل VANTA.
-    </p>
+<!-- VANTABOOK -->
+<section class="page" id="book">
+ <div class="vb-top">
+  <div class="vb-brand">VANTA<span>BOOK</span></div>
+  <div class="vb-nav" id="vbNav">
+   <button class="active" data-vb="feed">الرئيسية</button>
+   <button data-vb="explore">استكشاف</button>
+   <button data-vb="videos">فيديو</button>
+   <button data-vb="communities">المجتمعات</button>
+   <button data-vb="vbprofile">الملف</button>
+   <button data-vb="vbsettings">الإعدادات</button>
   </div>
+ </div>
 
-  <div class="profile-card">
-
-    <div class="profile-top">
-
-      <div class="big-avatar">
-        A
-      </div>
-
-      <div>
-        <h1>Ali Yaser</h1>
-        <p>@ali_yr_1</p>
-        <p style="margin-top:8px">
-          Founder • Developer • VANTA
-        </p>
-      </div>
-
-    </div>
-
-    <div class="stats">
-
-      <div class="stat">
-        <strong id="statPosts">0</strong>
-        <span>منشورات</span>
-      </div>
-
-      <div class="stat">
-        <strong>1.2K</strong>
-        <span>متابعون</span>
-      </div>
-
-      <div class="stat">
-        <strong>312</strong>
-        <span>متابَعون</span>
-      </div>
-
-      <div class="stat">
-        <strong>1,240</strong>
-        <span>XP</span>
-      </div>
-
-    </div>
-
+ <div id="vbLogin" class="card login-box hidden">
+  <h2>VANTABOOK</h2>
+  <p style="color:var(--muted);margin:10px 0 20px">تسجيل VANTABOOK مستقل عن دخول VANTA.</p>
+  <div class="form">
+   <input id="vbName" placeholder="اسمك">
+   <input id="vbUsername" placeholder="@username">
+   <button class="btn primary" onclick="vbLogin()">دخول VANTABOOK</button>
   </div>
+ </div>
 
-  <div class="section">
+ <div id="vbApp">
+  <div class="vb-layout">
+   <div>
+    <div class="story-row" id="stories"></div>
 
-    <div class="section-head">
-      <div>
-        <h2>إنجازاتي</h2>
-        <p>رحلتك داخل VANTA.</p>
-      </div>
+    <div class="create">
+     <textarea id="postText" placeholder="ماذا يدور في بالك؟"></textarea>
+     <div id="mediaPreview"></div>
+     <div class="create-actions">
+      <label class="file-label">📷 صورة/فيديو
+       <input id="postMedia" type="file" accept="image/*,video/*">
+      </label>
+      <button class="btn primary" onclick="publishPost()">نشر</button>
+     </div>
     </div>
 
-    <div class="grid-3">
+    <div id="vbContent"></div>
+   </div>
 
-      <div class="card">
-        <div class="card-icon">★</div>
-        <h3>Founder</h3>
-        <p>مؤسس VANTA.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">⚡</div>
-        <h3>First Challenge</h3>
-        <p>أكملت أول تحدٍ.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">N</div>
-        <h3>NOVA Friend</h3>
-        <p>بدأت رحلتك مع NOVA.</p>
-      </div>
-
+   <aside class="vb-side">
+    <div class="card">
+     <div class="avatar" id="vbAvatar">A</div>
+     <h3 id="vbUserName" style="margin-top:10px">Ali</h3>
+     <p id="vbUserHandle" style="color:var(--muted)">@user</p>
     </div>
-
+    <div class="card">
+     <h3>VANTABOOK</h3>
+     <p style="margin-top:8px">مكان اجتماعي مستقل داخل منظومة VANTA.</p>
+    </div>
+   </aside>
   </div>
-
+ </div>
 </section>
 
-<!-- =========================================================
-     SETTINGS
-========================================================= -->
+<!-- PROFILE -->
+<section class="page" id="profile">
+ <div class="section-title">
+  <div><h2>Profile</h2><p>المعلومات التي يستخدمها NOVA لفهم سياقك.</p></div>
+ </div>
 
-<section id="settings" class="view">
+ <div class="card profile-head">
+  <div class="bigavatar" id="profileAvatar">A</div>
+  <div class="profile-info">
+   <h1 id="profileNameView">Ali Yaser</h1>
+   <p id="profileHandleView">@ali_yr_1</p>
+   <p id="profileBioView">VANTA Founder • Developer</p>
+  </div>
+ </div>
 
-  <div class="page-title">
-    <h1>الإعدادات</h1>
-    <p>
-      إعدادات VANTA العامة.
-    </p>
+ <div class="grid" style="margin-top:15px">
+  <div class="card">
+   <h3>بيانات الحساب</h3><br>
+   <div class="form">
+    <input id="pName" placeholder="الاسم">
+    <input id="pUsername" placeholder="اسم المستخدم">
+    <textarea id="pBio" placeholder="نبذة"></textarea>
+    <input id="pInterests" placeholder="اهتماماتك — مثال: Cybersecurity, JavaScript">
+    <input id="pProgress" placeholder="تقدمك — مثال: تعلمت HTML وبدأت JavaScript">
+    <button class="btn primary" onclick="saveProfile()">حفظ الملف</button>
+   </div>
   </div>
 
-  <div class="settings-grid">
-
-    <div class="setting-card">
-
-      <div class="setting-row">
-
-        <div>
-          <strong>المظهر الداكن</strong>
-          <p>
-            واجهة VANTA الداكنة.
-          </p>
-        </div>
-
-        <button
-          class="toggle on"
-          onclick="toggleSetting(this)"
-        >
-          <i></i>
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="setting-card">
-
-      <div class="setting-row">
-
-        <div>
-          <strong>الحفظ المحلي</strong>
-          <p>
-            حفظ بيانات التجربة على جهازك.
-          </p>
-        </div>
-
-        <button
-          class="toggle on"
-          onclick="toggleSetting(this)"
-        >
-          <i></i>
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="setting-card">
-
-      <div class="setting-row">
-
-        <div>
-          <strong>VANTABOOK</strong>
-          <p>
-            إعدادات التطبيق الاجتماعي.
-          </p>
-        </div>
-
-        <button
-          class="secondary"
-          onclick="bookSettings()"
-        >
-          فتح
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="setting-card">
-
-      <div class="setting-row">
-
-        <div>
-          <strong>بيانات التجربة</strong>
-          <p>
-            حذف المنشورات والـStories المحلية.
-          </p>
-        </div>
-
-        <button
-          class="danger"
-          onclick="clearLocalData()"
-        >
-          مسح
-        </button>
-
-      </div>
-
-    </div>
-
+  <div class="card">
+   <h3>التقدم</h3>
+   <div class="stats" style="grid-template-columns:1fr 1fr">
+    <div class="stat"><b id="profileXP">0</b><span>XP</span></div>
+    <div class="stat"><b id="profileLevel">1</b><span>Level</span></div>
+    <div class="stat"><b>0</b><span>Achievements</span></div>
+    <div class="stat"><b>0</b><span>Lessons</span></div>
+   </div>
   </div>
-
+ </div>
 </section>
 
 </main>
-
 </div>
 
-<!-- =========================================================
-     VANTABOOK LOGIN
-     ONLY APPEARS WHEN ENTERING VANTABOOK
-========================================================= -->
-
-<div
-  class="book-login-overlay"
-  id="bookLogin"
->
-
-  <div class="login-card">
-
-    <button
-      class="login-close"
-      onclick="closeBookLogin()"
-    >
-      ×
-    </button>
-
-    <div class="login-brand">
-
-      <div class="login-logo">
-        B
-      </div>
-
-      <h1>
-        مرحبًا بك في VANTABOOK
-      </h1>
-
-      <p>
-        ادخل إلى مجتمع VANTA وشارك أفكارك وصورك وفيديوهاتك.
-      </p>
-
-    </div>
-
-    <div class="social-login">
-
-      <button
-        class="social-btn"
-        onclick="socialLogin('Google')"
-      >
-        <span class="social-icon">G</span>
-        Google
-      </button>
-
-      <button
-        class="social-btn"
-        onclick="socialLogin('Apple')"
-      >
-        <span class="social-icon"></span>
-        Apple
-      </button>
-
-    </div>
-
-    <div class="divider">
-      أو باستخدام البريد الإلكتروني
-    </div>
-
-    <div
-      class="login-error"
-      id="loginError"
-    ></div>
-
-    <form
-      class="login-form"
-      onsubmit="emailLogin(event)"
-    >
-
-      <label class="login-label">
-        البريد الإلكتروني
-      </label>
-
-      <input
-        id="loginEmail"
-        type="email"
-        autocomplete="email"
-        placeholder="you@example.com"
-        required
-      >
-
-      <label class="login-label">
-        كلمة المرور
-      </label>
-
-      <input
-        id="loginPassword"
-        type="password"
-        autocomplete="current-password"
-        placeholder="••••••••"
-        minlength="4"
-        required
-      >
-
-      <button
-        class="login-submit"
-        type="submit"
-      >
-        تسجيل الدخول
-      </button>
-
-    </form>
-
-    <div class="login-note">
-      الحسابات الحالية تجريبية ومحلية.
-      Google وApple جاهزان للربط مع Authentication لاحقًا.
-      لا يتم وضع أي API Key داخل هذا الملف.
-    </div>
-
+<!-- MODAL -->
+<div class="modal" id="modal">
+ <div class="modal-box">
+  <div class="modal-head">
+   <h2 id="modalTitle">VANTA</h2>
+   <button class="iconbtn" onclick="closeModal()">×</button>
   </div>
-
-</div>
-
-<!-- =========================================================
-     VANTABOOK LOADER
-========================================================= -->
-
-<div
-  class="book-loader"
-  id="bookLoader"
->
-
-  <div class="book-loader-inner">
-
-    <div class="book-loader-logo">
-      B
-    </div>
-
-    <h2>VANTABOOK</h2>
-
-    <p id="bookLoaderText">
-      Preparing your space...
-    </p>
-
-    <div class="book-loader-bar">
-      <i id="bookLoaderProgress"></i>
-    </div>
-
-  </div>
-
-</div>
-
-<!-- =========================================================
-     MODAL
-========================================================= -->
-
-<div
-  class="modal"
-  id="modal"
->
-
-  <div class="modal-box">
-
-    <div class="modal-head">
-
-      <h2 id="modalTitle">
-        VANTA
-      </h2>
-
-      <button
-        class="close"
-        onclick="closeModal()"
-      >
-        ×
-      </button>
-
-    </div>
-
-    <div id="modalBody"></div>
-
-  </div>
-
+  <div id="modalBody"></div>
+ </div>
 </div>
 
 <div id="toast"></div>
 
 <script>
-/* =========================================================
-   VANTA CORE
-========================================================= */
+/* =========================================
+   VANTA — SINGLE FILE ENGINE
+========================================= */
 
-const pages = document.querySelectorAll(".view");
-const mainNav = document.querySelectorAll(".main-nav button");
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+
+let profile=JSON.parse(localStorage.getItem("vanta_profile")||"null")||{
+ name:"Ali Yaser",
+ username:"ali_yr_1",
+ bio:"VANTA Founder • Developer",
+ level:1,
+ xp:0,
+ interests:"Cybersecurity, Programming, Technology",
+ progress:"بدأت رحلتي في VANTA."
+};
+
+let novaHistory=JSON.parse(localStorage.getItem("vanta_nova_history")||"[]");
+let posts=JSON.parse(localStorage.getItem("vantabook_posts")||"[]");
+let vbUser=JSON.parse(localStorage.getItem("vantabook_user")||"null");
+let currentFilter="all";
+
+/* BOOT */
+let bootDone=false;
+let progress=0;
+const pbar=$("#progress");
+const bootStatus=$("#bootStatus");
+
+const bootTimer=setInterval(()=>{
+ progress+=4;
+ pbar.style.width=Math.min(progress,100)+"%";
+ if(progress<35)bootStatus.textContent="Initializing VANTA...";
+ else if(progress<70)bootStatus.textContent="Loading NOVA...";
+ else if(progress<95)bootStatus.textContent="Preparing your workspace...";
+ else bootStatus.textContent="VANTA ready.";
+ if(progress>=100){
+  clearInterval(bootTimer);
+  setTimeout(startVanta,250);
+ }
+},45);
+
+$("#enterBtn").onclick=startVanta;
+$("#skipBtn").onclick=startVanta;
+
+function startVanta(){
+ if(bootDone)return;
+ bootDone=true;
+ $("#boot").style.opacity="0";
+ setTimeout(()=>{
+  $("#boot").remove();
+  $("#app").style.display="block";
+  renderAll();
+ },500);
+}
+
+/* NAV */
+$$("[data-page]").forEach(btn=>{
+ btn.addEventListener("click",()=>go(btn.dataset.page));
+});
 
 function go(page){
+ $$(".page").forEach(x=>x.classList.remove("active"));
+ const target=$("#"+page);
+ if(target)target.classList.add("active");
 
-  pages.forEach(p=>{
-    p.classList.remove("active");
-  });
+ $$("[data-page]").forEach(x=>x.classList.toggle("active",x.dataset.page===page));
 
-  const target=document.getElementById(page);
+ window.scrollTo({top:0,behavior:"smooth"});
 
-  if(!target)return;
-
-  target.classList.add("active");
-
-  mainNav.forEach(btn=>{
-    btn.classList.toggle(
-      "active",
-      btn.dataset.page===page
-    );
-  });
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-  if(page==="book"){
-    renderStories();
-    renderBookFeed();
-  }
+ if(page==="nova"){
+  renderNova();
+ }
+ if(page==="book"){
+  renderBook();
+ }
 }
 
-mainNav.forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    if(btn.dataset.page==="book"){
-      enterBook();
-      return;
-    }
+/* PROFILE */
+function saveProfile(){
+ profile.name=$("#pName").value.trim()||"Ali Yaser";
+ profile.username=$("#pUsername").value.trim().replace(/^@/,"")||"ali_yr_1";
+ profile.bio=$("#pBio").value.trim()||"VANTA Founder • Developer";
+ profile.interests=$("#pInterests").value.trim()||"Cybersecurity, Programming, Technology";
+ profile.progress=$("#pProgress").value.trim()||"بدأت رحلتي في VANTA.";
+ localStorage.setItem("vanta_profile",JSON.stringify(profile));
+ updateProfileUI();
+ showToast("تم حفظ الملف ✓");
+}
 
-    go(btn.dataset.page);
-  });
-});
+function updateProfileUI(){
+ $("#profileNameView").textContent=profile.name;
+ $("#profileHandleView").textContent="@"+profile.username;
+ $("#profileBioView").textContent=profile.bio;
+ $("#profileAvatar").textContent=(profile.name||"A")[0].toUpperCase();
+ $("#pName").value=profile.name;
+ $("#pUsername").value=profile.username;
+ $("#pBio").value=profile.bio;
+ $("#pInterests").value=profile.interests;
+ $("#pProgress").value=profile.progress;
+ $("#profileXP").textContent=profile.xp;
+ $("#profileLevel").textContent=profile.level;
+ $("#homeXP").textContent=profile.xp;
+ $("#novaContext").textContent=profile.name+" • Level "+profile.level+" • "+profile.interests;
+}
 
-/* =========================================================
-   BOOT
-========================================================= */
+function addXP(amount){
+ profile.xp+=amount;
+ while(profile.xp>=profile.level*100){
+  profile.xp-=profile.level*100;
+  profile.level++;
+ }
+ localStorage.setItem("vanta_profile",JSON.stringify(profile));
+ updateProfileUI();
+}
 
-const bootStatus=document.getElementById("bootStatus");
-
-const bootMessages=[
-  "Initializing VANTA...",
-  "Loading neural interface...",
-  "Preparing NOVA...",
-  "Loading Cyber Labs...",
-  "Preparing VANTABOOK...",
-  "VANTA ready."
+/* LEARNING */
+const courses=[
+ ["cyber","Cybersecurity Foundations","أساسيات الأمن السيبراني من الصفر.",25,"🛡"],
+ ["cyber","Network Security","فهم الشبكات ومبادئ حمايتها.",12,"🌐"],
+ ["cyber","Web Security","مفاهيم أمن تطبيقات الويب بشكل دفاعي.",8,"🔒"],
+ ["cyber","Digital Privacy","الخصوصية والحماية الرقمية.",31,"👁"],
+ ["code","JavaScript","منطق JavaScript وبناء تطبيقات الويب.",42,"JS"],
+ ["code","HTML & CSS","بناء واجهات ويب حديثة.",68,"◇"],
+ ["code","Python","أساسيات Python والتفكير البرمجي.",17,"🐍"],
+ ["code","Git & GitHub","إدارة المشاريع البرمجية.",5,"◆"],
+ ["code","APIs","فهم APIs وكيف تتواصل التطبيقات.",0,"⚡"]
 ];
 
-let bootIndex=0;
-
-const bootInterval=setInterval(()=>{
-
-  if(bootIndex<bootMessages.length){
-
-    bootStatus.textContent=
-      bootMessages[bootIndex];
-
-    bootIndex++;
-
-  }else{
-
-    clearInterval(bootInterval);
-
-  }
-
-},450);
-
-setTimeout(()=>{
-
-  document
-    .getElementById("bootScreen")
-    .classList.add("hide");
-
-},3100);
-
-/* =========================================================
-   TOAST
-========================================================= */
-
-let toastTimer;
-
-function toast(text){
-
-  const el=document.getElementById("toast");
-
-  el.textContent=text;
-
-  el.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer=setTimeout(()=>{
-    el.classList.remove("show");
-  },2400);
+function renderCourses(){
+ const q=($("#courseSearch")?.value||"").toLowerCase();
+ $("#courses").innerHTML=courses
+ .filter(c=>currentFilter==="all"||c[0]===currentFilter)
+ .filter(c=>(c[1]+" "+c[2]).toLowerCase().includes(q))
+ .map((c,i)=>`
+ <div class="card course">
+  <span class="tag">${c[0].toUpperCase()}</span>
+  <div class="card-icon">${c[4]}</div>
+  <h3>${c[1]}</h3>
+  <p>${c[2]}</p>
+  <div class="bar"><i style="width:${c[3]}%"></i></div>
+  <div class="meta"><span>${c[3]}% مكتمل</span><span>+50 XP</span></div>
+  <br>
+  <button class="btn primary" onclick="startCourse('${escapeAttr(c[1])}')">
+   ${c[3]?"متابعة":"ابدأ"}
+  </button>
+ </div>`).join("");
 }
 
-/* =========================================================
-   MODAL
-========================================================= */
+$("#courseSearch").addEventListener("input",renderCourses);
 
-function openModal(title,html){
-
-  document.getElementById("modalTitle")
-    .textContent=title;
-
-  document.getElementById("modalBody")
-    .innerHTML=html;
-
-  document.getElementById("modal")
-    .classList.add("show");
+function filterCourses(type){
+ currentFilter=type;
+ renderCourses();
 }
 
-function closeModal(){
-
-  document.getElementById("modal")
-    .classList.remove("show");
+function startCourse(name){
+ addXP(10);
+ showModal(name,`
+  <p style="line-height:1.8;color:var(--muted)">
+   تم فتح الدرس التجريبي. في النسخة المتصلة بقاعدة البيانات
+   سيتم حفظ الدرس ونسبة الإنجاز ونتيجة الاختبارات تلقائيًا.
+  </p>
+  <br>
+  <div class="card">
+   <h3>مهمة البداية</h3>
+   <p style="margin-top:8px;color:var(--muted)">ما الهدف الأساسي من تعلم هذا الموضوع؟ اكتب إجابتك ثم ناقشها مع NOVA.</p>
+  </div>
+  <br>
+  <button class="btn primary" onclick="closeModal();go('nova');quickAsk('ساعدني في درس ${escapeAttr(name)}')">ناقش مع NOVA ✦</button>
+ `);
 }
 
-document
-  .getElementById("modal")
-  .addEventListener("click",e=>{
-    if(e.target.id==="modal"){
-      closeModal();
+/* LABS */
+function openLab(type){
+ let title="",body="";
+ if(type==="password"){
+  title="Password Strength";
+  body=`
+   <p style="color:var(--muted);line-height:1.7">اكتب كلمة مرور تجريبية. لا تستخدم كلمة مرور حقيقية.</p><br>
+   <input id="labPass" class="search" type="text" placeholder="كلمة مرور تجريبية">
+   <div id="passResult" style="margin-top:15px"></div>
+  `;
+ }else if(type==="hash"){
+  title="Hashing Concept";
+  body=`
+   <p style="line-height:1.8;color:var(--muted)">
+    الـ Hash يحوّل البيانات إلى قيمة ثابتة الطول تقريبًا حسب الخوارزمية.
+    الفكرة الأساسية: لا نتعامل معه كأنه تشفير قابل لفكّه بالمفتاح نفسه.
+   </p><br>
+   <button class="btn primary" onclick="fakeHash()">جرّب مفهوم Hash</button>
+   <div id="hashResult" style="margin-top:15px"></div>
+  `;
+ }else if(type==="phishing"){
+  title="Phishing Awareness";
+  body=`
+   <p style="line-height:1.8">أي رسالة تطلب منك تسجيل الدخول أو إرسال رمز حساس تستحق التحقق.</p><br>
+   <div class="card">
+    <b>مثال:</b>
+    <p style="margin-top:8px;color:var(--muted)">"تم تعليق حسابك! اضغط الآن لتأكيد كلمة المرور."</p>
+   </div><br>
+   <button class="btn primary" onclick="showToast('إشارات مهمة: الاستعجال + طلب بيانات حساسة + رابط غير موثوق')">تحليل الرسالة</button>
+  `;
+ }else{
+  title="Web Security";
+  body=`
+   <p style="line-height:1.8;color:var(--muted)">
+    HTTPS يحمي الاتصال بين المتصفح والخادم عبر TLS، بينما Security Headers
+    تضيف سياسات حماية إضافية للمتصفح.
+   </p>
+  `;
+ }
+ showModal(title,body);
+ if(type==="password"){
+  setTimeout(()=>{
+   $("#labPass").addEventListener("input",e=>{
+    const v=e.target.value;
+    let score=0;
+    if(v.length>=8)score++;
+    if(v.length>=12)score++;
+    if(/[A-Z]/.test(v))score++;
+    if(/[a-z]/.test(v))score++;
+    if(/[0-9]/.test(v))score++;
+    if(/[^A-Za-z0-9]/.test(v))score++;
+    const labels=["ضعيفة جدًا","ضعيفة","متوسطة","جيدة","قوية","قوية جدًا"];
+    $("#passResult").innerHTML=`<b>${labels[Math.min(score,5)]}</b><p style="color:var(--muted);margin-top:6px">${score}/6 مؤشرات.</p>`;
+   });
+  },50);
+ }
+}
+
+function fakeHash(){
+ const value="VANTA-demo";
+ let h=0;
+ for(let i=0;i<value.length;i++)h=((h<<5)-h)+value.charCodeAt(i)|0;
+ $("#hashResult").textContent="مثال توضيحي: "+Math.abs(h).toString(16).padStart(8,"0");
+}
+
+/* LIBRARY */
+function readResource(title){
+ showModal(title,`
+  <p style="line-height:2;color:var(--muted)">
+   هذا مورد داخل مكتبة VANTA. يمكنك استخدام هذه المساحة لإضافة
+   الدروس والملاحظات والروابط والمراجع التي تريدها لاحقًا.
+  </p><br>
+  <button class="btn primary" onclick="closeModal();go('learning')">انتقل إلى Learning</button>
+ `);
+}
+
+/* NOVA */
+function renderNova(){
+ if(!novaHistory.length){
+  addNovaMessage("bot",`أهلًا ${profile.name || "بك"} ✦
+أنا NOVA، رفيقك داخل VANTA.
+
+أقدر أساعدك في البرمجة، الأمن السيبراني، التعلم، أو حتى ترتيب خطوتك القادمة.
+
+قل لي ماذا تريد.`);
+ }
+ updateProfileUI();
+}
+
+function addNovaMessage(role,text){
+ novaHistory.push({role,text});
+ localStorage.setItem("vanta_nova_history",JSON.stringify(novaHistory));
+ const el=document.createElement("div");
+ el.className="msg "+role;
+ el.textContent=text;
+ $("#messages").appendChild(el);
+ $("#messages").scrollTop=$("#messages").scrollHeight;
+}
+
+function redrawNova(){
+ $("#messages").innerHTML="";
+ novaHistory.forEach(m=>{
+  const el=document.createElement("div");
+  el.className="msg "+m.role;
+  el.textContent=m.text;
+  $("#messages").appendChild(el);
+ });
+ $("#messages").scrollTop=$("#messages").scrollHeight;
+}
+
+function clearChat(){
+ novaHistory=[];
+ localStorage.removeItem("vanta_nova_history");
+ redrawNova();
+ addNovaMessage("bot",`تم تنظيف المحادثة ✦
+أنا جاهزة من جديد، ${profile.name || "بك"}.`);
+}
+
+function detectMood(text){
+ const t=text.toLowerCase();
+ if(/(زعلان|متضايق|غاضب|قرف|تعبت|خرب|غبي|frustrat|angry|hate)/i.test(t))return"frustrated";
+ if(/(تعبان|نعسان|مرهق|tired|exhaust)/i.test(t))return"tired";
+ if(/(مستعجل|بسرعة|urgent|asap)/i.test(t))return"urgent";
+ if(/(هههه|فرح|مبسوط|سعيد|happy|excited)/i.test(t))return"happy";
+ if(/(كيف|ليش|لماذا|what|why|how)/i.test(t))return"curious";
+ return"calm";
+}
+
+function moodText(m){
+ return {
+  frustrated:"يبدو أنك متضايق قليلًا. خلينا نحلها خطوة خطوة بدون تعقيد.",
+  tired:"واضح أنك مرهق. خلينا نخلي الخطوة بسيطة ومباشرة.",
+  urgent:"تمام، خلينا ندخل في الموضوع مباشرة.",
+  happy:"حلو! ✦ خلينا نستفيد من الحماس وننجز شيء.",
+  curious:"سؤال ممتاز. خلينا نفككه ببساطة.",
+  calm:"تمام، أنا معك."
+ }[m];
+}
+
+async function sendNova(){
+ const input=$("#chatInput");
+ const text=input.value.trim();
+ if(!text)return;
+
+ input.value="";
+ addNovaMessage("user",text);
+
+ const mood=detectMood(text);
+ $("#novaMood").textContent=moodText(mood);
+
+ const typing=document.createElement("div");
+ typing.className="typing";
+ typing.id="typing";
+ typing.innerHTML="<i></i><i></i><i></i>";
+ $("#messages").appendChild(typing);
+ $("#messages").scrollTop=$("#messages").scrollHeight;
+
+ $("#sendBtn").disabled=true;
+
+ try{
+  const response=await fetch("/api/nova",{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({
+    message:text,
+    history:novaHistory.slice(-20),
+    mood,
+    user:{
+     name:profile.name,
+     username:profile.username,
+     level:profile.level,
+     xp:profile.xp,
+     interests:profile.interests,
+     progress:profile.progress
     }
+   })
   });
 
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"){
-    closeModal();
-  }
+  if(!response.ok)throw new Error("API "+response.status);
+
+  const data=await response.json();
+  typing.remove();
+
+  const reply=data.reply||data.output||data.message;
+  if(!reply)throw new Error("Empty response");
+
+  addNovaMessage("bot",reply);
+ }catch(err){
+  typing.remove();
+
+  let fallback=moodText(mood)+"\n\n";
+  fallback+="حاليًا لم يصل رد من خادم NOVA. تأكد أن `/api/nova` موجود وأن GEMINI_API_KEY مضبوط في Vercel.";
+  addNovaMessage("bot",fallback);
+ }finally{
+  $("#sendBtn").disabled=false;
+ }
+}
+
+$("#sendBtn").onclick=sendNova;
+$("#chatInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter"&&!e.shiftKey){
+  e.preventDefault();
+  sendNova();
+ }
 });
 
-/* =========================================================
-   LOCAL DATA
-========================================================= */
-
-const DATA_KEY="vanta_v2_local_data";
-
-let appData=loadData();
-
-function loadData(){
-
-  try{
-
-    const saved=
-      localStorage.getItem(DATA_KEY);
-
-    if(saved){
-
-      const parsed=JSON.parse(saved);
-
-      return{
-        posts:Array.isArray(parsed.posts)
-          ?parsed.posts:[],
-        stories:Array.isArray(parsed.stories)
-          ?parsed.stories:[],
-        bookUser:parsed.bookUser||null
-      };
-
-    }
-
-  }catch(e){}
-
-  return{
-    posts:[],
-    stories:[],
-    bookUser:null
-  };
+function quickAsk(text){
+ go("nova");
+ $("#chatInput").value=text;
+ sendNova();
 }
 
-function saveData(){
-
-  try{
-
-    localStorage.setItem(
-      DATA_KEY,
-      JSON.stringify(appData)
-    );
-
-  }catch(e){
-
-    toast(
-      "تعذر الحفظ. قد تكون مساحة التخزين ممتلئة."
-    );
-
-  }
-
+/* VANTABOOK */
+function vbLogin(){
+ const name=$("#vbName").value.trim()||profile.name;
+ const username=$("#vbUsername").value.trim().replace(/^@/,"")||profile.username;
+ vbUser={name,username};
+ localStorage.setItem("vantabook_user",JSON.stringify(vbUser));
+ renderBook();
+ showToast("مرحبًا بك في VANTABOOK ✦");
 }
 
-/* =========================================================
-   VANTABOOK ENTRY
-========================================================= */
-
-function enterBook(){
-
-  /*
-    IMPORTANT:
-    VANTA itself does NOT require login.
-
-    Only VANTABOOK checks its own local session.
-  */
-
-  if(appData.bookUser){
-
-    openBook();
-
-    return;
-  }
-
-  document
-    .getElementById("bookLogin")
-    .classList.add("show");
-
-}
-
-function closeBookLogin(){
-
-  document
-    .getElementById("bookLogin")
-    .classList.remove("show");
-
-}
-
-function socialLogin(provider){
-
-  /*
-    These buttons are intentionally functional:
-    they explain the current state instead of pretending
-    Google/Apple authentication is already connected.
-
-    Later this function can be replaced with:
-    Supabase Auth / Firebase Auth.
-  */
-
-  showLoginError(
-    provider+
-    " جاهز للربط. Authentication الحقيقي سيتم ربطه لاحقًا."
-  );
-
-}
-
-function showLoginError(message){
-
-  const el=
-    document.getElementById("loginError");
-
-  el.textContent=message;
-
-  el.classList.add("show");
-
-}
-
-function emailLogin(event){
-
-  event.preventDefault();
-
-  const email=
-    document.getElementById("loginEmail")
-      .value.trim();
-
-  const password=
-    document.getElementById("loginPassword")
-      .value;
-
-  const error=
-    document.getElementById("loginError");
-
-  error.classList.remove("show");
-
-  if(!email || !password){
-
-    showLoginError(
-      "أدخل البريد الإلكتروني وكلمة المرور."
-    );
-
-    return;
-  }
-
-  /*
-    LOCAL DEMO SESSION
-  */
-
-  appData.bookUser={
-    email:email,
-    name:email
-      .split("@")[0]
-      .replace(/[._-]/g," "),
-    loginAt:Date.now()
-  };
-
-  saveData();
-
-  closeBookLogin();
-
-  openBook();
-
-}
-
-function openBook(){
-
-  const loader=
-    document.getElementById("bookLoader");
-
-  const progress=
-    document.getElementById(
-      "bookLoaderProgress"
-    );
-
-  const loaderText=
-    document.getElementById(
-      "bookLoaderText"
-    );
-
-  loader.classList.add("show");
-
-  progress.style.transition="none";
-  progress.style.width="0%";
-
-  setTimeout(()=>{
-    progress.style.transition=
-      "width 1.15s cubic-bezier(.2,.8,.2,1)";
-    progress.style.width="100%";
-  },50);
-
-  loaderText.textContent=
-    "Loading your VANTABOOK...";
-
-  setTimeout(()=>{
-    loaderText.textContent=
-      "Preparing your feed...";
-  },420);
-
-  setTimeout(()=>{
-    loaderText.textContent=
-      "Almost there...";
-  },800);
-
-  setTimeout(()=>{
-
-    loader.classList.remove("show");
-
-    go("book");
-
-    renderStories();
-    renderBookFeed();
-
-  },1350);
-
-}
-
-function leaveBook(){
-
-  go("home");
-
-  toast("عدت إلى VANTA.");
-
-}
-
-/* =========================================================
-   MEDIA
-========================================================= */
-
-let selectedMedia=null;
-
-function selectMedia(input,type){
-
-  const file=input.files[0];
-
-  if(!file)return;
-
-  const max=15*1024*1024;
-
-  if(file.size>max){
-
-    toast(
-      "النسخة المحلية تسمح بملفات حتى 15MB."
-    );
-
-    input.value="";
-
-    return;
-  }
-
-  const reader=new FileReader();
-
-  reader.onload=()=>{
-
-    selectedMedia={
-      type:type,
-      name:file.name,
-      data:reader.result
-    };
-
-    renderComposerPreview();
-
-  };
-
-  reader.readAsDataURL(file);
-
-}
-
-function renderComposerPreview(){
-
-  const box=
-    document.getElementById(
-      "composerPreview"
-    );
-
-  if(!selectedMedia){
-
-    box.style.display="none";
-    box.innerHTML="";
-
-    return;
-  }
-
-  box.style.display="block";
-
-  if(selectedMedia.type==="image"){
-
-    box.innerHTML=`
-      <img
-        src="${selectedMedia.data}"
-        alt="preview"
-      >
-    `;
-
-  }else{
-
-    box.innerHTML=`
-      <video
-        src="${selectedMedia.data}"
-        controls
-        playsinline
-      ></video>
-    `;
-
-  }
-
-}
-
-/* =========================================================
-   POSTS
-========================================================= */
-
-function publishPost(){
-
-  const text=
-    document.getElementById("postText")
-      .value.trim();
-
-  if(!text && !selectedMedia){
-
-    toast(
-      "اكتب شيئًا أو اختر صورة/فيديو."
-    );
-
-    return;
-  }
-
-  const post={
-
-    id:Date.now(),
-
-    user:"Ali Yaser",
-
-    username:"@ali_yr_1",
-
-    text:text,
-
-    media:selectedMedia,
-
-    liked:false,
-
-    likes:0,
-
-    saved:false,
-
-    comments:[],
-
-    created:Date.now()
-
-  };
-
-  appData.posts.unshift(post);
-
-  saveData();
-
-  document.getElementById(
-    "postText"
-  ).value="";
-
-  selectedMedia=null;
-
-  document.getElementById(
-    "imageInput"
-  ).value="";
-
-  document.getElementById(
-    "videoInput"
-  ).value="";
-
-  renderComposerPreview();
-
-  renderBookFeed();
-
-  updateProfileStats();
-
-  toast("تم نشر المنشور محليًا.");
-
-}
-
-function escapeHTML(value){
-
-  return String(value||"")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-
-}
-
-function postHTML(post){
-
-  let media="";
-
-  if(post.media){
-
-    if(post.media.type==="image"){
-
-      media=`
-        <div class="post-media">
-          <img
-            src="${post.media.data}"
-            alt=""
-          >
-        </div>
-      `;
-
-    }else{
-
-      media=`
-        <div class="post-media">
-          <video
-            src="${post.media.data}"
-            controls
-            playsinline
-          ></video>
-        </div>
-      `;
-
-    }
-
-  }
-
-  return`
-
-    <article class="book-post">
-
-      <div class="post-head">
-
-        <div class="mini-avatar">
-          A
-        </div>
-
-        <div class="post-info">
-
-          <strong>
-            ${escapeHTML(post.user)}
-          </strong>
-
-          <small>
-            ${escapeHTML(post.username)}
-            • ${formatTime(post.created)}
-          </small>
-
-        </div>
-
-        <button
-          class="post-more"
-          onclick="postMenu(${post.id})"
-        >
-          •••
-        </button>
-
-      </div>
-
-      ${
-        post.text
-        ?
-        `<div class="post-text">
-          ${escapeHTML(post.text)}
-        </div>`
-        :
-        ""
-      }
-
-      ${media}
-
-      <div class="post-actions">
-
-        <button
-          class="${post.liked?"liked":""}"
-          onclick="likePost(${post.id})"
-        >
-          ${post.liked?"♥":"♡"}
-          ${post.likes}
-        </button>
-
-        <button
-          onclick="commentPost(${post.id})"
-        >
-          💬
-          ${post.comments?.length||0}
-        </button>
-
-        <button
-          onclick="savePost(${post.id})"
-        >
-          ${post.saved?"🔖":"▫"}
-          حفظ
-        </button>
-
-        <button
-          onclick="sharePost(${post.id})"
-        >
-          ↗ مشاركة
-        </button>
-
-      </div>
-
-    </article>
-
-  `;
-
-}
-
-function formatTime(timestamp){
-
-  const diff=
-    Date.now()-timestamp;
-
-  const minutes=
-    Math.floor(diff/60000);
-
-  if(minutes<1)return"الآن";
-
-  if(minutes<60){
-    return"منذ "+minutes+" د";
-  }
-
-  const hours=
-    Math.floor(minutes/60);
-
-  if(hours<24){
-    return"منذ "+hours+" س";
-  }
-
-  const days=
-    Math.floor(hours/24);
-
-  return"منذ "+days+" يوم";
-
-}
-
-/* =========================================================
-   FEED
-========================================================= */
-
-function renderBookFeed(){
-
-  const box=
-    document.getElementById(
-      "bookContent"
-    );
-
-  if(!box)return;
-
-  if(!appData.posts.length){
-
-    box.innerHTML=`
-      <div class="empty-book">
-        <strong style="color:#fff">
-          لا توجد منشورات بعد
-        </strong>
-        <br><br>
-        كن أول شخص ينشر شيئًا في VANTABOOK.
-      </div>
-    `;
-
-    return;
-  }
-
-  box.innerHTML=
-    appData.posts
-      .map(postHTML)
-      .join("");
-
-}
-
-/* =========================================================
-   LIKE / SAVE
-========================================================= */
-
-function findPost(id){
-
-  return appData.posts.find(
-    p=>p.id===id
-  );
-
-}
-
-function likePost(id){
-
-  const post=findPost(id);
-
-  if(!post)return;
-
-  post.liked=!post.liked;
-
-  post.likes+=
-    post.liked?1:-1;
-
-  saveData();
-
-  renderBookFeed();
-
-}
-
-function savePost(id){
-
-  const post=findPost(id);
-
-  if(!post)return;
-
-  post.saved=!post.saved;
-
-  saveData();
-
-  renderBookFeed();
-
-  toast(
-    post.saved
-      ?"تم حفظ المنشور."
-      :"تم إلغاء الحفظ."
-  );
-
-}
-
-function sharePost(id){
-
-  const post=findPost(id);
-
-  if(!post)return;
-
-  const text=
-    post.text||
-    "منشور من VANTABOOK";
-
-  if(
-    navigator.share
-  ){
-
-    navigator.share({
-      title:"VANTABOOK",
-      text:text
-    }).catch(()=>{});
-
-  }else{
-
-    if(
-      navigator.clipboard
-    ){
-
-      navigator.clipboard
-        .writeText(text);
-
-      toast(
-        "تم نسخ محتوى المنشور."
-      );
-
-    }else{
-
-      toast(
-        "المشاركة غير متاحة على هذا المتصفح."
-      );
-
-    }
-
-  }
-
-}
-
-/* =========================================================
-   COMMENTS
-========================================================= */
-
-function commentPost(id){
-
-  const post=findPost(id);
-
-  if(!post)return;
-
-  const comments=
-    post.comments||[];
-
-  openModal(
-    "التعليقات",
-    `
-
-      <div
-        style="
-          display:flex;
-          flex-direction:column;
-          gap:9px;
-          margin-bottom:15px;
-        "
-      >
-
-        ${
-          comments.length
-          ?
-          comments.map(c=>`
-            <div
-              style="
-                padding:10px;
-                border:1px solid var(--line);
-                border-radius:11px;
-                background:rgba(255,255,255,.03)
-              "
-            >
-              <strong style="font-size:12px">
-                ${escapeHTML(c.user)}
-              </strong>
-
-              <div
-                style="
-                  color:#ccc;
-                  font-size:12px;
-                  margin-top:4px
-                "
-              >
-                ${escapeHTML(c.text)}
-              </div>
-            </div>
-          `).join("")
-          :
-          `<p>لا توجد تعليقات بعد.</p>`
-        }
-
-      </div>
-
-      <input
-        id="commentInput"
-        class="modal-input"
-        placeholder="اكتب تعليقًا..."
-      >
-
-      <button
-        class="primary"
-        style="margin-top:10px;width:100%"
-        onclick="addComment(${id})"
-      >
-        إضافة تعليق
-      </button>
-
-    `
-  );
-
-}
-
-function addComment(id){
-
-  const input=
-    document.getElementById(
-      "commentInput"
-    );
-
-  if(!input)return;
-
-  const text=input.value.trim();
-
-  if(!text){
-
-    toast("اكتب تعليقًا أولًا.");
-
-    return;
-  }
-
-  const post=findPost(id);
-
-  if(!post)return;
-
-  if(!post.comments){
-    post.comments=[];
-  }
-
-  post.comments.push({
-    user:"Ali Yaser",
-    text:text,
-    created:Date.now()
-  });
-
-  saveData();
-
-  closeModal();
-
-  renderBookFeed();
-
-  toast("تمت إضافة التعليق محليًا.");
-
-}
-
-/* =========================================================
-   POST MENU
-========================================================= */
-
-function postMenu(id){
-
-  openModal(
-    "خيارات المنشور",
-    `
-
-      <button
-        class="danger"
-        style="width:100%"
-        onclick="deletePost(${id})"
-      >
-        حذف المنشور
-      </button>
-
-      <button
-        class="secondary"
-        style="width:100%;margin-top:8px"
-        onclick="closeModal()"
-      >
-        إلغاء
-      </button>
-
-    `
-  );
-
-}
-
-function deletePost(id){
-
-  appData.posts=
-    appData.posts.filter(
-      p=>p.id!==id
-    );
-
-  saveData();
-
-  closeModal();
-
-  renderBookFeed();
-
-  updateProfileStats();
-
-  toast("تم حذف المنشور.");
-
-}
-
-/* =========================================================
-   STORIES
-========================================================= */
-
-function createStory(){
-
-  openModal(
-    "إنشاء Story",
-    `
-
-      <p>
-        اختر صورة أو فيديو من جهازك.
-        سيتم حفظه محليًا في هذه النسخة.
-      </p>
-
-      <label
-        class="secondary"
-        style="
-          display:block;
-          text-align:center;
-          margin-top:15px;
-        "
-      >
-        اختيار صورة أو فيديو
-
-        <input
-          id="storyInput"
-          class="file-input"
-          type="file"
-          accept="image/*,video/*"
-          onchange="saveStory(this)"
-        >
-
-      </label>
-
-    `
-  );
-
-}
-
-function saveStory(input){
-
-  const file=input.files[0];
-
-  if(!file)return;
-
-  const max=
-    15*1024*1024;
-
-  if(file.size>max){
-
-    toast(
-      "الحد المحلي 15MB."
-    );
-
-    return;
-  }
-
-  const reader=
-    new FileReader();
-
-  reader.onload=()=>{
-
-    appData.stories.unshift({
-
-      id:Date.now(),
-
-      user:"Ali Yaser",
-
-      media:{
-        type:file.type.startsWith("video/")
-          ?"video"
-          :"image",
-
-        data:reader.result
-      },
-
-      created:Date.now()
-
-    });
-
-    saveData();
-
-    closeModal();
-
-    renderStories();
-
-    toast(
-      "تم نشر الـStory محليًا."
-    );
-
-  };
-
-  reader.readAsDataURL(file);
-
+function renderBook(){
+ if(!vbUser){
+  $("#vbLogin").classList.remove("hidden");
+  $("#vbApp").classList.add("hidden");
+  return;
+ }
+
+ $("#vbLogin").classList.add("hidden");
+ $("#vbApp").classList.remove("hidden");
+
+ $("#vbUserName").textContent=vbUser.name;
+ $("#vbUserHandle").textContent="@"+vbUser.username;
+ $("#vbAvatar").textContent=vbUser.name[0].toUpperCase();
+
+ renderStories();
+ renderFeed();
 }
 
 function renderStories(){
-
-  const box=
-    document.getElementById(
-      "storiesRow"
-    );
-
-  if(!box)return;
-
-  const mine=
-    appData.stories.slice(0,8);
-
-  box.innerHTML=`
-
-    <button
-      class="story-item"
-      onclick="createStory()"
-    >
-
-      <div class="story-circle">
-
-        <div class="story-circle-inner">
-          +
-        </div>
-
-      </div>
-
-      <small>قصتك</small>
-
-    </button>
-
-    ${
-      mine.map((story,index)=>`
-
-        <button
-          class="story-item"
-          onclick="viewMyStory(${index})"
-        >
-
-          <div class="story-circle">
-
-            <div class="story-circle-inner">
-              A
-            </div>
-
-          </div>
-
-          <small>Ali</small>
-
-        </button>
-
-      `).join("")
-    }
-
-    <button
-      class="story-item"
-      onclick="demoStory('NOVA')"
-    >
-
-      <div class="story-circle">
-
-        <div class="story-circle-inner">
-          N
-        </div>
-
-      </div>
-
-      <small>NOVA</small>
-
-    </button>
-
-    <button
-      class="story-item"
-      onclick="demoStory('VANTA')"
-    >
-
-      <div class="story-circle">
-
-        <div class="story-circle-inner">
-          V
-        </div>
-
-      </div>
-
-      <small>VANTA</small>
-
-    </button>
-
-  `;
-
+ $("#stories").innerHTML=`
+ <div class="story add" onclick="addStory()">＋<br>Story</div>
+ <div class="story">NOVA<br><small>قبل ساعة</small></div>
+ <div class="story">VANTA<br><small>قبل ساعتين</small></div>
+ <div class="story">Cyber<br><small>منذ 3س</small></div>
+ <div class="story">Code<br><small>منذ 5س</small></div>`;
 }
 
-function viewMyStory(index){
+function addStory(){
+ showModal("إضافة Story",`
+  <p style="color:var(--muted);margin-bottom:15px">اختر صورة أو فيديو للمعاينة.</p>
+  <label class="file-label">اختيار ملف
+   <input type="file" accept="image/*,video/*" onchange="previewStory(event)">
+  </label>
+  <div id="storyPreview" style="margin-top:15px"></div>
+ `);
+}
 
-  const story=
-    appData.stories[index];
+function previewStory(e){
+ const file=e.target.files[0];
+ if(!file)return;
+ const url=URL.createObjectURL(file);
+ $("#storyPreview").innerHTML=file.type.startsWith("video/")
+ ? `<video src="${url}" controls style="width:100%;border-radius:15px"></video>`
+ : `<img src="${url}" style="width:100%;border-radius:15px">`;
+}
 
-  if(!story)return;
+let selectedMedia=null;
+
+$("#postMedia").addEventListener("change",e=>{
+ selectedMedia=e.target.files[0]||null;
+ const box=$("#mediaPreview");
+ box.innerHTML="";
+ if(!selectedMedia)return;
+
+ const url=URL.createObjectURL(selectedMedia);
+ if(selectedMedia.type.startsWith("video/"))
+  box.innerHTML=`<video src="${url}" controls class="post-media" style="max-height:300px"></video>`;
+ else
+  box.innerHTML=`<img src="${url}" class="post-media" style="max-height:300px">`;
+});
+
+function publishPost(){
+ const text=$("#postText").value.trim();
+ if(!text&&!selectedMedia){
+  showToast("اكتب شيئًا أو اختر صورة/فيديو");
+  return;
+ }
+
+ let media=null;
+ if(selectedMedia){
+  /* local demo: preview is represented by object URL only during session */
+  media={
+   type:selectedMedia.type.startsWith("video/")?"video":"image",
+   url:URL.createObjectURL(selectedMedia)
+  };
+ }
+
+ posts.unshift({
+  id:Date.now(),
+  name:vbUser.name,
+  username:vbUser.username,
+  text,
+  media,
+  likes:0,
+  liked:false,
+  saved:false,
+  comments:[]
+ });
+
+ localStorage.setItem("vantabook_posts",JSON.stringify(posts));
+ $("#postText").value="";
+ $("#postMedia").value="";
+ $("#mediaPreview").innerHTML="";
+ selectedMedia=null;
+
+ renderFeed();
+ showToast("تم نشر المنشور ✓");
+}
+
+function renderFeed(){
+ const content=$("#vbContent");
+ content.innerHTML="";
+
+ if(!posts.length){
+  content.innerHTML=`
+   <div class="card" style="text-align:center;padding:50px">
+    <div style="font-size:45px">◎</div>
+    <h2 style="margin:12px">أول منشور لك</h2>
+    <p style="color:var(--muted)">انشر شيئًا ليظهر هنا.</p>
+   </div>`;
+  return;
+ }
+
+ posts.forEach(post=>{
+  const el=document.createElement("article");
+  el.className="card post";
 
   let media="";
-
-  if(
-    story.media.type==="image"
-  ){
-
-    media=`
-      <img
-        src="${story.media.data}"
-        style="
-          width:100%;
-          max-height:600px;
-          object-fit:contain;
-          border-radius:15px;
-        "
-      >
-    `;
-
-  }else{
-
-    media=`
-      <video
-        src="${story.media.data}"
-        controls
-        autoplay
-        playsinline
-        style="
-          width:100%;
-          max-height:600px;
-          object-fit:contain;
-          border-radius:15px;
-        "
-      ></video>
-    `;
-
+  if(post.media){
+   media=post.media.type==="video"
+   ?`<video class="post-media" src="${post.media.url}" controls></video>`
+   :`<img class="post-media" src="${post.media.url}" alt="">`;
   }
 
-  openModal(
-    "Ali Yaser • Story",
-    media
-  );
-
-}
-
-function demoStory(name){
-
-  openModal(
-    name,
-    `
-
-      <div
-        style="
-          min-height:430px;
-          display:grid;
-          place-items:center;
-          text-align:center;
-          border-radius:16px;
-          background:
-            radial-gradient(
-              circle,
-              rgba(139,92,246,.2),
-              transparent 50%
-            ),
-            #08090e;
-        "
-      >
-
-        <div>
-
-          <div
-            class="nova-crystal"
-            style="
-              margin:0 auto 25px;
-              width:110px;
-              height:110px;
-            "
-          >
-            <span>N</span>
-          </div>
-
-          <h2>
-            ${
-              name==="NOVA"
-              ?"تعلم شيئًا جديدًا اليوم."
-              :"Welcome to VANTA."
-            }
-          </h2>
-
-        </div>
-
-      </div>
-
-    `
-  );
-
-}
-
-/* =========================================================
-   BOOK TABS
-========================================================= */
-
-function bookTab(type,button){
-
-  document
-    .querySelectorAll(".book-side-item")
-    .forEach(btn=>{
-      btn.classList.remove("active");
-    });
-
-  if(button){
-    button.classList.add("active");
-  }
-
-  const box=
-    document.getElementById(
-      "bookContent"
-    );
-
-  if(type==="feed"){
-
-    renderBookFeed();
-
-    return;
-  }
-
-  if(type==="videos"){
-
-    const videos=
-      appData.posts.filter(
-        p=>p.media?.type==="video"
-      );
-
-    box.innerHTML=
-      videos.length
-      ?
-      videos.map(postHTML).join("")
-      :
-      `<div class="empty-book">
-        لا توجد فيديوهات بعد.
-      </div>`;
-
-    return;
-  }
-
-  if(type==="explore"){
-
-    box.innerHTML=`
-
-      <div class="grid-3">
-
-        <div class="card">
-          <div class="card-icon">🛡</div>
-          <h3>Cybersecurity</h3>
-          <p>
-            محتوى الأمن السيبراني.
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="card-icon">&lt;/&gt;</div>
-          <h3>Programming</h3>
-          <p>
-            البرمجة والتطوير.
-          </p>
-        </div>
-
-        <div class="card">
-          <div class="card-icon">🎮</div>
-          <h3>Gaming</h3>
-          <p>
-            الألعاب والمجتمعات.
-          </p>
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-  }
-
-  if(type==="communities"){
-
-    box.innerHTML=`
-
-      <div class="grid-3">
-
-        ${communityCard(
-          "Cybersecurity",
-          "🛡",
-          "12.4K"
-        )}
-
-        ${communityCard(
-          "Linux",
-          "⌘",
-          "8.2K"
-        )}
-
-        ${communityCard(
-          "Programming",
-          "</>",
-          "15.8K"
-        )}
-
-        ${communityCard(
-          "Minecraft",
-          "◆",
-          "6.1K"
-        )}
-
-      </div>
-
-    `;
-
-  }
-
-}
-
-function communityCard(
-  name,
-  icon,
-  count
-){
-
-  return`
-
-    <div class="card">
-
-      <div class="card-icon">
-        ${icon}
-      </div>
-
-      <h3>
-        ${name}
-      </h3>
-
-      <p>
-        ${count} عضو
-      </p>
-
-      <button
-        class="secondary"
-        style="
-          margin-top:15px;
-          width:100%
-        "
-        onclick="joinCommunity('${name}')"
-      >
-        انضمام
-      </button>
-
+  el.innerHTML=`
+   <div class="post-head">
+    <div class="avatar">${escapeHtml(post.name[0]||"A")}</div>
+    <div><b>${escapeHtml(post.name)}</b><small>@${escapeHtml(post.username)} · الآن</small></div>
+   </div>
+   ${post.text?`<div class="post-text">${escapeHtml(post.text)}</div>`:""}
+   ${media}
+   <div class="post-actions">
+    <button class="${post.liked?"active":""}" onclick="likePost(${post.id})">♡ ${post.likes}</button>
+    <button onclick="toggleComments(${post.id})">💬 ${post.comments.length}</button>
+    <button class="${post.saved?"active":""}" onclick="savePost(${post.id})">🔖</button>
+    <button onclick="sharePost(${post.id})">↗</button>
+    ${post.username===vbUser.username?`<button onclick="deletePost(${post.id})">حذف</button>`:""}
+   </div>
+   <div class="comments" id="comments-${post.id}">
+    ${post.comments.map(c=>`<div class="comment"><b>${escapeHtml(c.name)}</b> ${escapeHtml(c.text)}</div>`).join("")}
+    <div style="display:flex;gap:6px;margin-top:8px">
+     <input class="search" id="comment-${post.id}" placeholder="اكتب تعليقًا...">
+     <button class="btn primary" onclick="commentPost(${post.id})">نشر</button>
     </div>
-
+   </div>
   `;
-
+  content.appendChild(el);
+ });
 }
 
-function joinCommunity(name){
-
-  toast(
-    "تم الانضمام إلى "+
-    name+
-    " محليًا."
-  );
-
+function likePost(id){
+ const p=posts.find(x=>x.id===id);if(!p)return;
+ p.liked=!p.liked;p.likes+=p.liked?1:-1;
+ savePosts();renderFeed();
+}
+function savePost(id){
+ const p=posts.find(x=>x.id===id);if(!p)return;
+ p.saved=!p.saved;savePosts();renderFeed();
+ showToast(p.saved?"تم الحفظ 🔖":"تم إلغاء الحفظ");
+}
+function deletePost(id){
+ posts=posts.filter(x=>x.id!==id);savePosts();renderFeed();showToast("تم حذف المنشور");
+}
+function toggleComments(id){
+ $("#comments-"+id).classList.toggle("open");
+}
+function commentPost(id){
+ const input=$("#comment-"+id);
+ const text=input.value.trim();if(!text)return;
+ const p=posts.find(x=>x.id===id);if(!p)return;
+ p.comments.push({name:vbUser.name,text});
+ savePosts();renderFeed();
+ setTimeout(()=>$("#comments-"+id)?.classList.add("open"),20);
+}
+async function sharePost(id){
+ const p=posts.find(x=>x.id===id);
+ if(!p)return;
+ try{
+  await navigator.clipboard.writeText(p.text||"منشور من VANTABOOK");
+  showToast("تم نسخ المنشور ✓");
+ }catch{
+  showToast("تم تجهيز المشاركة");
+ }
+}
+function savePosts(){
+ localStorage.setItem("vantabook_posts",JSON.stringify(posts));
 }
 
-/* =========================================================
-   SEARCH
-========================================================= */
+/* VANTABOOK NAV */
+$$("[data-vb]").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  $$("[data-vb]").forEach(x=>x.classList.remove("active"));
+  btn.classList.add("active");
+  const mode=btn.dataset.vb;
 
-function searchBook(query){
+  if(mode==="feed"){renderFeed()}
+  else if(mode==="explore"){renderExplore()}
+  else if(mode==="videos"){renderVideos()}
+  else if(mode==="communities"){renderCommunities()}
+  else if(mode==="vbprofile"){renderVBProfile()}
+  else if(mode==="vbsettings"){renderVBSettings()}
+ });
+});
 
-  const q=
-    String(query||"")
-      .trim()
-      .toLowerCase();
-
-  if(!q){
-
-    renderBookFeed();
-
-    return;
-  }
-
-  const results=
-    appData.posts.filter(post=>{
-
-      const text=
-        (
-          post.text+
-          " "+
-          post.user+
-          " "+
-          post.username
-        ).toLowerCase();
-
-      return text.includes(q);
-
-    });
-
-  const box=
-    document.getElementById(
-      "bookContent"
-    );
-
-  if(!results.length){
-
-    box.innerHTML=`
-      <div class="empty-book">
-        لا توجد نتائج لـ "${escapeHTML(q)}".
-      </div>
-    `;
-
-    return;
-  }
-
-  box.innerHTML=
-    results.map(postHTML).join("");
-
+function renderExplore(){
+ $("#vbContent").innerHTML=`
+ <div class="grid">
+  ${["Cybersecurity","Programming","Technology","VANTA","AI","Web"].map(x=>`
+   <div class="card"><div class="card-icon">#</div><h3>${x}</h3>
+   <p style="margin-top:7px;color:var(--muted)">استكشف محتوى ${x}.</p></div>`).join("")}
+ </div>`;
+}
+function renderVideos(){
+ const vids=posts.filter(p=>p.media?.type==="video");
+ $("#vbContent").innerHTML=vids.length?vids.map(p=>`
+  <div class="card post">
+   <div class="post-head"><div class="avatar">${p.name[0]}</div><b>${escapeHtml(p.name)}</b></div>
+   <video class="post-media" src="${p.media.url}" controls></video>
+   <p style="margin-top:10px">${escapeHtml(p.text)}</p>
+  </div>`).join(""):`<div class="card"><h2>لا توجد فيديوهات بعد</h2></div>`;
+}
+function renderCommunities(){
+ $("#vbContent").innerHTML=`
+ <div class="grid">
+  <div class="card"><div class="card-icon">🛡</div><h3>Cybersecurity</h3><p>مجتمع الأمن السيبراني.</p><br><button class="btn primary" onclick="showToast('انضممت للمجتمع')">انضمام</button></div>
+  <div class="card"><div class="card-icon">💻</div><h3>Programming</h3><p>مجتمع البرمجة.</p><br><button class="btn primary" onclick="showToast('انضممت للمجتمع')">انضمام</button></div>
+  <div class="card"><div class="card-icon">✦</div><h3>VANTA</h3><p>مجتمع VANTA الرسمي.</p><br><button class="btn primary" onclick="showToast('انضممت للمجتمع')">انضمام</button></div>
+ </div>`;
+}
+function renderVBProfile(){
+ $("#vbContent").innerHTML=`
+ <div class="card profile-head">
+  <div class="bigavatar">${vbUser.name[0]}</div>
+  <div class="profile-info">
+   <h1>${escapeHtml(vbUser.name)}</h1>
+   <p>@${escapeHtml(vbUser.username)}</p>
+   <p>منشورات: ${posts.filter(p=>p.username===vbUser.username).length}</p>
+  </div>
+ </div>`;
+}
+function renderVBSettings(){
+ $("#vbContent").innerHTML=`
+ <div class="card">
+  <h2>VANTABOOK Settings</h2><br>
+  <button class="btn danger" onclick="vbLogout()">تسجيل خروج VANTABOOK</button>
+ </div>`;
+}
+function vbLogout(){
+ vbUser=null;
+ localStorage.removeItem("vantabook_user");
+ renderBook();
 }
 
-/* =========================================================
-   NOVA LOCAL
-========================================================= */
+/* MODAL */
+function showModal(title,body){
+ $("#modalTitle").textContent=title;
+ $("#modalBody").innerHTML=body;
+ $("#modal").classList.add("open");
+}
+function closeModal(){
+ $("#modal").classList.remove("open");
+}
+$("#modal").addEventListener("click",e=>{
+ if(e.target.id==="modal")closeModal();
+});
 
-function addNovaMessage(
-  text,
-  type
-){
+/* SETTINGS */
+$("#settingsBtn").onclick=()=>{
+ showModal("VANTA Settings",`
+  <div class="form">
+   <button class="btn" onclick="toggleTheme();closeModal()">تبديل المظهر</button>
+   <button class="btn" onclick="go('profile');closeModal()">الملف الشخصي</button>
+   <button class="btn danger" onclick="resetVanta()">مسح بيانات VANTA المحلية</button>
+  </div>
+ `);
+};
 
-  const box=
-    document.getElementById(
-      "messages"
-    );
+$("#themeBtn").onclick=toggleTheme;
 
-  const div=
-    document.createElement("div");
+function toggleTheme(){
+ document.body.classList.toggle("light");
+ localStorage.setItem("vanta_theme",document.body.classList.contains("light")?"light":"dark");
+}
+if(localStorage.getItem("vanta_theme")==="light")document.body.classList.add("light");
 
-  div.className=
-    "message "+type;
-
-  div.textContent=text;
-
-  box.appendChild(div);
-
-  box.scrollTop=
-    box.scrollHeight;
-
+function resetVanta(){
+ if(!confirm("هل تريد مسح بيانات VANTA المحلية؟"))return;
+ localStorage.removeItem("vanta_profile");
+ localStorage.removeItem("vanta_nova_history");
+ localStorage.removeItem("vantabook_posts");
+ location.reload();
 }
 
-function sendNova(){
-
-  const input=
-    document.getElementById(
-      "novaInput"
-    );
-
-  const q=
-    input.value.trim();
-
-  if(!q)return;
-
-  addNovaMessage(
-    q,
-    "user"
-  );
-
-  input.value="";
-
-  setTimeout(()=>{
-
-    const lower=
-      q.toLowerCase();
-
-    let answer=
-      "أنا NOVA في النسخة المحلية. ربط الذكاء الاصطناعي الحقيقي يتم لاحقًا عبر Backend آمن.";
-
-    if(
-      lower.includes("dns")||
-      q.includes("دي ان اس")
-    ){
-
-      answer=
-        "DNS هو النظام الذي يحول أسماء النطاقات إلى عناوين IP حتى تستطيع الأجهزة الوصول إلى الخوادم.";
-
-    }else if(
-      lower.includes("linux")||
-      q.includes("لينكس")
-    ){
-
-      answer=
-        "ابدأ في Linux بفهم الملفات والمجلدات والصلاحيات والعمليات والشبكات والطرفية.";
-
-    }else if(
-      lower.includes("hash")||
-      q.includes("هاش")
-    ){
-
-      answer=
-        "Hashing يحول البيانات إلى قيمة ثابتة الطول. يستخدم في التحقق من البيانات وتطبيقات أمنية متعددة.";
-
-    }else if(
-      q.includes("vanta")
-    ){
-
-      answer=
-        "VANTA هي المنصة، وأنا NOVA جزء من التجربة التعليمية داخلها.";
-
-    }else if(
-      q.includes("سلام")||
-      q.includes("هلا")||
-      q.includes("مرحبا")
-    ){
-
-      answer=
-        "أهلًا بك! 🚀 ماذا تريد أن نتعلم اليوم؟";
-
-    }
-
-    addNovaMessage(
-      answer,
-      "nova"
-    );
-
-  },450);
-
+/* TOAST */
+let toastTimer;
+function showToast(text){
+ const t=$("#toast");
+ t.textContent=text;
+ t.classList.add("show");
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>t.classList.remove("show"),2400);
 }
 
-function clearNova(){
-
-  document.getElementById(
-    "messages"
-  ).innerHTML=`
-
-    <div class="message nova">
-      تم بدء محادثة جديدة.
-      كيف أساعدك؟
-    </div>
-
-  `;
-
+/* HELPERS */
+function escapeHtml(str){
+ return String(str??"").replace(/[&<>"']/g,m=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+ })[m]);
+}
+function escapeAttr(str){
+ return String(str??"").replace(/['"]/g,"");
 }
 
-/* =========================================================
-   LABS
-========================================================= */
+/* PARALLAX */
+document.addEventListener("pointermove",e=>{
+ const x=(e.clientX/innerWidth-.5);
+ const y=(e.clientY/innerHeight-.5);
+ document.querySelectorAll(".planet,.saturn").forEach((el,i)=>{
+  el.style.marginLeft=(x*(i+1)*5)+"px";
+  el.style.marginTop=(y*(i+1)*5)+"px";
+ });
+});
 
-function openLab(name){
-
-  openModal(
-    name,
-    `
-
-      <p>
-        هذا المختبر التعليمي يعمل حاليًا
-        داخل الواجهة المحلية.
-        تشغيل Cyber Range حقيقي يحتاج
-        Backend معزول وآمن.
-      </p>
-
-      <div
-        class="card"
-        style="margin-top:15px"
-      >
-
-        <h3>
-          مهمة المختبر
-        </h3>
-
-        <p style="margin-top:8px">
-          افهم المفهوم ثم أكمل المهمة.
-        </p>
-
-        <button
-          class="primary"
-          style="margin-top:15px"
-          onclick="
-            closeModal();
-            toast('أحسنت! +50 XP');
-          "
-        >
-          إكمال المهمة
-        </button>
-
-      </div>
-
-    `
-  );
-
+/* START */
+function renderAll(){
+ updateProfileUI();
+ renderCourses();
+ renderBook();
+ if($("#messages"))redrawNova();
 }
 
-/* =========================================================
-   PROFILE
-========================================================= */
-
-function updateProfileStats(){
-
-  const el=
-    document.getElementById(
-      "statPosts"
-    );
-
-  if(el){
-
-    el.textContent=
-      appData.posts.length;
-
-  }
-
-}
-
-/* =========================================================
-   SETTINGS
-========================================================= */
-
-function toggleSetting(button){
-
-  button.classList.toggle("on");
-
-  toast(
-    button.classList.contains("on")
-      ?"تم التفعيل."
-      :"تم التعطيل."
-  );
-
-}
-
-function bookSettings(){
-
-  openModal(
-    "إعدادات VANTABOOK",
-    `
-
-      <div
-        class="setting-card"
-        style="margin-top:5px"
-      >
-
-        <strong>
-          الحساب
-        </strong>
-
-        <p
-          style="
-            color:var(--muted);
-            margin-top:7px;
-            font-size:12px
-          "
-        >
-          ${
-            appData.bookUser
-            ?
-            "مسجل محليًا باسم "+
-            escapeHTML(appData.bookUser.email)
-            :
-            "لا يوجد حساب محلي."
-          }
-        </p>
-
-      </div>
-
-      <div
-        class="setting-card"
-        style="margin-top:10px"
-      >
-
-        <strong>
-          الخصوصية
-        </strong>
-
-        <p
-          style="
-            color:var(--muted);
-            margin-top:7px;
-            font-size:12px
-          "
-        >
-          الخصوصية الحقيقية بين المستخدمين
-          تحتاج Database وAuthentication.
-        </p>
-
-      </div>
-
-      ${
-        appData.bookUser
-        ?
-        `
-          <button
-            class="danger"
-            style="
-              width:100%;
-              margin-top:10px
-            "
-            onclick="bookLogout()"
-          >
-            تسجيل الخروج من VANTABOOK
-          </button>
-        `
-        :
-        ""
-      }
-
-    `
-  );
-
-}
-
-function bookLogout(){
-
-  appData.bookUser=null;
-
-  saveData();
-
-  closeModal();
-
-  leaveBook();
-
-  toast(
-    "تم تسجيل الخروج من VANTABOOK."
-  );
-
-}
-
-/* =========================================================
-   CLEAR LOCAL DATA
-========================================================= */
-
-function clearLocalData(){
-
-  openModal(
-    "مسح البيانات المحلية",
-    `
-
-      <p>
-        سيتم حذف منشوراتك وStories
-        والحساب التجريبي المحلي من هذا الجهاز.
-      </p>
-
-      <button
-        class="danger"
-        style="
-          margin-top:15px;
-          width:100%
-        "
-        onclick="confirmClearData()"
-      >
-        نعم، امسح البيانات
-      </button>
-
-    `
-  );
-
-}
-
-function confirmClearData(){
-
-  appData={
-    posts:[],
-    stories:[],
-    bookUser:null
-  };
-
-  saveData();
-
-  renderStories();
-  renderBookFeed();
-  updateProfileStats();
-
-  closeModal();
-
-  toast(
-    "تم مسح البيانات المحلية."
-  );
-
-}
-
-/* =========================================================
-   FILTERS
-========================================================= */
-
-document
-  .querySelectorAll(".filter")
-  .forEach(button=>{
-
-    button.addEventListener(
-      "click",
-      ()=>{
-
-        document
-          .querySelectorAll(".filter")
-          .forEach(x=>{
-            x.classList.remove("active");
-          });
-
-        button.classList.add("active");
-
-      }
-    );
-
-  });
-
-/* =========================================================
-   INITIALIZE
-========================================================= */
-
-renderStories();
-renderBookFeed();
-updateProfileStats();
-
+/* روبوتية بسيطة عند الدخول */
+setTimeout(()=>{
+ if(bootDone){
+  try{
+   const speech=new SpeechSynthesisUtterance("Welcome to VANTA");
+   speech.lang="en-US";
+   speech.rate=.82;
+   speech.pitch=.7;
+   window.speechSynthesis?.speak(speech);
+  }catch{}
+ }
+},1800);
 </script>
 
 </body>
