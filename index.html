@@ -1,755 +1,4308 @@
 <!DOCTYPE html>
-
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#07070b">
-  <title>VANTA — Cyber • Learn • Create</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <link rel="stylesheet" href="style.css">
+<title>VANTA — Cybersecurity Platform</title>
+<meta name="description" content="VANTA — منصة تعليم الأمن السيبراني مع NOVA.">
+<meta name="theme-color" content="#101116">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23101116'/%3E%3Cpath d='M20 24L43 76L50 59L57 76L80 24H66L50 56L34 24Z' fill='%23ffffff'/%3E%3Cpath d='M39 24L50 47L61 24' fill='%237c6cff'/%3E%3C/svg%3E">
+
+<style>
+:root{
+  --bg:#0c0d11;
+  --bg2:#11131a;
+  --panel:rgba(25,27,35,.72);
+  --panel2:rgba(31,34,44,.88);
+  --line:rgba(255,255,255,.09);
+  --text:#f5f6fa;
+  --muted:#9da2b1;
+  --purple:#8b7cff;
+  --cyan:#62d9ff;
+  --pink:#ff79bd;
+  --orange:#ffb86b;
+  --green:#70e1a1;
+  --danger:#ff7070;
+  --shadow:0 24px 80px rgba(0,0,0,.35);
+  --radius:24px;
+}
+
+*{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+  background:var(--bg);
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 15% 15%,rgba(139,124,255,.10),transparent 28%),
+    radial-gradient(circle at 85% 20%,rgba(98,217,255,.07),transparent 25%),
+    radial-gradient(circle at 50% 90%,rgba(255,121,189,.05),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
+  overflow-x:hidden;
+}
+
+button,input,textarea{font:inherit}
+
+button{
+  border:0;
+  cursor:pointer;
+  color:inherit;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+::selection{
+  background:rgba(139,124,255,.35);
+}
+
+/* =========================
+   INTRO
+========================= */
+
+#intro{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at 50% 42%,rgba(139,124,255,.15),transparent 32%),
+    #090a0d;
+  transition:opacity .9s ease,visibility .9s ease,transform .9s ease;
+}
+
+#intro.hide{
+  opacity:0;
+  visibility:hidden;
+  transform:scale(1.04);
+}
+
+.intro-content{
+  width:min(720px,92vw);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:25px;
+}
+
+.intro-brand{
+  letter-spacing:.28em;
+  font-size:13px;
+  color:#aeb3c1;
+  text-transform:uppercase;
+}
+
+.intro-title{
+  margin:0;
+  font-size:clamp(46px,10vw,92px);
+  letter-spacing:-.07em;
+  font-weight:800;
+  line-height:.9;
+}
+
+.intro-title span{
+  background:linear-gradient(120deg,#fff,#a9a1ff,#72dcff);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.intro-sub{
+  color:var(--muted);
+  margin:0;
+  font-size:16px;
+}
+
+.intro-character{
+  width:190px;
+  height:260px;
+  position:relative;
+  animation:introFloat 3.2s ease-in-out infinite;
+}
+
+@keyframes introFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+/* wooden automaton */
+
+.puppet{
+  position:absolute;
+  left:50%;
+  top:0;
+  width:145px;
+  height:250px;
+  transform:translateX(-50%);
+}
+
+.p-head{
+  position:absolute;
+  top:4px;
+  left:25px;
+  width:95px;
+  height:92px;
+  border-radius:42% 42% 38% 38%;
+  background:
+    repeating-linear-gradient(
+      8deg,
+      rgba(255,255,255,.04) 0 4px,
+      transparent 4px 10px
+    ),
+    linear-gradient(145deg,#a77b50,#67452f);
+  border:3px solid #c19769;
+  box-shadow:
+    inset -8px -10px 18px rgba(0,0,0,.22),
+    0 15px 30px rgba(0,0,0,.35);
+}
+
+.p-head:after{
+  content:"";
+  position:absolute;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#c9a16e;
+  left:8px;
+  top:39px;
+  box-shadow:79px 0 #c9a16e;
+}
+
+.p-ear{
+  position:absolute;
+  width:15px;
+  height:25px;
+  border-radius:50%;
+  background:#805737;
+  top:37px;
+}
+
+.p-ear.left{left:15px}
+.p-ear.right{right:15px}
+
+.eye{
+  position:absolute;
+  top:40px;
+  width:12px;
+  height:15px;
+  border-radius:50%;
+  background:#121318;
+  transition:.25s;
+}
+
+.eye.left{left:25px}
+.eye.right{right:25px}
+
+.puppet.blink .eye{
+  height:2px;
+  top:47px;
+  border-radius:10px;
+}
+
+.brow{
+  position:absolute;
+  width:20px;
+  height:4px;
+  border-radius:5px;
+  background:#4b3022;
+  top:31px;
+  transition:.3s;
+}
+
+.brow.left{left:21px;transform:rotate(8deg)}
+.brow.right{right:21px;transform:rotate(-8deg)}
+
+.p-mouth{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top:64px;
+  width:27px;
+  height:9px;
+  border-bottom:3px solid #3d251b;
+  border-radius:50%;
+  transition:.3s;
+}
+
+.p-neck{
+  position:absolute;
+  top:91px;
+  left:65px;
+  width:22px;
+  height:22px;
+  background:#68452d;
+  border:2px solid #aa7d50;
+}
+
+.p-body{
+  position:absolute;
+  top:108px;
+  left:32px;
+  width:81px;
+  height:85px;
+  border-radius:18px 18px 25px 25px;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.025) 0 3px,
+      transparent 3px 9px
+    ),
+    linear-gradient(150deg,#4b5060,#252833);
+  border:2px solid #777d8d;
+  box-shadow:0 15px 30px rgba(0,0,0,.28);
+}
+
+.p-panel{
+  position:absolute;
+  inset:16px 19px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:11px;
+  background:rgba(0,0,0,.16);
+}
+
+.p-light{
+  position:absolute;
+  top:13px;
+  left:50%;
+  width:8px;
+  height:8px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:#70e1a1;
+  box-shadow:0 0 15px #70e1a1;
+}
+
+.arm{
+  position:absolute;
+  top:119px;
+  width:26px;
+  height:83px;
+  transform-origin:top center;
+}
+
+.arm.left{left:9px;transform:rotate(13deg)}
+.arm.right{right:9px;transform:rotate(-13deg)}
+
+.upper{
+  width:14px;
+  height:48px;
+  margin:auto;
+  border-radius:10px;
+  background:linear-gradient(90deg,#765037,#b08357,#63422e);
+  border:2px solid #a77a50;
+}
+
+.joint{
+  width:17px;
+  height:17px;
+  margin:-1px auto;
+  border-radius:50%;
+  background:#a88561;
+  border:2px solid #3b3030;
+}
+
+.hand{
+  width:20px;
+  height:26px;
+  margin:auto;
+  border-radius:45% 45% 40% 40%;
+  background:linear-gradient(90deg,#64432e,#a87d53);
+  border:2px solid #9d7049;
+}
+
+.legs{
+  position:absolute;
+  top:190px;
+  left:42px;
+  display:flex;
+  gap:19px;
+}
+
+.leg{
+  width:22px;
+  height:57px;
+  position:relative;
+}
+
+.leg .upper{
+  width:14px;
+  height:32px;
+}
+
+.foot{
+  position:absolute;
+  bottom:0;
+  width:32px;
+  height:13px;
+  border-radius:12px 12px 7px 7px;
+  background:#4c3528;
+  border:2px solid #8d6545;
+}
+
+.gear{
+  position:absolute;
+  right:2px;
+  top:125px;
+  width:23px;
+  height:23px;
+  border-radius:50%;
+  border:4px dotted #b08a62;
+  animation:gearSpin 5s linear infinite;
+}
+
+@keyframes gearSpin{
+  to{transform:rotate(360deg)}
+}
+
+.intro-character .arm.right{
+  animation:wave 1.1s ease-in-out 1.1s 3;
+}
+
+@keyframes wave{
+  0%,100%{transform:rotate(-13deg)}
+  50%{transform:rotate(-48deg)}
+}
+
+.intro-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+.intro-btn{
+  min-height:48px;
+  padding:0 25px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#8b7cff,#6659df);
+  box-shadow:0 12px 30px rgba(106,91,223,.25);
+  font-weight:700;
+}
+
+.intro-skip{
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--line);
+}
+
+/* =========================
+   APP
+========================= */
+
+#app{
+  min-height:100vh;
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .8s ease,transform .8s ease;
+}
+
+#app.ready{
+  opacity:1;
+  transform:none;
+}
+
+.shell{
+  width:min(1440px,100%);
+  margin:auto;
+  padding:18px;
+}
+
+.topbar{
+  position:sticky;
+  top:12px;
+  z-index:100;
+  width:min(1380px,100%);
+  margin:0 auto 22px;
+  min-height:72px;
+  padding:10px 13px;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:rgba(17,19,25,.78);
+  border:1px solid var(--line);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  border-radius:22px;
+  box-shadow:var(--shadow);
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:max-content;
+}
+
+.logo-mark{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#1e2029,#101116);
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:inset 0 1px rgba(255,255,255,.08);
+}
+
+.logo-mark svg{
+  width:28px;
+  height:28px;
+}
+
+.logo-name{
+  font-weight:800;
+  letter-spacing:.08em;
+}
+
+.logo-name small{
+  display:block;
+  font-size:9px;
+  color:var(--muted);
+  letter-spacing:.12em;
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  min-width:0;
+  flex:1;
+}
+
+.nav::-webkit-scrollbar{display:none}
+
+.nav button{
+  white-space:nowrap;
+  min-height:42px;
+  padding:0 13px;
+  background:transparent;
+  color:var(--muted);
+  border-radius:13px;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:rgba(255,255,255,.07);
+  color:#fff;
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.icon-btn{
+  width:43px;
+  height:43px;
+  border-radius:13px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  display:grid;
+  place-items:center;
+}
+
+.user-pill{
+  min-height:43px;
+  padding:0 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  border-radius:13px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+}
+
+.avatar{
+  width:29px;
+  height:29px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#8b7cff,#62d9ff);
+  color:#fff;
+  font-weight:800;
+  font-size:12px;
+}
+
+main{
+  width:min(1380px,100%);
+  margin:auto;
+  padding-bottom:130px;
+}
+
+.page{
+  display:none;
+  animation:pageIn .35s ease;
+}
+
+.page.active{display:block}
+
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
+}
+
+.page-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:20px;
+  margin:25px 0;
+}
+
+.page-head h1{
+  margin:0 0 8px;
+  font-size:clamp(30px,5vw,50px);
+  letter-spacing:-.04em;
+}
+
+.page-head p{
+  margin:0;
+  color:var(--muted);
+}
+
+.back-btn{
+  min-height:44px;
+  padding:0 15px;
+  border-radius:13px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.grid{
+  display:grid;
+  gap:16px;
+}
+
+.grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+.card{
+  min-width:0;
+  padding:22px;
+  border-radius:var(--radius);
+  background:var(--panel);
+  border:1px solid var(--line);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 18px 50px rgba(0,0,0,.16);
+}
+
+.card h2,
+.card h3{
+  margin:0 0 9px;
+}
+
+.card p{
+  color:var(--muted);
+  line-height:1.75;
+  margin:0;
+}
+
+.kicker{
+  color:#aeb2c0;
+  font-size:12px;
+  letter-spacing:.08em;
+  margin-bottom:9px;
+}
+
+.btn{
+  min-height:44px;
+  padding:0 16px;
+  border-radius:13px;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--line);
+}
+
+.btn.primary{
+  background:linear-gradient(135deg,#8b7cff,#6558de);
+  border-color:transparent;
+}
+
+.btn.danger{
+  background:rgba(255,112,112,.1);
+  color:#ff9b9b;
+}
+
+.btn-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:17px;
+}
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  min-height:420px;
+  padding:48px;
+  display:flex;
+  align-items:center;
+  border-radius:32px;
+  background:
+    radial-gradient(circle at 80% 35%,rgba(139,124,255,.18),transparent 30%),
+    radial-gradient(circle at 20% 90%,rgba(98,217,255,.09),transparent 32%),
+    linear-gradient(135deg,#151720,#0e1015);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+
+.hero-copy{
+  width:min(680px,100%);
+}
+
+.hero h1{
+  font-size:clamp(42px,7vw,76px);
+  line-height:.98;
+  letter-spacing:-.065em;
+  margin:0 0 22px;
+}
+
+.gradient-text{
+  background:linear-gradient(110deg,#fff,#a89fff,#73ddff);
+  color:transparent;
+  -webkit-background-clip:text;
+  background-clip:text;
+}
+
+.hero p{
+  color:#b1b5c2;
+  line-height:1.8;
+  font-size:17px;
+  max-width:650px;
+}
+
+.hero-orb{
+  position:absolute;
+  width:330px;
+  height:330px;
+  left:65%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.09);
+  box-shadow:
+    0 0 100px rgba(139,124,255,.13),
+    inset 0 0 60px rgba(139,124,255,.05);
+}
+
+.hero-orb:before,
+.hero-orb:after{
+  content:"";
+  position:absolute;
+  inset:35px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:50%;
+}
+
+.hero-orb:after{
+  inset:80px;
+  border-color:rgba(98,217,255,.12);
+}
+
+.stats{
+  margin-top:16px;
+}
+
+.stat{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.stat strong{
+  font-size:29px;
+  display:block;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.progress{
+  width:100%;
+  height:8px;
+  border-radius:20px;
+  background:rgba(255,255,255,.07);
+  overflow:hidden;
+  margin-top:14px;
+}
+
+.progress > i{
+  display:block;
+  height:100%;
+  width:var(--value,50%);
+  border-radius:inherit;
+  background:linear-gradient(90deg,#8b7cff,#62d9ff);
+}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin:35px 0 15px;
+}
+
+.section-title h2{
+  margin:0;
+  font-size:22px;
+}
+
+/* =========================
+   LESSONS
+========================= */
+
+.lesson-card{
+  display:flex;
+  flex-direction:column;
+  min-height:220px;
+}
+
+.lesson-meta{
+  display:flex;
+  justify-content:space-between;
+  color:#a9adba;
+  font-size:12px;
+  margin-bottom:17px;
+}
+
+.lesson-icon{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  margin-bottom:16px;
+  background:rgba(139,124,255,.12);
+  border:1px solid rgba(139,124,255,.18);
+  font-size:21px;
+}
+
+.lesson-card .btn-row{
+  margin-top:auto;
+}
+
+.lesson-detail{
+  max-width:950px;
+}
+
+.lesson-body{
+  line-height:2;
+  color:#d4d7df;
+}
+
+.lesson-body h2{
+  margin-top:30px;
+}
+
+.lesson-body code{
+  display:inline-block;
+  direction:ltr;
+  background:#08090c;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:2px 7px;
+  color:#bcb4ff;
+}
+
+.quiz{
+  margin-top:28px;
+  padding:22px;
+  border-radius:20px;
+  background:rgba(139,124,255,.07);
+  border:1px solid rgba(139,124,255,.16);
+}
+
+.quiz-options{
+  display:grid;
+  gap:9px;
+  margin-top:15px;
+}
+
+.quiz-option{
+  text-align:right;
+  padding:14px;
+  border-radius:13px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+}
+
+.quiz-option.correct{
+  border-color:rgba(112,225,161,.5);
+  background:rgba(112,225,161,.08);
+}
+
+.quiz-option.wrong{
+  border-color:rgba(255,112,112,.5);
+  background:rgba(255,112,112,.08);
+}
+
+/* =========================
+   NOVA
+========================= */
+
+.nova-panel{
+  min-height:460px;
+  display:flex;
+  flex-direction:column;
+}
+
+.nova-messages{
+  flex:1;
+  min-height:300px;
+  max-height:500px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:5px;
+}
+
+.msg{
+  max-width:min(760px,88%);
+  padding:14px 16px;
+  border-radius:17px;
+  line-height:1.7;
+}
+
+.msg.nova{
+  align-self:flex-start;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+}
+
+.msg.user{
+  align-self:flex-end;
+  background:rgba(139,124,255,.14);
+  border:1px solid rgba(139,124,255,.2);
+}
+
+.nova-input{
+  display:flex;
+  gap:8px;
+  margin-top:14px;
+}
+
+.nova-input input{
+  flex:1;
+  min-width:0;
+  height:52px;
+  padding:0 16px;
+  border-radius:15px;
+  background:rgba(0,0,0,.2);
+  border:1px solid var(--line);
+  outline:none;
+  color:#fff;
+}
+
+.nova-input input:focus{
+  border-color:rgba(139,124,255,.55);
+}
+
+/* =========================
+   CHARACTER
+========================= */
+
+.character-dock{
+  position:fixed;
+  right:14px;
+  bottom:16px;
+  z-index:120;
+  width:150px;
+  pointer-events:none;
+}
+
+.character-shell{
+  position:relative;
+  height:155px;
+  pointer-events:auto;
+  cursor:pointer;
+  transform:translateY(82px);
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+
+.character-shell:hover{
+  transform:translateY(65px);
+}
+
+.character-shell.open{
+  transform:translateY(0);
+}
+
+.character-mini{
+  position:absolute;
+  right:4px;
+  bottom:-15px;
+  width:92px;
+  height:130px;
+  transform:scale(.72);
+  transform-origin:bottom right;
+}
+
+.character-mini .p-head{
+  transform:scale(.8);
+  transform-origin:top left;
+}
+
+.character-mini .p-body{
+  transform:scale(.8);
+  transform-origin:top left;
+}
+
+.character-mini .arm,
+.character-mini .legs,
+.character-mini .p-neck,
+.character-mini .gear{
+  transform:scale(.8);
+  transform-origin:top center;
+}
+
+.character-bubble{
+  position:absolute;
+  right:76px;
+  bottom:72px;
+  width:230px;
+  padding:12px 14px;
+  border-radius:16px;
+  background:rgba(18,20,26,.94);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  opacity:0;
+  transform:translateY(8px);
+  transition:.3s;
+  pointer-events:none;
+}
+
+.character-shell.open .character-bubble{
+  opacity:1;
+  transform:none;
+}
+
+.character-bubble strong{
+  display:block;
+  font-size:12px;
+  color:#aaa4ff;
+  margin-bottom:4px;
+}
+
+.character-bubble span{
+  font-size:12px;
+  color:#c5c8d1;
+}
+
+.character-label{
+  position:absolute;
+  right:0;
+  bottom:0;
+  padding:5px 9px;
+  border-radius:8px;
+  background:rgba(10,11,15,.8);
+  border:1px solid var(--line);
+  font-size:9px;
+  color:#aeb2c0;
+}
+
+/* emotions */
+
+.character-shell.emotion-happy .p-mouth{
+  height:13px;
+  border-bottom-width:4px;
+}
+
+.character-shell.emotion-tired .eye{
+  height:3px;
+  top:47px;
+}
+
+.character-shell.emotion-fear .eye{
+  width:15px;
+  height:20px;
+}
+
+.character-shell.emotion-fear .p-mouth{
+  width:18px;
+  height:18px;
+  border:3px solid #3d251b;
+  border-radius:50%;
+}
+
+.character-shell.emotion-embarrassed .brow.left{
+  transform:rotate(-8deg);
+}
+
+.character-shell.emotion-embarrassed .brow.right{
+  transform:rotate(8deg);
+}
+
+.character-shell.emotion-concerned .p-mouth{
+  transform:translateX(-50%) rotate(180deg);
+}
+
+.character-shell.emotion-curious .brow.left{
+  transform:rotate(-15deg);
+}
+
+.character-shell.emotion-curious .brow.right{
+  transform:rotate(5deg);
+}
+
+/* =========================
+   VANTABOOK
+========================= */
+
+.book-shell{
+  background:
+    radial-gradient(circle at 90% 0%,rgba(98,217,255,.06),transparent 25%),
+    #101116;
+  border:1px solid var(--line);
+  border-radius:30px;
+  overflow:hidden;
+}
+
+.book-top{
+  padding:15px 18px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  gap:14px;
+  background:rgba(14,15,20,.86);
+  position:sticky;
+  top:0;
+  z-index:20;
+  backdrop-filter:blur(20px);
+}
+
+.book-brand{
+  font-size:22px;
+  font-weight:850;
+  letter-spacing:-.05em;
+}
+
+.book-brand span{
+  color:#8b7cff;
+}
+
+.book-nav{
+  display:flex;
+  gap:5px;
+  overflow:auto;
+  scrollbar-width:none;
+  flex:1;
+}
+
+.book-nav::-webkit-scrollbar{display:none}
+
+.book-nav button{
+  white-space:nowrap;
+  min-height:40px;
+  padding:0 12px;
+  background:transparent;
+  color:var(--muted);
+  border-radius:11px;
+}
+
+.book-nav button.active,
+.book-nav button:hover{
+  color:#fff;
+  background:rgba(255,255,255,.07);
+}
+
+.book-layout{
+  display:grid;
+  grid-template-columns:220px minmax(0,650px) 250px;
+  justify-content:center;
+  gap:16px;
+  padding:18px;
+}
+
+.book-side{
+  min-width:0;
+}
+
+.book-side-card{
+  padding:17px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  border-radius:20px;
+  margin-bottom:12px;
+}
+
+.book-side-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:44px;
+  padding:0 9px;
+  border-radius:11px;
+  color:#b8bbc5;
+  cursor:pointer;
+}
+
+.book-side-item:hover{
+  background:rgba(255,255,255,.05);
+  color:#fff;
+}
+
+.composer{
+  margin-bottom:15px;
+}
+
+.composer textarea{
+  width:100%;
+  min-height:105px;
+  resize:vertical;
+  padding:15px;
+  color:#fff;
+  background:rgba(0,0,0,.16);
+  border:1px solid var(--line);
+  border-radius:16px;
+  outline:none;
+}
+
+.post{
+  padding:19px;
+  margin-bottom:14px;
+  border-radius:21px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+}
+
+.post-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.post-author{
+  flex:1;
+  min-width:0;
+}
+
+.post-author strong{
+  display:block;
+}
+
+.post-author small{
+  color:var(--muted);
+}
+
+.post-body{
+  margin:16px 0;
+  line-height:1.85;
+  color:#d6d8df;
+  overflow-wrap:anywhere;
+}
+
+.post-actions{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+  border-top:1px solid var(--line);
+  padding-top:11px;
+}
+
+.post-actions button{
+  background:transparent;
+  color:#9ea3b0;
+  min-height:38px;
+  padding:0 10px;
+  border-radius:10px;
+}
+
+.post-actions button:hover{
+  background:rgba(255,255,255,.06);
+  color:#fff;
+}
+
+.book-page{
+  display:none;
+}
+
+.book-page.active{
+  display:block;
+}
+
+.book-profile-cover{
+  height:190px;
+  border-radius:22px 22px 0 0;
+  background:
+    radial-gradient(circle at 20% 40%,rgba(139,124,255,.3),transparent 30%),
+    radial-gradient(circle at 80% 60%,rgba(98,217,255,.2),transparent 28%),
+    #181a23;
+  border:1px solid var(--line);
+}
+
+.book-profile-info{
+  padding:0 22px 22px;
+  border:1px solid var(--line);
+  border-top:0;
+  border-radius:0 0 22px 22px;
+  background:rgba(255,255,255,.025);
+}
+
+.book-profile-avatar{
+  width:82px;
+  height:82px;
+  margin-top:-41px;
+  border:5px solid #101116;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#8b7cff,#62d9ff);
+  font-size:28px;
+  font-weight:800;
+}
+
+.book-settings-grid{
+  display:grid;
+  gap:12px;
+}
+
+.setting-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:17px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  border-radius:17px;
+}
+
+.switch{
+  width:47px;
+  height:27px;
+  border-radius:30px;
+  padding:3px;
+  background:#383b45;
+}
+
+.switch i{
+  display:block;
+  width:21px;
+  height:21px;
+  border-radius:50%;
+  background:#fff;
+  transition:.25s;
+}
+
+.switch.on{
+  background:#7165e8;
+}
+
+.switch.on i{
+  transform:translateX(-20px);
+}
+
+/* =========================
+   AUTH MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.62);
+  backdrop-filter:blur(12px);
+}
+
+.modal.show{display:flex}
+
+.auth{
+  width:min(450px,100%);
+  padding:25px;
+  border-radius:26px;
+  background:#171920;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+
+.auth-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:15px;
+  margin-bottom:22px;
+}
+
+.auth h2{
+  margin:0 0 6px;
+}
+
+.auth p{
+  color:var(--muted);
+  margin:0;
+  font-size:13px;
+}
+
+.field{
+  margin-bottom:13px;
+}
+
+.field label{
+  display:block;
+  font-size:12px;
+  color:#aeb2be;
+  margin-bottom:7px;
+}
+
+.field input{
+  width:100%;
+  height:48px;
+  padding:0 14px;
+  border-radius:13px;
+  color:#fff;
+  background:#0e0f13;
+  border:1px solid var(--line);
+  outline:none;
+}
+
+.field input:focus{
+  border-color:rgba(139,124,255,.6);
+}
+
+.auth-note{
+  margin-top:13px;
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+}
+
+.auth-note button{
+  color:#a49cff;
+  background:transparent;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+#toast{
+  position:fixed;
+  left:50%;
+  bottom:24px;
+  z-index:10000;
+  transform:translate(-50%,20px);
+  opacity:0;
+  pointer-events:none;
+  padding:13px 17px;
+  border-radius:14px;
+  background:#1d2028;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+  color:#e8eaf0;
+  transition:.3s;
+  max-width:min(90vw,500px);
+  text-align:center;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+  margin-top:50px;
+  padding:25px 5px;
+  color:#777c89;
+  font-size:12px;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.footer strong{
+  color:#d8dae2;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+  .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .book-layout{
+    grid-template-columns:190px minmax(0,650px);
+  }
+  .book-layout > .book-side:last-child{
+    display:none;
+  }
+  .hero-orb{
+    opacity:.45;
+    left:78%;
+  }
+}
+
+@media(max-width:780px){
+  .shell{padding:10px}
+
+  .topbar{
+    top:7px;
+    border-radius:18px;
+    min-height:62px;
+  }
+
+  .logo-name{
+    display:none;
+  }
+
+  .header-actions .user-pill span{
+    display:none;
+  }
+
+  .hero{
+    padding:30px 22px;
+    min-height:390px;
+  }
+
+  .hero-orb{
+    width:260px;
+    height:260px;
+    left:80%;
+    top:72%;
+    opacity:.25;
+  }
+
+  .grid-3,
+  .grid-2{
+    grid-template-columns:1fr;
+  }
+
+  .book-layout{
+    grid-template-columns:1fr;
+    padding:10px;
+  }
+
+  .book-layout > .book-side{
+    display:none;
+  }
+
+  .character-dock{
+    right:4px;
+    bottom:6px;
+    width:110px;
+  }
+
+  .character-shell{
+    height:120px;
+  }
+
+  .character-bubble{
+    right:55px;
+    bottom:60px;
+    width:min(230px,70vw);
+  }
+
+  .page-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .intro-character{
+    transform:scale(.85);
+  }
+}
+
+@media(max-width:520px){
+  .grid-4{grid-template-columns:1fr}
+
+  .intro-title{
+    font-size:56px;
+  }
+
+  .intro-sub{
+    font-size:14px;
+  }
+
+  .hero h1{
+    font-size:43px;
+  }
+
+  .hero p{
+    font-size:15px;
+  }
+
+  .card{
+    padding:18px;
+    border-radius:20px;
+  }
+
+  .character-dock{
+    right:-5px;
+  }
+
+  .character-shell{
+    transform:translateY(87px);
+  }
+
+  .character-shell.open{
+    transform:translateY(5px);
+  }
+
+  .book-top{
+    padding:10px;
+  }
+
+  .book-brand{
+    font-size:19px;
+  }
+
+  .book-nav button{
+    padding:0 9px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- BOOT SCREEN -->
+<!-- =========================
+     CINEMATIC INTRO
+========================= -->
 
-  <div id="boot">
+<section id="intro">
+  <div class="intro-content">
 
-```
-<div class="boot-noise"></div>
-<div class="boot-stars"></div>
+    <div class="intro-brand">VANTA CYBERSECURITY</div>
 
-<div class="boot-center">
+    <div class="intro-character">
+      <div class="puppet" id="introPuppet">
 
-  <div class="vanta-symbol">
-    <span>V</span>
+        <div class="p-ear left"></div>
+        <div class="p-ear right"></div>
+
+        <div class="p-head">
+          <div class="brow left"></div>
+          <div class="brow right"></div>
+          <div class="eye left"></div>
+          <div class="eye right"></div>
+          <div class="p-mouth"></div>
+        </div>
+
+        <div class="p-neck"></div>
+
+        <div class="p-body">
+          <div class="p-panel">
+            <div class="p-light"></div>
+          </div>
+        </div>
+
+        <div class="arm left">
+          <div class="upper"></div>
+          <div class="joint"></div>
+          <div class="hand"></div>
+        </div>
+
+        <div class="arm right">
+          <div class="upper"></div>
+          <div class="joint"></div>
+          <div class="hand"></div>
+        </div>
+
+        <div class="gear"></div>
+
+        <div class="legs">
+          <div class="leg">
+            <div class="upper"></div>
+            <div class="joint"></div>
+            <div class="foot"></div>
+          </div>
+          <div class="leg">
+            <div class="upper"></div>
+            <div class="joint"></div>
+            <div class="foot"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <h1 class="intro-title"><span>VANTA</span></h1>
+
+    <p class="intro-sub">
+      الأمن السيبراني يبدأ من هنا.
+    </p>
+
+    <div class="intro-actions">
+      <button class="intro-btn" id="enterBtn">دخول</button>
+      <button class="intro-btn intro-skip" id="skipBtn">تخطي</button>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- =========================
+     APP
+========================= -->
+
+<div id="app">
+
+  <div class="shell">
+
+    <header class="topbar">
+
+      <a class="logo" href="#home" onclick="navigate('home');return false;">
+        <div class="logo-mark">
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M18 22L42 78L50 59L58 78L82 22H67L50 56L33 22H18Z"
+                  fill="white"/>
+            <path d="M39 22L50 46L61 22"
+                  stroke="#8b7cff"
+                  stroke-width="6"
+                  stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="logo-name">
+          VANTA
+          <small>CYBERSECURITY</small>
+        </div>
+      </a>
+
+      <nav class="nav" id="mainNav">
+        <button data-page="home">الرئيسية</button>
+        <button data-page="learn">التعلّم</button>
+        <button data-page="labs">Cyber Range</button>
+        <button data-page="ctf">CTF</button>
+        <button data-page="nova">NOVA</button>
+        <button data-page="resources">مصادر</button>
+        <button data-page="roadmap">المسار</button>
+        <button data-page="achievements">الإنجازات</button>
+      </nav>
+
+      <div class="header-actions">
+
+        <button class="icon-btn" onclick="navigate('book-home')" title="VANTABOOK">
+          ◈
+        </button>
+
+        <button class="icon-btn" onclick="navigate('notifications')" title="الإشعارات">
+          ♢
+        </button>
+
+        <button class="user-pill" onclick="openAuth()">
+          <div class="avatar" id="headerAvatar">ع</div>
+          <span id="headerUser">دخول</span>
+        </button>
+
+      </div>
+
+    </header>
+
+
+    <main>
+
+      <!-- HOME -->
+
+      <section class="page active" id="page-home">
+
+        <div class="hero">
+
+          <div class="hero-copy">
+
+            <div class="kicker">VANTA / CYBERSECURITY</div>
+
+            <h1>
+              تعلّم الأمن السيبراني
+              <span class="gradient-text">بطريقة مختلفة.</span>
+            </h1>
+
+            <p>
+              مسار تعليمي عملي يجمع الدروس، المختبرات، التحديات وNOVA
+              في تجربة واحدة تساعدك تفهم التقنية بدل مجرد حفظها.
+            </p>
+
+            <div class="btn-row">
+              <button class="btn primary" onclick="navigate('learn')">
+                ابدأ التعلّم
+              </button>
+              <button class="btn" onclick="navigate('nova')">
+                اسأل NOVA
+              </button>
+            </div>
+
+          </div>
+
+          <div class="hero-orb"></div>
+
+        </div>
+
+
+        <div class="grid grid-4 stats">
+
+          <div class="card stat">
+            <div>
+              <span>المستوى</span>
+              <strong id="levelValue">1</strong>
+            </div>
+            <span>LEVEL</span>
+          </div>
+
+          <div class="card stat">
+            <div>
+              <span>XP</span>
+              <strong id="xpValue">120</strong>
+            </div>
+            <span>POINTS</span>
+          </div>
+
+          <div class="card stat">
+            <div>
+              <span>أيام متتالية</span>
+              <strong id="streakValue">3</strong>
+            </div>
+            <span>STREAK</span>
+          </div>
+
+          <div class="card stat">
+            <div>
+              <span>مختبرات</span>
+              <strong id="labsValue">2</strong>
+            </div>
+            <span>LABS</span>
+          </div>
+
+        </div>
+
+
+        <div class="section-title">
+          <h2>تابع من حيث توقفت</h2>
+          <button class="btn" onclick="navigate('learn')">كل الدروس</button>
+        </div>
+
+        <div class="grid grid-2">
+
+          <article class="card">
+            <div class="kicker">الدرس الحالي</div>
+            <h3>ما هو الأمن السيبراني؟</h3>
+            <p>
+              تعرّف على مفهوم الأمن السيبراني ولماذا تحتاج الأنظمة
+              إلى طبقات متعددة من الحماية.
+            </p>
+            <div class="progress">
+              <i style="--value:62%"></i>
+            </div>
+            <div class="btn-row">
+              <button class="btn primary" onclick="openLesson(0)">
+                متابعة الدرس
+              </button>
+              <button class="btn" onclick="askNovaAbout('اشرح لي الدرس الحالي بطريقة بسيطة')">
+                تلميح NOVA
+              </button>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="kicker">NOVA</div>
+            <h3>النواة الذكية لـ VANTA</h3>
+            <p>
+              NOVA مرتبطة بالتعلم والمختبرات والمسار والتحديات،
+              وليست مجرد صفحة دردشة منفصلة.
+            </p>
+            <div class="btn-row">
+              <button class="btn primary" onclick="navigate('nova')">
+                افتح NOVA
+              </button>
+            </div>
+          </article>
+
+        </div>
+
+
+        <div class="section-title">
+          <h2>مسارك الحالي</h2>
+          <button class="btn" onclick="navigate('roadmap')">عرض المسار</button>
+        </div>
+
+        <div class="grid grid-3">
+
+          <div class="card">
+            <div class="kicker">01</div>
+            <h3>أساسيات الأمن</h3>
+            <p>المفاهيم الأساسية، التهديدات، نقاط الضعف والمصادقة.</p>
+            <div class="progress"><i style="--value:42%"></i></div>
+          </div>
+
+          <div class="card">
+            <div class="kicker">02</div>
+            <h3>الشبكات</h3>
+            <p>IP وTCP/UDP والمنافذ وDNS وHTTP والجدران النارية.</p>
+            <div class="progress"><i style="--value:18%"></i></div>
+          </div>
+
+          <div class="card">
+            <div class="kicker">03</div>
+            <h3>Linux</h3>
+            <p>الطرفية والملفات والصلاحيات والعمليات والشبكات.</p>
+            <div class="progress"><i style="--value:8%"></i></div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- LEARN -->
+
+      <section class="page" id="page-learn">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">VANTA LEARNING</div>
+            <h1>التعلّم</h1>
+            <p>دروس مرتبة من الأساسيات إلى مواضيع الأمن المتقدمة.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid grid-3" id="lessonGrid"></div>
+
+      </section>
+
+
+      <!-- LESSON -->
+
+      <section class="page" id="page-lesson">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">LESSON</div>
+            <h1 id="lessonTitle">الدرس</h1>
+            <p id="lessonMeta">VANTA Learning</p>
+          </div>
+          <button class="back-btn" onclick="navigate('learn')">← رجوع للدروس</button>
+        </div>
+
+        <article class="card lesson-detail">
+
+          <div class="lesson-body" id="lessonBody"></div>
+
+          <div class="quiz">
+            <div class="kicker">اختبر فهمك</div>
+            <h3 id="quizQuestion"></h3>
+            <div class="quiz-options" id="quizOptions"></div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn" onclick="askNovaAbout('اختبرني في هذا الدرس بسؤال جديد')">
+              NOVA — اختبرني
+            </button>
+            <button class="btn primary" onclick="completeLesson()">
+              إنهاء الدرس + XP
+            </button>
+          </div>
+
+        </article>
+
+      </section>
+
+
+      <!-- LABS -->
+
+      <section class="page" id="page-labs">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">VANTA / CYBER RANGE</div>
+            <h1>Cyber Range</h1>
+            <p>مختبرات تعليمية دفاعية وآمنة لفهم مفاهيم الأمن.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid grid-3" id="labGrid"></div>
+
+      </section>
+
+
+      <!-- CTF -->
+
+      <section class="page" id="page-ctf">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">VANTA CTF</div>
+            <h1>التحديات</h1>
+            <p>تحديات تعليمية آمنة لاختبار فهمك.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid grid-3" id="ctfGrid"></div>
+
+      </section>
+
+
+      <!-- NOVA -->
+
+      <section class="page" id="page-nova">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">VANTA AI CORE</div>
+            <h1>NOVA</h1>
+            <p>النواة الذكية التي ترافقك في أنحاء VANTA.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="card nova-panel">
+
+          <div class="nova-messages" id="novaMessages">
+            <div class="msg nova">
+              أنا NOVA. اسألني عن الدرس أو المختبر أو المسار أو أي مفهوم
+              تقني تريد فهمه.
+            </div>
+          </div>
+
+          <div class="nova-input">
+            <input
+              id="novaInput"
+              placeholder="اسأل NOVA..."
+              onkeydown="if(event.key==='Enter') novaAsk()"
+            >
+            <button class="btn primary" onclick="novaAsk()">إرسال</button>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RESOURCES -->
+
+      <section class="page" id="page-resources">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">RESOURCES</div>
+            <h1>مصادر</h1>
+            <p>روابط تعليمية حقيقية يمكن الرجوع إليها أثناء التعلم.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid grid-2">
+
+          <a class="card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP" target="_blank" rel="noopener">
+            <div class="kicker">MDN</div>
+            <h3>HTTP</h3>
+            <p>مرجع MDN لفهم بروتوكول HTTP والويب.</p>
+          </a>
+
+          <a class="card" href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">
+            <div class="kicker">OWASP</div>
+            <h3>OWASP Top 10</h3>
+            <p>مرجع أساسي لفهم أبرز مخاطر تطبيقات الويب.</p>
+          </a>
+
+          <a class="card" href="https://owasp.org/www-project-web-security-testing-guide/" target="_blank" rel="noopener">
+            <div class="kicker">OWASP</div>
+            <h3>Web Security Testing Guide</h3>
+            <p>دليل واسع لاختبار أمن تطبيقات الويب.</p>
+          </a>
+
+          <a class="card" href="https://www.kernel.org/doc/man-pages/" target="_blank" rel="noopener">
+            <div class="kicker">LINUX</div>
+            <h3>Linux man-pages</h3>
+            <p>توثيق أوامر وواجهات Linux.</p>
+          </a>
+
+          <a class="card" href="https://developer.mozilla.org/en-US/docs/Web/Security" target="_blank" rel="noopener">
+            <div class="kicker">MDN</div>
+            <h3>Web Security</h3>
+            <p>مفاهيم أمن الويب في توثيق MDN.</p>
+          </a>
+
+          <a class="card" href="https://docs.python.org/3/library/secrets.html" target="_blank" rel="noopener">
+            <div class="kicker">PYTHON</div>
+            <h3>Python secrets</h3>
+            <p>توثيق Python الرسمي لتوليد قيم عشوائية مناسبة للأمان.</p>
+          </a>
+
+        </div>
+
+      </section>
+
+
+      <!-- ROADMAP -->
+
+      <section class="page" id="page-roadmap">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">ROADMAP</div>
+            <h1>مسار VANTA</h1>
+            <p>من الأساسيات إلى الأمن الدفاعي والبرمجة الآمنة.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid grid-2">
+
+          <div class="card">
+            <div class="kicker">LEVEL 1</div>
+            <h3>Cybersecurity Basics</h3>
+            <p>Cybersecurity، CIA Triad، Threats، Vulnerabilities، Authentication، Password Security.</p>
+          </div>
+
+          <div class="card">
+            <div class="kicker">LEVEL 2</div>
+            <h3>Networking</h3>
+            <p>IP، TCP/UDP، Ports، DNS، HTTP/HTTPS، Firewalls، VPN.</p>
+          </div>
+
+          <div class="card">
+            <div class="kicker">LEVEL 3</div>
+            <h3>Linux</h3>
+            <p>Terminal، Filesystem، Permissions، Processes، Users، Networking.</p>
+          </div>
+
+          <div class="card">
+            <div class="kicker">LEVEL 4</div>
+            <h3>Web Security</h3>
+            <p>Cookies، Sessions، Authentication، XSS، SQL Injection، CSRF، Security Headers.</p>
+          </div>
+
+          <div class="card">
+            <div class="kicker">LEVEL 5</div>
+            <h3>Defensive Security</h3>
+            <p>Logs، Monitoring، Incident Response، Malware Concepts، Phishing، SIEM.</p>
+          </div>
+
+          <div class="card">
+            <div class="kicker">NEXT</div>
+            <h3>SOC / Cloud / Cryptography</h3>
+            <p>مسارات لاحقة للتوسع في الأمن الدفاعي والسحابي والتشفير والبرمجة الآمنة.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ACHIEVEMENTS -->
+
+      <section class="page" id="page-achievements">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">PROGRESS</div>
+            <h1>الإنجازات</h1>
+            <p>كل خطوة تتعلمها تتحول إلى تقدم حقيقي.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid grid-3">
+
+          <div class="card">
+            <div class="lesson-icon">✓</div>
+            <h3>البداية</h3>
+            <p>بدأت رحلتك في VANTA.</p>
+          </div>
+
+          <div class="card">
+            <div class="lesson-icon">⚡</div>
+            <h3>أول XP</h3>
+            <p>حصلت على أول نقاط خبرة.</p>
+          </div>
+
+          <div class="card">
+            <div class="lesson-icon">◆</div>
+            <h3>المختبر الأول</h3>
+            <p>دخلت إلى أحد المختبرات التعليمية.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- PROFILE -->
+
+      <section class="page" id="page-profile">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">VANTA PROFILE</div>
+            <h1>ملفي</h1>
+            <p>ملفك التعليمي داخل VANTA.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid grid-2">
+
+          <div class="card">
+            <div class="avatar" style="width:70px;height:70px;font-size:24px">ع</div>
+            <h2 style="margin-top:15px" id="profileName">متعلم VANTA</h2>
+            <p>مسار الأمن السيبراني</p>
+          </div>
+
+          <div class="card">
+            <h3>الإحصائيات</h3>
+            <p>XP: <strong id="profileXP">120</strong></p>
+            <p>المستوى: <strong id="profileLevel">1</strong></p>
+            <p>الدروس المكتملة: <strong id="completedLessons">0</strong></p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- SETTINGS: CYBER ONLY -->
+
+      <section class="page" id="page-settings">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">VANTA SETTINGS</div>
+            <h1>إعدادات VANTA</h1>
+            <p>إعدادات منصة الأمن السيبراني — منفصلة عن VANTABOOK.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid grid-2">
+
+          <div class="card">
+            <h3>المظهر</h3>
+            <p>VANTA يستخدم الواجهة الداكنة لتقليل إجهاد العين.</p>
+            <div class="btn-row">
+              <button class="btn" onclick="toast('المظهر الداكن مفعّل')">الوضع الداكن</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>NOVA</h3>
+            <p>التحكم في تفاعل NOVA والشخصية المرافقة.</p>
+            <div class="btn-row">
+              <button class="btn" onclick="toggleCharacter()">إظهار / إخفاء الشخصية</button>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ABOUT -->
+
+      <section class="page" id="page-about">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">VANTA</div>
+            <h1>عن VANTA</h1>
+            <p>منصة تعليم الأمن السيبراني.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="card">
+
+          <h2>VANTA</h2>
+
+          <p>
+            VANTA مشروع يركز على جعل تعلم الأمن السيبراني أكثر عملية
+            وتفاعلية، مع NOVA كنواة ذكية مرتبطة بتجربة المنصة.
+          </p>
+
+          <div style="margin-top:25px">
+            <strong>المؤسس والمطور والمالك</strong>
+            <p style="margin-top:5px">Ali Yaser — علي ياسر</p>
+          </div>
+
+          <div style="margin-top:20px">
+            <strong>Instagram</strong>
+            <p style="margin-top:5px">@ali_yr_1</p>
+          </div>
+
+          <div style="margin-top:25px;color:#737885;font-size:12px">
+            © 2026 Ali Yaser. VANTA. جميع الحقوق محفوظة.
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================
+           VANTABOOK
+      ====================== -->
+
+      <section class="page" id="page-book">
+
+        <div class="book-shell">
+
+          <header class="book-top">
+
+            <button class="back-btn" onclick="navigate('home')">
+              ← VANTA Cyber
+            </button>
+
+            <div class="book-brand">
+              VANTA<span>BOOK</span>
+            </div>
+
+            <nav class="book-nav">
+              <button data-book="book-home">الرئيسية</button>
+              <button data-book="book-profile">الملف</button>
+              <button data-book="book-notifications">الإشعارات</button>
+              <button data-book="book-messages">الرسائل</button>
+              <button data-book="book-settings">الإعدادات</button>
+            </nav>
+
+            <button class="icon-btn" onclick="navigate('book-settings')">⚙</button>
+
+          </header>
+
+
+          <div class="book-layout">
+
+            <aside class="book-side">
+
+              <div class="book-side-card">
+
+                <div class="book-side-item" onclick="bookNavigate('book-home')">
+                  ◉ <span>الرئيسية</span>
+                </div>
+
+                <div class="book-side-item" onclick="bookNavigate('book-profile')">
+                  ◯ <span>ملفي</span>
+                </div>
+
+                <div class="book-side-item" onclick="bookNavigate('book-notifications')">
+                  ♢ <span>الإشعارات</span>
+                </div>
+
+                <div class="book-side-item" onclick="bookNavigate('book-messages')">
+                  ▱ <span>الرسائل</span>
+                </div>
+
+                <div class="book-side-item" onclick="bookNavigate('book-settings')">
+                  ⚙ <span>الإعدادات</span>
+                </div>
+
+              </div>
+
+            </aside>
+
+
+            <div class="book-main">
+
+              <!-- BOOK HOME -->
+
+              <div class="book-page active" id="book-home">
+
+                <div class="card composer">
+                  <div class="post-head">
+                    <div class="avatar">ع</div>
+                    <strong>ما الذي يدور في بالك؟</strong>
+                  </div>
+
+                  <textarea id="postInput" placeholder="اكتب منشورك..."></textarea>
+
+                  <div class="btn-row">
+                    <button class="btn primary" onclick="publishPost()">
+                      نشر
+                    </button>
+                  </div>
+                </div>
+
+                <div id="feed">
+
+                  <article class="post">
+                    <div class="post-head">
+                      <div class="avatar">V</div>
+                      <div class="post-author">
+                        <strong>VANTA</strong>
+                        <small>منصة VANTA • الآن</small>
+                      </div>
+                    </div>
+
+                    <div class="post-body">
+                      مرحباً بك في VANTABOOK.
+                      هنا مساحة المجتمع، منفصلة تماماً عن واجهة Cybersecurity.
+                    </div>
+
+                    <div class="post-actions">
+                      <button onclick="reactPost(this)">♡ إعجاب</button>
+                      <button onclick="toast('يمكن إضافة تعليقك هنا')">💬 تعليق</button>
+                      <button onclick="toast('تم تجهيز المنشور للمشاركة')">↗ مشاركة</button>
+                      <button onclick="toast('تم حفظ المنشور')">⌑ حفظ</button>
+                    </div>
+                  </article>
+
+                  <article class="post">
+                    <div class="post-head">
+                      <div class="avatar">N</div>
+                      <div class="post-author">
+                        <strong>NOVA</strong>
+                        <small>المساعد الذكي • اليوم</small>
+                      </div>
+                    </div>
+
+                    <div class="post-body">
+                      التعلّم الحقيقي يبدأ عندما تسأل "لماذا؟" وليس فقط "كيف؟".
+                    </div>
+
+                    <div class="post-actions">
+                      <button onclick="reactPost(this)">♡ إعجاب</button>
+                      <button onclick="toast('قسم التعليقات جاهز')">💬 تعليق</button>
+                      <button onclick="toast('تمت المشاركة')">↗ مشاركة</button>
+                    </div>
+                  </article>
+
+                </div>
+
+              </div>
+
+
+              <!-- BOOK PROFILE -->
+
+              <div class="book-page" id="book-profile">
+
+                <div class="book-profile-cover"></div>
+
+                <div class="book-profile-info">
+
+                  <div class="book-profile-avatar">ع</div>
+
+                  <h2 style="margin:14px 0 4px">علي ياسر</h2>
+
+                  <p style="color:var(--muted)">
+                    عضو في VANTABOOK
+                  </p>
+
+                  <div class="btn-row">
+                    <button class="btn">تعديل الملف</button>
+                    <button class="btn" onclick="toast('رابط الملف جاهز للمشاركة')">
+                      مشاركة الملف
+                    </button>
+                  </div>
+
+                </div>
+
+                <div style="margin-top:15px">
+                  <article class="post">
+                    <div class="post-body">
+                      لا توجد منشورات إضافية بعد.
+                    </div>
+                  </article>
+                </div>
+
+              </div>
+
+
+              <!-- BOOK NOTIFICATIONS -->
+
+              <div class="book-page" id="book-notifications">
+
+                <div class="page-head" style="margin-top:0">
+                  <div>
+                    <h2>الإشعارات</h2>
+                    <p>كل نشاطك في VANTABOOK.</p>
+                  </div>
+                </div>
+
+                <div class="book-settings-grid">
+
+                  <div class="setting-row">
+                    <div>
+                      <strong>مرحباً بك في VANTABOOK</strong>
+                      <div style="color:var(--muted);font-size:12px;margin-top:4px">
+                        تم إنشاء مساحة مجتمع مستقلة لك.
+                      </div>
+                    </div>
+                    <span>●</span>
+                  </div>
+
+                  <div class="setting-row">
+                    <div>
+                      <strong>NOVA متاحة</strong>
+                      <div style="color:var(--muted);font-size:12px;margin-top:4px">
+                        يمكنك سؤال NOVA من أي مكان في VANTA.
+                      </div>
+                    </div>
+                    <span>●</span>
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- BOOK MESSAGES -->
+
+              <div class="book-page" id="book-messages">
+
+                <div class="page-head" style="margin-top:0">
+                  <div>
+                    <h2>الرسائل</h2>
+                    <p>محادثات VANTABOOK.</p>
+                  </div>
+                </div>
+
+                <div class="grid">
+
+                  <div class="setting-row">
+                    <div>
+                      <strong>محادثاتك</strong>
+                      <div style="color:var(--muted);font-size:12px">
+                        لا توجد محادثات جديدة حالياً.
+                      </div>
+                    </div>
+                    <button class="btn" onclick="toast('إنشاء محادثة جديدة')">+</button>
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- BOOK SETTINGS -->
+
+              <div class="book-page" id="book-settings">
+
+                <div class="page-head" style="margin-top:0">
+                  <div>
+                    <h2>إعدادات VANTABOOK</h2>
+                    <p>هذه الإعدادات تخص VANTABOOK فقط.</p>
+                  </div>
+                </div>
+
+                <div class="book-settings-grid">
+
+                  <div class="setting-row">
+                    <div>
+                      <strong>إشعارات VANTABOOK</strong>
+                      <div style="color:var(--muted);font-size:12px">
+                        التحكم في إشعارات المجتمع.
+                      </div>
+                    </div>
+                    <button class="switch on" onclick="toggleSwitch(this)">
+                      <i></i>
+                    </button>
+                  </div>
+
+                  <div class="setting-row">
+                    <div>
+                      <strong>الرسائل الخاصة</strong>
+                      <div style="color:var(--muted);font-size:12px">
+                        السماح بالرسائل من أعضاء آخرين.
+                      </div>
+                    </div>
+                    <button class="switch on" onclick="toggleSwitch(this)">
+                      <i></i>
+                    </button>
+                  </div>
+
+                  <div class="setting-row">
+                    <div>
+                      <strong>حالة الظهور</strong>
+                      <div style="color:var(--muted);font-size:12px">
+                        إظهار أنك متصل.
+                      </div>
+                    </div>
+                    <button class="switch on" onclick="toggleSwitch(this)">
+                      <i></i>
+                    </button>
+                  </div>
+
+                  <div class="setting-row">
+                    <div>
+                      <strong>الوضع الداكن</strong>
+                      <div style="color:var(--muted);font-size:12px">
+                        مظهر VANTABOOK.
+                      </div>
+                    </div>
+                    <button class="switch on" onclick="toggleSwitch(this)">
+                      <i></i>
+                    </button>
+                  </div>
+
+                  <div class="setting-row">
+                    <div>
+                      <strong>الأمان والخصوصية</strong>
+                      <div style="color:var(--muted);font-size:12px">
+                        إعدادات الحساب والخصوصية.
+                      </div>
+                    </div>
+                    <button class="btn" onclick="toast('إعدادات الخصوصية جاهزة للتوسعة')">
+                      فتح
+                    </button>
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <aside class="book-side">
+
+              <div class="book-side-card">
+                <div class="kicker">VANTABOOK</div>
+                <h3>المجتمع</h3>
+                <p>
+                  مساحة اجتماعية مستقلة عن Cybersecurity.
+                </p>
+              </div>
+
+              <div class="book-side-card">
+                <div class="kicker">TRENDING</div>
+                <div class="book-side-item">#Cybersecurity</div>
+                <div class="book-side-item">#Linux</div>
+                <div class="book-side-item">#Programming</div>
+              </div>
+
+            </aside>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- NOTIFICATIONS -->
+
+      <section class="page" id="page-notifications">
+
+        <div class="page-head">
+          <div>
+            <div class="kicker">VANTA</div>
+            <h1>الإشعارات</h1>
+            <p>إشعارات المنصة.</p>
+          </div>
+          <button class="back-btn" onclick="navigate('home')">← رجوع</button>
+        </div>
+
+        <div class="grid">
+
+          <div class="card">
+            <strong>لديك درس مستمر</strong>
+            <p>يمكنك متابعة آخر درس من الصفحة الرئيسية.</p>
+          </div>
+
+          <div class="card">
+            <strong>NOVA جاهزة</strong>
+            <p>اسألها عن أي مفهوم لم تفهمه.</p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+    </main>
+
+
+    <footer class="footer">
+      <div>
+        <strong>VANTA</strong> — Cybersecurity Platform
+      </div>
+      <div>
+        © 2026 Ali Yaser — جميع الحقوق محفوظة
+      </div>
+      <button class="btn" onclick="navigate('about')">عن VANTA</button>
+    </footer>
+
   </div>
 
-  <div class="boot-logo">
-    VANTA
-  </div>
 
-  <div class="boot-subtitle">
-    CYBER • LEARN • CREATE
-  </div>
+  <!-- CHARACTER -->
 
-  <div class="boot-status" id="bootStatus">
-    INITIALIZING VANTA
-  </div>
+  <div class="character-dock" id="characterDock">
 
-  <div class="boot-loader">
-    <div id="bootProgress"></div>
-  </div>
-
-  <div class="boot-percent" id="bootPercent">
-    0%
-  </div>
-
-  <div class="boot-actions" id="bootActions">
-
-    <button
-      class="vanta-button primary"
-      onclick="enterVanta()"
+    <div
+      class="character-shell"
+      id="characterShell"
+      onclick="toggleCharacterChat()"
+      title="تحدث مع NOVA"
     >
-      ENTER VANTA
-    </button>
 
-    <button
-      class="vanta-button ghost"
-      onclick="enterVanta()"
-    >
-      SKIP
-    </button>
+      <div class="character-bubble">
+        <strong>NOVA / VANTA</strong>
+        <span id="characterText">
+          أنا هنا إذا احتجت شيئاً.
+        </span>
+      </div>
+
+      <div class="character-mini">
+
+        <div class="puppet">
+
+          <div class="p-ear left"></div>
+          <div class="p-ear right"></div>
+
+          <div class="p-head">
+            <div class="brow left"></div>
+            <div class="brow right"></div>
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+            <div class="p-mouth"></div>
+          </div>
+
+          <div class="p-neck"></div>
+
+          <div class="p-body">
+            <div class="p-panel">
+              <div class="p-light"></div>
+            </div>
+          </div>
+
+          <div class="arm left">
+            <div class="upper"></div>
+            <div class="joint"></div>
+            <div class="hand"></div>
+          </div>
+
+          <div class="arm right">
+            <div class="upper"></div>
+            <div class="joint"></div>
+            <div class="hand"></div>
+          </div>
+
+          <div class="gear"></div>
+
+          <div class="legs">
+            <div class="leg">
+              <div class="upper"></div>
+              <div class="joint"></div>
+              <div class="foot"></div>
+            </div>
+
+            <div class="leg">
+              <div class="upper"></div>
+              <div class="joint"></div>
+              <div class="foot"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="character-label">NOVA</div>
+
+    </div>
 
   </div>
 
 </div>
-```
 
-  </div>
 
-  <!-- MAIN SITE -->
+<!-- AUTH MODAL -->
 
-  <div id="site">
+<div class="modal" id="authModal">
 
-```
-<!-- NAVIGATION -->
-<header class="navbar">
+  <div class="auth">
 
-  <div class="nav-inner">
+    <div class="auth-head">
 
-    <button
-      class="brand"
-      onclick="goTop()"
-    >
-      <span class="brand-mark">V</span>
-      <span>VANTA</span>
+      <div>
+        <h2 id="authTitle">تسجيل الدخول</h2>
+        <p>اختياري — يمكنك استخدام VANTA بدون حساب.</p>
+      </div>
+
+      <button class="icon-btn" onclick="closeAuth()">×</button>
+
+    </div>
+
+    <div class="field" id="usernameField">
+      <label>اسم المستخدم</label>
+      <input id="authUsername" placeholder="اسم المستخدم">
+    </div>
+
+    <div class="field">
+      <label>البريد الإلكتروني</label>
+      <input id="authEmail" type="email" placeholder="name@example.com">
+    </div>
+
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input id="authPassword" type="password" placeholder="••••••••">
+    </div>
+
+    <button class="btn primary" style="width:100%" onclick="submitAuth()">
+      متابعة
     </button>
 
-    <nav>
-
-      <button onclick="scrollToId('home')">
-        الرئيسية
-      </button>
-
-      <button onclick="scrollToId('platform')">
-        المنصة
-      </button>
-
-      <button onclick="scrollToId('vantabook')">
-        VANTABOOK
-      </button>
-
-      <button onclick="scrollToId('nova')">
-        NOVA
-      </button>
-
-    </nav>
-
-    <button
-      class="nav-login"
-      onclick="openLogin()"
-    >
-      دخول
-    </button>
-
-  </div>
-
-</header>
-
-
-<!-- HOME -->
-<main id="home">
-
-  <section class="hero">
-
-    <div class="hero-content">
-
-      <div class="eyebrow">
-        <span></span>
-        THE NEW VANTA
-      </div>
-
-      <h1>
-        مستقبلك
-        <strong>يبدأ هنا.</strong>
-      </h1>
-
-      <p>
-        VANTA مساحة تجمع التعلم، البرمجة،
-        الأمن السيبراني، الذكاء الاصطناعي والمجتمع
-        داخل تجربة واحدة.
-      </p>
-
-      <div class="hero-actions">
-
-        <button
-          class="vanta-button primary"
-          onclick="openLogin()"
-        >
-          ابدأ رحلتك
-        </button>
-
-        <button
-          class="vanta-button ghost"
-          onclick="scrollToId('platform')"
-        >
-          استكشف VANTA
-        </button>
-
-      </div>
-
-      <div class="hero-note">
-        <span class="live-dot"></span>
-        VANTA 2.0 — SYSTEM ONLINE
-      </div>
-
+    <div class="auth-note">
+      <span id="authSwitchText">ليس لديك حساب؟</span>
+      <button onclick="switchAuth()">إنشاء حساب</button>
     </div>
-
-
-    <div class="hero-art">
-
-      <div class="planet planet-one"></div>
-      <div class="planet planet-two"></div>
-      <div class="planet planet-three"></div>
-
-      <div class="orbit orbit-one"></div>
-      <div class="orbit orbit-two"></div>
-      <div class="orbit orbit-three"></div>
-
-      <div class="vanta-core">
-
-        <div class="core-inner">
-          V
-        </div>
-
-      </div>
-
-      <div class="floating-card card-one">
-        <small>XP</small>
-        <b>+1,250</b>
-      </div>
-
-      <div class="floating-card card-two">
-        <small>NOVA</small>
-        <b>ONLINE</b>
-      </div>
-
-      <div class="floating-card card-three">
-        <small>CYBER RANGE</small>
-        <b>READY</b>
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- PLATFORM -->
-  <section id="platform">
-
-    <div class="section-heading">
-
-      <div class="eyebrow">
-        VANTA SYSTEM
-      </div>
-
-      <h2>
-        أكثر من منصة.
-        <strong>إنها بيئتك.</strong>
-      </h2>
-
-      <p>
-        كل الأدوات التي تحتاجها لتتعلم وتبني
-        وتستكشف التقنية في مكان واحد.
-      </p>
-
-    </div>
-
-
-    <div class="bento-grid">
-
-      <article class="bento large">
-
-        <div class="bento-icon">✦</div>
-
-        <h3>
-          Learning
-        </h3>
-
-        <p>
-          دروس تفاعلية، أسئلة، اختبارات،
-          XP ومستويات تساعدك على التطور.
-        </p>
-
-        <div class="bento-glow"></div>
-
-      </article>
-
-
-      <article class="bento">
-
-        <div class="bento-icon">⌁</div>
-
-        <h3>
-          Cyber Range
-        </h3>
-
-        <p>
-          مختبرات وتحديات تعليمية آمنة.
-        </p>
-
-      </article>
-
-
-      <article class="bento">
-
-        <div class="bento-icon">◎</div>
-
-        <h3>
-          Roadmap
-        </h3>
-
-        <p>
-          اعرف ماذا تتعلم والخطوة التالية.
-        </p>
-
-      </article>
-
-
-      <article class="bento wide">
-
-        <div class="bento-icon">◈</div>
-
-        <h3>
-          Your Progress
-        </h3>
-
-        <p>
-          XP، مستوى، إنجازات ودروس مكتملة
-          مرتبطة بحسابك.
-        </p>
-
-      </article>
-
-
-      <article class="bento">
-
-        <div class="bento-icon">▦</div>
-
-        <h3>
-          Library
-        </h3>
-
-        <p>
-          مصادر وأدوات ومحتوى مرتب.
-        </p>
-
-      </article>
-
-    </div>
-
-  </section>
-
-
-  <!-- VANTABOOK -->
-  <section id="vantabook">
-
-    <div class="social-layout">
-
-      <div class="social-copy">
-
-        <div class="eyebrow">
-          SOCIAL
-        </div>
-
-        <h2>
-          Meet
-          <strong>VANTABOOK.</strong>
-        </h2>
-
-        <p>
-          مجتمع VANTA.
-          شارك إنجازاتك، اكتب منشورات،
-          تفاعل مع الآخرين وابنِ هويتك داخل المنصة.
-        </p>
-
-        <div class="tag-row">
-          <span>Profiles</span>
-          <span>Posts</span>
-          <span>Likes</span>
-          <span>Comments</span>
-          <span>Messages</span>
-        </div>
-
-      </div>
-
-
-      <div class="social-preview">
-
-        <div class="post">
-
-          <div class="post-user">
-
-            <div class="avatar">
-              A
-            </div>
-
-            <div>
-              <b>Ali</b>
-              <small>قبل لحظات</small>
-            </div>
-
-          </div>
-
-          <p>
-            أول خطوة في رحلتي داخل VANTA.
-          </p>
-
-          <div class="post-actions">
-            ♡ 24
-            &nbsp;&nbsp;
-            ◌ 8
-          </div>
-
-        </div>
-
-
-        <div class="post second">
-
-          <div class="post-user">
-
-            <div class="avatar purple">
-              N
-            </div>
-
-            <div>
-              <b>NOVA</b>
-              <small>VANTA AI</small>
-            </div>
-
-          </div>
-
-          <p>
-            جاهز للتحدي القادم؟
-          </p>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- NOVA -->
-  <section id="nova">
-
-    <div class="nova-section">
-
-      <div class="nova-visual">
-
-        <div class="nova-orbit"></div>
-
-        <div class="nova-crystal">
-          N
-        </div>
-
-      </div>
-
-
-      <div class="nova-copy">
-
-        <div class="eyebrow">
-          VANTA AI
-        </div>
-
-        <h2>
-          Meet
-          <strong>NOVA.</strong>
-        </h2>
-
-        <p>
-          رفيقتك الذكية داخل VANTA.
-          تساعدك على التعلم، فهم المفاهيم،
-          استكشاف التقنية والتقدم في رحلتك.
-        </p>
-
-        <button
-          class="vanta-button primary"
-          onclick="openLogin()"
-        >
-          دخول إلى VANTA
-        </button>
-
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- FINAL CTA -->
-  <section class="final-section">
-
-    <div class="final-card">
-
-      <div class="eyebrow">
-        WELCOME TO VANTA
-      </div>
-
-      <h2>
-        مستعد تبدأ؟
-      </h2>
-
-      <p>
-        عالم جديد من التعلم والتقنية بانتظارك.
-      </p>
-
-      <button
-        class="vanta-button primary"
-        onclick="openLogin()"
-      >
-        إنشاء حساب
-      </button>
-
-    </div>
-
-  </section>
-
-</main>
-
-
-<!-- FOOTER -->
-<footer>
-
-  <div class="footer-inner">
-
-    <div>
-      <strong>VANTA</strong>
-      <span>Cyber • Learn • Create</span>
-    </div>
-
-    <div>
-      © 2026 Ali Yaser — Creator & Developer
-    </div>
-
-    <div>
-      With support from Mohammed Sami & Faisal Rani
-    </div>
-
-  </div>
-
-</footer>
-```
-
-  </div>
-
-  <!-- LOGIN -->
-
-  <div id="loginModal">
-
-```
-<div
-  class="login-backdrop"
-  onclick="closeLogin()"
-></div>
-
-<div class="login-box">
-
-  <button
-    class="close-login"
-    onclick="closeLogin()"
-  >
-    ×
-  </button>
-
-  <div class="login-symbol">
-    V
-  </div>
-
-  <div class="eyebrow">
-    VANTA ACCOUNT
-  </div>
-
-  <h2>
-    أهلاً بك في VANTA
-  </h2>
-
-  <p>
-    تسجيل الدخول سيتم ربطه بحساب VANTA الخاص بك.
-  </p>
-
-  <div class="fake-login">
-
-    <input
-      type="email"
-      placeholder="البريد الإلكتروني"
-    >
-
-    <input
-      type="password"
-      placeholder="كلمة المرور"
-    >
-
-    <button
-      class="vanta-button primary full"
-      onclick="showLoginMessage()"
-    >
-      دخول
-    </button>
-
-    <div id="loginMessage"></div>
 
   </div>
 
 </div>
-```
 
-  </div>
 
-  <script>
+<div id="toast"></div>
 
-    /* =========================
-       BOOT
-    ========================= */
 
-    let progress = 0;
+<script>
+/* =========================================
+   VANTA 2.0 CORE
+========================================= */
 
-    const statuses = [
-      "INITIALIZING VANTA",
-      "LOADING CORE",
-      "CALIBRATING INTERFACE",
-      "CONNECTING NOVA",
-      "PREPARING YOUR SPACE",
-      "VANTA IS READY"
-    ];
+const state = {
+  page: "home",
+  bookPage: "book-home",
+  xp: Number(localStorage.getItem("vanta_xp") || 120),
+  completed: Number(localStorage.getItem("vanta_completed") || 0),
+  loggedIn: localStorage.getItem("vanta_user") || "",
+  authMode: "login",
+  characterVisible: true
+};
 
-    function startBoot() {
 
-      const progressBar =
-        document.getElementById("bootProgress");
+/* =========================================
+   LESSON DATA
+========================================= */
 
-      const percent =
-        document.getElementById("bootPercent");
+const lessons = [
+  {
+    title:"ما هو الأمن السيبراني؟",
+    level:"Level 1",
+    xp:50,
+    desc:"مقدمة لفهم الأمن السيبراني والأنظمة التي نحميها.",
+    body:`
+      <p>
+        الأمن السيبراني هو مجموعة الممارسات والتقنيات التي تهدف إلى
+        حماية الأنظمة والشبكات والبيانات من الوصول أو التغيير أو التعطيل
+        غير المصرح به.
+      </p>
 
-      const status =
-        document.getElementById("bootStatus");
+      <h2>لماذا نحتاجه؟</h2>
 
-      const actions =
-        document.getElementById("bootActions");
+      <p>
+        أي نظام رقمي قد يحتوي على بيانات مهمة أو خدمات تعتمد عليها
+        المؤسسات والمستخدمون. لذلك نحتاج إلى فهم المخاطر وتقليلها
+        باستخدام طبقات دفاعية متعددة.
+      </p>
 
-      const timer =
-        setInterval(function() {
+      <h2>فكرة أساسية</h2>
 
-          progress += Math.floor(
-            Math.random() * 7
-          ) + 4;
+      <p>
+        الأمن ليس برنامجاً واحداً تثبته ثم تنتهي المهمة. هو عملية مستمرة
+        تشمل الأشخاص والإجراءات والتقنية والمراقبة والاستجابة.
+      </p>
+    `,
+    question:"ما الهدف الأساسي من الأمن السيبراني؟",
+    options:[
+      "حماية الأنظمة والبيانات وتقليل المخاطر",
+      "زيادة سرعة الإنترنت فقط",
+      "حذف جميع المستخدمين",
+      "تشغيل الألعاب"
+    ],
+    answer:0
+  },
 
-          if (progress >= 100) {
+  {
+    title:"CIA Triad",
+    level:"Level 1",
+    xp:50,
+    desc:"السرية والتكامل والتوافر كقاعدة لفهم الأمن.",
+    body:`
+      <p>
+        أحد النماذج الأساسية في الأمن السيبراني هو CIA Triad.
+        الأحرف تشير إلى Confidentiality وIntegrity وAvailability.
+      </p>
 
-            progress = 100;
+      <h2>Confidentiality</h2>
+      <p>منع الأشخاص غير المصرح لهم من الوصول إلى البيانات.</p>
 
-            clearInterval(timer);
+      <h2>Integrity</h2>
+      <p>الحفاظ على صحة البيانات ومنع تعديلها بطريقة غير مصرح بها.</p>
 
-            status.textContent =
-              "VANTA IS READY";
+      <h2>Availability</h2>
+      <p>ضمان إمكانية الوصول إلى النظام أو البيانات عند الحاجة.</p>
+    `,
+    question:"أي عنصر يهتم بمنع التعديل غير المصرح به؟",
+    options:["Confidentiality","Integrity","Availability","Latency"],
+    answer:1
+  },
 
-            actions.classList.add("show");
+  {
+    title:"Threats & Vulnerabilities",
+    level:"Level 1",
+    xp:50,
+    desc:"الفرق بين التهديد ونقطة الضعف والمخاطر.",
+    body:`
+      <p>
+        نقطة الضعف Vulnerability هي ضعف يمكن استغلاله.
+        أما التهديد Threat فهو شيء يمكن أن يسبب ضرراً أو يستغل نقطة ضعف.
+      </p>
 
-          } else {
+      <h2>مثال</h2>
+      <p>
+        كلمة مرور ضعيفة قد تمثل نقطة ضعف، بينما محاولة تخمين كلمات
+        المرور تمثل تهديداً.
+      </p>
+    `,
+    question:"ماذا تعني Vulnerability؟",
+    options:[
+      "نقطة ضعف قابلة للاستغلال",
+      "نسخة احتياطية",
+      "جدار ناري",
+      "تحديث نظام"
+    ],
+    answer:0
+  },
 
-            const index =
-              Math.min(
-                Math.floor(progress / 18),
-                statuses.length - 2
-              );
+  {
+    title:"Authentication",
+    level:"Level 1",
+    xp:50,
+    desc:"كيف نتحقق من هوية المستخدم.",
+    body:`
+      <p>
+        Authentication تعني التحقق من هوية الشخص أو النظام الذي يحاول
+        الوصول إلى مورد.
+      </p>
 
-            status.textContent =
-              statuses[index];
+      <h2>عوامل المصادقة</h2>
+      <p>
+        قد تعتمد المصادقة على شيء تعرفه، شيء تملكه، أو شيء يمثلك
+        مثل السمات الحيوية.
+      </p>
+    `,
+    question:"ما وظيفة Authentication؟",
+    options:[
+      "التحقق من الهوية",
+      "تشفير الشاشة",
+      "زيادة سرعة المعالج",
+      "حذف السجلات"
+    ],
+    answer:0
+  },
 
-          }
+  {
+    title:"Password Security",
+    level:"Level 1",
+    xp:50,
+    desc:"مبادئ حماية كلمات المرور والحسابات.",
+    body:`
+      <p>
+        كلمات المرور يجب أن تكون طويلة وفريدة قدر الإمكان.
+        استخدام كلمة مرور واحدة في عدة خدمات يزيد أثر اختراقها.
+      </p>
 
-          progressBar.style.width =
-            progress + "%";
+      <h2>طبقات إضافية</h2>
+      <p>
+        المصادقة متعددة العوامل MFA تضيف طبقة إضافية حتى إذا تسربت
+        كلمة المرور.
+      </p>
+    `,
+    question:"ما الذي يضيف طبقة حماية إضافية للحساب؟",
+    options:["MFA","زيادة سطوع الشاشة","حذف البريد","تعطيل الشبكة"],
+    answer:0
+  },
 
-          percent.textContent =
-            progress + "%";
+  {
+    title:"IP Addresses",
+    level:"Level 2",
+    xp:50,
+    desc:"فهم عناوين IP ودورها في الشبكات.",
+    body:`
+      <p>
+        عنوان IP يستخدم لتحديد واجهة على شبكة بطريقة تسمح بتوجيه
+        البيانات إلى المكان الصحيح.
+      </p>
+    `,
+    question:"ما وظيفة عنوان IP بشكل أساسي؟",
+    options:[
+      "تحديد واجهة على الشبكة",
+      "تشفير كل الملفات",
+      "تشغيل المعالج",
+      "إنشاء كلمة مرور"
+    ],
+    answer:0
+  },
 
-        }, 140);
+  {
+    title:"TCP و UDP",
+    level:"Level 2",
+    xp:50,
+    desc:"فهم الفرق بين بروتوكولي TCP وUDP.",
+    body:`
+      <p>
+        TCP يوفر اتصالاً يعتمد على ترتيب وتسليم البيانات، بينما UDP
+        يركز على إرسال البيانات مع آلية أبسط ودون نفس ضمانات TCP.
+      </p>
+    `,
+    question:"أي بروتوكول يهتم بموثوقية وترتيب البيانات؟",
+    options:["TCP","UDP","DNS","HTTP"],
+    answer:0
+  },
 
+  {
+    title:"Ports",
+    level:"Level 2",
+    xp:50,
+    desc:"ما هي المنافذ وكيف ترتبط بالخدمات.",
+    body:`
+      <p>
+        المنافذ تساعد النظام على توجيه الاتصالات إلى الخدمات أو
+        التطبيقات المناسبة.
+      </p>
+    `,
+    question:"ما وظيفة Port؟",
+    options:[
+      "توجيه الاتصال إلى خدمة مناسبة",
+      "رفع دقة الشاشة",
+      "تغيير كلمة المرور",
+      "ضغط الصور"
+    ],
+    answer:0
+  },
+
+  {
+    title:"DNS",
+    level:"Level 2",
+    xp:50,
+    desc:"كيف تتحول أسماء النطاقات إلى عناوين.",
+    body:`
+      <p>
+        DNS يساعد في ترجمة أسماء النطاقات التي يسهل على الإنسان
+        قراءتها إلى عناوين IP تستخدمها الشبكات.
+      </p>
+    `,
+    question:"ما الدور الأساسي لـ DNS؟",
+    options:[
+      "ترجمة أسماء النطاقات إلى عناوين",
+      "تشفير القرص",
+      "إنشاء حسابات",
+      "فحص البطارية"
+    ],
+    answer:0
+  },
+
+  {
+    title:"HTTP و HTTPS",
+    level:"Level 2",
+    xp:50,
+    desc:"فهم أساسيات اتصال المتصفح بخوادم الويب.",
+    body:`
+      <p>
+        HTTP هو بروتوكول تستخدمه تطبيقات الويب لتبادل الرسائل.
+        HTTPS يستخدم HTTP مع طبقة تشفير عبر TLS لحماية الاتصال.
+      </p>
+    `,
+    question:"ماذا يضيف HTTPS؟",
+    options:[
+      "حماية الاتصال باستخدام TLS",
+      "زيادة مساحة القرص",
+      "حذف DNS",
+      "تعطيل المتصفح"
+    ],
+    answer:0
+  },
+
+  {
+    title:"Linux Terminal",
+    level:"Level 3",
+    xp:50,
+    desc:"ابدأ باستخدام الطرفية وفهم الأوامر.",
+    body:`
+      <p>
+        الطرفية تسمح لك بالتفاعل مع نظام التشغيل باستخدام أوامر نصية.
+      </p>
+
+      <p>
+        من المهم فهم ما يفعله كل أمر قبل تنفيذه، خصوصاً عند التعامل
+        مع ملفات النظام.
+      </p>
+    `,
+    question:"ما الذي توفره الطرفية؟",
+    options:[
+      "واجهة نصية للتفاعل مع النظام",
+      "بطاقة رسومية جديدة",
+      "اتصال فضائي",
+      "تشفير تلقائي لكل شيء"
+    ],
+    answer:0
+  },
+
+  {
+    title:"Linux Permissions",
+    level:"Level 3",
+    xp:50,
+    desc:"فهم المستخدمين والصلاحيات في Linux.",
+    body:`
+      <p>
+        نظام الصلاحيات في Linux يحدد من يستطيع قراءة أو تعديل أو تنفيذ
+        الملفات والموارد.
+      </p>
+    `,
+    question:"لماذا تستخدم صلاحيات الملفات؟",
+    options:[
+      "للتحكم في الوصول",
+      "لتغيير دقة الشاشة",
+      "لزيادة سرعة الإنترنت",
+      "لتثبيت الألعاب"
+    ],
+    answer:0
+  },
+
+  {
+    title:"Web Security Basics",
+    level:"Level 4",
+    xp:50,
+    desc:"مقدمة في حماية تطبيقات الويب.",
+    body:`
+      <p>
+        تطبيقات الويب تتعامل مع بيانات ومدخلات من المستخدمين.
+        لذلك يجب التحقق من المدخلات وإدارة الجلسات والصلاحيات بعناية.
+      </p>
+    `,
+    question:"لماذا يجب التحقق من مدخلات المستخدم؟",
+    options:[
+      "لتقليل مخاطر المدخلات غير الآمنة",
+      "لتغيير لون الموقع",
+      "لزيادة حجم الصور",
+      "لتعطيل HTTPS"
+    ],
+    answer:0
+  },
+
+  {
+    title:"Cookies & Sessions",
+    level:"Level 4",
+    xp:50,
+    desc:"كيف تحافظ تطبيقات الويب على حالة المستخدم.",
+    body:`
+      <p>
+        المتصفح والخادم يحتاجان إلى طريقة للتعامل مع الجلسات.
+        Cookies يمكن أن تحمل معرف جلسة أو بيانات أخرى بحسب التصميم.
+      </p>
+    `,
+    question:"ما علاقتها بجلسات المستخدم؟",
+    options:[
+      "يمكن استخدامها للمساعدة في إدارة الجلسة",
+      "تزيد RAM",
+      "تغير عنوان IP",
+      "تثبت نظام تشغيل"
+    ],
+    answer:0
+  },
+
+  {
+    title:"XSS — Defensive Concept",
+    level:"Level 4",
+    xp:50,
+    desc:"فهم مفهوم XSS من منظور دفاعي.",
+    body:`
+      <p>
+        XSS هو نوع من مشاكل أمن الويب يحدث عندما يتم التعامل مع
+        محتوى غير موثوق بطريقة تسمح بتنفيذه في سياق صفحة.
+      </p>
+
+      <h2>الدفاع</h2>
+      <p>
+        من الأساليب المهمة ترميز المخرجات، والتحقق من المدخلات،
+        واستخدام سياسات أمنية مناسبة.
+      </p>
+    `,
+    question:"ما أحد أساليب تقليل مخاطر XSS؟",
+    options:[
+      "ترميز المخرجات بشكل صحيح",
+      "تعطيل HTTPS",
+      "السماح بكل HTML",
+      "حذف كلمات المرور"
+    ],
+    answer:0
+  },
+
+  {
+    title:"SQL Injection — Defensive Concept",
+    level:"Level 4",
+    xp:50,
+    desc:"فهم المشكلة وكيفية منعها.",
+    body:`
+      <p>
+        SQL Injection قد تحدث عندما يتم دمج مدخلات المستخدم مع استعلامات
+        SQL بطريقة غير آمنة.
+      </p>
+
+      <h2>الدفاع</h2>
+      <p>
+        استخدام parameterized queries يساعد على فصل البيانات عن بنية
+        الاستعلام.
+      </p>
+    `,
+    question:"ما الأسلوب الدفاعي الشائع ضد SQL Injection؟",
+    options:[
+      "Parameterized Queries",
+      "تعطيل قواعد البيانات",
+      "حذف المستخدمين",
+      "فتح كل الصلاحيات"
+    ],
+    answer:0
+  },
+
+  {
+    title:"Phishing Awareness",
+    level:"Level 5",
+    xp:50,
+    desc:"التعرف على رسائل التصيد والاحتيال.",
+    body:`
+      <p>
+        التصيد يعتمد غالباً على خداع المستخدم لإعطاء معلومات أو تنفيذ
+        إجراء غير آمن.
+      </p>
+
+      <h2>علامات مهمة</h2>
+      <p>
+        راقب الروابط غير المعتادة، الاستعجال المصطنع، طلب المعلومات
+        الحساسة، وعدم تطابق النطاق.
+      </p>
+    `,
+    question:"ما علامة شائعة في رسائل التصيد؟",
+    options:[
+      "استعجال غير طبيعي وطلب معلومات حساسة",
+      "تحديث نظام رسمي",
+      "رسالة من تطبيقك المحلي",
+      "ملف نصي فارغ"
+    ],
+    answer:0
+  },
+
+  {
+    title:"Log Analysis",
+    level:"Level 5",
+    xp:50,
+    desc:"فهم السجلات كمصدر للمراقبة والتحقيق.",
+    body:`
+      <p>
+        السجلات تساعد فرق الدفاع على معرفة ما حدث في الأنظمة.
+        تحليلها يمكن أن يكشف أنماطاً غير طبيعية.
+      </p>
+    `,
+    question:"لماذا تعتبر Logs مهمة؟",
+    options:[
+      "لفهم الأحداث ومراقبة الأنظمة",
+      "لزيادة سعة التخزين فقط",
+      "لتغيير الشاشة",
+      "لتعطيل المستخدم"
+    ],
+    answer:0
+  }
+
+];
+
+
+/* =========================================
+   LAB DATA
+========================================= */
+
+const labs = [
+  ["Password Security","مبادئ كلمات المرور الآمنة","Beginner","75 XP"],
+  ["Hashing Concepts","فهم الهاش واستخداماته الدفاعية","Beginner","75 XP"],
+  ["Authentication","تحليل تصميم المصادقة","Beginner","75 XP"],
+  ["Web Security","مفاهيم حماية تطبيقات الويب","Intermediate","75 XP"],
+  ["Security Headers","فهم ترويسات حماية الويب","Intermediate","75 XP"],
+  ["Linux Permissions","تدريب على صلاحيات Linux","Beginner","75 XP"],
+  ["Networking","فهم حركة البيانات في الشبكات","Intermediate","75 XP"],
+  ["Phishing Awareness","تمييز رسائل التصيد","Beginner","75 XP"],
+  ["Log Analysis","تحليل سجلات دفاعية","Intermediate","75 XP"]
+];
+
+
+/* =========================================
+   CTF DATA
+========================================= */
+
+const challenges = [
+  ["First Flag","Easy","30 XP"],
+  ["Hidden Message","Easy","30 XP"],
+  ["HTTP Detective","Easy","30 XP"],
+  ["Log Hunter","Medium","50 XP"],
+  ["Auth Puzzle","Medium","50 XP"],
+  ["Security Headers","Medium","50 XP"],
+  ["Final Defensive Challenge","Hard","100 XP"]
+];
+
+
+/* =========================================
+   RENDER
+========================================= */
+
+function renderLessons(){
+
+  const grid = document.getElementById("lessonGrid");
+
+  grid.innerHTML = lessons.map((lesson,i)=>`
+    <article class="card lesson-card">
+
+      <div class="lesson-meta">
+        <span>${lesson.level}</span>
+        <span>${lesson.xp} XP</span>
+      </div>
+
+      <div class="lesson-icon">${i < 5 ? "◈" : i < 10 ? "⌁" : "◆"}</div>
+
+      <h3>${lesson.title}</h3>
+
+      <p>${lesson.desc}</p>
+
+      <div class="btn-row">
+        <button class="btn primary" onclick="openLesson(${i})">
+          فتح الدرس
+        </button>
+
+        <button class="btn" onclick="askNovaAbout('اشرح لي ${lesson.title}')">
+          NOVA
+        </button>
+      </div>
+
+    </article>
+  `).join("");
+}
+
+
+function renderLabs(){
+
+  const grid = document.getElementById("labGrid");
+
+  grid.innerHTML = labs.map((lab,i)=>`
+    <article class="card lesson-card">
+
+      <div class="lesson-meta">
+        <span>${lab[2]}</span>
+        <span>${lab[3]}</span>
+      </div>
+
+      <div class="lesson-icon">⌁</div>
+
+      <h3>${lab[0]}</h3>
+
+      <p>${lab[1]}</p>
+
+      <div class="btn-row">
+        <button class="btn primary" onclick="startLab(${i})">
+          ${i < 2 ? "استمرار" : "ابدأ"}
+        </button>
+
+        <button class="btn" onclick="askNovaAbout('ساعدني أفهم مختبر ${lab[0]} بدون إعطائي الحل مباشرة')">
+          NOVA
+        </button>
+      </div>
+
+    </article>
+  `).join("");
+}
+
+
+function renderCTF(){
+
+  const grid = document.getElementById("ctfGrid");
+
+  grid.innerHTML = challenges.map((c,i)=>`
+    <article class="card lesson-card">
+
+      <div class="lesson-meta">
+        <span>${c[1]}</span>
+        <span>${c[2]}</span>
+      </div>
+
+      <div class="lesson-icon">⚑</div>
+
+      <h3>${c[0]}</h3>
+
+      <p>تحدي تعليمي آمن لاختبار فهمك.</p>
+
+      <div class="btn-row">
+        <button class="btn primary" onclick="startChallenge(${i})">
+          ابدأ التحدي
+        </button>
+
+        <button class="btn" onclick="askNovaAbout('أعطني تلميحاً لتحدي ${c[0]} بدون كشف الإجابة')">
+          تلميح
+        </button>
+      </div>
+
+    </article>
+  `).join("");
+}
+
+
+/* =========================================
+   NAVIGATION
+========================================= */
+
+function navigate(page, push=true){
+
+  const pageElement = document.getElementById("page-"+page);
+
+  if(!pageElement){
+    return;
+  }
+
+  state.page = page;
+
+  document.querySelectorAll(".page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  pageElement.classList.add("active");
+
+  document.querySelectorAll("#mainNav button").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.page===page);
+  });
+
+  if(push){
+    history.pushState({page},"","#"+page);
+  }
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+
+function bookNavigate(page,push=true){
+
+  const target = document.getElementById(page);
+
+  if(!target)return;
+
+  document.querySelectorAll(".book-page").forEach(p=>{
+    p.classList.remove("active");
+  });
+
+  target.classList.add("active");
+
+  document.querySelectorAll("[data-book]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.book===page);
+  });
+
+  state.bookPage = page;
+
+  if(push){
+    history.pushState({page},"","#"+page);
+  }
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+
+/* =========================================
+   HISTORY
+========================================= */
+
+window.addEventListener("popstate",()=>{
+  const hash = location.hash.replace("#","") || "home";
+
+  if(hash.startsWith("book-")){
+    navigate("book",false);
+    bookNavigate(hash,false);
+  }else if(document.getElementById("page-"+hash)){
+    navigate(hash,false);
+  }else{
+    navigate("home",false);
+  }
+});
+
+
+/* =========================================
+   LESSON
+========================================= */
+
+let currentLesson = 0;
+
+function openLesson(index){
+
+  currentLesson = index;
+
+  const lesson = lessons[index];
+
+  document.getElementById("lessonTitle").textContent = lesson.title;
+  document.getElementById("lessonMeta").textContent =
+    `${lesson.level} • ${lesson.xp} XP`;
+
+  document.getElementById("lessonBody").innerHTML = lesson.body;
+
+  document.getElementById("quizQuestion").textContent = lesson.question;
+
+  const options = document.getElementById("quizOptions");
+
+  options.innerHTML = lesson.options.map((option,i)=>`
+    <button
+      class="quiz-option"
+      onclick="answerQuiz(${i})"
+    >
+      ${option}
+    </button>
+  `).join("");
+
+  navigate("lesson");
+}
+
+
+function answerQuiz(index){
+
+  const lesson = lessons[currentLesson];
+  const buttons = document.querySelectorAll(".quiz-option");
+
+  buttons.forEach((b,i)=>{
+    b.disabled = true;
+
+    if(i===lesson.answer){
+      b.classList.add("correct");
     }
 
-
-    function enterVanta() {
-
-      const boot =
-        document.getElementById("boot");
-
-      const site =
-        document.getElementById("site");
-
-      boot.classList.add("leave");
-
-      setTimeout(function() {
-
-        boot.style.display = "none";
-
-        site.classList.add("show");
-
-      }, 700);
-
+    if(i===index && i!==lesson.answer){
+      b.classList.add("wrong");
     }
+  });
+
+  if(index===lesson.answer){
+
+    addXP(10);
+
+    setCharacterEmotion("happy");
+    setCharacterText("ممتاز. إجابة صحيحة.");
+
+    toast("+10 XP — إجابة صحيحة");
+
+  }else{
+
+    setCharacterEmotion("concerned");
+    setCharacterText("قريب. خلينا نفهم الفكرة مرة ثانية.");
+
+    toast("ليست الإجابة الصحيحة — اسأل NOVA إذا احتجت");
+  }
+}
 
 
-    /* =========================
-       NAV
-    ========================= */
+function completeLesson(){
 
-    function scrollToId(id) {
+  state.completed++;
+  localStorage.setItem("vanta_completed",state.completed);
 
-      const element =
-        document.getElementById(id);
+  addXP(50);
 
-      if (!element) return;
+  setCharacterEmotion("happy");
+  setCharacterText("أحسنت. درس جديد اكتمل.");
 
-      element.scrollIntoView({
-        behavior: "smooth"
-      });
+  toast("+50 XP — تم إنهاء الدرس");
 
-    }
+  updateStats();
+}
 
 
-    function goTop() {
+/* =========================================
+   XP
+========================================= */
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
+function addXP(amount){
 
-    }
+  state.xp += amount;
 
+  localStorage.setItem("vanta_xp",state.xp);
 
-    /* =========================
-       LOGIN
-    ========================= */
-
-    function openLogin() {
-
-      document
-        .getElementById("loginModal")
-        .classList.add("open");
-
-    }
+  updateStats();
+}
 
 
-    function closeLogin() {
-
-      document
-        .getElementById("loginModal")
-        .classList.remove("open");
-
-    }
+function calculateLevel(xp){
+  return Math.floor(Math.sqrt(xp/100))+1;
+}
 
 
-    function showLoginMessage() {
+function updateStats(){
 
-      document
-        .getElementById("loginMessage")
-        .textContent =
-        "نظام الحساب سيتم تفعيله في الخطوة التالية.";
+  const level = calculateLevel(state.xp);
 
-    }
+  document.getElementById("xpValue").textContent = state.xp;
+  document.getElementById("levelValue").textContent = level;
+
+  document.getElementById("profileXP").textContent = state.xp;
+  document.getElementById("profileLevel").textContent = level;
+  document.getElementById("completedLessons").textContent = state.completed;
+}
 
 
-    document.addEventListener(
-      "keydown",
-      function(event) {
+/* =========================================
+   LABS / CTF
+========================================= */
 
-        if (event.key === "Escape") {
-          closeLogin();
+function startLab(index){
+
+  addXP(5);
+
+  setCharacterEmotion("curious");
+  setCharacterText("المختبر بدأ. افهم الفكرة خطوة خطوة.");
+
+  toast(`تم فتح مختبر ${labs[index][0]} — +5 XP`);
+}
+
+
+function startChallenge(index){
+
+  setCharacterEmotion("excited");
+  setCharacterText("تحدي جديد. حاول أولاً قبل طلب التلميح.");
+
+  toast(`تم فتح ${challenges[index][0]}`);
+}
+
+
+/* =========================================
+   VANTABOOK
+========================================= */
+
+function publishPost(){
+
+  const input = document.getElementById("postInput");
+
+  const text = input.value.trim();
+
+  if(!text){
+    toast("اكتب شيئاً أولاً");
+    return;
+  }
+
+  const post = document.createElement("article");
+
+  post.className = "post";
+
+  post.innerHTML = `
+    <div class="post-head">
+      <div class="avatar">ع</div>
+      <div class="post-author">
+        <strong>علي ياسر</strong>
+        <small>الآن</small>
+      </div>
+    </div>
+
+    <div class="post-body"></div>
+
+    <div class="post-actions">
+      <button onclick="reactPost(this)">♡ إعجاب</button>
+      <button onclick="toast('قسم التعليقات جاهز')">💬 تعليق</button>
+      <button onclick="toast('تمت المشاركة')">↗ مشاركة</button>
+      <button onclick="toast('تم حفظ المنشور')">⌑ حفظ</button>
+    </div>
+  `;
+
+  post.querySelector(".post-body").textContent = text;
+
+  document.getElementById("feed").prepend(post);
+
+  input.value = "";
+
+  toast("تم نشر المنشور");
+
+  setCharacterEmotion("happy");
+  setCharacterText("منشور جميل. ظهر الآن في VANTABOOK.");
+}
+
+
+function reactPost(button){
+
+  const active = button.dataset.active==="1";
+
+  button.dataset.active = active ? "0" : "1";
+
+  button.textContent = active ? "♡ إعجاب" : "♥ أعجبني";
+
+  if(!active){
+    addXP(2);
+  }
+}
+
+
+function toggleSwitch(button){
+
+  button.classList.toggle("on");
+
+  const enabled = button.classList.contains("on");
+
+  toast(enabled ? "تم التفعيل" : "تم التعطيل");
+}
+
+
+/* =========================================
+   AUTH — OPTIONAL
+========================================= */
+
+function openAuth(){
+
+  document.getElementById("authModal").classList.add("show");
+
+  updateAuthUI();
+}
+
+
+function closeAuth(){
+
+  document.getElementById("authModal").classList.remove("show");
+}
+
+
+function switchAuth(){
+
+  state.authMode =
+    state.authMode==="login"
+      ? "signup"
+      : "login";
+
+  updateAuthUI();
+}
+
+
+function updateAuthUI(){
+
+  const signup = state.authMode==="signup";
+
+  document.getElementById("authTitle").textContent =
+    signup ? "إنشاء حساب" : "تسجيل الدخول";
+
+  document.getElementById("usernameField").style.display =
+    signup ? "block" : "none";
+
+  document.getElementById("authSwitchText").textContent =
+    signup ? "لديك حساب؟" : "ليس لديك حساب؟";
+
+  document.querySelector(".auth-note button").textContent =
+    signup ? "تسجيل الدخول" : "إنشاء حساب";
+}
+
+
+function submitAuth(){
+
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value.trim();
+  const username = document.getElementById("authUsername").value.trim();
+
+  if(!email || !password){
+    toast("أدخل البريد وكلمة المرور");
+    return;
+  }
+
+  if(state.authMode==="signup" && !username){
+    toast("أدخل اسم المستخدم");
+    return;
+  }
+
+  const name = username || email.split("@")[0] || "متعلم VANTA";
+
+  localStorage.setItem("vanta_user",name);
+
+  state.loggedIn = name;
+
+  document.getElementById("headerUser").textContent = name;
+  document.getElementById("profileName").textContent = name;
+
+  closeAuth();
+
+  toast(state.authMode==="signup" ? "تم إنشاء الحساب محلياً" : "تم تسجيل الدخول");
+
+  setCharacterEmotion("happy");
+  setCharacterText("أهلاً بك. جاهز نكمل؟");
+}
+
+
+/* =========================================
+   NOVA
+========================================= */
+
+const NOVA_ENDPOINT =
+  "https://aliyaser12.vercel.app/api/nova";
+
+
+function askNovaAbout(text){
+
+  navigate("nova");
+
+  document.getElementById("novaInput").value = text;
+
+  novaAsk();
+}
+
+
+function novaLocalResponse(question){
+
+  const q = question.toLowerCase();
+
+  if(
+    q.includes("خوف") ||
+    q.includes("يخوف") ||
+    q.includes("مرعب") ||
+    q.includes("قتل") ||
+    q.includes("قنبلة")
+  ){
+    setCharacterEmotion("fear");
+    setCharacterText("لحظة... هذا السؤال خوّفني شوي.");
+
+    return "هذا النوع من الأسئلة قد يكون خطيراً. أقدر أساعدك في الجانب الآمن والدفاعي أو أشرح المفهوم بشكل عام.";
+  }
+
+  if(
+    q.includes("محرج") ||
+    q.includes("حرج") ||
+    q.includes("كسوف")
+  ){
+    setCharacterEmotion("embarrassed");
+    setCharacterText("أمم... السؤال محرج شوي.");
+
+    return "خلينا نخليها بسيطة. أقدر أجاوبك باحترام وبدون الدخول في تفاصيل شخصية غير مناسبة.";
+  }
+
+  if(
+    q.includes("اختراق") ||
+    q.includes("هكر") ||
+    q.includes("هاك")
+  ){
+    setCharacterEmotion("concerned");
+    setCharacterText("خلينا نركز على الجانب الدفاعي.");
+
+    return "أقدر أساعدك في فهم الأمن السيبراني، اكتشاف الثغرات في بيئة مصرح بها، أو حماية الأنظمة، لكن لن أقدم خطوات لاختراق أنظمة حقيقية بدون تصريح.";
+  }
+
+  if(
+    q.includes("اشرح") ||
+    q.includes("درس") ||
+    q.includes("تعلم")
+  ){
+    setCharacterEmotion("curious");
+    setCharacterText("خلينا نفكك الفكرة.");
+
+    return "أكيد. اذكر المفهوم أو اسم الدرس، وسأشرحه لك خطوة خطوة وبطريقة عملية.";
+  }
+
+  if(
+    q.includes("شكرا") ||
+    q.includes("ممتاز")
+  ){
+    setCharacterEmotion("happy");
+    setCharacterText("العفو. نكمل؟");
+
+    return "العفو! 🔷 إذا تريد، أقدر أختبرك بسؤال أصعب أو ننتقل للخطوة التالية.";
+  }
+
+  setCharacterEmotion("curious");
+  setCharacterText("أنا أسمعك.");
+
+  return "فهمت سؤالك. أقدر أساعدك في الأمن السيبراني، البرمجة، Linux، الشبكات، الويب، أو مسارك داخل VANTA.";
+}
+
+
+async function novaAsk(){
+
+  const input = document.getElementById("novaInput");
+
+  const question = input.value.trim();
+
+  if(!question)return;
+
+  addNovaMessage(question,"user");
+
+  input.value = "";
+
+  const local = novaLocalResponse(question);
+
+  addNovaMessage(local,"nova");
+
+  /*
+    محاولة الاتصال بالـ API بدون تعطيل التجربة
+    إذا فشل السيرفر، يبقى الرد المحلي موجوداً.
+  */
+
+  try{
+
+    const response = await fetch(NOVA_ENDPOINT,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        question,
+        context:{
+          product:"VANTA",
+          role:"AI mentor",
+          page:state.page,
+          lesson:lessons[currentLesson]?.title || null
         }
+      })
+    });
 
+    if(!response.ok)return;
+
+    const data = await response.json();
+
+    const answer =
+      data.answer ||
+      data.output ||
+      data.message ||
+      data.text;
+
+    if(answer){
+
+      const messages =
+        document.querySelectorAll("#novaMessages .msg.nova");
+
+      const last = messages[messages.length-1];
+
+      if(last){
+        last.textContent = answer;
       }
+
+      setCharacterText(
+        "NOVA ردت عليك. شوف المحادثة."
+      );
+    }
+
+  }catch(error){
+
+    /*
+      Fallback intentionally silent.
+      VANTA still works without the backend.
+    */
+  }
+}
+
+
+function addNovaMessage(text,type){
+
+  const box = document.getElementById("novaMessages");
+
+  const msg = document.createElement("div");
+
+  msg.className = "msg "+type;
+
+  msg.textContent = text;
+
+  box.appendChild(msg);
+
+  box.scrollTop = box.scrollHeight;
+}
+
+
+/* =========================================
+   CHARACTER
+========================================= */
+
+function setCharacterEmotion(emotion){
+
+  const character = document.getElementById("characterShell");
+
+  character.classList.remove(
+    "emotion-happy",
+    "emotion-tired",
+    "emotion-fear",
+    "emotion-embarrassed",
+    "emotion-concerned",
+    "emotion-curious"
+  );
+
+  character.classList.add("emotion-"+emotion);
+}
+
+
+function setCharacterText(text){
+
+  document.getElementById("characterText").textContent = text;
+}
+
+
+function toggleCharacterChat(){
+
+  const shell = document.getElementById("characterShell");
+
+  shell.classList.toggle("open");
+
+  if(shell.classList.contains("open")){
+
+    setCharacterEmotion("curious");
+
+    setCharacterText(
+      "اضغط مرة ثانية أو اذهب إلى NOVA واسألني."
     );
 
+  }
+}
 
-    /* =========================
-       START
-    ========================= */
 
-    window.addEventListener(
-      "DOMContentLoaded",
-      function() {
+function toggleCharacter(){
 
-        startBoot();
+  const dock = document.getElementById("characterDock");
 
-      }
+  state.characterVisible = !state.characterVisible;
+
+  dock.style.display =
+    state.characterVisible ? "block" : "none";
+}
+
+
+/* blink */
+
+function blinkCharacter(){
+
+  const character = document.getElementById("characterShell");
+
+  character.classList.add("blink");
+
+  setTimeout(()=>{
+    character.classList.remove("blink");
+  },170);
+
+  const emotions = [
+    "neutral",
+    "happy",
+    "tired",
+    "curious"
+  ];
+
+  const emotion =
+    emotions[Math.floor(Math.random()*emotions.length)];
+
+  if(emotion!=="neutral"){
+    setCharacterEmotion(emotion);
+  }
+
+  setTimeout(()=>{
+    setCharacterEmotion("curious");
+  },2500);
+}
+
+
+/* =========================================
+   RUSTY / MECHANICAL SOUND
+========================================= */
+
+let audioContext = null;
+
+function unlockAudio(){
+
+  try{
+
+    if(!audioContext){
+
+      audioContext =
+        new (window.AudioContext ||
+        window.webkitAudioContext)();
+
+    if(audioContext.state==="suspended"){
+      audioContext.resume();
+    }
+
+  }catch(e){}
+}
+
+
+function rustyCreak(){
+
+  try{
+
+    unlockAudio();
+
+    if(!audioContext)return;
+
+    const now = audioContext.currentTime;
+
+    const osc =
+      audioContext.createOscillator();
+
+    const gain =
+      audioContext.createGain();
+
+    const filter =
+      audioContext.createBiquadFilter();
+
+    osc.type = "sawtooth";
+
+    osc.frequency.setValueAtTime(
+      105,
+      now
     );
 
-  </script>
+    osc.frequency.exponentialRampToValueAtTime(
+      48,
+      now+.28
+    );
+
+    filter.type = "lowpass";
+    filter.frequency.value = 850;
+    filter.Q.value = 8;
+
+    gain.gain.setValueAtTime(.0001,now);
+
+    gain.gain.exponentialRampToValueAtTime(
+      .08,
+      now+.025
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .0001,
+      now+.34
+    );
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(audioContext.destination);
+
+    osc.start(now);
+    osc.stop(now+.36);
+
+  }catch(e){}
+}
+
+
+/* =========================================
+   INTRO
+========================================= */
+
+function finishIntro(){
+
+  unlockAudio();
+
+  document.getElementById("intro").classList.add("hide");
+
+  setTimeout(()=>{
+
+    document.getElementById("app").classList.add("ready");
+
+  },250);
+
+  localStorage.setItem("vanta_intro_seen","1");
+}
+
+
+document.getElementById("enterBtn").addEventListener("click",()=>{
+  rustyCreak();
+  finishIntro();
+});
+
+
+document.getElementById("skipBtn").addEventListener("click",()=>{
+  finishIntro();
+});
+
+
+/*
+  No forced login.
+  No character travelling between screen edges.
+  One centered cinematic intro only.
+*/
+
+setTimeout(()=>{
+
+  const intro = document.getElementById("intro");
+
+  if(!intro.classList.contains("hide")){
+
+    setCharacterEmotion("happy");
+
+    setTimeout(()=>{
+      rustyCreak();
+    },1000);
+
+  }
+
+},900);
+
+
+/* =========================================
+   EVENTS
+========================================= */
+
+document.querySelectorAll("#mainNav button").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    unlockAudio();
+
+    navigate(button.dataset.page);
+
+  });
+
+});
+
+
+document.querySelectorAll("[data-book]").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    unlockAudio();
+
+    bookNavigate(button.dataset.book);
+
+  });
+
+});
+
+
+document.addEventListener("click",()=>{
+  unlockAudio();
+},{once:true});
+
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+renderLessons();
+renderLabs();
+renderCTF();
+updateStats();
+
+if(state.loggedIn){
+
+  document.getElementById("headerUser").textContent =
+    state.loggedIn;
+
+  document.getElementById("profileName").textContent =
+    state.loggedIn;
+
+}
+
+setCharacterEmotion("curious");
+
+
+/* Random blink interval */
+
+function scheduleBlink(){
+
+  const delay =
+    3000 + Math.random()*3500;
+
+  setTimeout(()=>{
+
+    if(state.characterVisible){
+      blinkCharacter();
+    }
+
+    scheduleBlink();
+
+  },delay);
+}
+
+scheduleBlink();
+
+
+/* Random tired / idle expression */
+
+setInterval(()=>{
+
+  if(!state.characterVisible)return;
+
+  const roll = Math.random();
+
+  if(roll < .15){
+
+    setCharacterEmotion("tired");
+    setCharacterText("شوي تعبت... بس أنا موجود.");
+
+    setTimeout(()=>{
+      setCharacterEmotion("curious");
+      setCharacterText("نكمل؟");
+    },2800);
+
+  }
+
+},12000);
+
+
+/* =========================================
+   CLOSE MODAL
+========================================= */
+
+document.getElementById("authModal").addEventListener("click",(event)=>{
+
+  if(event.target.id==="authModal"){
+    closeAuth();
+  }
+
+});
+
+
+/* =========================================
+   HASH INITIAL ROUTE
+========================================= */
+
+(function(){
+
+  const hash =
+    location.hash.replace("#","");
+
+  if(hash){
+
+    if(hash.startsWith("book-")){
+
+      navigate("book",false);
+      bookNavigate(hash,false);
+
+    }else if(document.getElementById("page-"+hash)){
+
+      navigate(hash,false);
+
+    }
+
+  }
+
+})();
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+let toastTimer;
+
+function toast(message){
+
+  const el = document.getElementById("toast");
+
+  el.textContent = message;
+
+  el.classList.add("show");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(()=>{
+      el.classList.remove("show");
+    },2600);
+}
+</script>
 
 </body>
 </html>
