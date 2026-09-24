@@ -1,2965 +1,1693 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#080b18">
-<meta name="description" content="VANTA — منصة تعلم مستقبلية للبرمجة والأمن السيبراني والتقنية، من تطوير علي ياسر.">
-<meta property="og:title" content="VANTA — Ali Yaser">
-<meta property="og:description" content="منصة تعلم مستقبلية للبرمجة والأمن السيبراني والتقنية.">
-<title>VANTA — Ali Yaser</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
-<style>
-:root{
-  --bg:#060814;
-  --bg2:#0d1024;
-  --text:#f7f8ff;
-  --muted:#9ca5c4;
-  --glass:rgba(255,255,255,.075);
-  --glass2:rgba(255,255,255,.11);
-  --border:rgba(255,255,255,.14);
-  --blue:#62a7ff;
-  --cyan:#5de7ff;
-  --purple:#a879ff;
-  --pink:#ff72bd;
-  --green:#65e6ae;
-  --yellow:#ffd76a;
-  --danger:#ff6e7d;
-  --shadow:0 25px 80px rgba(0,0,0,.35);
-  --radius:26px;
-  --font:16px;
-}
+    <title>VANTA — Cyber • Learn • Connect</title>
+    <meta name="description" content="VANTA — منصة تقنية تجمع التعلم، الأمن السيبراني، المجتمع والذكاء الاصطناعي.">
+    <meta name="theme-color" content="#070711">
 
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 15% 15%,rgba(98,167,255,.18),transparent 30%),
-    radial-gradient(circle at 85% 20%,rgba(168,121,255,.18),transparent 28%),
-    radial-gradient(circle at 50% 90%,rgba(255,114,189,.12),transparent 30%),
-    var(--bg);
-  color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Arial,sans-serif;
-  font-size:var(--font);
-  overflow-x:hidden;
-}
+    <link rel="icon" href="vanta-logo.png">
 
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-a{color:inherit;text-decoration:none}
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-#space{
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  overflow:hidden;
-  z-index:-3;
-}
+    <!-- Main styles -->
+    <link rel="stylesheet" href="style.css">
 
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  border-radius:50%;
-  opacity:.65;
-  animation:twinkle 3s infinite ease-in-out;
-}
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-@keyframes twinkle{
-  0%,100%{opacity:.2;transform:scale(.7)}
-  50%{opacity:1;transform:scale(1.5)}
-}
-
-.nebula{
-  position:absolute;
-  width:500px;
-  height:500px;
-  border-radius:50%;
-  filter:blur(80px);
-  opacity:.13;
-}
-
-.n1{background:#5e6cff;left:-180px;top:10%}
-.n2{background:#ff45bd;right:-180px;top:45%}
-.n3{background:#3de9ff;left:30%;bottom:-250px}
-
-.meteor{
-  position:absolute;
-  width:120px;
-  height:2px;
-  background:linear-gradient(90deg,transparent,#fff,transparent);
-  transform:rotate(-30deg);
-  opacity:0;
-  animation:meteor 8s linear infinite;
-}
-
-@keyframes meteor{
-  0%{transform:translate(0,0) rotate(-30deg);opacity:0}
-  8%{opacity:.9}
-  25%{transform:translate(-450px,260px) rotate(-30deg);opacity:0}
-  100%{opacity:0}
-}
-
-.boot{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at center,rgba(95,120,255,.2),transparent 45%),
-    #03050d;
-  transition:.8s;
-}
-
-.boot.hide{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-}
-
-.boot-card{
-  width:min(520px,90%);
-  text-align:center;
-}
-
-.logo{
-  font-size:clamp(48px,13vw,100px);
-  font-weight:900;
-  letter-spacing:.12em;
-  background:linear-gradient(120deg,#fff,#75dfff,#a879ff,#ff72bd);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-
-.boot-sub{
-  color:#aab2d2;
-  margin:8px 0 35px;
-}
-
-.progress{
-  height:5px;
-  background:rgba(255,255,255,.1);
-  border-radius:20px;
-  overflow:hidden;
-}
-
-.progress i{
-  display:block;
-  width:0%;
-  height:100%;
-  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
-  transition:.15s;
-}
-
-.boot-actions{
-  display:flex;
-  gap:10px;
-  justify-content:center;
-  margin-top:24px;
-}
-
-.btn{
-  border:1px solid var(--border);
-  background:var(--glass);
-  color:white;
-  border-radius:16px;
-  padding:12px 18px;
-  transition:.2s;
-  backdrop-filter:blur(18px);
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-  background:var(--glass2);
-}
-
-.btn.primary{
-  border:0;
-  background:linear-gradient(135deg,#668cff,#a46cff);
-  box-shadow:0 12px 35px rgba(120,110,255,.25);
-}
-
-.btn.danger{
-  background:rgba(255,80,100,.12);
-  color:#ff9ca7;
-}
-
-.app{
-  width:min(1500px,100%);
-  margin:auto;
-  padding:16px;
-  position:relative;
-  z-index:2;
-}
-
-.topbar{
-  position:sticky;
-  top:10px;
-  z-index:100;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  padding:12px;
-  border:1px solid var(--border);
-  background:rgba(8,10,25,.65);
-  backdrop-filter:blur(25px) saturate(150%);
-  border-radius:24px;
-  box-shadow:var(--shadow);
-}
-
-.brand{
-  min-width:130px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-weight:900;
-  font-size:20px;
-}
-
-.brand-mark{
-  width:38px;
-  height:38px;
-  border-radius:13px;
-  display:grid;
-  place-items:center;
-  background:linear-gradient(135deg,#66aaff,#a878ff,#ff71bc);
-  box-shadow:0 8px 25px rgba(130,110,255,.3);
-}
-
-.nav{
-  display:flex;
-  gap:5px;
-  overflow-x:auto;
-  scrollbar-width:none;
-  flex:1;
-}
-
-.nav::-webkit-scrollbar{display:none}
-
-.nav button{
-  white-space:nowrap;
-  border:0;
-  color:#aeb5d0;
-  background:transparent;
-  padding:10px 13px;
-  border-radius:13px;
-}
-
-.nav button.active,
-.nav button:hover{
-  color:white;
-  background:rgba(255,255,255,.1);
-}
-
-.user-box{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.avatar{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  object-fit:cover;
-  background:linear-gradient(135deg,#6b8dff,#c477ff);
-  display:grid;
-  place-items:center;
-  font-weight:800;
-  overflow:hidden;
-}
-
-.avatar img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.icon-btn{
-  width:42px;
-  height:42px;
-  border:1px solid var(--border);
-  background:var(--glass);
-  color:white;
-  border-radius:14px;
-}
-
-.page{
-  display:none;
-  padding:35px 4px 80px;
-  animation:pageIn .35s ease;
-}
-
-.page.active{display:block}
-
-@keyframes pageIn{
-  from{opacity:0;transform:translateY(8px)}
-  to{opacity:1;transform:none}
-}
-
-.hero{
-  min-height:510px;
-  display:grid;
-  grid-template-columns:1.25fr .75fr;
-  align-items:center;
-  gap:30px;
-}
-
-.hero-text h1{
-  font-size:clamp(45px,7vw,88px);
-  line-height:.95;
-  margin:0 0 20px;
-  letter-spacing:-.05em;
-}
-
-.gradient{
-  background:linear-gradient(100deg,#fff,#75dfff,#a878ff,#ff72bd);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-
-.hero-text p{
-  color:var(--muted);
-  font-size:19px;
-  line-height:1.8;
-  max-width:700px;
-}
-
-.hero-actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:25px;
-}
-
-.nova-orb{
-  position:relative;
-  width:min(420px,80vw);
-  aspect-ratio:1;
-  margin:auto;
-  border-radius:50%;
-  background:
-    radial-gradient(circle at 38% 32%,#fff 0 2%,#7ddcff 4%,transparent 17%),
-    radial-gradient(circle at center,rgba(109,130,255,.5),transparent 52%),
-    radial-gradient(circle,rgba(255,88,190,.2),transparent 70%);
-  box-shadow:
-    0 0 80px rgba(98,167,255,.3),
-    0 0 150px rgba(168,121,255,.18);
-  animation:float 5s ease-in-out infinite;
-}
-
-.nova-orb:before,
-.nova-orb:after{
-  content:"";
-  position:absolute;
-  inset:14%;
-  border:1px solid rgba(255,255,255,.2);
-  border-radius:50%;
-  transform:rotate(25deg) scaleY(.45);
-}
-
-.nova-orb:after{
-  transform:rotate(-35deg) scaleY(.45);
-}
-
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-12px)}
-}
-
-.nova-face{
-  position:absolute;
-  inset:30%;
-  border-radius:35%;
-  background:linear-gradient(145deg,#171b38,#080a16);
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:inset 0 0 30px rgba(90,210,255,.1),0 20px 50px #000;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:25px;
-}
-
-.eye{
-  width:18px;
-  height:55px;
-  border-radius:50%;
-  background:linear-gradient(#fff,#5de7ff,#668cff);
-  box-shadow:0 0 22px #5de7ff;
-  transform:skew(-7deg);
-}
-
-.section-title{
-  margin:30px 0 18px;
-}
-
-.section-title h2{
-  margin:0;
-  font-size:30px;
-}
-
-.section-title p{
-  color:var(--muted);
-  margin:6px 0;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
-}
-
-.grid-3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
-
-.grid-2{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-}
-
-.card{
-  background:linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.035));
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:22px;
-  backdrop-filter:blur(20px) saturate(130%);
-  box-shadow:0 20px 60px rgba(0,0,0,.15);
-}
-
-.card.clickable{
-  cursor:pointer;
-  transition:.22s;
-}
-
-.card.clickable:hover{
-  transform:translateY(-5px);
-  border-color:rgba(120,190,255,.35);
-  box-shadow:0 25px 70px rgba(40,70,160,.2);
-}
-
-.stat{
-  position:relative;
-  overflow:hidden;
-}
-
-.stat:after{
-  content:"";
-  position:absolute;
-  width:100px;
-  height:100px;
-  border-radius:50%;
-  right:-40px;
-  top:-40px;
-  background:rgba(110,150,255,.12);
-}
-
-.stat-value{
-  font-size:34px;
-  font-weight:900;
-}
-
-.stat-label{
-  color:var(--muted);
-  margin-top:5px;
-}
-
-.course-icon{
-  width:50px;
-  height:50px;
-  border-radius:16px;
-  display:grid;
-  place-items:center;
-  font-size:23px;
-  background:rgba(255,255,255,.09);
-  margin-bottom:15px;
-}
-
-.card h3{
-  margin:8px 0;
-}
-
-.card p{
-  color:var(--muted);
-  line-height:1.7;
-}
-
-.tag{
-  display:inline-flex;
-  padding:5px 9px;
-  border-radius:9px;
-  background:rgba(255,255,255,.08);
-  color:#bfc7e2;
-  font-size:12px;
-  margin:3px;
-}
-
-.progress-line{
-  height:8px;
-  background:rgba(255,255,255,.08);
-  border-radius:10px;
-  overflow:hidden;
-  margin-top:15px;
-}
-
-.progress-line i{
-  display:block;
-  height:100%;
-  border-radius:10px;
-  background:linear-gradient(90deg,#63dfff,#897cff,#ff72bd);
-}
-
-.xp-bar{
-  padding:20px;
-  margin-bottom:18px;
-}
-
-.xp-head{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.lesson{
-  min-height:190px;
-}
-
-.lesson-number{
-  color:#7edfff;
-  font-size:13px;
-  font-weight:700;
-}
-
-.quiz-box{
-  max-width:850px;
-  margin:auto;
-}
-
-.question{
-  font-size:26px;
-  line-height:1.5;
-  margin:20px 0 25px;
-}
-
-.options{
-  display:grid;
-  gap:12px;
-}
-
-.option{
-  text-align:right;
-  padding:17px;
-  border:1px solid var(--border);
-  border-radius:17px;
-  color:white;
-  background:rgba(255,255,255,.05);
-  transition:.2s;
-}
-
-.option:hover{
-  background:rgba(255,255,255,.1);
-  transform:translateX(-3px);
-}
-
-.option.correct{
-  background:rgba(80,220,150,.14);
-  border-color:rgba(80,220,150,.5);
-}
-
-.option.wrong{
-  background:rgba(255,90,110,.14);
-  border-color:rgba(255,90,110,.5);
-}
-
-.chat{
-  height:520px;
-  display:flex;
-  flex-direction:column;
-}
-
-.messages{
-  flex:1;
-  overflow:auto;
-  padding:8px;
-}
-
-.msg{
-  max-width:80%;
-  padding:13px 16px;
-  border-radius:18px;
-  margin:8px 0;
-  line-height:1.7;
-  white-space:pre-wrap;
-}
-
-.msg.nova{
-  background:rgba(110,130,255,.12);
-  border:1px solid rgba(110,130,255,.2);
-}
-
-.msg.user{
-  background:rgba(255,255,255,.08);
-  margin-right:auto;
-}
-
-.chat-input{
-  display:flex;
-  gap:8px;
-  border-top:1px solid var(--border);
-  padding-top:12px;
-}
-
-.chat-input input{
-  flex:1;
-  border:1px solid var(--border);
-  background:rgba(0,0,0,.2);
-  color:white;
-  padding:13px 15px;
-  border-radius:15px;
-  outline:none;
-}
-
-textarea,input,select{
-  width:100%;
-  border:1px solid var(--border);
-  background:rgba(0,0,0,.2);
-  color:white;
-  padding:13px;
-  border-radius:15px;
-  outline:none;
-}
-
-textarea{resize:vertical;min-height:120px}
-
-.form-group{
-  margin-bottom:15px;
-}
-
-.form-group label{
-  display:block;
-  margin-bottom:7px;
-  color:#cdd3e9;
-}
-
-.switch-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  padding:15px 0;
-  border-bottom:1px solid rgba(255,255,255,.07);
-}
-
-.switch{
-  width:50px;
-  height:29px;
-  border-radius:20px;
-  background:#30344a;
-  border:0;
-  padding:3px;
-}
-
-.switch i{
-  display:block;
-  width:23px;
-  height:23px;
-  border-radius:50%;
-  background:white;
-  transition:.2s;
-}
-
-.switch.on{
-  background:linear-gradient(90deg,#5fdfff,#8c7bff);
-}
-
-.switch.on i{
-  transform:translateX(-21px);
-}
-
-.auth-overlay,
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:500;
-  background:rgba(0,0,0,.65);
-  backdrop-filter:blur(12px);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-
-.auth-overlay.show,
-.modal.show{display:flex}
-
-.modal-box{
-  width:min(470px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:rgba(12,15,32,.94);
-  border:1px solid var(--border);
-  border-radius:28px;
-  padding:25px;
-  box-shadow:0 30px 100px rgba(0,0,0,.6);
-}
-
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-
-.close{
-  border:0;
-  background:rgba(255,255,255,.08);
-  color:white;
-  width:38px;
-  height:38px;
-  border-radius:12px;
-}
-
-.auth-tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:5px;
-  margin-bottom:18px;
-  background:rgba(255,255,255,.05);
-  padding:4px;
-  border-radius:13px;
-}
-
-.auth-tabs button{
-  border:0;
-  background:transparent;
-  color:#aeb6d2;
-  padding:10px;
-  border-radius:10px;
-}
-
-.auth-tabs button.active{
-  color:white;
-  background:rgba(255,255,255,.1);
-}
-
-.nova-float{
-  position:fixed;
-  left:18px;
-  bottom:18px;
-  z-index:120;
-  width:65px;
-  height:65px;
-  border-radius:22px;
-  border:1px solid rgba(255,255,255,.2);
-  background:
-    radial-gradient(circle at 35% 30%,#fff 0 2%,#6fe6ff 5%,transparent 13%),
-    linear-gradient(145deg,#202750,#0c1020);
-  box-shadow:0 15px 45px rgba(0,0,0,.4),0 0 35px rgba(100,130,255,.25);
-  animation:float 4s infinite ease-in-out;
-}
-
-.nova-float .mini-eye{
-  position:absolute;
-  width:7px;
-  height:22px;
-  border-radius:50%;
-  background:#5de7ff;
-  box-shadow:0 0 10px #5de7ff;
-  top:22px;
-}
-
-.nova-float .mini-eye.a{left:22px}
-.nova-float .mini-eye.b{right:22px}
-
-.toast{
-  position:fixed;
-  right:18px;
-  bottom:20px;
-  z-index:1000;
-  background:rgba(15,18,38,.9);
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:13px 17px;
-  transform:translateY(100px);
-  opacity:0;
-  transition:.3s;
-  pointer-events:none;
-}
-
-.toast.show{
-  transform:none;
-  opacity:1;
-}
-
-.empty{
-  text-align:center;
-  padding:50px 20px;
-  color:var(--muted);
-}
-
-.post{
-  display:flex;
-  gap:12px;
-}
-
-.post-body{flex:1}
-
-.post-top{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-
-.like{
-  border:0;
-  color:#aeb6d0;
-  background:rgba(255,255,255,.06);
-  padding:8px 12px;
-  border-radius:12px;
-}
-
-.like.liked{
-  color:#ff78b9;
-  background:rgba(255,100,180,.1);
-}
-
-.profile-cover{
-  min-height:220px;
-  background:
-    radial-gradient(circle at 20% 30%,rgba(95,220,255,.3),transparent 30%),
-    radial-gradient(circle at 80% 20%,rgba(185,100,255,.35),transparent 30%),
-    linear-gradient(120deg,#151936,#0d1022);
-  border-radius:30px;
-  border:1px solid var(--border);
-  position:relative;
-}
-
-.profile-info{
-  margin-top:-60px;
-  position:relative;
-  padding:0 25px 20px;
-}
-
-.profile-big-avatar{
-  width:120px;
-  height:120px;
-  border-radius:35px;
-  border:5px solid #101328;
-  background:linear-gradient(135deg,#6b8dff,#c477ff);
-  object-fit:cover;
-}
-
-.nova-full{
-  display:grid;
-  grid-template-columns:.8fr 1.2fr;
-  gap:20px;
-  align-items:stretch;
-}
-
-.nova-panel{
-  min-height:520px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-
-.nova-big{
-  width:min(360px,70vw);
-  aspect-ratio:1;
-  position:relative;
-  border-radius:45%;
-  background:
-    radial-gradient(circle at 40% 35%,#fff 0 2%,#75e8ff 4%,transparent 15%),
-    radial-gradient(circle,#596cff,transparent 55%),
-    linear-gradient(145deg,#1a2043,#070913);
-  box-shadow:0 0 100px rgba(90,130,255,.3);
-  transform:rotate(-3deg);
-}
-
-.nova-big:before{
-  content:"";
-  position:absolute;
-  inset:8%;
-  border:1px solid rgba(255,255,255,.15);
-  border-radius:40%;
-  transform:rotate(25deg);
-}
-
-.nova-mouth{
-  position:absolute;
-  width:95px;
-  height:30px;
-  border-bottom:4px solid #5de7ff;
-  border-radius:50%;
-  left:50%;
-  bottom:29%;
-  transform:translateX(-50%);
-  filter:drop-shadow(0 0 8px #5de7ff);
-}
-
-.footer{
-  text-align:center;
-  color:#717997;
-  padding:40px 10px;
-  font-size:13px;
-}
-
-@media(max-width:1100px){
-  .grid{grid-template-columns:repeat(2,1fr)}
-  .grid-3{grid-template-columns:repeat(2,1fr)}
-  .hero{grid-template-columns:1fr}
-  .hero-text{text-align:center}
-  .hero-actions{justify-content:center}
-  .hero-text p{margin-left:auto;margin-right:auto}
-  .nova-full{grid-template-columns:1fr}
-}
-
-@media(max-width:700px){
-  .app{padding:8px}
-  .topbar{
-    top:5px;
-    border-radius:18px;
-    flex-wrap:wrap;
-  }
-  .brand{min-width:auto}
-  .nav{order:3;flex-basis:100%}
-  .nav button{padding:9px 10px;font-size:13px}
-  .user-box{margin-right:auto}
-  .page{padding-top:25px}
-  .hero{min-height:auto;padding:30px 0}
-  .hero-text h1{font-size:49px}
-  .hero-text p{font-size:16px}
-  .grid,.grid-3,.grid-2{grid-template-columns:1fr}
-  .card{padding:18px;border-radius:21px}
-  .question{font-size:21px}
-  .msg{max-width:90%}
-  .profile-info{padding:0 12px 20px}
-  .profile-big-avatar{width:90px;height:90px}
-  .nova-panel{min-height:380px}
-  .nova-orb{width:300px}
-}
-
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important;
-    scroll-behavior:auto!important;
-    transition-duration:.01ms!important;
-  }
-}
-</style>
+    <!-- VANTA config -->
+    <script src="supabase-config.js"></script>
 </head>
 
 <body>
 
-<div id="space">
-  <div class="nebula n1"></div>
-  <div class="nebula n2"></div>
-  <div class="nebula n3"></div>
+<!-- =========================================================
+     BACKGROUND
+========================================================= -->
+
+<div class="space-background" aria-hidden="true">
+    <div class="stars stars-one"></div>
+    <div class="stars stars-two"></div>
+    <div class="stars stars-three"></div>
+
+    <div class="orb orb-purple"></div>
+    <div class="orb orb-blue"></div>
+    <div class="orb orb-pink"></div>
+
+    <div class="planet planet-one"></div>
+    <div class="planet planet-two"></div>
+    <div class="planet planet-three"></div>
+
+    <div class="meteor meteor-one"></div>
+    <div class="meteor meteor-two"></div>
 </div>
 
-<div class="boot" id="boot">
-  <div class="boot-card">
-    <div class="logo">VANTA</div>
-    <div class="boot-sub">A learning system by Ali Yaser</div>
-    <div class="progress"><i id="bootProgress"></i></div>
-    <div class="boot-actions">
-      <button class="btn primary" id="enterBtn">دخول</button>
-      <button class="btn" id="skipBtn">تخطي</button>
-    </div>
-  </div>
-</div>
 
-<div class="app">
+<!-- =========================================================
+     HEADER
+========================================================= -->
 
 <header class="topbar">
-  <div class="brand">
-    <div class="brand-mark">V</div>
-    <span>VANTA</span>
-  </div>
 
-  <nav class="nav" id="nav">
-    <button data-page="home" class="active">الرئيسية</button>
-    <button data-page="learn">التعلم</button>
-    <button data-page="cyber">Cyber Range</button>
-    <button data-page="labs">Labs</button>
-    <button data-page="challenges">CTF</button>
-    <button data-page="programming">البرمجة</button>
-    <button data-page="technology">التقنية</button>
-    <button data-page="library">المكتبة</button>
-    <button data-page="quiz">Quiz</button>
-    <button data-page="roadmap">Roadmap</button>
-    <button data-page="community">المجتمع</button>
-    <button data-page="dashboard">لوحتي</button>
-    <button data-page="nova">NOVA</button>
-    <button data-page="settings">الإعدادات</button>
-  </nav>
+    <a href="index.html" class="brand" aria-label="VANTA">
 
-  <div class="user-box">
-    <button class="icon-btn" id="authBtn">دخول</button>
-    <div class="avatar" id="topAvatar">A</div>
-  </div>
+        <div class="brand-mark">
+            <span>V</span>
+        </div>
+
+        <div class="brand-text">
+            <strong>VANTA</strong>
+            <small>CYBER • LEARN • CONNECT</small>
+        </div>
+
+    </a>
+
+
+    <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+
+        <a href="#home" class="nav-link active">
+            الرئيسية
+        </a>
+
+        <a href="#features" class="nav-link">
+            المنصة
+        </a>
+
+        <a href="#vantabook" class="nav-link">
+            VANTABOOK
+        </a>
+
+        <a href="#nova" class="nav-link">
+            NOVA
+        </a>
+
+        <a href="#about" class="nav-link">
+            عن VANTA
+        </a>
+
+    </nav>
+
+
+    <div class="top-actions">
+
+        <button
+            class="icon-button theme-button"
+            type="button"
+            aria-label="المظهر"
+            title="المظهر">
+            ◐
+        </button>
+
+        <button
+            class="button button-ghost open-login logged-out-only"
+            type="button">
+            تسجيل الدخول
+        </button>
+
+        <button
+            class="button button-primary open-signup logged-out-only"
+            type="button">
+            ابدأ الآن
+        </button>
+
+        <div class="user-menu logged-in-only">
+
+            <button class="user-avatar" id="headerUserAvatar" type="button">
+                <span id="headerUserInitial">V</span>
+            </button>
+
+            <div class="user-dropdown">
+
+                <div class="dropdown-user">
+                    <strong id="headerUsername">
+                        مستخدم VANTA
+                    </strong>
+
+                    <small id="headerEmail">
+                        —
+                    </small>
+                </div>
+
+                <a href="dashboard.html">
+                    لوحة التحكم
+                </a>
+
+                <a href="profile.html">
+                    الملف الشخصي
+                </a>
+
+                <a href="settings.html">
+                    الإعدادات
+                </a>
+
+                <button id="logoutButton" type="button">
+                    تسجيل الخروج
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </header>
 
-<main>
 
-<!-- HOME -->
-<section class="page active" id="page-home">
-  <div class="hero">
-    <div class="hero-text">
-      <div class="tag">VANTA SYSTEM • 01</div>
-      <h1>تعلم.<br><span class="gradient">تطور.</span><br>لا تتوقف.</h1>
-      <p>
-        منصة مستقبلية تجمع البرمجة والأمن السيبراني والتقنية في تجربة تعلم
-        تفاعلية يقودها NOVA، المساعد الذكي داخل VANTA.
-      </p>
+<!-- =========================================================
+     MAIN
+========================================================= -->
 
-      <div class="hero-actions">
-        <button class="btn primary" onclick="go('learn')">ابدأ التعلم</button>
-        <button class="btn" onclick="go('nova')">قابل NOVA</button>
-        <button class="btn" onclick="go('cyber')">ادخل Cyber Range</button>
-      </div>
-    </div>
+<main id="home">
 
-    <div>
-      <div class="nova-orb">
-        <div class="nova-face">
-          <div class="eye"></div>
-          <div class="eye"></div>
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<section class="hero section">
+
+    <div class="hero-content">
+
+        <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            مرحبًا بك في الجيل الجديد من التعلم التقني
         </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-title">
-    <h2>حالتك الآن</h2>
-    <p>رحلتك التعليمية محفوظة على هذا الجهاز وحسابك عند تسجيل الدخول.</p>
-  </div>
-
-  <div class="grid">
-    <div class="card stat">
-      <div class="stat-value" id="homeXP">0</div>
-      <div class="stat-label">XP</div>
-    </div>
-    <div class="card stat">
-      <div class="stat-value" id="homeLevel">1</div>
-      <div class="stat-label">المستوى</div>
-    </div>
-    <div class="card stat">
-      <div class="stat-value" id="homeStreak">0</div>
-      <div class="stat-label">أيام متتالية</div>
-    </div>
-    <div class="card stat">
-      <div class="stat-value" id="homeLessons">0</div>
-      <div class="stat-label">دروس مكتملة</div>
-    </div>
-  </div>
-
-  <div class="section-title">
-    <h2>ابدأ من هنا</h2>
-  </div>
-
-  <div class="grid-3">
-    <div class="card clickable" onclick="startLesson('programming')">
-      <div class="course-icon">⌘</div>
-      <span class="tag">Programming</span>
-      <h3>أساسيات البرمجة</h3>
-      <p>منطق البرمجة، المتغيرات، الشروط، الحلقات والدوال.</p>
-    </div>
-
-    <div class="card clickable" onclick="startLesson('cyber')">
-      <div class="course-icon">◈</div>
-      <span class="tag">Cybersecurity</span>
-      <h3>أساسيات الأمن السيبراني</h3>
-      <p>الشبكات، المصادقة، كلمات المرور، التشفير والتصيد.</p>
-    </div>
-
-    <div class="card clickable" onclick="startLesson('technology')">
-      <div class="course-icon">✦</div>
-      <span class="tag">Technology</span>
-      <h3>التقنية الحديثة</h3>
-      <p>الذكاء الاصطناعي، السحابة، الأنظمة والويب الحديث.</p>
-    </div>
-  </div>
-</section>
-
-<!-- LEARN -->
-<section class="page" id="page-learn">
-  <div class="section-title">
-    <h2>مركز التعلم</h2>
-    <p>اختر مسارك، وسيتم تسجيل تقدمك تلقائيًا.</p>
-  </div>
-
-  <div class="card xp-bar">
-    <div class="xp-head">
-      <strong>المستوى <span id="learnLevel">1</span></strong>
-      <span><span id="learnXP">0</span> XP</span>
-    </div>
-    <div class="progress-line">
-      <i id="learnProgress" style="width:0%"></i>
-    </div>
-  </div>
-
-  <div class="grid-3">
-    <div class="card clickable lesson" onclick="startLesson('programming')">
-      <span class="lesson-number">UNIT 01</span>
-      <h3>البرمجة</h3>
-      <p>تعلم التفكير البرمجي وبناء البرامج خطوة بخطوة.</p>
-      <span class="tag">مبتدئ → متقدم</span>
-    </div>
-
-    <div class="card clickable lesson" onclick="startLesson('cyber')">
-      <span class="lesson-number">UNIT 02</span>
-      <h3>الأمن السيبراني</h3>
-      <p>فهم الدفاع، الشبكات، المصادقة وتحليل المخاطر.</p>
-      <span class="tag">Defensive</span>
-    </div>
-
-    <div class="card clickable lesson" onclick="startLesson('technology')">
-      <span class="lesson-number">UNIT 03</span>
-      <h3>التقنية</h3>
-      <p>اكتشف كيف تعمل التقنيات الحديثة من الداخل.</p>
-      <span class="tag">Modern Tech</span>
-    </div>
-  </div>
-
-  <div class="section-title">
-    <h2>آخر ما تعلمته</h2>
-  </div>
-
-  <div class="card">
-    <h3 id="lastTopic">لم تبدأ أي درس بعد</h3>
-    <p id="lastTopicText">ابدأ أول درس وسيظهر تقدمك هنا.</p>
-    <button class="btn primary" onclick="resumeLearning()">متابعة</button>
-  </div>
-</section>
-
-<!-- CYBER -->
-<section class="page" id="page-cyber">
-  <div class="section-title">
-    <h2>Cyber Range</h2>
-    <p>تدريب دفاعي وآمن على مفاهيم الأمن السيبراني.</p>
-  </div>
-
-  <div class="grid-3">
-    <div class="card clickable" onclick="openCyber('password')">
-      <div class="course-icon">🔐</div>
-      <h3>Password Strength</h3>
-      <p>تعلم كيف تقيس قوة كلمة المرور وما الذي يجعلها أقوى.</p>
-    </div>
-
-    <div class="card clickable" onclick="openCyber('hash')">
-      <div class="course-icon">#</div>
-      <h3>Hashing</h3>
-      <p>افهم الفرق بين hashing والتشفير واستخداماتهما.</p>
-    </div>
-
-    <div class="card clickable" onclick="openCyber('phishing')">
-      <div class="course-icon">✉</div>
-      <h3>Phishing Awareness</h3>
-      <p>تعلم اكتشاف رسائل التصيد والروابط المشبوهة.</p>
-    </div>
-
-    <div class="card clickable" onclick="openCyber('auth')">
-      <div class="course-icon">◉</div>
-      <h3>Authentication</h3>
-      <p>افهم تسجيل الدخول، الجلسات، كلمات المرور والمصادقة متعددة العوامل.</p>
-    </div>
-
-    <div class="card clickable" onclick="openCyber('network')">
-      <div class="course-icon">⌁</div>
-      <h3>Network Basics</h3>
-      <p>أساسيات IP وDNS وHTTP والشبكات المحلية.</p>
-    </div>
-
-    <div class="card clickable" onclick="openCyber('analysis')">
-      <div class="course-icon">◌</div>
-      <h3>Security Analysis</h3>
-      <p>تعلم التفكير كمحلل دفاعي وتحديد المخاطر.</p>
-    </div>
-  </div>
-</section>
-
-<!-- LABS -->
-<section class="page" id="page-labs">
-  <div class="section-title">
-    <h2>Labs</h2>
-    <p>تجارب تعليمية قصيرة لتثبيت المفاهيم.</p>
-  </div>
-
-  <div class="grid-3">
-    <div class="card clickable" onclick="runLab('http')">
-      <span class="tag">WEB</span>
-      <h3>كيف يعمل HTTP؟</h3>
-      <p>تتبع طلبًا واستجابة وافهم دور headers وstatus codes.</p>
-    </div>
-
-    <div class="card clickable" onclick="runLab('dns')">
-      <span class="tag">NETWORK</span>
-      <h3>رحلة DNS</h3>
-      <p>اكتشف كيف يتحول اسم الموقع إلى عنوان IP.</p>
-    </div>
-
-    <div class="card clickable" onclick="runLab('crypto')">
-      <span class="tag">CRYPTO</span>
-      <h3>Hash Lab</h3>
-      <p>قارن بين قيم hash وافهم خاصية التغيير الكامل.</p>
-    </div>
-
-    <div class="card clickable" onclick="runLab('social')">
-      <span class="tag">AWARENESS</span>
-      <h3>Social Engineering</h3>
-      <p>حدد العلامات التي تكشف محاولة خداع اجتماعي.</p>
-    </div>
-
-    <div class="card clickable" onclick="runLab('secure')">
-      <span class="tag">DEFENSE</span>
-      <h3>Secure Login</h3>
-      <p>صمم تصورًا آمنًا لعملية تسجيل الدخول.</p>
-    </div>
-
-    <div class="card clickable" onclick="runLab('privacy')">
-      <span class="tag">PRIVACY</span>
-      <h3>Privacy Check</h3>
-      <p>راجع إعدادات الخصوصية واكتشف المعلومات المكشوفة.</p>
-    </div>
-  </div>
-</section>
-
-<!-- CHALLENGES -->
-<section class="page" id="page-challenges">
-  <div class="section-title">
-    <h2>Challenges / CTF</h2>
-    <p>تحديات معرفية قانونية بدون استهداف أنظمة حقيقية.</p>
-  </div>
-
-  <div class="grid-3">
-    <div class="card clickable" onclick="startChallenge(1)">
-      <span class="tag">EASY</span>
-      <h3>Hidden Message</h3>
-      <p>اكتشف الرسالة المخفية في نص تدريبي.</p>
-      <button class="btn">ابدأ</button>
-    </div>
-
-    <div class="card clickable" onclick="startChallenge(2)">
-      <span class="tag">MEDIUM</span>
-      <h3>Hash Detective</h3>
-      <p>حل لغزًا مبنيًا على مفهوم hashing.</p>
-      <button class="btn">ابدأ</button>
-    </div>
-
-    <div class="card clickable" onclick="startChallenge(3)">
-      <span class="tag">LOGIC</span>
-      <h3>Security Analyst</h3>
-      <p>حل سيناريو تحليل مخاطر دفاعي.</p>
-      <button class="btn">ابدأ</button>
-    </div>
-  </div>
-</section>
-
-<!-- PROGRAMMING -->
-<section class="page" id="page-programming">
-  <div class="section-title">
-    <h2>Programming</h2>
-    <p>مسار البرمجة داخل VANTA.</p>
-  </div>
-
-  <div class="grid-3">
-    <div class="card clickable" onclick="startLesson('javascript')">
-      <div class="course-icon">JS</div>
-      <h3>JavaScript</h3>
-      <p>اللغة الأساسية للتفاعل في الويب.</p>
-    </div>
-
-    <div class="card clickable" onclick="startLesson('python')">
-      <div class="course-icon">🐍</div>
-      <h3>Python</h3>
-      <p>تعلم البرمجة والأتمتة وتحليل البيانات.</p>
-    </div>
-
-    <div class="card clickable" onclick="startLesson('web')">
-      <div class="course-icon">◇</div>
-      <h3>HTML / CSS</h3>
-      <p>بناء صفحات ومواقع متجاوبة وحديثة.</p>
-    </div>
-
-    <div class="card clickable" onclick="startLesson('logic')">
-      <div class="course-icon">∑</div>
-      <h3>Programming Logic</h3>
-      <p>تعلم حل المشاكل قبل كتابة الكود.</p>
-    </div>
-
-    <div class="card clickable" onclick="startLesson('git')">
-      <div class="course-icon">G</div>
-      <h3>Git</h3>
-      <p>إدارة الإصدارات والتغييرات في المشاريع.</p>
-    </div>
-
-    <div class="card clickable" onclick="startLesson('apis')">
-      <div class="course-icon">API</div>
-      <h3>APIs</h3>
-      <p>فهم كيف تتواصل التطبيقات والخدمات.</p>
-    </div>
-  </div>
-</section>
-
-<!-- TECHNOLOGY -->
-<section class="page" id="page-technology">
-  <div class="section-title">
-    <h2>Technology</h2>
-    <p>استكشف التقنيات التي تشكل المستقبل.</p>
-  </div>
-
-  <div class="grid-3">
-    <div class="card clickable" onclick="techInfo('ai')">
-      <div class="course-icon">✦</div>
-      <h3>Artificial Intelligence</h3>
-      <p>النماذج، الوكلاء، الاستدلال والذكاء الاصطناعي الحديث.</p>
-    </div>
-
-    <div class="card clickable" onclick="techInfo('cloud')">
-      <div class="course-icon">☁</div>
-      <h3>Cloud</h3>
-      <p>كيف تعمل الخدمات والبنية التحتية السحابية.</p>
-    </div>
-
-    <div class="card clickable" onclick="techInfo('web3')">
-      <div class="course-icon">W</div>
-      <h3>Modern Web</h3>
-      <p>تطبيقات الويب الحديثة والواجهات التفاعلية.</p>
-    </div>
-
-    <div class="card clickable" onclick="techInfo('systems')">
-      <div class="course-icon">▣</div>
-      <h3>Operating Systems</h3>
-      <p>العمليات والذاكرة والملفات والنواة.</p>
-    </div>
-
-    <div class="card clickable" onclick="techInfo('data')">
-      <div class="course-icon">◫</div>
-      <h3>Data</h3>
-      <p>قواعد البيانات وتخزين البيانات واسترجاعها.</p>
-    </div>
-
-    <div class="card clickable" onclick="techInfo('future')">
-      <div class="course-icon">∞</div>
-      <h3>Future Tech</h3>
-      <p>اتجاهات وتقنيات جديدة يجب مراقبتها.</p>
-    </div>
-  </div>
-</section>
-
-<!-- LIBRARY -->
-<section class="page" id="page-library">
-  <div class="section-title">
-    <h2>Library</h2>
-    <p>مصادر تساعدك على التعلم خارج الدروس.</p>
-  </div>
-
-  <div class="grid-3">
-    <div class="card clickable" onclick="resource('youtube')">
-      <div class="course-icon">▶</div>
-      <h3>YouTube</h3>
-      <p>ابحث عن شروحات تقنية موثوقة ومناسبة لمستواك.</p>
-    </div>
-
-    <div class="card clickable" onclick="resource('docs')">
-      <div class="course-icon">⌘</div>
-      <h3>Documentation</h3>
-      <p>تعلم من التوثيق الرسمي للأدوات واللغات.</p>
-    </div>
-
-    <div class="card clickable" onclick="resource('books')">
-      <div class="course-icon">▤</div>
-      <h3>Books</h3>
-      <p>كتب ومراجع للبرمجة والتقنية والأمن.</p>
-    </div>
-  </div>
-</section>
-
-<!-- QUIZ -->
-<section class="page" id="page-quiz">
-  <div class="section-title">
-    <h2>Adaptive Quiz</h2>
-    <p>اختبار يتغير حسب إجاباتك.</p>
-  </div>
-
-  <div class="quiz-box">
-    <div class="card">
-      <div class="tag" id="quizTopic">Programming</div>
-      <div class="question" id="quizQuestion">اضغط "ابدأ الاختبار" للحصول على سؤال.</div>
-      <div class="options" id="quizOptions"></div>
-      <div style="margin-top:18px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn primary" id="startQuizBtn" onclick="startQuiz()">ابدأ الاختبار</button>
-        <button class="btn" onclick="askNovaForQuestion()">اسأل NOVA</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ROADMAP -->
-<section class="page" id="page-roadmap">
-  <div class="section-title">
-    <h2>Roadmap</h2>
-    <p>خارطة طريق مقترحة يمكنك تعديلها مع NOVA.</p>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <span class="tag">01</span>
-      <h3>Foundation</h3>
-      <p>منطق البرمجة + أنظمة التشغيل + الشبكات الأساسية.</p>
-      <div class="progress-line"><i style="width:35%"></i></div>
-    </div>
-
-    <div class="card">
-      <span class="tag">02</span>
-      <h3>Developer</h3>
-      <p>JavaScript + Python + Git + APIs.</p>
-      <div class="progress-line"><i style="width:20%"></i></div>
-    </div>
-
-    <div class="card">
-      <span class="tag">03</span>
-      <h3>Cyber Defense</h3>
-      <p>Authentication + Web Security + Security Analysis.</p>
-      <div class="progress-line"><i style="width:15%"></i></div>
-    </div>
-
-    <div class="card">
-      <span class="tag">04</span>
-      <h3>Advanced</h3>
-      <p>Cloud + AI + Systems + مشاريع حقيقية.</p>
-      <div class="progress-line"><i style="width:5%"></i></div>
-    </div>
-  </div>
-
-  <div style="margin-top:18px;text-align:center">
-    <button class="btn primary" onclick="novaAction('generate_roadmap')">اجعل NOVA يبني خارطتي</button>
-  </div>
-</section>
-
-<!-- COMMUNITY -->
-<section class="page" id="page-community">
-  <div class="section-title">
-    <h2>Community</h2>
-    <p>شارك إنجازاتك وتابع تقدمك.</p>
-  </div>
-
-  <div class="grid-2">
-    <div class="card">
-      <h3>منشور جديد</h3>
-      <div class="form-group">
-        <textarea id="postText" placeholder="ماذا أنجزت اليوم؟"></textarea>
-      </div>
-      <button class="btn primary" onclick="createPost()">نشر الإنجاز</button>
-    </div>
-
-    <div class="card">
-      <h3>إنجازاتي</h3>
-      <p>يمكنك استخدام هذه المساحة لتسجيل ما تعلمته ومشاركته.</p>
-      <div id="achievementCount" class="stat-value">0</div>
-      <div class="stat-label">إنجازات منشورة</div>
-    </div>
-  </div>
-
-  <div class="section-title">
-    <h2>المنشورات</h2>
-  </div>
-
-  <div id="posts"></div>
-</section>
-
-<!-- DASHBOARD -->
-<section class="page" id="page-dashboard">
-  <div class="section-title">
-    <h2>لوحتي</h2>
-    <p>كل تقدمك في مكان واحد.</p>
-  </div>
-
-  <div class="card profile-cover"></div>
-
-  <div class="profile-info">
-    <img id="profileAvatar" class="profile-big-avatar" alt="Profile">
-    <h2 id="profileName">Ali Yaser</h2>
-    <p id="profileEmail">غير مسجل</p>
-    <button class="btn" onclick="openAuth()">تسجيل الدخول / الحساب</button>
-  </div>
-
-  <div class="grid">
-    <div class="card stat">
-      <div class="stat-value" id="dashXP">0</div>
-      <div class="stat-label">XP</div>
-    </div>
-    <div class="card stat">
-      <div class="stat-value" id="dashLevel">1</div>
-      <div class="stat-label">Level</div>
-    </div>
-    <div class="card stat">
-      <div class="stat-value" id="dashLessons">0</div>
-      <div class="stat-label">Lessons</div>
-    </div>
-    <div class="card stat">
-      <div class="stat-value" id="dashBadges">0</div>
-      <div class="stat-label">Badges</div>
-    </div>
-  </div>
-
-  <div class="section-title">
-    <h2>تخصيص الملف</h2>
-  </div>
-
-  <div class="card">
-    <div class="form-group">
-      <label>اسم العرض</label>
-      <input id="displayNameInput" placeholder="اسمك">
-    </div>
-
-    <div class="form-group">
-      <label>صورة الملف</label>
-      <input id="avatarInput" type="file" accept="image/*">
-    </div>
-
-    <button class="btn primary" onclick="saveProfile()">حفظ الملف</button>
-  </div>
-</section>
-
-<!-- NOVA -->
-<section class="page" id="page-nova">
-  <div class="section-title">
-    <h2>NOVA</h2>
-    <p>المساعد الذكي داخل VANTA.</p>
-  </div>
-
-  <div class="nova-full">
-    <div class="card nova-panel">
-      <div class="nova-big">
-        <div class="nova-face" style="inset:27%">
-          <div class="eye"></div>
-          <div class="eye"></div>
+
+
+        <h1>
+
+            <span>تعلّم.</span>
+            <span>استكشف.</span>
+            <span class="gradient-text">ابنِ مستقبلك.</span>
+
+        </h1>
+
+
+        <p class="hero-description">
+
+            VANTA تجمع التعلم التقني، الأمن السيبراني، التحديات،
+            المجتمع والذكاء الاصطناعي في تجربة واحدة مصممة لك.
+
+        </p>
+
+
+        <div class="hero-actions">
+
+            <button
+                class="button button-primary button-large open-signup"
+                type="button">
+
+                ابدأ رحلتك
+
+                <span class="button-arrow">←</span>
+
+            </button>
+
+
+            <a
+                href="#features"
+                class="button button-glass button-large">
+
+                اكتشف VANTA
+
+            </a>
+
         </div>
-        <div class="nova-mouth"></div>
-      </div>
-    </div>
 
-    <div class="card chat">
-      <div class="messages" id="novaMessages">
-        <div class="msg nova">
-          أنا NOVA. 👁️<br>
-          جاهز أساعدك في التعلم، تحليل أخطائك، بناء دروس وأسئلة، وتطوير مستواك داخل VANTA.
+
+        <div class="hero-trust">
+
+            <div class="trust-avatars">
+
+                <span>V</span>
+                <span>N</span>
+                <span>C</span>
+                <span>+</span>
+
+            </div>
+
+            <div>
+                <strong>منصة واحدة</strong>
+                <small>لتتعلم وتبني وتشارك</small>
+            </div>
+
         </div>
-      </div>
 
-      <div class="chat-input">
-        <input id="novaInput" placeholder="اكتب لـ NOVA..." onkeydown="if(event.key==='Enter')sendNova()">
-        <button class="btn primary" onclick="sendNova()">إرسال</button>
-      </div>
-
-      <div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:10px">
-        <button class="btn" onclick="novaAction('generate_question')">سؤال جديد</button>
-        <button class="btn" onclick="novaAction('generate_lesson')">درس</button>
-        <button class="btn" onclick="novaAction('generate_exam')">اختبار</button>
-        <button class="btn" onclick="novaAction('progress')">تحليلي</button>
-      </div>
     </div>
-  </div>
+
+
+    <!-- =====================================================
+         VANTA CORE VISUAL
+    ====================================================== -->
+
+    <div class="hero-visual">
+
+        <div class="visual-glow"></div>
+
+
+        <div class="vanta-core">
+
+            <div class="core-ring ring-one"></div>
+            <div class="core-ring ring-two"></div>
+            <div class="core-ring ring-three"></div>
+
+
+            <div class="core-glass">
+
+                <div class="core-symbol">
+                    V
+                </div>
+
+                <div class="core-label">
+                    VANTA
+                </div>
+
+                <div class="core-status">
+                    <span></span>
+                    SYSTEM ONLINE
+                </div>
+
+            </div>
+
+
+            <div class="floating-card card-top">
+
+                <span class="mini-icon">✦</span>
+
+                <div>
+                    <strong>XP</strong>
+                    <small>+250 اليوم</small>
+                </div>
+
+            </div>
+
+
+            <div class="floating-card card-right">
+
+                <span class="mini-icon">◈</span>
+
+                <div>
+                    <strong>NOVA</strong>
+                    <small>متصل الآن</small>
+                </div>
+
+            </div>
+
+
+            <div class="floating-card card-bottom">
+
+                <span class="mini-icon">⌁</span>
+
+                <div>
+                    <strong>VANTABOOK</strong>
+                    <small>مجتمعك التقني</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
-<!-- SETTINGS -->
-<section class="page" id="page-settings">
-  <div class="section-title">
-    <h2>الإعدادات</h2>
-    <p>تحكم في تجربة VANTA.</p>
-  </div>
 
-  <div class="grid-2">
+<!-- =========================================================
+     STATS
+========================================================= -->
 
-    <div class="card">
-      <h3>المظهر</h3>
+<section class="stats-section">
 
-      <div class="switch-row">
-        <span>حركة الخلفية</span>
-        <button class="switch on" data-setting="motion" onclick="toggleSetting(this,'motion')"><i></i></button>
-      </div>
+    <div class="stats-grid">
 
-      <div class="switch-row">
-        <span>زخرفة النجوم</span>
-        <button class="switch on" data-setting="stars" onclick="toggleSetting(this,'stars')"><i></i></button>
-      </div>
+        <div class="stat-card">
+            <strong>12+</strong>
+            <span>مسارًا تعليميًا</span>
+        </div>
 
-      <div class="form-group" style="margin-top:15px">
-        <label>حجم الخط</label>
-        <select id="fontSize" onchange="changeFont(this.value)">
-          <option value="15px">صغير</option>
-          <option value="16px" selected>متوسط</option>
-          <option value="18px">كبير</option>
-          <option value="20px">كبير جدًا</option>
-        </select>
-      </div>
+        <div class="stat-card">
+            <strong>9+</strong>
+            <span>مختبرات تقنية</span>
+        </div>
+
+        <div class="stat-card">
+            <strong>6+</strong>
+            <span>تحديات CTF</span>
+        </div>
+
+        <div class="stat-card">
+            <strong>∞</strong>
+            <span>مساحة للتطور</span>
+        </div>
+
     </div>
 
-    <div class="card">
-      <h3>الصوت</h3>
-
-      <div class="switch-row">
-        <span>أصوات VANTA</span>
-        <button class="switch on" data-setting="sound" onclick="toggleSetting(this,'sound')"><i></i></button>
-      </div>
-
-      <div class="switch-row">
-        <span>صوت NOVA</span>
-        <button class="switch on" data-setting="novaVoice" onclick="toggleSetting(this,'novaVoice')"><i></i></button>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>التعلم</h3>
-
-      <div class="form-group">
-        <label>مستوى الصعوبة</label>
-        <select id="difficulty" onchange="saveSetting('difficulty',this.value)">
-          <option>Adaptive</option>
-          <option>Easy</option>
-          <option>Medium</option>
-          <option>Hard</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>نوع التدريب</label>
-        <select id="trainingType" onchange="saveSetting('trainingType',this.value)">
-          <option>Mixed</option>
-          <option>Programming</option>
-          <option>Cybersecurity</option>
-          <option>Technology</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>الحساب</h3>
-      <p id="settingsAccount">غير مسجل</p>
-      <button class="btn" onclick="openAuth()">الحساب</button>
-      <button class="btn danger" onclick="logout()" style="margin-top:8px">تسجيل الخروج</button>
-    </div>
-
-  </div>
 </section>
+
+
+<!-- =========================================================
+     FEATURES
+========================================================= -->
+
+<section id="features" class="section features-section">
+
+    <div class="section-heading">
+
+        <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            كل ما تحتاجه في مكان واحد
+        </div>
+
+        <h2>
+            VANTA ليست مجرد موقع.
+            <span class="gradient-text">إنها منظومة.</span>
+        </h2>
+
+        <p>
+            تعلم، طبّق، تحدث مع الآخرين، واستخدم أدوات الذكاء الاصطناعي
+            بدون التنقل بين عشرات المنصات.
+        </p>
+
+    </div>
+
+
+    <div class="feature-grid">
+
+
+        <article class="feature-card feature-large">
+
+            <div class="feature-number">
+                01
+            </div>
+
+            <div class="feature-icon">
+                ◇
+            </div>
+
+            <h3>
+                التعلم الذكي
+            </h3>
+
+            <p>
+                دروس ومسارات وتمارين وأسئلة تتدرج مع مستواك،
+                مع XP وتحديات ومكافآت تساعدك على الاستمرار.
+            </p>
+
+            <a href="learn.html" class="feature-link">
+                ابدأ التعلم ←
+            </a>
+
+        </article>
+
+
+        <article class="feature-card">
+
+            <div class="feature-number">
+                02
+            </div>
+
+            <div class="feature-icon">
+                ◎
+            </div>
+
+            <h3>
+                Cyber Range
+            </h3>
+
+            <p>
+                مختبرات وتحديات تعليمية في الأمن السيبراني
+                بطريقة آمنة ومناسبة للتعلم.
+            </p>
+
+            <a href="labs.html" class="feature-link">
+                استكشف المختبرات ←
+            </a>
+
+        </article>
+
+
+        <article class="feature-card">
+
+            <div class="feature-number">
+                03
+            </div>
+
+            <div class="feature-icon">
+                ✦
+            </div>
+
+            <h3>
+                NOVA
+            </h3>
+
+            <p>
+                مساعدك الذكي داخل VANTA لمساعدتك أثناء التعلم
+                واستكشاف المنصة.
+            </p>
+
+            <a href="#nova" class="feature-link">
+                تعرف على NOVA ←
+            </a>
+
+        </article>
+
+
+        <article class="feature-card feature-wide">
+
+            <div class="feature-number">
+                04
+            </div>
+
+            <div class="feature-icon">
+                ◌
+            </div>
+
+            <h3>
+                VANTABOOK
+            </h3>
+
+            <p>
+                مجتمع VANTA. أنشئ منشوراتك، شارك أفكارك،
+                تابع المستخدمين وتفاعل مع مجتمع تقني حقيقي.
+            </p>
+
+            <a href="#vantabook" class="feature-link">
+                دخول VANTABOOK ←
+            </a>
+
+        </article>
+
+
+        <article class="feature-card">
+
+            <div class="feature-number">
+                05
+            </div>
+
+            <div class="feature-icon">
+                ↗
+            </div>
+
+            <h3>
+                Roadmap
+            </h3>
+
+            <p>
+                اعرف أين أنت الآن وإلى أين تتجه،
+                وابنِ طريقك التقني خطوة بخطوة.
+            </p>
+
+            <a href="roadmap.html" class="feature-link">
+                افتح المسار ←
+            </a>
+
+        </article>
+
+
+        <article class="feature-card">
+
+            <div class="feature-number">
+                06
+            </div>
+
+            <div class="feature-icon">
+                ◆
+            </div>
+
+            <h3>
+                الإنجازات
+            </h3>
+
+            <p>
+                اكسب XP وافتح الإنجازات وسجل تقدمك
+                في رحلتك داخل VANTA.
+            </p>
+
+            <a href="achievements.html" class="feature-link">
+                شاهد الإنجازات ←
+            </a>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     VANTABOOK
+========================================================= -->
+
+<section id="vantabook" class="section product-section">
+
+    <div class="product-copy">
+
+        <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            VANTABOOK
+        </div>
+
+        <h2>
+            عالمك الاجتماعي
+            <span class="gradient-text">داخل VANTA.</span>
+        </h2>
+
+        <p>
+            مجتمع حقيقي مرتبط بحسابك في VANTA.
+            شارك، ناقش، تابع، وتعرّف على أشخاص يهتمون بالتقنية مثلك.
+        </p>
+
+
+        <div class="product-points">
+
+            <div>
+                <span>✓</span>
+                ملفات شخصية حقيقية
+            </div>
+
+            <div>
+                <span>✓</span>
+                منشورات وتعليقات وتفاعلات
+            </div>
+
+            <div>
+                <span>✓</span>
+                رسائل وإشعارات
+            </div>
+
+            <div>
+                <span>✓</span>
+                حساب VANTA واحد لكل شيء
+            </div>
+
+        </div>
+
+
+        <a href="community.html" class="button button-primary">
+            افتح VANTABOOK
+            <span>←</span>
+        </a>
+
+    </div>
+
+
+    <div class="product-visual vantabook-visual">
+
+        <div class="social-window">
+
+            <div class="social-top">
+
+                <div class="fake-avatar">
+                    V
+                </div>
+
+                <div>
+                    <strong>VANTABOOK</strong>
+                    <small>مجتمع VANTA</small>
+                </div>
+
+                <span class="online-dot"></span>
+
+            </div>
+
+
+            <div class="post-card">
+
+                <div class="post-header">
+
+                    <div class="fake-avatar small">
+                        A
+                    </div>
+
+                    <div>
+                        <strong>Ali Yaser</strong>
+                        <small>منذ لحظات</small>
+                    </div>
+
+                </div>
+
+                <p>
+                    مرحبًا بك في VANTABOOK — مساحة جديدة
+                    لعشاق التقنية والتعلم.
+                </p>
+
+                <div class="post-image">
+                    <span>VANTA</span>
+                </div>
+
+                <div class="post-actions">
+
+                    <span>♡ 128</span>
+                    <span>◌ 32</span>
+                    <span>↗ مشاركة</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     NOVA
+========================================================= -->
+
+<section id="nova" class="section nova-section">
+
+    <div class="nova-visual">
+
+        <div class="nova-orbit orbit-one"></div>
+        <div class="nova-orbit orbit-two"></div>
+
+        <div class="nova-crystal">
+
+            <div class="nova-crystal-inner">
+                N
+            </div>
+
+        </div>
+
+        <div class="nova-particle particle-one"></div>
+        <div class="nova-particle particle-two"></div>
+        <div class="nova-particle particle-three"></div>
+
+    </div>
+
+
+    <div class="nova-copy">
+
+        <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            NOVA • AI COMPANION
+        </div>
+
+        <h2>
+            قابل NOVA،
+            <span class="gradient-text">رفيقك داخل VANTA.</span>
+        </h2>
+
+        <p>
+            NOVA ليس مجرد زر للمحادثة.
+            إنه المساعد الذكي الذي يرافقك أثناء استكشافك
+            للمنصة والتعلم والتحديات.
+        </p>
+
+
+        <div class="nova-features">
+
+            <div class="nova-feature">
+
+                <span>✦</span>
+
+                <div>
+                    <strong>مساعد ذكي</strong>
+                    <small>يساعدك على فهم ما تتعلمه</small>
+                </div>
+
+            </div>
+
+
+            <div class="nova-feature">
+
+                <span>◇</span>
+
+                <div>
+                    <strong>جزء من VANTA</strong>
+                    <small>موجود معك داخل المنصة</small>
+                </div>
+
+            </div>
+
+
+            <div class="nova-feature">
+
+                <span>⌁</span>
+
+                <div>
+                    <strong>شخصية حقيقية</strong>
+                    <small>لهوية وشكل وتجربة خاصة</small>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <a href="assistant.html" class="button button-glass">
+            تحدث مع NOVA
+            <span>←</span>
+        </a>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     LEARNING JOURNEY
+========================================================= -->
+
+<section class="section journey-section">
+
+    <div class="section-heading">
+
+        <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            رحلتك
+        </div>
+
+        <h2>
+            من أول خطوة
+            <span class="gradient-text">إلى الاحتراف.</span>
+        </h2>
+
+        <p>
+            VANTA مصممة لتخليك تتحرك إلى الأمام،
+            بدل ما تضيع بين المحتوى.
+        </p>
+
+    </div>
+
+
+    <div class="journey">
+
+        <div class="journey-line"></div>
+
+
+        <div class="journey-step">
+
+            <div class="journey-marker">
+                01
+            </div>
+
+            <div class="journey-content">
+
+                <span>START</span>
+
+                <h3>
+                    اكتشف مستواك
+                </h3>
+
+                <p>
+                    ابدأ من المستوى المناسب لك.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="journey-step">
+
+            <div class="journey-marker">
+                02
+            </div>
+
+            <div class="journey-content">
+
+                <span>LEARN</span>
+
+                <h3>
+                    تعلم بطريقة عملية
+                </h3>
+
+                <p>
+                    دروس، أسئلة، تطبيقات وتحديات.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="journey-step">
+
+            <div class="journey-marker">
+                03
+            </div>
+
+            <div class="journey-content">
+
+                <span>BUILD</span>
+
+                <h3>
+                    طبّق ما تعلمته
+                </h3>
+
+                <p>
+                    مختبرات ومشاريع وتحديات.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="journey-step">
+
+            <div class="journey-marker">
+                04
+            </div>
+
+            <div class="journey-content">
+
+                <span>CONNECT</span>
+
+                <h3>
+                    شارك مع المجتمع
+                </h3>
+
+                <p>
+                    VANTABOOK يجمعك مع الآخرين.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CTA
+========================================================= -->
+
+<section class="cta-section">
+
+    <div class="cta-glow"></div>
+
+    <div class="cta-content">
+
+        <div class="eyebrow">
+            <span class="eyebrow-dot"></span>
+            مستعد؟
+        </div>
+
+        <h2>
+            مستقبلك التقني
+            <span class="gradient-text">يبدأ هنا.</span>
+        </h2>
+
+        <p>
+            أنشئ حسابك وابدأ أول خطوة في VANTA.
+        </p>
+
+        <button
+            class="button button-primary button-large open-signup"
+            type="button">
+
+            إنشاء حساب مجاني
+            <span>←</span>
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ABOUT
+========================================================= -->
+
+<section id="about" class="section about-section">
+
+    <div class="about-grid">
+
+        <div>
+
+            <div class="eyebrow">
+                <span class="eyebrow-dot"></span>
+                عن VANTA
+            </div>
+
+            <h2>
+                نبني مساحة
+                <span class="gradient-text">للتقنية.</span>
+            </h2>
+
+        </div>
+
+
+        <div class="about-copy">
+
+            <p>
+                VANTA مشروع تقني يهدف إلى جمع التعلم،
+                الأمن السيبراني، الذكاء الاصطناعي والمجتمع
+                في تجربة واحدة حديثة.
+            </p>
+
+            <p>
+                تم إنشاء VANTA وتطويرها بواسطة
+                <strong>Ali Yaser</strong>.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="credits-card">
+
+        <div class="credits-main">
+
+            <span class="credits-label">
+                CREATED & DEVELOPED BY
+            </span>
+
+            <strong>
+                Ali Yaser
+            </strong>
+
+            <small>
+                مؤسس ومطور VANTA
+            </small>
+
+        </div>
+
+
+        <div class="credits-support">
+
+            <span>
+                SPECIAL THANKS
+            </span>
+
+            <p>
+                Mohammed Sami
+                <span>•</span>
+                Faisal Rani
+            </p>
+
+            <small>
+                شكرًا على الدعم والمساندة
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
+
 
 </main>
 
-<div class="footer">
-  VANTA — Created, Designed & Developed by <strong>Ali Yaser</strong><br>
-  © 2026 Ali Yaser. All rights reserved.
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer class="footer">
+
+    <div class="footer-top">
+
+        <a href="index.html" class="brand">
+
+            <div class="brand-mark">
+                <span>V</span>
+            </div>
+
+            <div class="brand-text">
+                <strong>VANTA</strong>
+                <small>CYBER • LEARN • CONNECT</small>
+            </div>
+
+        </a>
+
+
+        <div class="footer-links">
+
+            <a href="learn.html">
+                التعلم
+            </a>
+
+            <a href="labs.html">
+                المختبرات
+            </a>
+
+            <a href="community.html">
+                VANTABOOK
+            </a>
+
+            <a href="library.html">
+                المكتبة
+            </a>
+
+            <a href="roadmap.html">
+                Roadmap
+            </a>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="about.html">
+                عن VANTA
+            </a>
+
+            <a href="contact.html">
+                تواصل معنا
+            </a>
+
+            <a href="terms.html">
+                شروط الاستخدام
+            </a>
+
+            <a href="privacy.html">
+                الخصوصية
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 VANTA. All rights reserved.
+        </span>
+
+        <span>
+            Built by Ali Yaser
+        </span>
+
+    </div>
+
+</footer>
+
+
+<!-- =========================================================
+     AUTH MODAL
+========================================================= -->
+
+<div
+    class="authModal"
+    id="authModal"
+    aria-hidden="true">
+
+    <div class="auth-backdrop"></div>
+
+
+    <div
+        class="auth-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="authTitle">
+
+
+        <button
+            class="auth-close"
+            id="closeAuth"
+            type="button"
+            aria-label="إغلاق">
+
+            ×
+
+        </button>
+
+
+        <!-- LOGIN -->
+
+        <div class="loginView" id="loginView">
+
+            <div class="auth-logo">
+                V
+            </div>
+
+            <span class="auth-kicker">
+                WELCOME BACK
+            </span>
+
+            <h2 id="authTitle">
+                أهلًا بعودتك
+            </h2>
+
+            <p>
+                سجل دخولك للعودة إلى رحلتك في VANTA.
+            </p>
+
+
+            <form id="loginForm">
+
+                <label>
+                    البريد الإلكتروني
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        name="email"
+                        autocomplete="email"
+                        placeholder="you@example.com"
+                        required>
+
+                </label>
+
+
+                <label>
+                    كلمة المرور
+
+                    <input
+                        type="password"
+                        id="loginPassword"
+                        name="password"
+                        autocomplete="current-password"
+                        placeholder="••••••••"
+                        required>
+
+                </label>
+
+
+                <div class="auth-extra">
+
+                    <label class="remember-check">
+
+                        <input
+                            type="checkbox"
+                            id="rememberMe">
+
+                        <span>
+                            تذكرني
+                        </span>
+
+                    </label>
+
+                    <a href="#" id="forgotPassword">
+                        نسيت كلمة المرور؟
+                    </a>
+
+                </div>
+
+
+                <button
+                    class="button button-primary auth-submit"
+                    type="submit">
+
+                    تسجيل الدخول
+
+                </button>
+
+
+                <div
+                    class="auth-message"
+                    id="loginMessage">
+                </div>
+
+            </form>
+
+
+            <div class="auth-switch">
+
+                ليس لديك حساب؟
+
+                <button
+                    type="button"
+                    class="switch-auth"
+                    data-auth-mode="signup">
+
+                    إنشاء حساب
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- SIGN UP -->
+
+        <div
+            class="signupView"
+            id="signupView"
+            hidden>
+
+            <div class="auth-logo">
+                V
+            </div>
+
+            <span class="auth-kicker">
+                JOIN VANTA
+            </span>
+
+            <h2>
+                ابدأ رحلتك
+            </h2>
+
+            <p>
+                أنشئ حساب VANTA الخاص بك خلال لحظات.
+            </p>
+
+
+            <form id="signupForm">
+
+                <label>
+                    اسم المستخدم
+
+                    <input
+                        type="text"
+                        id="signupUsername"
+                        name="username"
+                        autocomplete="username"
+                        placeholder="اختر اسمك"
+                        minlength="3"
+                        maxlength="24"
+                        required>
+
+                </label>
+
+
+                <label>
+                    البريد الإلكتروني
+
+                    <input
+                        type="email"
+                        id="signupEmail"
+                        name="email"
+                        autocomplete="email"
+                        placeholder="you@example.com"
+                        required>
+
+                </label>
+
+
+                <label>
+                    كلمة المرور
+
+                    <input
+                        type="password"
+                        id="signupPassword"
+                        name="password"
+                        autocomplete="new-password"
+                        placeholder="8 أحرف على الأقل"
+                        minlength="8"
+                        required>
+
+                </label>
+
+
+                <label class="terms-check">
+
+                    <input
+                        type="checkbox"
+                        id="termsAgreement"
+                        required>
+
+                    <span>
+                        أوافق على
+                        <a href="terms.html" target="_blank">
+                            شروط الاستخدام
+                        </a>
+                        و
+                        <a href="privacy.html" target="_blank">
+                            سياسة الخصوصية
+                        </a>.
+                    </span>
+
+                </label>
+
+
+                <button
+                    class="button button-primary auth-submit"
+                    type="submit">
+
+                    إنشاء حساب
+
+                </button>
+
+
+                <div
+                    class="auth-message"
+                    id="signupMessage">
+                </div>
+
+            </form>
+
+
+            <div class="auth-switch">
+
+                لديك حساب بالفعل؟
+
+                <button
+                    type="button"
+                    class="switch-auth"
+                    data-auth-mode="login">
+
+                    تسجيل الدخول
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- AUTH LOADING -->
+
+        <div
+            class="auth-loading"
+            id="authLoading"
+            hidden>
+
+            <div class="loading-spinner"></div>
+
+            <span>
+                جاري الاتصال بـ VANTA...
+            </span>
+
+        </div>
+
+
+    </div>
+
 </div>
 
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+    class="vanta-toast"
+    id="vantaToast"
+    role="status"
+    aria-live="polite">
+
+    <span class="toast-icon">✓</span>
+
+    <span id="toastText">
+        تم
+    </span>
+
 </div>
 
-<button class="nova-float" onclick="go('nova')" title="NOVA">
-  <span class="mini-eye a"></span>
-  <span class="mini-eye b"></span>
-</button>
 
-<div class="toast" id="toast"></div>
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
 
-<!-- AUTH -->
-<div class="auth-overlay" id="authModal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <div>
-        <h2 style="margin:0">VANTA Account</h2>
-        <p style="margin:5px 0;color:var(--muted)">احفظ تقدمك مع حسابك.</p>
-      </div>
-      <button class="close" onclick="closeAuth()">×</button>
-    </div>
+<script src="app.js"></script>
+<script src="xp.js"></script>
 
-    <div class="auth-tabs">
-      <button id="loginTab" class="active" onclick="authMode('login')">دخول</button>
-      <button id="signupTab" onclick="authMode('signup')">إنشاء حساب</button>
-    </div>
-
-    <div id="nameField" class="form-group" style="display:none">
-      <label>الاسم</label>
-      <input id="authName" placeholder="اسم العرض">
-    </div>
-
-    <div class="form-group">
-      <label>البريد الإلكتروني</label>
-      <input id="authEmail" type="email" placeholder="name@example.com">
-    </div>
-
-    <div class="form-group">
-      <label>كلمة المرور</label>
-      <input id="authPassword" type="password" placeholder="••••••••">
-    </div>
-
-    <button class="btn primary" style="width:100%" id="authSubmit" onclick="submitAuth()">دخول</button>
-    <p id="authStatus" style="color:var(--muted);font-size:13px"></p>
-  </div>
-</div>
 
 <script>
-/* =========================
-   FIREBASE
-========================= */
+/*
+ * VANTA 2.0 — Homepage interactions
+ */
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDwPdYkuRjugCD21tChOoSLldQG5raA-ps",
-  authDomain: "vanta-9c0bb.firebaseapp.com",
-  projectId: "vanta-9c0bb",
-  storageBucket: "vanta-9c0bb.firebasestorage.app",
-  messagingSenderId: "169706708804",
-  appId: "1:169706708804:web:4bff666c9c6f44ee0a4111",
-  measurementId: "G-10C7TQPCZB"
-};
+document.addEventListener("DOMContentLoaded", () => {
 
-firebase.initializeApp(firebaseConfig);
+    /* -------------------------------------------------------
+       Smooth navigation
+    ------------------------------------------------------- */
 
-const auth = firebase.auth();
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
 
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+        link.addEventListener("click", event => {
 
-let currentUser = null;
-let authModeValue = "login";
+            const targetId = link.getAttribute("href");
 
-/* =========================
-   SUPABASE
-========================= */
+            if (!targetId || targetId === "#") return;
 
-const SUPABASE_URL = "https://mknbfymmwuesjffbmkmu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_fLJzcNmcjgSYGh9-EspBuQ_nJlDnZby";
+            const target = document.querySelector(targetId);
 
-/* =========================
-   STATE
-========================= */
+            if (!target) return;
 
-const defaultState = {
-  xp:0,
-  level:1,
-  lessons:0,
-  badges:0,
-  streak:0,
-  studyMinutes:0,
-  lastTopic:"",
-  lastTopicText:"",
-  posts:[],
-  settings:{
-    motion:true,
-    stars:true,
-    sound:true,
-    novaVoice:true,
-    difficulty:"Adaptive",
-    trainingType:"Mixed",
-    fontSize:"16px"
-  },
-  profile:{
-    name:"Ali Yaser",
-    avatar:""
-  }
-};
+            event.preventDefault();
 
-let state = JSON.parse(localStorage.getItem("vanta_state") || "null") || structuredClone(defaultState);
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
 
-function saveState(){
-  localStorage.setItem("vanta_state",JSON.stringify(state));
-  updateUI();
-}
-
-function updateUI(){
-
-  document.documentElement.style.setProperty(
-    "--font",
-    state.settings.fontSize || "16px"
-  );
-
-  const level = Math.max(1,Math.floor(state.xp/100)+1);
-
-  state.level = level;
-
-  const els = {
-    homeXP:state.xp,
-    homeLevel:state.level,
-    homeStreak:state.streak,
-    homeLessons:state.lessons,
-    learnLevel:state.level,
-    learnXP:state.xp,
-    dashXP:state.xp,
-    dashLevel:state.level,
-    dashLessons:state.lessons,
-    dashBadges:state.badges
-  };
-
-  Object.entries(els).forEach(([id,val])=>{
-    const el=document.getElementById(id);
-    if(el)el.textContent=val;
-  });
-
-  const percent=state.xp%100;
-
-  const progress=document.getElementById("learnProgress");
-  if(progress)progress.style.width=percent+"%";
-
-  const lastTopic=document.getElementById("lastTopic");
-  const lastTopicText=document.getElementById("lastTopicText");
-
-  if(lastTopic){
-    lastTopic.textContent=state.lastTopic || "لم تبدأ أي درس بعد";
-  }
-
-  if(lastTopicText){
-    lastTopicText.textContent=state.lastTopicText || "ابدأ أول درس وسيظهر تقدمك هنا.";
-  }
-
-  const name=state.profile?.name || "Ali Yaser";
-
-  document.getElementById("profileName").textContent=name;
-  document.getElementById("displayNameInput").value=name;
-
-  const avatar=document.getElementById("profileAvatar");
-  const topAvatar=document.getElementById("topAvatar");
-
-  if(state.profile?.avatar){
-    avatar.src=state.profile.avatar;
-    avatar.style.display="block";
-    topAvatar.innerHTML='<img src="'+state.profile.avatar+'">';
-  }else{
-    avatar.removeAttribute("src");
-    avatar.style.display="none";
-    topAvatar.textContent=name.charAt(0).toUpperCase();
-  }
-
-  if(currentUser){
-    document.getElementById("profileEmail").textContent=currentUser.email || "";
-    document.getElementById("settingsAccount").textContent=currentUser.email || "";
-    document.getElementById("authBtn").textContent="حسابي";
-  }else{
-    document.getElementById("profileEmail").textContent="غير مسجل";
-    document.getElementById("settingsAccount").textContent="غير مسجل";
-    document.getElementById("authBtn").textContent="دخول";
-  }
-
-  renderPosts();
-}
-
-/* =========================
-   NAVIGATION
-========================= */
-
-function go(page){
-
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-
-  const target=document.getElementById("page-"+page);
-
-  if(target)target.classList.add("active");
-
-  document.querySelectorAll(".nav button").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.page===page);
-  });
-
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-
-document.querySelectorAll(".nav button").forEach(btn=>{
-  btn.addEventListener("click",()=>go(btn.dataset.page));
-});
-
-/* =========================
-   BOOT
-========================= */
-
-function createSpace(){
-
-  const space=document.getElementById("space");
-
-  for(let i=0;i<100;i++){
-
-    const star=document.createElement("span");
-
-    star.className="star";
-
-    star.style.left=Math.random()*100+"%";
-    star.style.top=Math.random()*100+"%";
-    star.style.animationDelay=(Math.random()*4)+"s";
-
-    space.appendChild(star);
-  }
-
-  for(let i=0;i<5;i++){
-
-    const meteor=document.createElement("span");
-
-    meteor.className="meteor";
-
-    meteor.style.left=(60+Math.random()*40)+"%";
-    meteor.style.top=(Math.random()*50)+"%";
-    meteor.style.animationDelay=(Math.random()*8)+"s";
-
-    space.appendChild(meteor);
-  }
-}
-
-createSpace();
-
-let bootDone=false;
-
-function finishBoot(){
-
-  if(bootDone)return;
-
-  bootDone=true;
-
-  document.getElementById("boot").classList.add("hide");
-
-  if(state.settings.novaVoice){
-    speak("Welcome to VANTA");
-  }
-
-  setTimeout(()=>{
-    toast("NOVA: أهلاً بك في VANTA. لنبدأ.");
-  },900);
-}
-
-let bootProgress=0;
-
-const bootTimer=setInterval(()=>{
-
-  bootProgress+=5;
-
-  document.getElementById("bootProgress").style.width=bootProgress+"%";
-
-  if(bootProgress>=100){
-    clearInterval(bootTimer);
-  }
-
-},100);
-
-document.getElementById("enterBtn").onclick=finishBoot;
-document.getElementById("skipBtn").onclick=finishBoot;
-
-setTimeout(finishBoot,6500);
-
-/* =========================
-   TOAST
-========================= */
-
-let toastTimer;
-
-function toast(message){
-
-  const el=document.getElementById("toast");
-
-  el.textContent=message;
-
-  el.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer=setTimeout(()=>{
-    el.classList.remove("show");
-  },3500);
-}
-
-/* =========================
-   AUDIO
-========================= */
-
-function speak(text){
-
-  if(!state.settings.novaVoice)return;
-
-  if(!("speechSynthesis" in window))return;
-
-  try{
-    speechSynthesis.cancel();
-
-    const u=new SpeechSynthesisUtterance(text);
-
-    u.lang="en-US";
-    u.rate=.9;
-    u.pitch=.7;
-    u.volume=.7;
-
-    speechSynthesis.speak(u);
-  }catch(e){}
-}
-
-/* =========================
-   AUTH
-========================= */
-
-function openAuth(){
-  document.getElementById("authModal").classList.add("show");
-}
-
-function closeAuth(){
-  document.getElementById("authModal").classList.remove("show");
-}
-
-function authMode(mode){
-
-  authModeValue=mode;
-
-  document.getElementById("loginTab").classList.toggle("active",mode==="login");
-  document.getElementById("signupTab").classList.toggle("active",mode==="signup");
-
-  document.getElementById("nameField").style.display=
-    mode==="signup"?"block":"none";
-
-  document.getElementById("authSubmit").textContent=
-    mode==="signup"?"إنشاء الحساب":"دخول";
-
-  document.getElementById("authStatus").textContent="";
-}
-
-async function submitAuth(){
-
-  const email=document.getElementById("authEmail").value.trim();
-  const password=document.getElementById("authPassword").value;
-  const name=document.getElementById("authName").value.trim();
-
-  const status=document.getElementById("authStatus");
-
-  if(!email || !password){
-
-    status.textContent="أدخل البريد وكلمة المرور.";
-    return;
-  }
-
-  status.textContent="جاري الاتصال...";
-
-  try{
-
-    if(authModeValue==="signup"){
-
-      const result=await auth.createUserWithEmailAndPassword(email,password);
-
-      if(name){
-
-        await result.user.updateProfile({
-          displayName:name
         });
 
-        state.profile.name=name;
-        saveState();
-      }
+    });
 
-      status.textContent="تم إنشاء الحساب.";
 
-    }else{
+    /* -------------------------------------------------------
+       Scroll navigation state
+    ------------------------------------------------------- */
 
-      await auth.signInWithEmailAndPassword(email,password);
-
-      status.textContent="تم تسجيل الدخول.";
-    }
-
-    setTimeout(closeAuth,600);
-
-  }catch(error){
-
-    status.textContent=authError(error);
-  }
-}
-
-function authError(error){
-
-  const code=error?.code || "";
-
-  const map={
-    "auth/email-already-in-use":"البريد مستخدم بالفعل.",
-    "auth/invalid-email":"البريد الإلكتروني غير صحيح.",
-    "auth/weak-password":"كلمة المرور ضعيفة.",
-    "auth/user-not-found":"الحساب غير موجود.",
-    "auth/wrong-password":"كلمة المرور غير صحيحة.",
-    "auth/invalid-credential":"بيانات الدخول غير صحيحة.",
-    "auth/too-many-requests":"محاولات كثيرة. حاول لاحقًا."
-  };
-
-  return map[code] || "حدث خطأ أثناء تسجيل الدخول.";
-}
-
-async function logout(){
-
-  try{
-    await auth.signOut();
-    toast("تم تسجيل الخروج.");
-  }catch(e){
-    toast("تعذر تسجيل الخروج.");
-  }
-}
-
-auth.onAuthStateChanged(async user=>{
-
-  currentUser=user;
-
-  if(user){
-
-    const name=user.displayName || state.profile.name || "Ali Yaser";
-
-    state.profile.name=name;
-
-    saveState();
-
-    try{
-      await syncMemory();
-    }catch(e){}
-  }
-
-  updateUI();
-});
-
-/* =========================
-   NOVA API
-========================= */
-
-async function novaRequest(action,payload={}){
-
-  if(!currentUser){
-
-    openAuth();
-
-    throw new Error("AUTH_REQUIRED");
-  }
-
-  const token=await currentUser.getIdToken();
-
-  const response=await fetch("/api/nova",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "Authorization":"Bearer "+token
-    },
-    body:JSON.stringify({
-      action,
-      ...payload
-    })
-  });
-
-  const data=await response.json().catch(()=>({}));
-
-  if(!response.ok){
-
-    throw new Error(
-      data?.error ||
-      data?.message ||
-      "NOVA server error"
+    const sections = document.querySelectorAll(
+        "main section[id]"
     );
-  }
 
-  return data;
-}
-
-async function syncMemory(){
-
-  try{
-
-    await novaRequest("progress");
-
-  }catch(e){
-
-    if(e.message!=="AUTH_REQUIRED"){
-      console.log("Memory sync:",e.message);
-    }
-  }
-}
-
-async function sendNova(){
-
-  const input=document.getElementById("novaInput");
-
-  const text=input.value.trim();
-
-  if(!text)return;
-
-  addMessage(text,"user");
-
-  input.value="";
-
-  const loadingId=addMessage("NOVA يفكر...","nova");
-
-  try{
-
-    const data=await novaRequest("chat",{
-      message:text
-    });
-
-    removeMessage(loadingId);
-
-    const answer=
-      data.answer ||
-      data.message ||
-      data.text ||
-      "لم يصل رد من NOVA.";
-
-    addMessage(answer,"nova");
-
-  }catch(error){
-
-    removeMessage(loadingId);
-
-    if(error.message==="AUTH_REQUIRED")return;
-
-    addMessage(
-      "تعذر الاتصال بـ NOVA الآن. تأكد أن /api/nova منشور بشكل صحيح.",
-      "nova"
+    const navLinks = document.querySelectorAll(
+        ".desktop-nav .nav-link"
     );
-  }
-}
 
-function addMessage(text,type){
+    const observer = new IntersectionObserver(
+        entries => {
 
-  const box=document.getElementById("novaMessages");
+            entries.forEach(entry => {
 
-  const id="m"+Date.now()+Math.random();
+                if (!entry.isIntersecting) return;
 
-  const el=document.createElement("div");
+                navLinks.forEach(link => {
+                    link.classList.remove("active");
+                });
 
-  el.className="msg "+type;
-  el.id=id;
-  el.textContent=text;
+                const activeLink = document.querySelector(
+                    `.desktop-nav .nav-link[href="#${entry.target.id}"]`
+                );
 
-  box.appendChild(el);
+                if (activeLink) {
+                    activeLink.classList.add("active");
+                }
 
-  box.scrollTop=box.scrollHeight;
+            });
 
-  return id;
-}
+        },
+        {
+            rootMargin: "-35% 0px -55% 0px"
+        }
+    );
 
-function removeMessage(id){
-
-  const el=document.getElementById(id);
-
-  if(el)el.remove();
-}
-
-async function novaAction(action){
-
-  try{
-
-    addMessage("NOVA: جاري التنفيذ...","nova");
-
-    const data=await novaRequest(action,{
-      topic:state.settings.trainingType,
-      difficulty:state.settings.difficulty
+    sections.forEach(section => {
+        observer.observe(section);
     });
 
-    let result=
-      data.answer ||
-      data.lesson ||
-      data.question ||
-      data.exam ||
-      data.roadmap ||
-      data.challenge ||
-      data.explanation ||
-      data.text ||
-      JSON.stringify(data,null,2);
 
-    addMessage(result,"nova");
+    /* -------------------------------------------------------
+       Theme button
+    ------------------------------------------------------- */
 
-  }catch(error){
+    const themeButton = document.querySelector(".theme-button");
 
-    if(error.message!=="AUTH_REQUIRED"){
-      addMessage("حدث خطأ: "+error.message,"nova");
-    }
-  }
-}
+    if (themeButton) {
 
-function askNovaForQuestion(){
+        themeButton.addEventListener("click", () => {
 
-  go("nova");
+            document.body.classList.toggle("light-mode");
 
-  setTimeout(()=>{
-    novaAction("generate_question");
-  },300);
-}
+            const lightMode =
+                document.body.classList.contains("light-mode");
 
-/* =========================
-   LEARNING
-========================= */
+            localStorage.setItem(
+                "vanta-theme",
+                lightMode ? "light" : "dark"
+            );
 
-function startLesson(topic){
+        });
 
-  const names={
-    programming:"البرمجة",
-    javascript:"JavaScript",
-    python:"Python",
-    web:"HTML و CSS",
-    logic:"منطق البرمجة",
-    git:"Git",
-    apis:"APIs",
-    cyber:"الأمن السيبراني",
-    technology:"التقنية الحديثة"
-  };
+        if (localStorage.getItem("vanta-theme") === "light") {
+            document.body.classList.add("light-mode");
+        }
 
-  const name=names[topic] || topic;
-
-  state.lastTopic=name;
-  state.lastTopicText="بدأت مسار "+name+". أكمل التدريب واختبر نفسك.";
-
-  saveState();
-
-  go("quiz");
-
-  document.getElementById("quizTopic").textContent=name;
-
-  document.getElementById("quizQuestion").textContent=
-    "هل تريد أن يولد NOVA سؤالًا مناسبًا لهذا المسار؟";
-
-  document.getElementById("quizOptions").innerHTML="";
-
-  document.getElementById("startQuizBtn").textContent="توليد سؤال";
-
-  document.getElementById("startQuizBtn").onclick=()=>{
-    generateAIQuestion(name);
-  };
-}
-
-function resumeLearning(){
-
-  if(state.lastTopic){
-    startLesson(state.lastTopic);
-  }else{
-    go("learn");
-  }
-}
-
-async function generateAIQuestion(topic){
-
-  if(!currentUser){
-
-    openAuth();
-    return;
-  }
-
-  const questionEl=document.getElementById("quizQuestion");
-  const optionsEl=document.getElementById("quizOptions");
-
-  questionEl.textContent="NOVA يولد سؤالًا...";
-  optionsEl.innerHTML="";
-
-  try{
-
-    const data=await novaRequest("generate_question",{
-      topic,
-      difficulty:state.settings.difficulty
-    });
-
-    const q=data.question || data;
-
-    if(typeof q==="object"){
-
-      questionEl.textContent=
-        q.question ||
-        q.prompt ||
-        "سؤال NOVA";
-
-      const options=q.options || [];
-
-      optionsEl.innerHTML="";
-
-      options.forEach((option,index)=>{
-
-        const btn=document.createElement("button");
-
-        btn.className="option";
-
-        btn.textContent=
-          typeof option==="string"
-          ?option
-          :(option.text || option.label || JSON.stringify(option));
-
-        btn.onclick=()=>{
-
-          document.querySelectorAll(".option").forEach(x=>{
-            x.disabled=true;
-          });
-
-          btn.classList.add("correct");
-
-          state.xp+=10;
-          state.lessons+=1;
-
-          saveState();
-
-          toast("+10 XP");
-        };
-
-        optionsEl.appendChild(btn);
-      });
-
-    }else{
-
-      questionEl.textContent=String(q);
     }
 
-  }catch(error){
 
-    questionEl.textContent=
-      "تعذر توليد السؤال من NOVA الآن.";
+    /* -------------------------------------------------------
+       User dropdown
+    ------------------------------------------------------- */
 
-    optionsEl.innerHTML="";
-  }
-}
+    const userAvatar =
+        document.getElementById("headerUserAvatar");
 
-function startQuiz(){
+    const userMenu =
+        document.querySelector(".user-menu");
 
-  generateAIQuestion(
-    state.settings.trainingType || "Mixed"
-  );
-}
+    if (userAvatar && userMenu) {
 
-/* =========================
-   CYBER
-========================= */
+        userAvatar.addEventListener("click", event => {
 
-function openCyber(type){
+            event.stopPropagation();
 
-  const info={
-    password:"كلمات المرور القوية تعتمد على طول مناسب، عشوائية، وعدم إعادة الاستخدام.",
-    hash:"الـ Hashing يحول البيانات إلى قيمة ثابتة الطول، ويستخدم كثيرًا للتحقق والتخزين الآمن.",
-    phishing:"افحص المرسل والرابط والسياق ولا تدخل بياناتك في صفحات مشبوهة.",
-    auth:"المصادقة تثبت هوية المستخدم، ويمكن تقويتها باستخدام MFA.",
-    network:"الشبكات تعتمد على بروتوكولات متعددة مثل IP وDNS وHTTP.",
-    analysis:"التحليل الأمني يبدأ بتحديد الأصول والتهديدات ونقاط الضعف والتأثير."
-  };
+            userMenu.classList.toggle("open");
 
-  toast(info[type] || "تم فتح التدريب.");
-}
+        });
 
-function runLab(type){
+        document.addEventListener("click", () => {
+            userMenu.classList.remove("open");
+        });
 
-  const names={
-    http:"HTTP Lab",
-    dns:"DNS Lab",
-    crypto:"Hash Lab",
-    social:"Social Engineering Lab",
-    secure:"Secure Login Lab",
-    privacy:"Privacy Lab"
-  };
+    }
 
-  toast("تم فتح "+(names[type]||"Lab"));
 
-  setTimeout(()=>{
-    go("quiz");
-    document.getElementById("quizTopic").textContent=names[type]||"Lab";
-  },400);
-}
+    /* -------------------------------------------------------
+       Toast helper
+    ------------------------------------------------------- */
 
-function startChallenge(id){
+    window.VANTA_TOAST = function(message) {
 
-  go("quiz");
+        const toast =
+            document.getElementById("vantaToast");
 
-  document.getElementById("quizTopic").textContent=
-    "CTF Challenge "+id;
+        const text =
+            document.getElementById("toastText");
 
-  document.getElementById("quizQuestion").textContent=
-    "هذا تحدٍ تدريبي. اطلب من NOVA توليد تحدٍ مناسب لمستواك.";
+        if (!toast || !text) return;
 
-  document.getElementById("quizOptions").innerHTML="";
+        text.textContent = message;
 
-  document.getElementById("startQuizBtn").textContent=
-    "توليد التحدي";
+        toast.classList.add("show");
 
-  document.getElementById("startQuizBtn").onclick=()=>{
-    novaAction("generate_challenge");
-    go("nova");
-  };
-}
+        clearTimeout(window.__vantaToastTimer);
 
-/* =========================
-   TECHNOLOGY
-========================= */
+        window.__vantaToastTimer = setTimeout(() => {
 
-function techInfo(type){
+            toast.classList.remove("show");
 
-  const info={
-    ai:"الذكاء الاصطناعي يشمل نماذج تعلم آلي وأنظمة قادرة على معالجة المعلومات وتوليد مخرجات.",
-    cloud:"الحوسبة السحابية توفر موارد حوسبة وتخزين وشبكات عبر خدمات قابلة للتوسع.",
-    web3:"الويب الحديث يعتمد على JavaScript وواجهات API وخدمات خلفية وبنية سحابية.",
-    systems:"نظام التشغيل يدير الموارد والعمليات والذاكرة والأجهزة.",
-    data:"قواعد البيانات تنظم البيانات وتسمح بتخزينها واسترجاعها ومعالجتها.",
-    future:"التقنية تتغير بسرعة؛ أفضل طريقة لمتابعتها هي فهم المبادئ وليس حفظ الأدوات فقط."
-  };
+        }, 3000);
 
-  toast(info[type] || "موضوع تقني.");
-}
-
-/* =========================
-   LIBRARY
-========================= */
-
-function resource(type){
-
-  const messages={
-    youtube:"استخدم YouTube للبحث عن شرح محدد بعد تحديد هدفك.",
-    docs:"التوثيق الرسمي غالبًا أفضل مرجع عند تعلم أداة أو API.",
-    books:"اختر كتابًا يتناسب مع مستواك ولا تنتقل بين مصادر كثيرة في الوقت نفسه."
-  };
-
-  toast(messages[type]||"تم.");
-}
-
-/* =========================
-   COMMUNITY
-========================= */
-
-function createPost(){
-
-  const text=document.getElementById("postText").value.trim();
-
-  if(!text){
-    toast("اكتب شيئًا أولًا.");
-    return;
-  }
-
-  const post={
-    id:Date.now(),
-    name:state.profile.name || "Ali Yaser",
-    avatar:state.profile.avatar || "",
-    text,
-    likes:0,
-    liked:false,
-    date:new Date().toLocaleString("ar-SA")
-  };
-
-  state.posts.unshift(post);
-
-  document.getElementById("postText").value="";
-
-  saveState();
-
-  toast("تم نشر الإنجاز.");
-}
-
-function renderPosts(){
-
-  const box=document.getElementById("posts");
-
-  if(!box)return;
-
-  const posts=state.posts || [];
-
-  document.getElementById("achievementCount").textContent=posts.length;
-
-  if(!posts.length){
-
-    box.innerHTML=
-      '<div class="card empty">لا توجد منشورات بعد. ابدأ بأول إنجاز لك.</div>';
-
-    return;
-  }
-
-  box.innerHTML="";
-
-  posts.forEach(post=>{
-
-    const card=document.createElement("div");
-
-    card.className="card";
-
-    const avatar=post.avatar
-      ?'<img src="'+post.avatar+'" style="width:100%;height:100%;object-fit:cover">'
-      :post.name.charAt(0).toUpperCase();
-
-    card.innerHTML=`
-      <div class="post">
-        <div class="avatar">${avatar}</div>
-        <div class="post-body">
-          <div class="post-top">
-            <strong>${escapeHTML(post.name)}</strong>
-            <span style="color:var(--muted);font-size:12px">${escapeHTML(post.date)}</span>
-          </div>
-          <p>${escapeHTML(post.text)}</p>
-          <button class="like ${post.liked?'liked':''}" onclick="likePost(${post.id})">
-            ♥ ${post.likes}
-          </button>
-        </div>
-      </div>
-    `;
-
-    box.appendChild(card);
-  });
-}
-
-function likePost(id){
-
-  const post=state.posts.find(p=>p.id===id);
-
-  if(!post)return;
-
-  if(post.liked){
-    post.likes=Math.max(0,post.likes-1);
-    post.liked=false;
-  }else{
-    post.likes++;
-    post.liked=true;
-  }
-
-  saveState();
-}
-
-function escapeHTML(value){
-
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-/* =========================
-   PROFILE
-========================= */
-
-document.getElementById("avatarInput").addEventListener("change",event=>{
-
-  const file=event.target.files[0];
-
-  if(!file)return;
-
-  if(file.size>2*1024*1024){
-
-    toast("الصورة أكبر من 2MB.");
-    return;
-  }
-
-  const reader=new FileReader();
-
-  reader.onload=()=>{
-    state.profile.avatar=reader.result;
-    saveState();
-    toast("تم تجهيز الصورة.");
-  };
-
-  reader.readAsDataURL(file);
-});
-
-function saveProfile(){
-
-  const name=document.getElementById("displayNameInput").value.trim();
-
-  if(name){
-    state.profile.name=name;
-  }
-
-  saveState();
-
-  if(currentUser){
-
-    currentUser.updateProfile({
-      displayName:state.profile.name
-    }).catch(()=>{});
-  }
-
-  toast("تم حفظ الملف.");
-}
-
-/* =========================
-   SETTINGS
-========================= */
-
-function saveSetting(key,value){
-
-  state.settings[key]=value;
-
-  saveState();
-}
-
-function toggleSetting(button,key){
-
-  state.settings[key]=!state.settings[key];
-
-  button.classList.toggle("on",state.settings[key]);
-
-  saveState();
-
-  if(key==="stars"){
-
-    document.querySelectorAll(".star").forEach(star=>{
-      star.style.display=state.settings.stars?"block":"none";
-    });
-  }
-
-  if(key==="motion"){
-
-    document.querySelectorAll(".meteor,.nova-orb,.nova-float").forEach(el=>{
-      el.style.animationPlayState=
-        state.settings.motion?"running":"paused";
-    });
-  }
-}
-
-function changeFont(value){
-
-  state.settings.fontSize=value;
-
-  saveState();
-}
-
-/* =========================
-   INIT SETTINGS UI
-========================= */
-
-function loadSettingsUI(){
-
-  document.documentElement.style.setProperty(
-    "--font",
-    state.settings.fontSize || "16px"
-  );
-
-  const difficulty=document.getElementById("difficulty");
-  const training=document.getElementById("trainingType");
-  const font=document.getElementById("fontSize");
-
-  if(difficulty)difficulty.value=state.settings.difficulty;
-  if(training)training.value=state.settings.trainingType;
-  if(font)font.value=state.settings.fontSize;
-
-  document.querySelectorAll(".switch[data-setting]").forEach(btn=>{
-
-    const key=btn.dataset.setting;
-
-    btn.classList.toggle("on",!!state.settings[key]);
-  });
-
-  document.querySelectorAll(".star").forEach(star=>{
-    star.style.display=state.settings.stars?"block":"none";
-  });
-}
-
-/* =========================
-   MOBILE / EFFECTS
-========================= */
-
-window.addEventListener("resize",()=>{
-  document.body.style.overflowX="hidden";
-});
-
-/* =========================
-   KEYBOARD
-========================= */
-
-document.addEventListener("keydown",event=>{
-
-  if(event.key==="Escape"){
-
-    closeAuth();
-
-    document.getElementById("authModal").classList.remove("show");
-  }
-});
-
-/* =========================
-   INITIALIZE
-========================= */
-
-updateUI();
-loadSettingsUI();
-
-/* =========================
-   SAFE LOCAL DEMO QUESTION
-========================= */
-
-const localQuestions=[
-  {
-    topic:"Programming",
-    q:"أي نوع من البيانات يستخدم لتخزين قيمة منطقية؟",
-    options:["Boolean","String","Array","Object"],
-    answer:0
-  },
-  {
-    topic:"Cybersecurity",
-    q:"ما الهدف الأساسي من MFA؟",
-    options:[
-      "إضافة عامل تحقق إضافي",
-      "زيادة سرعة الإنترنت",
-      "ضغط الملفات",
-      "تغيير عنوان IP"
-    ],
-    answer:0
-  },
-  {
-    topic:"Technology",
-    q:"ما وظيفة DNS الأساسية؟",
-    options:[
-      "تحويل أسماء النطاقات إلى عناوين IP",
-      "تشفير كل ملفات الجهاز",
-      "زيادة ذاكرة RAM",
-      "إدارة بطارية الهاتف"
-    ],
-    answer:0
-  }
-];
-
-function localQuiz(){
-
-  const q=
-    localQuestions[
-      Math.floor(Math.random()*localQuestions.length)
-    ];
-
-  document.getElementById("quizTopic").textContent=q.topic;
-  document.getElementById("quizQuestion").textContent=q.q;
-
-  const box=document.getElementById("quizOptions");
-
-  box.innerHTML="";
-
-  q.options.forEach((option,index)=>{
-
-    const btn=document.createElement("button");
-
-    btn.className="option";
-    btn.textContent=option;
-
-    btn.onclick=()=>{
-
-      document.querySelectorAll(".option").forEach(x=>{
-        x.disabled=true;
-      });
-
-      if(index===q.answer){
-
-        btn.classList.add("correct");
-
-        state.xp+=10;
-        state.lessons++;
-
-        toast("+10 XP — إجابة صحيحة");
-      }else{
-
-        btn.classList.add("wrong");
-
-        toast("حاول مرة أخرى.");
-      }
-
-      saveState();
     };
 
-    box.appendChild(btn);
-  });
-}
 
-/* Override only if NOVA isn't available */
-async function generateAIQuestion(topic){
+    /* -------------------------------------------------------
+       Reveal animations
+    ------------------------------------------------------- */
 
-  if(!currentUser){
+    const revealItems = document.querySelectorAll(
+        ".feature-card, .stat-card, .journey-step, .nova-feature, .credits-card"
+    );
 
-    localQuiz();
+    const revealObserver = new IntersectionObserver(
+        entries => {
 
-    return;
-  }
+            entries.forEach(entry => {
 
-  const questionEl=document.getElementById("quizQuestion");
-  const optionsEl=document.getElementById("quizOptions");
+                if (!entry.isIntersecting) return;
 
-  questionEl.textContent="NOVA يولد سؤالًا...";
-  optionsEl.innerHTML="";
+                entry.target.classList.add("revealed");
 
-  try{
+                revealObserver.unobserve(entry.target);
 
-    const data=await novaRequest("generate_question",{
-      topic,
-      difficulty:state.settings.difficulty
+            });
+
+        },
+        {
+            threshold: 0.12
+        }
+    );
+
+    revealItems.forEach(item => {
+        revealObserver.observe(item);
     });
 
-    const q=data.question || data;
 
-    if(typeof q==="object"){
+    /* -------------------------------------------------------
+       Parallax
+    ------------------------------------------------------- */
 
-      questionEl.textContent=
-        q.question ||
-        q.prompt ||
-        "سؤال جديد";
+    let ticking = false;
 
-      const options=q.options || [];
+    window.addEventListener("scroll", () => {
 
-      options.forEach((option,index)=>{
+        if (ticking) return;
 
-        const btn=document.createElement("button");
+        ticking = true;
 
-        btn.className="option";
+        requestAnimationFrame(() => {
 
-        btn.textContent=
-          typeof option==="string"
-          ?option
-          :(option.text || option.label || JSON.stringify(option));
+            const scrollY = window.scrollY;
 
-        btn.onclick=async()=>{
+            document.documentElement.style.setProperty(
+                "--scroll-y",
+                `${scrollY}px`
+            );
 
-          document.querySelectorAll(".option").forEach(x=>{
-            x.disabled=true;
-          });
+            ticking = false;
 
-          btn.classList.add("correct");
+        });
 
-          state.xp+=10;
-          state.lessons++;
+    });
 
-          saveState();
 
-          toast("+10 XP");
+    /* -------------------------------------------------------
+       Auth buttons
+    ------------------------------------------------------- */
 
-          try{
-            await novaRequest("check_answer",{
-              question:q.question || "",
-              answer:
-                typeof option==="string"
-                ?option
-                :(option.text || option.label || "")
-            });
-          }catch(e){}
-        };
+    document.querySelectorAll(".open-login").forEach(button => {
 
-        optionsEl.appendChild(btn);
-      });
+        button.addEventListener("click", () => {
 
-    }else{
+            if (window.VANTA_AUTH &&
+                typeof window.VANTA_AUTH.openAuth === "function") {
 
-      questionEl.textContent=String(q);
+                window.VANTA_AUTH.openAuth("login");
 
-      const btn=document.createElement("button");
+            }
 
-      btn.className="btn primary";
-      btn.textContent="اسأل NOVA عن الإجابة";
+        });
 
-      btn.onclick=()=>{
-        go("nova");
-        addMessage(
-          "اشرح لي هذا السؤال: "+String(q),
-          "user"
-        );
-        novaAction("explain");
-      };
+    });
 
-      optionsEl.appendChild(btn);
-    }
 
-  }catch(error){
+    document.querySelectorAll(".open-signup").forEach(button => {
 
-    questionEl.textContent=
-      "تعذر الوصول إلى NOVA، لذلك استخدمنا السؤال المحلي.";
+        button.addEventListener("click", () => {
 
-    setTimeout(localQuiz,500);
-  }
-}
+            if (window.VANTA_AUTH &&
+                typeof window.VANTA_AUTH.openAuth === "function") {
 
+                window.VANTA_AUTH.openAuth("signup");
+
+            }
+
+        });
+
+    });
+
+
+    /* -------------------------------------------------------
+       Auth mode switch
+    ------------------------------------------------------- */
+
+    document.querySelectorAll(".switch-auth").forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            const mode =
+                button.dataset.authMode;
+
+            if (
+                window.VANTA_AUTH &&
+                typeof window.VANTA_AUTH.showAuthMode === "function"
+            ) {
+
+                window.VANTA_AUTH.showAuthMode(mode);
+
+            }
+
+        });
+
+    });
+
+
+});
 </script>
-<script src="xp.js"></script>
+
 </body>
 </html>
