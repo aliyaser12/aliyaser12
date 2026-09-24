@@ -1,1693 +1,755 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07070b">
+  <title>VANTA — Cyber • Learn • Create</title>
 
-    <title>VANTA — Cyber • Learn • Connect</title>
-    <meta name="description" content="VANTA — منصة تقنية تجمع التعلم، الأمن السيبراني، المجتمع والذكاء الاصطناعي.">
-    <meta name="theme-color" content="#070711">
-
-    <link rel="icon" href="vanta-logo.png">
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Main styles -->
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <!-- VANTA config -->
-    <script src="supabase-config.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<!-- =========================================================
-     BACKGROUND
-========================================================= -->
+  <!-- BOOT SCREEN -->
 
-<div class="space-background" aria-hidden="true">
-    <div class="stars stars-one"></div>
-    <div class="stars stars-two"></div>
-    <div class="stars stars-three"></div>
+  <div id="boot">
 
-    <div class="orb orb-purple"></div>
-    <div class="orb orb-blue"></div>
-    <div class="orb orb-pink"></div>
+```
+<div class="boot-noise"></div>
+<div class="boot-stars"></div>
 
-    <div class="planet planet-one"></div>
-    <div class="planet planet-two"></div>
-    <div class="planet planet-three"></div>
+<div class="boot-center">
 
-    <div class="meteor meteor-one"></div>
-    <div class="meteor meteor-two"></div>
+  <div class="vanta-symbol">
+    <span>V</span>
+  </div>
+
+  <div class="boot-logo">
+    VANTA
+  </div>
+
+  <div class="boot-subtitle">
+    CYBER • LEARN • CREATE
+  </div>
+
+  <div class="boot-status" id="bootStatus">
+    INITIALIZING VANTA
+  </div>
+
+  <div class="boot-loader">
+    <div id="bootProgress"></div>
+  </div>
+
+  <div class="boot-percent" id="bootPercent">
+    0%
+  </div>
+
+  <div class="boot-actions" id="bootActions">
+
+    <button
+      class="vanta-button primary"
+      onclick="enterVanta()"
+    >
+      ENTER VANTA
+    </button>
+
+    <button
+      class="vanta-button ghost"
+      onclick="enterVanta()"
+    >
+      SKIP
+    </button>
+
+  </div>
+
 </div>
+```
 
+  </div>
 
-<!-- =========================================================
-     HEADER
-========================================================= -->
+  <!-- MAIN SITE -->
 
-<header class="topbar">
+  <div id="site">
 
-    <a href="index.html" class="brand" aria-label="VANTA">
+```
+<!-- NAVIGATION -->
+<header class="navbar">
 
-        <div class="brand-mark">
-            <span>V</span>
-        </div>
+  <div class="nav-inner">
 
-        <div class="brand-text">
-            <strong>VANTA</strong>
-            <small>CYBER • LEARN • CONNECT</small>
-        </div>
+    <button
+      class="brand"
+      onclick="goTop()"
+    >
+      <span class="brand-mark">V</span>
+      <span>VANTA</span>
+    </button>
 
-    </a>
+    <nav>
 
+      <button onclick="scrollToId('home')">
+        الرئيسية
+      </button>
 
-    <nav class="desktop-nav" aria-label="التنقل الرئيسي">
+      <button onclick="scrollToId('platform')">
+        المنصة
+      </button>
 
-        <a href="#home" class="nav-link active">
-            الرئيسية
-        </a>
+      <button onclick="scrollToId('vantabook')">
+        VANTABOOK
+      </button>
 
-        <a href="#features" class="nav-link">
-            المنصة
-        </a>
-
-        <a href="#vantabook" class="nav-link">
-            VANTABOOK
-        </a>
-
-        <a href="#nova" class="nav-link">
-            NOVA
-        </a>
-
-        <a href="#about" class="nav-link">
-            عن VANTA
-        </a>
+      <button onclick="scrollToId('nova')">
+        NOVA
+      </button>
 
     </nav>
 
+    <button
+      class="nav-login"
+      onclick="openLogin()"
+    >
+      دخول
+    </button>
 
-    <div class="top-actions">
-
-        <button
-            class="icon-button theme-button"
-            type="button"
-            aria-label="المظهر"
-            title="المظهر">
-            ◐
-        </button>
-
-        <button
-            class="button button-ghost open-login logged-out-only"
-            type="button">
-            تسجيل الدخول
-        </button>
-
-        <button
-            class="button button-primary open-signup logged-out-only"
-            type="button">
-            ابدأ الآن
-        </button>
-
-        <div class="user-menu logged-in-only">
-
-            <button class="user-avatar" id="headerUserAvatar" type="button">
-                <span id="headerUserInitial">V</span>
-            </button>
-
-            <div class="user-dropdown">
-
-                <div class="dropdown-user">
-                    <strong id="headerUsername">
-                        مستخدم VANTA
-                    </strong>
-
-                    <small id="headerEmail">
-                        —
-                    </small>
-                </div>
-
-                <a href="dashboard.html">
-                    لوحة التحكم
-                </a>
-
-                <a href="profile.html">
-                    الملف الشخصي
-                </a>
-
-                <a href="settings.html">
-                    الإعدادات
-                </a>
-
-                <button id="logoutButton" type="button">
-                    تسجيل الخروج
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
+  </div>
 
 </header>
 
 
-<!-- =========================================================
-     MAIN
-========================================================= -->
-
+<!-- HOME -->
 <main id="home">
 
-
-<!-- =========================================================
-     HERO
-========================================================= -->
-
-<section class="hero section">
+  <section class="hero">
 
     <div class="hero-content">
 
-        <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            مرحبًا بك في الجيل الجديد من التعلم التقني
-        </div>
+      <div class="eyebrow">
+        <span></span>
+        THE NEW VANTA
+      </div>
 
+      <h1>
+        مستقبلك
+        <strong>يبدأ هنا.</strong>
+      </h1>
 
-        <h1>
+      <p>
+        VANTA مساحة تجمع التعلم، البرمجة،
+        الأمن السيبراني، الذكاء الاصطناعي والمجتمع
+        داخل تجربة واحدة.
+      </p>
 
-            <span>تعلّم.</span>
-            <span>استكشف.</span>
-            <span class="gradient-text">ابنِ مستقبلك.</span>
+      <div class="hero-actions">
 
-        </h1>
+        <button
+          class="vanta-button primary"
+          onclick="openLogin()"
+        >
+          ابدأ رحلتك
+        </button>
 
+        <button
+          class="vanta-button ghost"
+          onclick="scrollToId('platform')"
+        >
+          استكشف VANTA
+        </button>
 
-        <p class="hero-description">
+      </div>
 
-            VANTA تجمع التعلم التقني، الأمن السيبراني، التحديات،
-            المجتمع والذكاء الاصطناعي في تجربة واحدة مصممة لك.
-
-        </p>
-
-
-        <div class="hero-actions">
-
-            <button
-                class="button button-primary button-large open-signup"
-                type="button">
-
-                ابدأ رحلتك
-
-                <span class="button-arrow">←</span>
-
-            </button>
-
-
-            <a
-                href="#features"
-                class="button button-glass button-large">
-
-                اكتشف VANTA
-
-            </a>
-
-        </div>
-
-
-        <div class="hero-trust">
-
-            <div class="trust-avatars">
-
-                <span>V</span>
-                <span>N</span>
-                <span>C</span>
-                <span>+</span>
-
-            </div>
-
-            <div>
-                <strong>منصة واحدة</strong>
-                <small>لتتعلم وتبني وتشارك</small>
-            </div>
-
-        </div>
+      <div class="hero-note">
+        <span class="live-dot"></span>
+        VANTA 2.0 — SYSTEM ONLINE
+      </div>
 
     </div>
 
 
-    <!-- =====================================================
-         VANTA CORE VISUAL
-    ====================================================== -->
+    <div class="hero-art">
 
-    <div class="hero-visual">
+      <div class="planet planet-one"></div>
+      <div class="planet planet-two"></div>
+      <div class="planet planet-three"></div>
 
-        <div class="visual-glow"></div>
+      <div class="orbit orbit-one"></div>
+      <div class="orbit orbit-two"></div>
+      <div class="orbit orbit-three"></div>
 
+      <div class="vanta-core">
 
-        <div class="vanta-core">
-
-            <div class="core-ring ring-one"></div>
-            <div class="core-ring ring-two"></div>
-            <div class="core-ring ring-three"></div>
-
-
-            <div class="core-glass">
-
-                <div class="core-symbol">
-                    V
-                </div>
-
-                <div class="core-label">
-                    VANTA
-                </div>
-
-                <div class="core-status">
-                    <span></span>
-                    SYSTEM ONLINE
-                </div>
-
-            </div>
-
-
-            <div class="floating-card card-top">
-
-                <span class="mini-icon">✦</span>
-
-                <div>
-                    <strong>XP</strong>
-                    <small>+250 اليوم</small>
-                </div>
-
-            </div>
-
-
-            <div class="floating-card card-right">
-
-                <span class="mini-icon">◈</span>
-
-                <div>
-                    <strong>NOVA</strong>
-                    <small>متصل الآن</small>
-                </div>
-
-            </div>
-
-
-            <div class="floating-card card-bottom">
-
-                <span class="mini-icon">⌁</span>
-
-                <div>
-                    <strong>VANTABOOK</strong>
-                    <small>مجتمعك التقني</small>
-                </div>
-
-            </div>
-
+        <div class="core-inner">
+          V
         </div>
+
+      </div>
+
+      <div class="floating-card card-one">
+        <small>XP</small>
+        <b>+1,250</b>
+      </div>
+
+      <div class="floating-card card-two">
+        <small>NOVA</small>
+        <b>ONLINE</b>
+      </div>
+
+      <div class="floating-card card-three">
+        <small>CYBER RANGE</small>
+        <b>READY</b>
+      </div>
 
     </div>
 
-</section>
+  </section>
 
 
-<!-- =========================================================
-     STATS
-========================================================= -->
-
-<section class="stats-section">
-
-    <div class="stats-grid">
-
-        <div class="stat-card">
-            <strong>12+</strong>
-            <span>مسارًا تعليميًا</span>
-        </div>
-
-        <div class="stat-card">
-            <strong>9+</strong>
-            <span>مختبرات تقنية</span>
-        </div>
-
-        <div class="stat-card">
-            <strong>6+</strong>
-            <span>تحديات CTF</span>
-        </div>
-
-        <div class="stat-card">
-            <strong>∞</strong>
-            <span>مساحة للتطور</span>
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     FEATURES
-========================================================= -->
-
-<section id="features" class="section features-section">
+  <!-- PLATFORM -->
+  <section id="platform">
 
     <div class="section-heading">
 
+      <div class="eyebrow">
+        VANTA SYSTEM
+      </div>
+
+      <h2>
+        أكثر من منصة.
+        <strong>إنها بيئتك.</strong>
+      </h2>
+
+      <p>
+        كل الأدوات التي تحتاجها لتتعلم وتبني
+        وتستكشف التقنية في مكان واحد.
+      </p>
+
+    </div>
+
+
+    <div class="bento-grid">
+
+      <article class="bento large">
+
+        <div class="bento-icon">✦</div>
+
+        <h3>
+          Learning
+        </h3>
+
+        <p>
+          دروس تفاعلية، أسئلة، اختبارات،
+          XP ومستويات تساعدك على التطور.
+        </p>
+
+        <div class="bento-glow"></div>
+
+      </article>
+
+
+      <article class="bento">
+
+        <div class="bento-icon">⌁</div>
+
+        <h3>
+          Cyber Range
+        </h3>
+
+        <p>
+          مختبرات وتحديات تعليمية آمنة.
+        </p>
+
+      </article>
+
+
+      <article class="bento">
+
+        <div class="bento-icon">◎</div>
+
+        <h3>
+          Roadmap
+        </h3>
+
+        <p>
+          اعرف ماذا تتعلم والخطوة التالية.
+        </p>
+
+      </article>
+
+
+      <article class="bento wide">
+
+        <div class="bento-icon">◈</div>
+
+        <h3>
+          Your Progress
+        </h3>
+
+        <p>
+          XP، مستوى، إنجازات ودروس مكتملة
+          مرتبطة بحسابك.
+        </p>
+
+      </article>
+
+
+      <article class="bento">
+
+        <div class="bento-icon">▦</div>
+
+        <h3>
+          Library
+        </h3>
+
+        <p>
+          مصادر وأدوات ومحتوى مرتب.
+        </p>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- VANTABOOK -->
+  <section id="vantabook">
+
+    <div class="social-layout">
+
+      <div class="social-copy">
+
         <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            كل ما تحتاجه في مكان واحد
+          SOCIAL
         </div>
 
         <h2>
-            VANTA ليست مجرد موقع.
-            <span class="gradient-text">إنها منظومة.</span>
+          Meet
+          <strong>VANTABOOK.</strong>
         </h2>
 
         <p>
-            تعلم، طبّق، تحدث مع الآخرين، واستخدم أدوات الذكاء الاصطناعي
-            بدون التنقل بين عشرات المنصات.
+          مجتمع VANTA.
+          شارك إنجازاتك، اكتب منشورات،
+          تفاعل مع الآخرين وابنِ هويتك داخل المنصة.
         </p>
 
-    </div>
-
-
-    <div class="feature-grid">
-
-
-        <article class="feature-card feature-large">
-
-            <div class="feature-number">
-                01
-            </div>
-
-            <div class="feature-icon">
-                ◇
-            </div>
-
-            <h3>
-                التعلم الذكي
-            </h3>
-
-            <p>
-                دروس ومسارات وتمارين وأسئلة تتدرج مع مستواك،
-                مع XP وتحديات ومكافآت تساعدك على الاستمرار.
-            </p>
-
-            <a href="learn.html" class="feature-link">
-                ابدأ التعلم ←
-            </a>
-
-        </article>
-
-
-        <article class="feature-card">
-
-            <div class="feature-number">
-                02
-            </div>
-
-            <div class="feature-icon">
-                ◎
-            </div>
-
-            <h3>
-                Cyber Range
-            </h3>
-
-            <p>
-                مختبرات وتحديات تعليمية في الأمن السيبراني
-                بطريقة آمنة ومناسبة للتعلم.
-            </p>
-
-            <a href="labs.html" class="feature-link">
-                استكشف المختبرات ←
-            </a>
-
-        </article>
-
-
-        <article class="feature-card">
-
-            <div class="feature-number">
-                03
-            </div>
-
-            <div class="feature-icon">
-                ✦
-            </div>
-
-            <h3>
-                NOVA
-            </h3>
-
-            <p>
-                مساعدك الذكي داخل VANTA لمساعدتك أثناء التعلم
-                واستكشاف المنصة.
-            </p>
-
-            <a href="#nova" class="feature-link">
-                تعرف على NOVA ←
-            </a>
-
-        </article>
-
-
-        <article class="feature-card feature-wide">
-
-            <div class="feature-number">
-                04
-            </div>
-
-            <div class="feature-icon">
-                ◌
-            </div>
-
-            <h3>
-                VANTABOOK
-            </h3>
-
-            <p>
-                مجتمع VANTA. أنشئ منشوراتك، شارك أفكارك،
-                تابع المستخدمين وتفاعل مع مجتمع تقني حقيقي.
-            </p>
-
-            <a href="#vantabook" class="feature-link">
-                دخول VANTABOOK ←
-            </a>
-
-        </article>
-
-
-        <article class="feature-card">
-
-            <div class="feature-number">
-                05
-            </div>
-
-            <div class="feature-icon">
-                ↗
-            </div>
-
-            <h3>
-                Roadmap
-            </h3>
-
-            <p>
-                اعرف أين أنت الآن وإلى أين تتجه،
-                وابنِ طريقك التقني خطوة بخطوة.
-            </p>
-
-            <a href="roadmap.html" class="feature-link">
-                افتح المسار ←
-            </a>
-
-        </article>
-
-
-        <article class="feature-card">
-
-            <div class="feature-number">
-                06
-            </div>
-
-            <div class="feature-icon">
-                ◆
-            </div>
-
-            <h3>
-                الإنجازات
-            </h3>
-
-            <p>
-                اكسب XP وافتح الإنجازات وسجل تقدمك
-                في رحلتك داخل VANTA.
-            </p>
-
-            <a href="achievements.html" class="feature-link">
-                شاهد الإنجازات ←
-            </a>
-
-        </article>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     VANTABOOK
-========================================================= -->
-
-<section id="vantabook" class="section product-section">
-
-    <div class="product-copy">
-
-        <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            VANTABOOK
+        <div class="tag-row">
+          <span>Profiles</span>
+          <span>Posts</span>
+          <span>Likes</span>
+          <span>Comments</span>
+          <span>Messages</span>
         </div>
 
-        <h2>
-            عالمك الاجتماعي
-            <span class="gradient-text">داخل VANTA.</span>
-        </h2>
-
-        <p>
-            مجتمع حقيقي مرتبط بحسابك في VANTA.
-            شارك، ناقش، تابع، وتعرّف على أشخاص يهتمون بالتقنية مثلك.
-        </p>
+      </div>
 
 
-        <div class="product-points">
+      <div class="social-preview">
 
-            <div>
-                <span>✓</span>
-                ملفات شخصية حقيقية
+        <div class="post">
+
+          <div class="post-user">
+
+            <div class="avatar">
+              A
             </div>
 
             <div>
-                <span>✓</span>
-                منشورات وتعليقات وتفاعلات
+              <b>Ali</b>
+              <small>قبل لحظات</small>
             </div>
 
-            <div>
-                <span>✓</span>
-                رسائل وإشعارات
-            </div>
+          </div>
 
-            <div>
-                <span>✓</span>
-                حساب VANTA واحد لكل شيء
-            </div>
+          <p>
+            أول خطوة في رحلتي داخل VANTA.
+          </p>
+
+          <div class="post-actions">
+            ♡ 24
+            &nbsp;&nbsp;
+            ◌ 8
+          </div>
 
         </div>
 
 
-        <a href="community.html" class="button button-primary">
-            افتح VANTABOOK
-            <span>←</span>
-        </a>
+        <div class="post second">
 
-    </div>
+          <div class="post-user">
 
-
-    <div class="product-visual vantabook-visual">
-
-        <div class="social-window">
-
-            <div class="social-top">
-
-                <div class="fake-avatar">
-                    V
-                </div>
-
-                <div>
-                    <strong>VANTABOOK</strong>
-                    <small>مجتمع VANTA</small>
-                </div>
-
-                <span class="online-dot"></span>
-
+            <div class="avatar purple">
+              N
             </div>
 
-
-            <div class="post-card">
-
-                <div class="post-header">
-
-                    <div class="fake-avatar small">
-                        A
-                    </div>
-
-                    <div>
-                        <strong>Ali Yaser</strong>
-                        <small>منذ لحظات</small>
-                    </div>
-
-                </div>
-
-                <p>
-                    مرحبًا بك في VANTABOOK — مساحة جديدة
-                    لعشاق التقنية والتعلم.
-                </p>
-
-                <div class="post-image">
-                    <span>VANTA</span>
-                </div>
-
-                <div class="post-actions">
-
-                    <span>♡ 128</span>
-                    <span>◌ 32</span>
-                    <span>↗ مشاركة</span>
-
-                </div>
-
+            <div>
+              <b>NOVA</b>
+              <small>VANTA AI</small>
             </div>
+
+          </div>
+
+          <p>
+            جاهز للتحدي القادم؟
+          </p>
 
         </div>
 
+      </div>
+
     </div>
 
-</section>
+  </section>
 
 
-<!-- =========================================================
-     NOVA
-========================================================= -->
+  <!-- NOVA -->
+  <section id="nova">
 
-<section id="nova" class="section nova-section">
+    <div class="nova-section">
 
-    <div class="nova-visual">
+      <div class="nova-visual">
 
-        <div class="nova-orbit orbit-one"></div>
-        <div class="nova-orbit orbit-two"></div>
+        <div class="nova-orbit"></div>
 
         <div class="nova-crystal">
-
-            <div class="nova-crystal-inner">
-                N
-            </div>
-
+          N
         </div>
 
-        <div class="nova-particle particle-one"></div>
-        <div class="nova-particle particle-two"></div>
-        <div class="nova-particle particle-three"></div>
-
-    </div>
+      </div>
 
 
-    <div class="nova-copy">
+      <div class="nova-copy">
 
         <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            NOVA • AI COMPANION
+          VANTA AI
         </div>
 
         <h2>
-            قابل NOVA،
-            <span class="gradient-text">رفيقك داخل VANTA.</span>
+          Meet
+          <strong>NOVA.</strong>
         </h2>
 
         <p>
-            NOVA ليس مجرد زر للمحادثة.
-            إنه المساعد الذكي الذي يرافقك أثناء استكشافك
-            للمنصة والتعلم والتحديات.
-        </p>
-
-
-        <div class="nova-features">
-
-            <div class="nova-feature">
-
-                <span>✦</span>
-
-                <div>
-                    <strong>مساعد ذكي</strong>
-                    <small>يساعدك على فهم ما تتعلمه</small>
-                </div>
-
-            </div>
-
-
-            <div class="nova-feature">
-
-                <span>◇</span>
-
-                <div>
-                    <strong>جزء من VANTA</strong>
-                    <small>موجود معك داخل المنصة</small>
-                </div>
-
-            </div>
-
-
-            <div class="nova-feature">
-
-                <span>⌁</span>
-
-                <div>
-                    <strong>شخصية حقيقية</strong>
-                    <small>لهوية وشكل وتجربة خاصة</small>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <a href="assistant.html" class="button button-glass">
-            تحدث مع NOVA
-            <span>←</span>
-        </a>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     LEARNING JOURNEY
-========================================================= -->
-
-<section class="section journey-section">
-
-    <div class="section-heading">
-
-        <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            رحلتك
-        </div>
-
-        <h2>
-            من أول خطوة
-            <span class="gradient-text">إلى الاحتراف.</span>
-        </h2>
-
-        <p>
-            VANTA مصممة لتخليك تتحرك إلى الأمام،
-            بدل ما تضيع بين المحتوى.
-        </p>
-
-    </div>
-
-
-    <div class="journey">
-
-        <div class="journey-line"></div>
-
-
-        <div class="journey-step">
-
-            <div class="journey-marker">
-                01
-            </div>
-
-            <div class="journey-content">
-
-                <span>START</span>
-
-                <h3>
-                    اكتشف مستواك
-                </h3>
-
-                <p>
-                    ابدأ من المستوى المناسب لك.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="journey-step">
-
-            <div class="journey-marker">
-                02
-            </div>
-
-            <div class="journey-content">
-
-                <span>LEARN</span>
-
-                <h3>
-                    تعلم بطريقة عملية
-                </h3>
-
-                <p>
-                    دروس، أسئلة، تطبيقات وتحديات.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="journey-step">
-
-            <div class="journey-marker">
-                03
-            </div>
-
-            <div class="journey-content">
-
-                <span>BUILD</span>
-
-                <h3>
-                    طبّق ما تعلمته
-                </h3>
-
-                <p>
-                    مختبرات ومشاريع وتحديات.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="journey-step">
-
-            <div class="journey-marker">
-                04
-            </div>
-
-            <div class="journey-content">
-
-                <span>CONNECT</span>
-
-                <h3>
-                    شارك مع المجتمع
-                </h3>
-
-                <p>
-                    VANTABOOK يجمعك مع الآخرين.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     CTA
-========================================================= -->
-
-<section class="cta-section">
-
-    <div class="cta-glow"></div>
-
-    <div class="cta-content">
-
-        <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            مستعد؟
-        </div>
-
-        <h2>
-            مستقبلك التقني
-            <span class="gradient-text">يبدأ هنا.</span>
-        </h2>
-
-        <p>
-            أنشئ حسابك وابدأ أول خطوة في VANTA.
+          رفيقتك الذكية داخل VANTA.
+          تساعدك على التعلم، فهم المفاهيم،
+          استكشاف التقنية والتقدم في رحلتك.
         </p>
 
         <button
-            class="button button-primary button-large open-signup"
-            type="button">
-
-            إنشاء حساب مجاني
-            <span>←</span>
-
+          class="vanta-button primary"
+          onclick="openLogin()"
+        >
+          دخول إلى VANTA
         </button>
 
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     ABOUT
-========================================================= -->
-
-<section id="about" class="section about-section">
-
-    <div class="about-grid">
-
-        <div>
-
-            <div class="eyebrow">
-                <span class="eyebrow-dot"></span>
-                عن VANTA
-            </div>
-
-            <h2>
-                نبني مساحة
-                <span class="gradient-text">للتقنية.</span>
-            </h2>
-
-        </div>
-
-
-        <div class="about-copy">
-
-            <p>
-                VANTA مشروع تقني يهدف إلى جمع التعلم،
-                الأمن السيبراني، الذكاء الاصطناعي والمجتمع
-                في تجربة واحدة حديثة.
-            </p>
-
-            <p>
-                تم إنشاء VANTA وتطويرها بواسطة
-                <strong>Ali Yaser</strong>.
-            </p>
-
-        </div>
+      </div>
 
     </div>
 
-
-    <div class="credits-card">
-
-        <div class="credits-main">
-
-            <span class="credits-label">
-                CREATED & DEVELOPED BY
-            </span>
-
-            <strong>
-                Ali Yaser
-            </strong>
-
-            <small>
-                مؤسس ومطور VANTA
-            </small>
-
-        </div>
+  </section>
 
 
-        <div class="credits-support">
+  <!-- FINAL CTA -->
+  <section class="final-section">
 
-            <span>
-                SPECIAL THANKS
-            </span>
+    <div class="final-card">
 
-            <p>
-                Mohammed Sami
-                <span>•</span>
-                Faisal Rani
-            </p>
+      <div class="eyebrow">
+        WELCOME TO VANTA
+      </div>
 
-            <small>
-                شكرًا على الدعم والمساندة
-            </small>
+      <h2>
+        مستعد تبدأ؟
+      </h2>
 
-        </div>
+      <p>
+        عالم جديد من التعلم والتقنية بانتظارك.
+      </p>
+
+      <button
+        class="vanta-button primary"
+        onclick="openLogin()"
+      >
+        إنشاء حساب
+      </button>
 
     </div>
 
-</section>
-
+  </section>
 
 </main>
 
 
-<!-- =========================================================
-     FOOTER
-========================================================= -->
+<!-- FOOTER -->
+<footer>
 
-<footer class="footer">
+  <div class="footer-inner">
 
-    <div class="footer-top">
-
-        <a href="index.html" class="brand">
-
-            <div class="brand-mark">
-                <span>V</span>
-            </div>
-
-            <div class="brand-text">
-                <strong>VANTA</strong>
-                <small>CYBER • LEARN • CONNECT</small>
-            </div>
-
-        </a>
-
-
-        <div class="footer-links">
-
-            <a href="learn.html">
-                التعلم
-            </a>
-
-            <a href="labs.html">
-                المختبرات
-            </a>
-
-            <a href="community.html">
-                VANTABOOK
-            </a>
-
-            <a href="library.html">
-                المكتبة
-            </a>
-
-            <a href="roadmap.html">
-                Roadmap
-            </a>
-
-        </div>
-
-
-        <div class="footer-links">
-
-            <a href="about.html">
-                عن VANTA
-            </a>
-
-            <a href="contact.html">
-                تواصل معنا
-            </a>
-
-            <a href="terms.html">
-                شروط الاستخدام
-            </a>
-
-            <a href="privacy.html">
-                الخصوصية
-            </a>
-
-        </div>
-
+    <div>
+      <strong>VANTA</strong>
+      <span>Cyber • Learn • Create</span>
     </div>
 
-
-    <div class="footer-bottom">
-
-        <span>
-            © 2026 VANTA. All rights reserved.
-        </span>
-
-        <span>
-            Built by Ali Yaser
-        </span>
-
+    <div>
+      © 2026 Ali Yaser — Creator & Developer
     </div>
+
+    <div>
+      With support from Mohammed Sami & Faisal Rani
+    </div>
+
+  </div>
 
 </footer>
+```
 
+  </div>
 
-<!-- =========================================================
-     AUTH MODAL
-========================================================= -->
+  <!-- LOGIN -->
 
+  <div id="loginModal">
+
+```
 <div
-    class="authModal"
-    id="authModal"
-    aria-hidden="true">
-
-    <div class="auth-backdrop"></div>
-
-
-    <div
-        class="auth-card"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="authTitle">
-
-
-        <button
-            class="auth-close"
-            id="closeAuth"
-            type="button"
-            aria-label="إغلاق">
-
-            ×
-
-        </button>
-
-
-        <!-- LOGIN -->
-
-        <div class="loginView" id="loginView">
-
-            <div class="auth-logo">
-                V
-            </div>
-
-            <span class="auth-kicker">
-                WELCOME BACK
-            </span>
-
-            <h2 id="authTitle">
-                أهلًا بعودتك
-            </h2>
-
-            <p>
-                سجل دخولك للعودة إلى رحلتك في VANTA.
-            </p>
-
-
-            <form id="loginForm">
-
-                <label>
-                    البريد الإلكتروني
-
-                    <input
-                        type="email"
-                        id="loginEmail"
-                        name="email"
-                        autocomplete="email"
-                        placeholder="you@example.com"
-                        required>
-
-                </label>
-
-
-                <label>
-                    كلمة المرور
-
-                    <input
-                        type="password"
-                        id="loginPassword"
-                        name="password"
-                        autocomplete="current-password"
-                        placeholder="••••••••"
-                        required>
-
-                </label>
-
-
-                <div class="auth-extra">
-
-                    <label class="remember-check">
-
-                        <input
-                            type="checkbox"
-                            id="rememberMe">
-
-                        <span>
-                            تذكرني
-                        </span>
-
-                    </label>
-
-                    <a href="#" id="forgotPassword">
-                        نسيت كلمة المرور؟
-                    </a>
-
-                </div>
-
-
-                <button
-                    class="button button-primary auth-submit"
-                    type="submit">
-
-                    تسجيل الدخول
-
-                </button>
-
-
-                <div
-                    class="auth-message"
-                    id="loginMessage">
-                </div>
-
-            </form>
-
-
-            <div class="auth-switch">
-
-                ليس لديك حساب؟
-
-                <button
-                    type="button"
-                    class="switch-auth"
-                    data-auth-mode="signup">
-
-                    إنشاء حساب
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- SIGN UP -->
-
-        <div
-            class="signupView"
-            id="signupView"
-            hidden>
-
-            <div class="auth-logo">
-                V
-            </div>
-
-            <span class="auth-kicker">
-                JOIN VANTA
-            </span>
-
-            <h2>
-                ابدأ رحلتك
-            </h2>
-
-            <p>
-                أنشئ حساب VANTA الخاص بك خلال لحظات.
-            </p>
-
-
-            <form id="signupForm">
-
-                <label>
-                    اسم المستخدم
-
-                    <input
-                        type="text"
-                        id="signupUsername"
-                        name="username"
-                        autocomplete="username"
-                        placeholder="اختر اسمك"
-                        minlength="3"
-                        maxlength="24"
-                        required>
-
-                </label>
-
-
-                <label>
-                    البريد الإلكتروني
-
-                    <input
-                        type="email"
-                        id="signupEmail"
-                        name="email"
-                        autocomplete="email"
-                        placeholder="you@example.com"
-                        required>
-
-                </label>
-
-
-                <label>
-                    كلمة المرور
-
-                    <input
-                        type="password"
-                        id="signupPassword"
-                        name="password"
-                        autocomplete="new-password"
-                        placeholder="8 أحرف على الأقل"
-                        minlength="8"
-                        required>
-
-                </label>
-
-
-                <label class="terms-check">
-
-                    <input
-                        type="checkbox"
-                        id="termsAgreement"
-                        required>
-
-                    <span>
-                        أوافق على
-                        <a href="terms.html" target="_blank">
-                            شروط الاستخدام
-                        </a>
-                        و
-                        <a href="privacy.html" target="_blank">
-                            سياسة الخصوصية
-                        </a>.
-                    </span>
-
-                </label>
-
-
-                <button
-                    class="button button-primary auth-submit"
-                    type="submit">
-
-                    إنشاء حساب
-
-                </button>
-
-
-                <div
-                    class="auth-message"
-                    id="signupMessage">
-                </div>
-
-            </form>
-
-
-            <div class="auth-switch">
-
-                لديك حساب بالفعل؟
-
-                <button
-                    type="button"
-                    class="switch-auth"
-                    data-auth-mode="login">
-
-                    تسجيل الدخول
-
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- AUTH LOADING -->
-
-        <div
-            class="auth-loading"
-            id="authLoading"
-            hidden>
-
-            <div class="loading-spinner"></div>
-
-            <span>
-                جاري الاتصال بـ VANTA...
-            </span>
-
-        </div>
-
-
-    </div>
+  class="login-backdrop"
+  onclick="closeLogin()"
+></div>
+
+<div class="login-box">
+
+  <button
+    class="close-login"
+    onclick="closeLogin()"
+  >
+    ×
+  </button>
+
+  <div class="login-symbol">
+    V
+  </div>
+
+  <div class="eyebrow">
+    VANTA ACCOUNT
+  </div>
+
+  <h2>
+    أهلاً بك في VANTA
+  </h2>
+
+  <p>
+    تسجيل الدخول سيتم ربطه بحساب VANTA الخاص بك.
+  </p>
+
+  <div class="fake-login">
+
+    <input
+      type="email"
+      placeholder="البريد الإلكتروني"
+    >
+
+    <input
+      type="password"
+      placeholder="كلمة المرور"
+    >
+
+    <button
+      class="vanta-button primary full"
+      onclick="showLoginMessage()"
+    >
+      دخول
+    </button>
+
+    <div id="loginMessage"></div>
+
+  </div>
 
 </div>
+```
 
+  </div>
 
-<!-- =========================================================
-     TOAST
-========================================================= -->
+  <script>
 
-<div
-    class="vanta-toast"
-    id="vantaToast"
-    role="status"
-    aria-live="polite">
+    /* =========================
+       BOOT
+    ========================= */
 
-    <span class="toast-icon">✓</span>
+    let progress = 0;
 
-    <span id="toastText">
-        تم
-    </span>
+    const statuses = [
+      "INITIALIZING VANTA",
+      "LOADING CORE",
+      "CALIBRATING INTERFACE",
+      "CONNECTING NOVA",
+      "PREPARING YOUR SPACE",
+      "VANTA IS READY"
+    ];
 
-</div>
+    function startBoot() {
 
+      const progressBar =
+        document.getElementById("bootProgress");
 
-<!-- =========================================================
-     SCRIPTS
-========================================================= -->
+      const percent =
+        document.getElementById("bootPercent");
 
-<script src="app.js"></script>
-<script src="xp.js"></script>
+      const status =
+        document.getElementById("bootStatus");
 
+      const actions =
+        document.getElementById("bootActions");
 
-<script>
-/*
- * VANTA 2.0 — Homepage interactions
- */
+      const timer =
+        setInterval(function() {
 
-document.addEventListener("DOMContentLoaded", () => {
+          progress += Math.floor(
+            Math.random() * 7
+          ) + 4;
 
-    /* -------------------------------------------------------
-       Smooth navigation
-    ------------------------------------------------------- */
+          if (progress >= 100) {
 
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
+            progress = 100;
 
-        link.addEventListener("click", event => {
+            clearInterval(timer);
 
-            const targetId = link.getAttribute("href");
+            status.textContent =
+              "VANTA IS READY";
 
-            if (!targetId || targetId === "#") return;
+            actions.classList.add("show");
 
-            const target = document.querySelector(targetId);
+          } else {
 
-            if (!target) return;
+            const index =
+              Math.min(
+                Math.floor(progress / 18),
+                statuses.length - 2
+              );
 
-            event.preventDefault();
+            status.textContent =
+              statuses[index];
 
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+          }
 
-        });
+          progressBar.style.width =
+            progress + "%";
 
-    });
+          percent.textContent =
+            progress + "%";
 
-
-    /* -------------------------------------------------------
-       Scroll navigation state
-    ------------------------------------------------------- */
-
-    const sections = document.querySelectorAll(
-        "main section[id]"
-    );
-
-    const navLinks = document.querySelectorAll(
-        ".desktop-nav .nav-link"
-    );
-
-    const observer = new IntersectionObserver(
-        entries => {
-
-            entries.forEach(entry => {
-
-                if (!entry.isIntersecting) return;
-
-                navLinks.forEach(link => {
-                    link.classList.remove("active");
-                });
-
-                const activeLink = document.querySelector(
-                    `.desktop-nav .nav-link[href="#${entry.target.id}"]`
-                );
-
-                if (activeLink) {
-                    activeLink.classList.add("active");
-                }
-
-            });
-
-        },
-        {
-            rootMargin: "-35% 0px -55% 0px"
-        }
-    );
-
-    sections.forEach(section => {
-        observer.observe(section);
-    });
-
-
-    /* -------------------------------------------------------
-       Theme button
-    ------------------------------------------------------- */
-
-    const themeButton = document.querySelector(".theme-button");
-
-    if (themeButton) {
-
-        themeButton.addEventListener("click", () => {
-
-            document.body.classList.toggle("light-mode");
-
-            const lightMode =
-                document.body.classList.contains("light-mode");
-
-            localStorage.setItem(
-                "vanta-theme",
-                lightMode ? "light" : "dark"
-            );
-
-        });
-
-        if (localStorage.getItem("vanta-theme") === "light") {
-            document.body.classList.add("light-mode");
-        }
+        }, 140);
 
     }
 
 
-    /* -------------------------------------------------------
-       User dropdown
-    ------------------------------------------------------- */
+    function enterVanta() {
 
-    const userAvatar =
-        document.getElementById("headerUserAvatar");
+      const boot =
+        document.getElementById("boot");
 
-    const userMenu =
-        document.querySelector(".user-menu");
+      const site =
+        document.getElementById("site");
 
-    if (userAvatar && userMenu) {
+      boot.classList.add("leave");
 
-        userAvatar.addEventListener("click", event => {
+      setTimeout(function() {
 
-            event.stopPropagation();
+        boot.style.display = "none";
 
-            userMenu.classList.toggle("open");
+        site.classList.add("show");
 
-        });
-
-        document.addEventListener("click", () => {
-            userMenu.classList.remove("open");
-        });
+      }, 700);
 
     }
 
 
-    /* -------------------------------------------------------
-       Toast helper
-    ------------------------------------------------------- */
+    /* =========================
+       NAV
+    ========================= */
 
-    window.VANTA_TOAST = function(message) {
+    function scrollToId(id) {
 
-        const toast =
-            document.getElementById("vantaToast");
+      const element =
+        document.getElementById(id);
 
-        const text =
-            document.getElementById("toastText");
+      if (!element) return;
 
-        if (!toast || !text) return;
+      element.scrollIntoView({
+        behavior: "smooth"
+      });
 
-        text.textContent = message;
-
-        toast.classList.add("show");
-
-        clearTimeout(window.__vantaToastTimer);
-
-        window.__vantaToastTimer = setTimeout(() => {
-
-            toast.classList.remove("show");
-
-        }, 3000);
-
-    };
+    }
 
 
-    /* -------------------------------------------------------
-       Reveal animations
-    ------------------------------------------------------- */
+    function goTop() {
 
-    const revealItems = document.querySelectorAll(
-        ".feature-card, .stat-card, .journey-step, .nova-feature, .credits-card"
-    );
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
 
-    const revealObserver = new IntersectionObserver(
-        entries => {
+    }
 
-            entries.forEach(entry => {
 
-                if (!entry.isIntersecting) return;
+    /* =========================
+       LOGIN
+    ========================= */
 
-                entry.target.classList.add("revealed");
+    function openLogin() {
 
-                revealObserver.unobserve(entry.target);
+      document
+        .getElementById("loginModal")
+        .classList.add("open");
 
-            });
+    }
 
-        },
-        {
-            threshold: 0.12
+
+    function closeLogin() {
+
+      document
+        .getElementById("loginModal")
+        .classList.remove("open");
+
+    }
+
+
+    function showLoginMessage() {
+
+      document
+        .getElementById("loginMessage")
+        .textContent =
+        "نظام الحساب سيتم تفعيله في الخطوة التالية.";
+
+    }
+
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Escape") {
+          closeLogin();
         }
+
+      }
     );
 
-    revealItems.forEach(item => {
-        revealObserver.observe(item);
-    });
 
+    /* =========================
+       START
+    ========================= */
 
-    /* -------------------------------------------------------
-       Parallax
-    ------------------------------------------------------- */
+    window.addEventListener(
+      "DOMContentLoaded",
+      function() {
 
-    let ticking = false;
+        startBoot();
 
-    window.addEventListener("scroll", () => {
+      }
+    );
 
-        if (ticking) return;
-
-        ticking = true;
-
-        requestAnimationFrame(() => {
-
-            const scrollY = window.scrollY;
-
-            document.documentElement.style.setProperty(
-                "--scroll-y",
-                `${scrollY}px`
-            );
-
-            ticking = false;
-
-        });
-
-    });
-
-
-    /* -------------------------------------------------------
-       Auth buttons
-    ------------------------------------------------------- */
-
-    document.querySelectorAll(".open-login").forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            if (window.VANTA_AUTH &&
-                typeof window.VANTA_AUTH.openAuth === "function") {
-
-                window.VANTA_AUTH.openAuth("login");
-
-            }
-
-        });
-
-    });
-
-
-    document.querySelectorAll(".open-signup").forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            if (window.VANTA_AUTH &&
-                typeof window.VANTA_AUTH.openAuth === "function") {
-
-                window.VANTA_AUTH.openAuth("signup");
-
-            }
-
-        });
-
-    });
-
-
-    /* -------------------------------------------------------
-       Auth mode switch
-    ------------------------------------------------------- */
-
-    document.querySelectorAll(".switch-auth").forEach(button => {
-
-        button.addEventListener("click", () => {
-
-            const mode =
-                button.dataset.authMode;
-
-            if (
-                window.VANTA_AUTH &&
-                typeof window.VANTA_AUTH.showAuthMode === "function"
-            ) {
-
-                window.VANTA_AUTH.showAuthMode(mode);
-
-            }
-
-        });
-
-    });
-
-
-});
-</script>
+  </script>
 
 </body>
 </html>
