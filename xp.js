@@ -1,83 +1,41 @@
 // VANTA XP SYSTEM
-// Firebase Firestore
+// Firebase Compat
 
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
-import { getAuth } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-const db = getFirestore();
-const auth = getAuth();
+const db = firebase.firestore();
+const auth = firebase.auth();
 
 
 // ================================
 // XP SETTINGS
 // ================================
 
-const XP_PER_CORRECT_ANSWER = 10;
-const XP_PER_LESSON = 50;
-const XP_PER_QUIZ = 100;
+const XP_REWARDS = {
+  correctAnswer: 10,
+  lessonCompleted: 50,
+  quizCompleted: 100,
+  labCompleted: 75,
+  challengeCompleted: 30
+};
 
 
 // ================================
-// GET USER DATA
+// LEVEL SYSTEM
 // ================================
 
-export async function getXPData() {
-
-  const user = auth.currentUser;
-
-  if (!user) {
-    return null;
-  }
-
-  const ref = doc(db, "users", user.uid);
-  const snapshot = await getDoc(ref);
-
-  if (!snapshot.exists()) {
-
-    const initialData = {
-      xp: 0,
-      level: 1,
-      lessonsCompleted: 0,
-      quizzesCompleted: 0,
-      correctAnswers: 0
-    };
-
-    await setDoc(ref, initialData);
-
-    return initialData;
-  }
-
-  return snapshot.data();
-}
-
-
-// ================================
-// CALCULATE LEVEL
-// ================================
-
-export function calculateLevel(xp) {
-
+function calculateLevel(xp) {
   xp = Math.max(0, Number(xp) || 0);
 
-  // كل مستوى يحتاج XP أكثر تدريجيًا
   let level = 1;
-  let requiredXP = 100;
-  let remainingXP = xp;
+  let required = 100;
+  let remaining = xp;
 
-  while (remainingXP >= requiredXP) {
-
-    remainingXP -= requiredXP;
+  while (remaining >= required && level < 100) {
+    remaining -= required;
     level++;
 
-    requiredXP =
-      Math.floor(100 * Math.pow(level, 1.15));
+    required = Math.floor(
+      100 * Math.pow(level, 1.15)
+    );
   }
 
   return level;
@@ -85,46 +43,90 @@ export function calculateLevel(xp) {
 
 
 // ================================
-// XP REQUIRED FOR NEXT LEVEL
+// LEVEL INFORMATION
 // ================================
 
-export function getLevelInfo(xp) {
-
+function getLevelInfo(xp) {
   xp = Math.max(0, Number(xp) || 0);
 
   let level = 1;
-  let remainingXP = xp;
-  let requiredXP = 100;
+  let required = 100;
+  let remaining = xp;
 
-  while (remainingXP >= requiredXP) {
-
-    remainingXP -= requiredXP;
+  while (remaining >= required && level < 100) {
+    remaining -= required;
     level++;
 
-    requiredXP =
-      Math.floor(100 * Math.pow(level, 1.15));
+    required = Math.floor(
+      100 * Math.pow(level, 1.15)
+    );
   }
 
   return {
+    level: level,
+    xp: xp,
+    xpIntoLevel: remaining,
+    xpForLevel: required,
+    xpToNextLevel: required - remaining,
+    progress: Math.floor(
+      (remaining / required) * 100
+    )
+  };
+}
 
-    level,
 
-    currentXP: xp,
+// ================================
+// GET USER XP
+// ================================
 
-    xpIntoLevel: remainingXP,
+async function getXPData() {
 
-    xpForLevel: requiredXP,
+  const user = auth.currentUser;
 
-    xpToNextLevel:
-      requiredXP - remainingXP,
+  if (!user) {
+    return null;
+  }
 
-    progress:
-      Math.min(
-        100,
-        Math.floor(
-          (remainingXP / requiredXP) * 100
-        )
-      )
+  const ref = db
+    .collection("users")
+    .doc(user.uid);
+
+  const snapshot = await ref.get();
+
+  if (!snapshot.exists) {
+
+    const data = {
+      xp: 0,
+      level: 1,
+      lessonsCompleted: 0,
+      quizzesCompleted: 0,
+      correctAnswers: 0,
+      labsCompleted: 0,
+      challengesCompleted: 0,
+      createdAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    await ref.set(data);
+
+    return data;
+  }
+
+  const data = snapshot.data();
+
+  return {
+    xp: Number(data.xp) || 0,
+    level: Number(data.level) || 1,
+    lessonsCompleted:
+      Number(data.lessonsCompleted) || 0,
+    quizzesCompleted:
+      Number(data.quizzesCompleted) || 0,
+    correctAnswers:
+      Number(data.correctAnswers) || 0,
+    labsCompleted:
+      Number(data.labsCompleted) || 0,
+    challengesCompleted:
+      Number(data.challengesCompleted) || 0
   };
 }
 
@@ -133,7 +135,7 @@ export function getLevelInfo(xp) {
 // ADD XP
 // ================================
 
-export async function addXP(amount, reason = "activity") {
+async function addXP(amount, reason = "activity") {
 
   const user = auth.currentUser;
 
@@ -143,34 +145,26 @@ export async function addXP(amount, reason = "activity") {
 
   amount = Number(amount);
 
-  if (!Number.isFinite(amount) || amount <= 0) {
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
     throw new Error("Invalid XP amount.");
   }
 
-  const ref = doc(db, "users", user.uid);
-  const snapshot = await getDoc(ref);
+  const ref = db
+    .collection("users")
+    .doc(user.uid);
 
-  let data;
+  const snapshot = await ref.get();
 
-  if (!snapshot.exists()) {
-
-    data = {
-      xp: 0,
-      level: 1,
-      lessonsCompleted: 0,
-      quizzesCompleted: 0,
-      correctAnswers: 0
-    };
-
-    await setDoc(ref, data);
-
-  } else {
-
-    data = snapshot.data();
-  }
+  const oldData =
+    snapshot.exists
+      ? snapshot.data()
+      : {};
 
   const oldXP =
-    Number(data.xp) || 0;
+    Number(oldData.xp) || 0;
 
   const newXP =
     oldXP + amount;
@@ -181,28 +175,26 @@ export async function addXP(amount, reason = "activity") {
   const newLevel =
     calculateLevel(newXP);
 
-  await updateDoc(ref, {
+  await ref.set(
+    {
+      xp: newXP,
+      level: newLevel,
 
-    xp: newXP,
+      lastXPAmount: amount,
+      lastXPReason: reason,
 
-    level: newLevel,
-
-    lastXPReason: reason,
-
-    lastXPAmount: amount,
-
-    lastXPAt: new Date().toISOString()
-  });
+      lastXPAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+    },
+    {
+      merge: true
+    }
+  );
 
   return {
-
-    xp: newXP,
-
-    level: newLevel,
-
     gained: amount,
-
-    reason,
+    xp: newXP,
+    level: newLevel,
 
     levelUp:
       newLevel > oldLevel
@@ -214,31 +206,28 @@ export async function addXP(amount, reason = "activity") {
 // CORRECT ANSWER
 // ================================
 
-export async function rewardCorrectAnswer() {
+async function rewardCorrectAnswer() {
 
   const user = auth.currentUser;
 
   if (!user) return null;
 
-  const ref =
-    doc(db, "users", user.uid);
+  const ref = db
+    .collection("users")
+    .doc(user.uid);
 
-  const snapshot =
-    await getDoc(ref);
-
-  const data =
-    snapshot.exists()
-      ? snapshot.data()
-      : {};
-
-  await updateDoc(ref, {
-
-    correctAnswers:
-      (Number(data.correctAnswers) || 0) + 1
-  });
+  await ref.set(
+    {
+      correctAnswers:
+        firebase.firestore.FieldValue.increment(1)
+    },
+    {
+      merge: true
+    }
+  );
 
   return addXP(
-    XP_PER_CORRECT_ANSWER,
+    XP_REWARDS.correctAnswer,
     "correct_answer"
   );
 }
@@ -248,31 +237,28 @@ export async function rewardCorrectAnswer() {
 // LESSON COMPLETED
 // ================================
 
-export async function rewardLessonCompleted() {
+async function rewardLessonCompleted() {
 
   const user = auth.currentUser;
 
   if (!user) return null;
 
-  const ref =
-    doc(db, "users", user.uid);
+  const ref = db
+    .collection("users")
+    .doc(user.uid);
 
-  const snapshot =
-    await getDoc(ref);
-
-  const data =
-    snapshot.exists()
-      ? snapshot.data()
-      : {};
-
-  await updateDoc(ref, {
-
-    lessonsCompleted:
-      (Number(data.lessonsCompleted) || 0) + 1
-  });
+  await ref.set(
+    {
+      lessonsCompleted:
+        firebase.firestore.FieldValue.increment(1)
+    },
+    {
+      merge: true
+    }
+  );
 
   return addXP(
-    XP_PER_LESSON,
+    XP_REWARDS.lessonCompleted,
     "lesson_completed"
   );
 }
@@ -282,31 +268,117 @@ export async function rewardLessonCompleted() {
 // QUIZ COMPLETED
 // ================================
 
-export async function rewardQuizCompleted() {
+async function rewardQuizCompleted() {
 
   const user = auth.currentUser;
 
   if (!user) return null;
 
-  const ref =
-    doc(db, "users", user.uid);
+  const ref = db
+    .collection("users")
+    .doc(user.uid);
 
-  const snapshot =
-    await getDoc(ref);
-
-  const data =
-    snapshot.exists()
-      ? snapshot.data()
-      : {};
-
-  await updateDoc(ref, {
-
-    quizzesCompleted:
-      (Number(data.quizzesCompleted) || 0) + 1
-  });
+  await ref.set(
+    {
+      quizzesCompleted:
+        firebase.firestore.FieldValue.increment(1)
+    },
+    {
+      merge: true
+    }
+  );
 
   return addXP(
-    XP_PER_QUIZ,
+    XP_REWARDS.quizCompleted,
     "quiz_completed"
   );
 }
+
+
+// ================================
+// LAB COMPLETED
+// ================================
+
+async function rewardLabCompleted() {
+
+  const user = auth.currentUser;
+
+  if (!user) return null;
+
+  const ref = db
+    .collection("users")
+    .doc(user.uid);
+
+  await ref.set(
+    {
+      labsCompleted:
+        firebase.firestore.FieldValue.increment(1)
+    },
+    {
+      merge: true
+    }
+  );
+
+  return addXP(
+    XP_REWARDS.labCompleted,
+    "lab_completed"
+  );
+}
+
+
+// ================================
+// CHALLENGE COMPLETED
+// ================================
+
+async function rewardChallengeCompleted() {
+
+  const user = auth.currentUser;
+
+  if (!user) return null;
+
+  const ref = db
+    .collection("users")
+    .doc(user.uid);
+
+  await ref.set(
+    {
+      challengesCompleted:
+        firebase.firestore.FieldValue.increment(1)
+    },
+    {
+      merge: true
+    }
+  );
+
+  return addXP(
+    XP_REWARDS.challengeCompleted,
+    "challenge_completed"
+  );
+}
+
+
+// ================================
+// GLOBAL VANTA API
+// ================================
+
+window.VANTA_XP = {
+
+  getXPData,
+
+  addXP,
+
+  calculateLevel,
+
+  getLevelInfo,
+
+  rewardCorrectAnswer,
+
+  rewardLessonCompleted,
+
+  rewardQuizCompleted,
+
+  rewardLabCompleted,
+
+  rewardChallengeCompleted
+
+};
