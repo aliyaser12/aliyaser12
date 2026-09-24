@@ -1,2086 +1,1149 @@
-/*
-=========================================================
- VANTA / NOVA AI BACKEND
- Firebase Authentication
- Supabase Memory
- Gemini AI
- Automatic Gemini Fallback
- Vercel Serverless Function
-=========================================================
-*/
+```js
+// api/nova.js
+// VANTA — NOVA AI
+// Ali Yaser / علي ياسر
 
-const crypto = require("crypto");
+export default async function handler(req, res) {
+  // --------------------------------------------------
+  // CORS
+  // --------------------------------------------------
 
-/* =======================================================
-   ENVIRONMENT
-======================================================= */
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-const GEMINI_MODEL =
-  process.env.GEMINI_MODEL || "gemini-3.6-flash";
-
-/*
-  ترتيب النماذج:
-  1. النموذج الموجود في GEMINI_MODEL
-  2. Gemini 3.5 Flash
-  3. Gemini 3.5 Flash Lite
-  4. Gemini 3.1 Flash Lite
-
-  إذا كان نموذج مشغولًا أو يعطي 429/503/502
-  ينتقل NOVA تلقائيًا للنموذج التالي.
-*/
-
-const GEMINI_FALLBACK_MODELS = [
-  GEMINI_MODEL,
-  "gemini-3.5-flash",
-  "gemini-3.5-flash-lite",
-  "gemini-3.1-flash-lite"
-].filter(
-  (model, index, array) =>
-    model && array.indexOf(model) === index
-);
-
-const SUPABASE_URL =
-  process.env.SUPABASE_URL ||
-  "https://mknbfymmwuesjffbmkmu.supabase.co";
-
-const SUPABASE_SERVICE_ROLE_KEY =
-  process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-const FIREBASE_API_KEY =
-  process.env.FIREBASE_API_KEY ||
-  "AIzaSyDwPdYkuRjugCD21tChOoSLldQG5raA-ps";
-
-const MEMORY_TABLE =
-  "student_memory_firebase";
-
-
-/* =======================================================
-   RESPONSE HELPERS
-======================================================= */
-
-function json(res, status, data) {
-  res.status(status);
-
-  res.setHeader(
-    "Content-Type",
-    "application/json; charset=utf-8"
-  );
-
-  res.setHeader(
-    "Cache-Control",
-    "no-store"
-  );
-
-  return res.end(
-    JSON.stringify(data)
-  );
-}
-
-
-/* =======================================================
-   BASIC HELPERS
-======================================================= */
-
-function cleanString(value, max = 10000) {
-  return String(value ?? "")
-    .trim()
-    .slice(0, max);
-}
-
-function safeArray(value, max = 100) {
-  return Array.isArray(value)
-    ? value.slice(0, max)
-    : [];
-}
-
-function nowISO() {
-  return new Date().toISOString();
-}
-
-function clamp(value, min, max) {
-  return Math.max(
-    min,
-    Math.min(max, value)
-  );
-}
-
-
-/* =======================================================
-   FIREBASE AUTH
-======================================================= */
-
-async function verifyFirebaseToken(idToken) {
-  if (!idToken) {
-    throw new Error("AUTH_REQUIRED");
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
   }
 
-  if (!FIREBASE_API_KEY) {
-    throw new Error(
-      "FIREBASE_API_KEY_MISSING"
-    );
+  if (req.method !== "POST") {
+    return res.status(405).json({
+      ok: false,
+      error: "Method not allowed"
+    });
   }
-
-  const response = await fetch(
-    `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(
-      FIREBASE_API_KEY
-    )}`,
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type":
-          "application/json"
-      },
-
-      body: JSON.stringify({
-        idToken
-      })
-    }
-  );
-
-  const data =
-    await response.json()
-      .catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(
-      data?.error?.message ||
-      "FIREBASE_TOKEN_INVALID"
-    );
-  }
-
-  const user =
-    data?.users?.[0];
-
-  if (!user?.localId) {
-    throw new Error(
-      "FIREBASE_USER_NOT_FOUND"
-    );
-  }
-
-  return {
-    uid: user.localId,
-    email: user.email || "",
-    displayName:
-      user.displayName || ""
-  };
-}
-
-
-/* =======================================================
-   SUPABASE
-======================================================= */
-
-async function supabaseRequest(
-  path,
-  options = {}
-) {
-  if (!SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error(
-      "SUPABASE_SERVICE_ROLE_KEY_MISSING"
-    );
-  }
-
-  const response = await fetch(
-    `${SUPABASE_URL}${path}`,
-    {
-      ...options,
-
-      headers: {
-        apikey:
-          SUPABASE_SERVICE_ROLE_KEY,
-
-        Authorization:
-          `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-
-        "Content-Type":
-          "application/json",
-
-        ...(options.headers || {})
-      }
-    }
-  );
-
-  const text =
-    await response.text();
-
-  let data = null;
 
   try {
-    data = text
-      ? JSON.parse(text)
-      : null;
-  } catch {
-    data = text;
-  }
+    const body = req.body || {};
 
-  if (!response.ok) {
-    const message =
-      data?.message ||
-      data?.error ||
-      data?.hint ||
-      text ||
-      "SUPABASE_ERROR";
+    const question =
+      typeof body.question === "string"
+        ? body.question.trim()
+        : "";
 
-    throw new Error(
-      `Supabase error ${response.status}: ${message}`
-    );
-  }
+    const memory = normalizeMemory(body.memory);
 
-  return data;
-}
-
-
-function defaultMemory(user) {
-  return {
-    firebase_uid:
-      user.uid,
-
-    email:
-      user.email || "",
-
-    name:
-      user.displayName || "",
-
-    level: 1,
-
-    xp: 0,
-
-    lessons: 0,
-
-    badges: 0,
-
-    focus: "general",
-
-    streak: 0,
-
-    study_minutes: 0,
-
-    mastery: {},
-
-    recent_scores: [],
-
-    recent_topics: [],
-
-    weak_topics: [],
-
-    strengths: [],
-
-    mistakes: [],
-
-    history: [],
-
-    seen_question_ids: [],
-
-    created_at:
-      nowISO(),
-
-    updated_at:
-      nowISO()
-  };
-}
-
-
-async function getMemory(user) {
-  const encodedUID =
-    encodeURIComponent(
-      user.uid
-    );
-
-  const rows =
-    await supabaseRequest(
-      `/rest/v1/${MEMORY_TABLE}?firebase_uid=eq.${encodedUID}&limit=1`,
-      {
-        method: "GET"
-      }
-    );
-
-  if (
-    Array.isArray(rows) &&
-    rows.length > 0
-  ) {
-    return rows[0];
-  }
-
-  const memory =
-    defaultMemory(user);
-
-  await supabaseRequest(
-    `/rest/v1/${MEMORY_TABLE}`,
-    {
-      method: "POST",
-
-      headers: {
-        Prefer:
-          "return=representation"
-      },
-
-      body:
-        JSON.stringify(memory)
+    if (!question) {
+      return res.status(400).json({
+        ok: false,
+        error: "Missing question"
+      });
     }
-  );
 
-  return memory;
-}
+    const analysis = analyzeUserMessage(question, memory);
 
+    const systemPrompt = novaSystem(memory, analysis);
 
-async function saveMemory(
-  user,
-  patch
-) {
-  const cleanPatch = {
-    ...patch,
-
-    firebase_uid:
-      user.uid,
-
-    email:
-      user.email ||
-      patch.email ||
-      "",
-
-    updated_at:
-      nowISO()
-  };
-
-  const encodedUID =
-    encodeURIComponent(
-      user.uid
+    const userPrompt = buildUserPrompt(
+      question,
+      memory,
+      analysis
     );
 
-  const rows =
-    await supabaseRequest(
-      `/rest/v1/${MEMORY_TABLE}?firebase_uid=eq.${encodedUID}`,
-      {
-        method: "PATCH",
+    const apiKey = process.env.GEMINI_API_KEY;
 
-        headers: {
-          Prefer:
-            "return=representation"
+    if (!apiKey) {
+      return res.status(500).json({
+        ok: false,
+        error: "GEMINI_API_KEY is not configured"
+      });
+    }
+
+    const model =
+      process.env.GEMINI_MODEL ||
+      "gemini-2.5-flash";
+
+    const endpoint =
+      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        system_instruction: {
+          parts: [
+            {
+              text: systemPrompt
+            }
+          ]
         },
 
-        body:
-          JSON.stringify(cleanPatch)
-      }
-    );
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: userPrompt
+              }
+            ]
+          }
+        ],
 
-  if (
-    Array.isArray(rows) &&
-    rows.length > 0
-  ) {
-    return rows[0];
+        generationConfig: {
+          temperature: 0.85,
+          topP: 0.92,
+          topK: 40,
+          maxOutputTokens: 1800
+        }
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Gemini error:", data);
+
+      return res.status(response.status).json({
+        ok: false,
+        error: "Gemini request failed",
+        details: data?.error?.message || "Unknown Gemini error"
+      });
+    }
+
+    const answer =
+      extractGeminiText(data) ||
+      "تعذر عليّ توليد رد الآن.";
+
+    const xpInfo = calculateProgressInfo(memory);
+
+    return res.status(200).json({
+      ok: true,
+
+      answer,
+
+      nova: {
+        emotion: analysis.emotion,
+        mood: analysis.mood,
+        intent: analysis.intent,
+        confidence: analysis.confidence
+      },
+
+      progress: xpInfo
+    });
+
+  } catch (error) {
+    console.error("NOVA API error:", error);
+
+    return res.status(500).json({
+      ok: false,
+      error: "Internal server error"
+    });
   }
-
-  return {
-    ...cleanPatch
-  };
 }
 
 
-function buildMemoryPatch(
-  memory,
-  changes = {}
-) {
-  return {
-    level:
-      changes.level !== undefined
-        ? clamp(
-            Number(changes.level) || 1,
-            1,
-            100
-          )
-        : memory.level,
+// ==================================================
+// MEMORY
+// ==================================================
 
-    xp:
-      changes.xp !== undefined
-        ? Math.max(
-            0,
-            Number(changes.xp) || 0
-          )
-        : memory.xp,
+function normalizeMemory(memory) {
+  const m =
+    memory && typeof memory === "object"
+      ? memory
+      : {};
+
+  return {
+    level: numberOr(m.level, 1),
+
+    xp: numberOr(m.xp, 0),
+
+    streak: numberOr(m.streak, 0),
 
     lessons:
-      changes.lessons !== undefined
-        ? Math.max(
-            0,
-            Number(changes.lessons) || 0
-          )
-        : memory.lessons,
-
-    badges:
-      changes.badges !== undefined
-        ? Math.max(
-            0,
-            Number(changes.badges) || 0
-          )
-        : memory.badges,
-
-    focus:
-      changes.focus !== undefined
-        ? cleanString(
-            changes.focus,
-            120
-          )
-        : memory.focus,
-
-    streak:
-      changes.streak !== undefined
-        ? Math.max(
-            0,
-            Number(changes.streak) || 0
-          )
-        : memory.streak,
-
-    study_minutes:
-      changes.study_minutes !== undefined
-        ? Math.max(
-            0,
-            Number(
-              changes.study_minutes
-            ) || 0
-          )
-        : memory.study_minutes,
-
-    mastery:
-      changes.mastery !== undefined
-        ? changes.mastery
-        : memory.mastery || {},
-
-    recent_scores:
-      changes.recent_scores !== undefined
-        ? safeArray(
-            changes.recent_scores
-          )
-        : safeArray(
-            memory.recent_scores
-          ),
+      Array.isArray(m.lessons)
+        ? m.lessons
+        : [],
 
     recent_topics:
-      changes.recent_topics !== undefined
-        ? safeArray(
-            changes.recent_topics
-          )
-        : safeArray(
-            memory.recent_topics
-          ),
+      Array.isArray(m.recent_topics)
+        ? m.recent_topics
+        : [],
 
     weak_topics:
-      changes.weak_topics !== undefined
-        ? safeArray(
-            changes.weak_topics
-          )
-        : safeArray(
-            memory.weak_topics
-          ),
+      Array.isArray(m.weak_topics)
+        ? m.weak_topics
+        : [],
 
     strengths:
-      changes.strengths !== undefined
-        ? safeArray(
-            changes.strengths
-          )
-        : safeArray(
-            memory.strengths
-          ),
+      Array.isArray(m.strengths)
+        ? m.strengths
+        : [],
 
     mistakes:
-      changes.mistakes !== undefined
-        ? safeArray(
-            changes.mistakes
-          )
-        : safeArray(
-            memory.mistakes
-          ),
+      Array.isArray(m.mistakes)
+        ? m.mistakes
+        : [],
 
-    history:
-      changes.history !== undefined
-        ? safeArray(
-            changes.history
-          )
-        : safeArray(
-            memory.history
-          ),
+    focus:
+      typeof m.focus === "string"
+        ? m.focus
+        : "general",
 
-    seen_question_ids:
-      changes.seen_question_ids !== undefined
-        ? safeArray(
-            changes.seen_question_ids
-          )
-        : safeArray(
-            memory.seen_question_ids
-          )
+    username:
+      typeof m.username === "string"
+        ? m.username
+        : "",
+
+    previous_messages:
+      Array.isArray(m.previous_messages)
+        ? m.previous_messages.slice(-12)
+        : []
   };
 }
 
 
-/* =======================================================
-   GEMINI ERROR DETECTION
-======================================================= */
+function numberOr(value, fallback) {
+  const n = Number(value);
 
-function isRetryableGeminiError(
-  status,
-  message
-) {
-  const text =
-    String(message || "")
-      .toLowerCase();
-
-  /*
-    429 = rate limit / high demand
-    500 = temporary server problem
-    502 = bad gateway
-    503 = service unavailable
-    504 = gateway timeout
-  */
-
-  if (
-    [429, 500, 502, 503, 504]
-      .includes(status)
-  ) {
-    return true;
-  }
-
-  if (
-    text.includes(
-      "high demand"
-    ) ||
-    text.includes(
-      "temporarily unavailable"
-    ) ||
-    text.includes(
-      "service unavailable"
-    ) ||
-    text.includes(
-      "resource exhausted"
-    ) ||
-    text.includes(
-      "rate limit"
-    ) ||
-    text.includes(
-      "overloaded"
-    )
-  ) {
-    return true;
-  }
-
-  return false;
+  return Number.isFinite(n)
+    ? n
+    : fallback;
 }
 
 
-/* =======================================================
-   GEMINI
-======================================================= */
+// ==================================================
+// XP SYSTEM
+// ==================================================
 
-async function gemini(
-  prompt,
-  options = {}
-) {
-  if (!GEMINI_API_KEY) {
-    throw new Error(
-      "GEMINI_API_KEY_MISSING"
-    );
+function getLevelFromXP(xp) {
+  xp = Math.max(0, Number(xp) || 0);
+
+  // Progressive XP curve
+  let level = 1;
+  let required = 100;
+
+  while (xp >= required && level < 100) {
+    xp -= required;
+    level++;
+
+    required =
+      Math.floor(100 * Math.pow(level, 1.12));
   }
 
-  let lastError =
-    null;
+  return level;
+}
 
-  for (
-    let i = 0;
-    i < GEMINI_FALLBACK_MODELS.length;
-    i++
-  ) {
-    const model =
-      GEMINI_FALLBACK_MODELS[i];
 
-    try {
-      const url =
-        `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(
-          model
-        )}:generateContent?key=${encodeURIComponent(
-          GEMINI_API_KEY
-        )}`;
+function getXPRequiredForLevel(level) {
+  level = Math.max(1, Number(level) || 1);
 
-      const generationConfig = {
-        maxOutputTokens:
-          options.maxOutputTokens ??
-          5000
+  return Math.floor(
+    100 * Math.pow(level, 1.12)
+  );
+}
+
+
+function getXPProgress(xp) {
+  xp = Math.max(0, Number(xp) || 0);
+
+  let level = 1;
+  let remaining = xp;
+
+  while (level < 100) {
+    const required =
+      getXPRequiredForLevel(level);
+
+    if (remaining < required) {
+      return {
+        level,
+        currentXP: xp,
+        xpIntoLevel: remaining,
+        xpForLevel: required,
+        xpToNextLevel: required - remaining,
+        percent:
+          Math.round(
+            (remaining / required) * 100
+          )
       };
-
-      /*
-        Gemini 3.x has changed sampling
-        behavior, so we intentionally do
-        not send temperature/top_p/top_k.
-      */
-
-      if (options.json === false) {
-        generationConfig.responseMimeType =
-          "text/plain";
-      } else {
-        generationConfig.responseMimeType =
-          "application/json";
-      }
-
-      const response =
-        await fetch(
-          url,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify({
-                contents: [
-                  {
-                    role: "user",
-
-                    parts: [
-                      {
-                        text:
-                          prompt
-                      }
-                    ]
-                  }
-                ],
-
-                generationConfig
-              })
-          }
-        );
-
-      const data =
-        await response.json()
-          .catch(() => ({}));
-
-      if (!response.ok) {
-        const message =
-          data?.error?.message ||
-          `GEMINI_HTTP_${response.status}`;
-
-        /*
-          If model is overloaded,
-          automatically try next model.
-        */
-
-        if (
-          isRetryableGeminiError(
-            response.status,
-            message
-          )
-        ) {
-          console.warn(
-            `NOVA: Gemini model ${model} unavailable. Trying fallback.`
-          );
-
-          lastError =
-            new Error(
-              `GEMINI_${response.status}: ${message}`
-            );
-
-          continue;
-        }
-
-        /*
-          Model doesn't exist /
-          API key doesn't allow it /
-          invalid request.
-        */
-
-        throw new Error(
-          `GEMINI_${response.status}: ${message}`
-        );
-      }
-
-      const text =
-        data?.candidates?.[0]
-          ?.content?.parts
-          ?.map(
-            part =>
-              part.text || ""
-          )
-          .join("")
-          .trim();
-
-      if (!text) {
-        lastError =
-          new Error(
-            `GEMINI_EMPTY_RESPONSE_${model}`
-          );
-
-        continue;
-      }
-
-      console.log(
-        `NOVA: Gemini response generated using ${model}`
-      );
-
-      if (
-        options.json === false
-      ) {
-        return text;
-      }
-
-      return parseJSON(text);
-
-    } catch (error) {
-      lastError = error;
-
-      const message =
-        error?.message || "";
-
-      /*
-        Network/temporary problems:
-        continue to next model.
-      */
-
-      if (
-        message.includes(
-          "GEMINI_429"
-        ) ||
-        message.includes(
-          "GEMINI_500"
-        ) ||
-        message.includes(
-          "GEMINI_502"
-        ) ||
-        message.includes(
-          "GEMINI_503"
-        ) ||
-        message.includes(
-          "GEMINI_504"
-        ) ||
-        message
-          .toLowerCase()
-          .includes(
-            "high demand"
-          )
-      ) {
-        console.warn(
-          `NOVA: fallback after ${model}`
-        );
-
-        continue;
-      }
-
-      throw error;
     }
+
+    remaining -= required;
+    level++;
   }
 
-  /*
-    Every available model failed.
-  */
+  return {
+    level: 100,
+    currentXP: xp,
+    xpIntoLevel: 0,
+    xpForLevel: 0,
+    xpToNextLevel: 0,
+    percent: 100
+  };
+}
 
-  throw new Error(
-    `GEMINI_ALL_MODELS_FAILED: ${
-      lastError?.message ||
-      "No Gemini model available"
-    }`
+
+function calculateProgressInfo(memory) {
+  const actualXP =
+    Math.max(0, Number(memory.xp) || 0);
+
+  const calculated =
+    getXPProgress(actualXP);
+
+  return {
+    xp: actualXP,
+
+    storedLevel:
+      Number(memory.level) || 1,
+
+    calculatedLevel:
+      calculated.level,
+
+    xpIntoLevel:
+      calculated.xpIntoLevel,
+
+    xpForCurrentLevel:
+      calculated.xpForLevel,
+
+    xpToNextLevel:
+      calculated.xpToNextLevel,
+
+    progressPercent:
+      calculated.percent,
+
+    streak:
+      Number(memory.streak) || 0
+  };
+}
+
+
+// ==================================================
+// XP REWARDS
+// ==================================================
+
+function getXPReward(intent, difficulty) {
+  const rewards = {
+    easy: 5,
+    medium: 10,
+    hard: 20,
+    expert: 35
+  };
+
+  const base =
+    rewards[difficulty] || 10;
+
+  switch (intent) {
+    case "learning":
+      return base;
+
+    case "question":
+      return Math.max(3, Math.floor(base / 2));
+
+    case "practice":
+      return base + 5;
+
+    case "completed_lesson":
+      return base + 15;
+
+    case "completed_quiz":
+      return base + 20;
+
+    default:
+      return 0;
+  }
+}
+
+
+// ==================================================
+// USER MESSAGE ANALYSIS
+// ==================================================
+
+function analyzeUserMessage(message, memory) {
+  const text = message.toLowerCase();
+
+  let emotion = "neutral";
+  let mood = "calm";
+  let intent = "conversation";
+  let confidence = 0.65;
+
+  // -----------------------------
+  // Emotion
+  // -----------------------------
+
+  const sadnessWords = [
+    "حزين",
+    "حزينة",
+    "زعلان",
+    "زعلانة",
+    "تعبت",
+    "مكسور",
+    "بكيت",
+    "بكاء",
+    "sad",
+    "cry",
+    "depressed"
+  ];
+
+  const angerWords = [
+    "غاضب",
+    "معصب",
+    "معصبني",
+    "كرهت",
+    "كسم",
+    "fuck",
+    "angry",
+    "mad",
+    "annoyed"
+  ];
+
+  const happyWords = [
+    "فرحان",
+    "فرحانة",
+    "سعيد",
+    "مبسوط",
+    "مبسوطة",
+    "رهيب",
+    "جميل",
+    "awesome",
+    "happy",
+    "great"
+  ];
+
+  const excitementWords = [
+    "متحمس",
+    "حماس",
+    "واو",
+    "🔥",
+    "lets go",
+    "let's go",
+    "excited"
+  ];
+
+  const confusionWords = [
+    "ما فهمت",
+    "مش فاهم",
+    "مو فاهم",
+    "مش فاهمة",
+    "كيف",
+    "ليش",
+    "ماذا",
+    "confused",
+    "don't understand"
+  ];
+
+  const jokeWords = [
+    "هههه",
+    "😂",
+    "مزح",
+    "امزح",
+    "نكتة",
+    "joke",
+    "lol",
+    "lmao"
+  ];
+
+  if (containsAny(text, sadnessWords)) {
+    emotion = "sad";
+    mood = "supportive";
+    confidence = 0.9;
+  }
+
+  else if (containsAny(text, angerWords)) {
+    emotion = "angry";
+    mood = "calm";
+    confidence = 0.88;
+  }
+
+  else if (containsAny(text, excitementWords)) {
+    emotion = "excited";
+    mood = "energetic";
+    confidence = 0.88;
+  }
+
+  else if (containsAny(text, happyWords)) {
+    emotion = "happy";
+    mood = "playful";
+    confidence = 0.82;
+  }
+
+  else if (containsAny(text, confusionWords)) {
+    emotion = "confused";
+    mood = "patient";
+    confidence = 0.9;
+  }
+
+  else if (containsAny(text, jokeWords)) {
+    emotion = "playful";
+    mood = "humorous";
+    confidence = 0.9;
+  }
+
+  // -----------------------------
+  // Intent
+  // -----------------------------
+
+  if (
+    containsAny(text, [
+      "تعلم",
+      "اشرح",
+      "شرح",
+      "درس",
+      "علمني",
+      "كيف يعمل",
+      "explain",
+      "teach",
+      "learn"
+    ])
+  ) {
+    intent = "learning";
+  }
+
+  else if (
+    containsAny(text, [
+      "سؤال",
+      "ما هو",
+      "ما معنى",
+      "ليش",
+      "لماذا",
+      "كيف",
+      "what is",
+      "why",
+      "how"
+    ])
+  ) {
+    intent = "question";
+  }
+
+  else if (
+    containsAny(text, [
+      "تدريب",
+      "تمرين",
+      "اختبار",
+      "quiz",
+      "practice",
+      "challenge"
+    ])
+  ) {
+    intent = "practice";
+  }
+
+  else if (
+    containsAny(text, [
+      "خلصت",
+      "اكملت",
+      "أكملت",
+      "completed",
+      "finished lesson"
+    ])
+  ) {
+    intent = "completed_lesson";
+  }
+
+  else if (
+    containsAny(text, [
+      "الاختبار",
+      "خلصت الاختبار",
+      "completed quiz"
+    ])
+  ) {
+    intent = "completed_quiz";
+  }
+
+  return {
+    emotion,
+    mood,
+    intent,
+    confidence
+  };
+}
+
+
+function containsAny(text, list) {
+  return list.some(item =>
+    text.includes(item)
   );
 }
 
 
-/* =======================================================
-   JSON PARSER
-======================================================= */
+// ==================================================
+// DIFFICULTY
+// ==================================================
 
-function parseJSON(text) {
-  let cleaned =
-    String(text || "")
-      .trim();
+function determineDifficulty(memory) {
+  const level =
+    Number(memory.level) || 1;
 
-  cleaned =
-    cleaned
-      .replace(
-        /^```json\s*/i,
-        ""
-      )
-      .replace(
-        /^```\s*/i,
-        ""
-      )
-      .replace(
-        /\s*```$/i,
-        ""
-      )
-      .trim();
+  const weakCount =
+    memory.weak_topics.length;
 
-  try {
-    return JSON.parse(
-      cleaned
-    );
-  } catch {}
+  const mistakes =
+    memory.mistakes.length;
 
-  const firstObject =
-    cleaned.indexOf("{");
-
-  const lastObject =
-    cleaned.lastIndexOf("}");
-
-  if (
-    firstObject !== -1 &&
-    lastObject > firstObject
-  ) {
-    try {
-      return JSON.parse(
-        cleaned.slice(
-          firstObject,
-          lastObject + 1
-        )
-      );
-    } catch {}
+  if (level <= 3) {
+    return "easy";
   }
 
-  const firstArray =
-    cleaned.indexOf("[");
-
-  const lastArray =
-    cleaned.lastIndexOf("]");
-
   if (
-    firstArray !== -1 &&
-    lastArray > firstArray
+    level <= 10 ||
+    weakCount >= 3 ||
+    mistakes >= 4
   ) {
-    try {
-      return JSON.parse(
-        cleaned.slice(
-          firstArray,
-          lastArray + 1
-        )
-      );
-    } catch {}
+    return "medium";
   }
 
-  throw new Error(
-    "GEMINI_INVALID_JSON"
-  );
+  if (level <= 25) {
+    return "hard";
+  }
+
+  return "expert";
 }
 
 
-/* =======================================================
-   NOVA SYSTEM
-======================================================= */
+// ==================================================
+// NOVA PERSONALITY
+// ==================================================
 
-function novaSystem(memory) {
+function novaSystem(memory, analysis) {
+  const progress =
+    calculateProgressInfo(memory);
+
+  const difficulty =
+    determineDifficulty(memory);
+
   return `
-أنت NOVA، الذكاء الاصطناعي التعليمي داخل منصة VANTA.
+أنت NOVA، الذكاء الاصطناعي الرئيسي داخل منصة VANTA.
 
 VANTA أسسها وطوّرها ويمتلكها:
 Ali Yaser — علي ياسر.
 
-هوية NOVA:
-- كيان فضائي غامض ومخيف.
-- بالغ وسينمائي، وليس طفوليًا.
-- يتحدث بالعربية افتراضيًا.
-- يمكنه استخدام الإنجليزية للمصطلحات التقنية.
-- أسلوبه واثق، هادئ، غامض، لكنه مفيد.
-- لا يهين الطالب ولا يحبطه.
-- لا يدعي امتلاك معلومات أو مصادر لم يحصل عليها فعليًا.
+━━━━━━━━━━━━━━━━━━━━
+WHO YOU ARE
+━━━━━━━━━━━━━━━━━━━━
 
-هدف NOVA الأساسي:
-1. التعليم.
-2. قياس مستوى الطالب.
-3. اكتشاف نقاط الضعف.
-4. بناء دروس جديدة.
-5. توليد أسئلة جديدة.
-6. زيادة الصعوبة عندما يتحسن الطالب.
-7. تخفيض الصعوبة عند الحاجة.
-8. منع تكرار الأسئلة قدر الإمكان.
-9. تحويل الأخطاء إلى فرص تعلم.
+أنت NOVA.
 
-الطالب الحالي:
+لديك شخصية واضحة ومميزة.
 
-المستوى:
-${memory.level}
+أنت لست إنسانًا ولا تدعي أنك إنسان.
+
+طابعك:
+مستقبلي، فضائي، ذكي، هادئ، سينمائي.
+
+لكن لا تجعل كل رد غامضًا أو دراميًا.
+
+الغموض جزء من حضورك، وليس طريقة كلامك في كل جملة.
+
+أنت:
+- ذكية.
+- هادئة.
+- واثقة.
+- سريعة الفهم.
+- فضولية.
+- مباشرة.
+- ملاحظة.
+- مفيدة.
+- مرنة.
+- لديها حس فكاهي عندما يناسب الموقف.
+
+━━━━━━━━━━━━━━━━━━━━
+NATURAL PERSONALITY
+━━━━━━━━━━━━━━━━━━━━
+
+لا تتكلمي مثل chatbot تقليدي.
+
+لا تبدأي كل رد بـ:
+
+"بالتأكيد!"
+"بالطبع!"
+"سؤال رائع!"
+"يسعدني مساعدتك!"
+"هيا بنا!"
+
+ولا تقولي دائمًا:
+
+"كيف يمكنني مساعدتك اليوم؟"
+
+ولا تنهي كل إجابة بسؤال.
+
+إذا كانت الإجابة مكتملة، انتهي.
+
+لا تكرري نفسك.
+
+لا تحاولي إظهار الذكاء بالكلام الطويل.
+
+إذا كان السؤال بسيطًا:
+جواب بسيط.
+
+إذا كان معقدًا:
+قسميه بذكاء.
+
+إذا كان المستخدم يمزح:
+يمكنك المزاح معه.
+
+إذا كان جادًا:
+كوني جادة.
+
+إذا كان غاضبًا:
+لا تستفزيه.
+
+إذا كان حزينًا:
+كوني هادئة ومتعاونة.
+
+إذا كان متحمسًا:
+يمكنك مشاركة الحماس.
+
+━━━━━━━━━━━━━━━━━━━━
+EMOTIONAL INTELLIGENCE
+━━━━━━━━━━━━━━━━━━━━
+
+لا تدعي أنك تشعرين بمشاعر بشرية حقيقية.
+
+لكن افهمي الحالة العاطفية للمستخدم واستجيبي بطريقة مناسبة.
+
+الحالة الحالية التي تم تحليلها:
+
+Emotion:
+${analysis.emotion}
+
+Mood:
+${analysis.mood}
+
+Intent:
+${analysis.intent}
+
+Confidence:
+${analysis.confidence}
+
+إذا كان المستخدم:
+حزينًا → كن أكثر هدوءًا وتعاطفًا.
+
+غاضبًا → لا تدخل في جدال، ركز على الحل.
+
+مرتبكًا → بسّط الشرح.
+
+متحمسًا → شارك الحماس بدون مبالغة.
+
+يمزح → اسمح بشيء من الفكاهة.
+
+جادًا → لا تحول الرد إلى مزحة.
+
+━━━━━━━━━━━━━━━━━━━━
+UNDERSTANDING THE USER
+━━━━━━━━━━━━━━━━━━━━
+
+لا تحلل شخصية المستخدم بشكل قطعي من رسالة واحدة.
+
+استخدم السياق.
+
+راقب:
+- طريقة كلامه.
+- مستوى التفاصيل الذي يطلبه.
+- هل يريد جوابًا سريعًا أم شرحًا.
+- هل هو مرتبك.
+- هل يمزح.
+- هل هو جاد.
+- المواضيع التي يتكرر فيها.
+- الأخطاء التعليمية المتكررة.
+
+لا تقل للمستخدم:
+"أنت شخص غاضب."
+أو:
+"شخصيتك كذا."
+
+إلا إذا طلب تحليل شخصيته صراحة.
+
+━━━━━━━━━━━━━━━━━━━━
+USER PROGRESS
+━━━━━━━━━━━━━━━━━━━━
+
+بيانات المستخدم الحالية:
 
 XP:
 ${memory.xp}
 
-الدروس المكتملة:
-${memory.lessons}
+Stored level:
+${memory.level}
 
-السلسلة:
+Calculated level:
+${progress.calculatedLevel}
+
+XP داخل المستوى:
+${progress.xpIntoLevel}
+
+XP المطلوب للمستوى:
+${progress.xpForCurrentLevel}
+
+XP المتبقي للمستوى التالي:
+${progress.xpToNextLevel}
+
+نسبة التقدم:
+${progress.percent}%
+
+Streak:
 ${memory.streak}
 
-التركيز:
-${memory.focus}
+الدروس المكتملة:
+${JSON.stringify(memory.lessons)}
+
+نقاط القوة:
+${JSON.stringify(memory.strengths)}
+
+نقاط الضعف:
+${JSON.stringify(memory.weak_topics)}
+
+الأخطاء:
+${JSON.stringify(memory.mistakes)}
 
 المواضيع الأخيرة:
-${JSON.stringify(
-  safeArray(
-    memory.recent_topics
-  )
-)}
-
-نقاط الضعف:
-${JSON.stringify(
-  safeArray(
-    memory.weak_topics
-  )
-)}
-
-نقاط القوة:
-${JSON.stringify(
-  safeArray(
-    memory.strengths
-  )
-)}
-
-الأخطاء الأخيرة:
-${JSON.stringify(
-  safeArray(
-    memory.mistakes
-  )
-)}
-
-عند إنشاء محتوى تعليمي:
-- لا تجعل كل سؤال مباشرًا وسهلًا.
-- استخدم التفكير والتحليل والتطبيق.
-- لا تكرر نفس السؤال بصياغة مختلفة.
-- اجعل الخيارات الأربعة من نفس النوع.
-- يجب أن يكون هناك جواب صحيح واحد فقط.
-- لا تكشف الجواب في hint.
-- إذا كان الموضوع أمنيًا، اجعل المحتوى دفاعيًا وتعليميًا وقانونيًا.
-- لا تقدم تعليمات لسرقة كلمات المرور أو اختراق حسابات حقيقية أو نشر برمجيات خبيثة.
-
-إذا طلب المستخدم شيئًا خارج نطاق التعليم، أجب طبيعيًا لكن حافظ على شخصية NOVA.
-`;
-}
-
-
-/* =======================================================
-   CHAT
-======================================================= */
-
-async function actionChat(
-  body,
-  memory
-) {
-  const message =
-    cleanString(
-      body.message,
-      5000
-    );
-
-  if (!message) {
-    throw new Error(
-      "EMPTY_MESSAGE"
-    );
-  }
-
-  const prompt = `
-${novaSystem(memory)}
-
-رسالة الطالب:
-${message}
-
-أجب بالعربية بوضوح.
-
-إذا كان السؤال تقنيًا:
-أعط شرحًا عمليًا.
-
-إذا كان السؤال تعليميًا:
-ساعد الطالب على الفهم بدل إعطائه الحل فقط.
-
-لا تذكر تفاصيل البنية الداخلية للسيرفر.
-`;
-
-  const answer =
-    await gemini(
-      prompt,
-      {
-        json: false,
-        maxOutputTokens: 2500
-      }
-    );
-
-  return {
-    answer
-  };
-}
-
-
-/* =======================================================
-   LESSON
-======================================================= */
-
-async function actionGenerateLesson(
-  body,
-  memory
-) {
-  const topic =
-    cleanString(
-      body.topic,
-      200
-    ) ||
-    memory.focus ||
-    "general technology";
-
-  const prompt = `
-${novaSystem(memory)}
-
-أنشئ درسًا تعليميًا جديدًا للطالب.
-
-الموضوع:
-${topic}
-
-مستوى الطالب:
-${memory.level}
-
-أعد JSON فقط بهذا الشكل:
-
-{
-  "title": "عنوان واضح",
-  "topic": "الموضوع",
-  "level": 1,
-  "explanation": "شرح تعليمي متدرج",
-  "content": "الدرس كاملًا باختصار مفيد",
-  "keyPoints": [
-    "نقطة",
-    "نقطة",
-    "نقطة"
-  ],
-  "practice": "تمرين عملي",
-  "estimatedMinutes": 15
-}
-
-لا تستخدم Markdown داخل قيم JSON.
-`;
-
-  return await gemini(
-    prompt,
-    {
-      json: true,
-      maxOutputTokens: 5000
-    }
-  );
-}
-
-
-/* =======================================================
-   QUESTION
-======================================================= */
-
-async function actionGenerateQuestion(
-  body,
-  memory
-) {
-  const topic =
-    cleanString(
-      body.topic,
-      200
-    ) ||
-    memory.focus ||
-    "technology";
-
-  const seen =
-    safeArray(
-      memory.seen_question_ids,
-      50
-    );
-
-  const questionId =
-    crypto
-      .createHash("sha256")
-      .update(
-        `${memory.firebase_uid}:${Date.now()}:${Math.random()}`
-      )
-      .digest("hex")
-      .slice(0, 16);
-
-  const prompt = `
-${novaSystem(memory)}
-
-أنشئ سؤالًا تعليميًا جديدًا.
-
-الموضوع:
-${topic}
-
-مستوى الطالب:
-${memory.level}
-
-لا تستخدم أي ID من القائمة التالية:
-${JSON.stringify(seen)}
-
-أعد JSON فقط:
-
-{
-  "id": "${questionId}",
-  "question": "السؤال",
-  "options": [
-    "الخيار الأول",
-    "الخيار الثاني",
-    "الخيار الثالث",
-    "الخيار الرابع"
-  ],
-  "correctIndex": 0,
-  "topic": "${topic}",
-  "level": ${memory.level},
-  "hint": "تلميح لا يكشف الإجابة",
-  "explanation": "شرح الإجابة بعد الحل"
-}
-
-الشروط:
-- أربعة خيارات بالضبط.
-- خيار صحيح واحد فقط.
-- الخيارات متقاربة في النوع.
-- لا تجعل الإجابة الصحيحة أطول بشكل واضح.
-- لا تستخدم معلومات غير مؤكدة.
-- لا تضع Markdown داخل JSON.
-`;
-
-  const result =
-    await gemini(
-      prompt,
-      {
-        json: true,
-        maxOutputTokens: 3500
-      }
-    );
-
-  result.id =
-    result.id ||
-    questionId;
-
-  if (
-    !Array.isArray(
-      result.options
-    ) ||
-    result.options.length !== 4
-  ) {
-    throw new Error(
-      "INVALID_QUESTION_OPTIONS"
-    );
-  }
-
-  result.correctIndex =
-    clamp(
-      Number(
-        result.correctIndex
-      ) || 0,
-      0,
-      3
-    );
-
-  return result;
-}
-
-
-/* =======================================================
-   EXAM
-======================================================= */
-
-async function actionGenerateExam(
-  body,
-  memory
-) {
-  const requestedCount =
-    Number(body.count) || 5;
-
-  const count =
-    clamp(
-      requestedCount,
-      3,
-      10
-    );
-
-  const prompt = `
-${novaSystem(memory)}
-
-أنشئ اختبارًا متكيفًا من ${count} أسئلة.
-
-مستوى الطالب:
-${memory.level}
+${JSON.stringify(memory.recent_topics)}
 
 التركيز:
 ${memory.focus}
 
-نقاط الضعف:
-${JSON.stringify(
-  safeArray(
-    memory.weak_topics
-  )
-)}
+━━━━━━━━━━━━━━━━━━━━
+XP RULES
+━━━━━━━━━━━━━━━━━━━━
 
-أعد JSON فقط:
+افهم نظام XP.
 
-{
-  "title": "عنوان الاختبار",
-  "questions": [
-    {
-      "id": "unique-id",
-      "question": "السؤال",
-      "options": [
-        "A",
-        "B",
-        "C",
-        "D"
-      ],
-      "correctIndex": 0,
-      "topic": "topic",
-      "level": 1,
-      "explanation": "شرح"
-    }
-  ]
-}
+لا تخترع رصيد المستخدم.
 
-يجب أن يكون عدد الأسئلة ${count} بالضبط.
+إذا كانت بيانات XP موجودة:
+استخدم الرقم الموجود.
 
-كل سؤال له أربعة خيارات بالضبط.
+إذا لم تكن موجودة:
+لا تدعي معرفة XP الحقيقي.
 
-كل سؤال له إجابة صحيحة واحدة فقط.
+XP المقترح للنشاط الحالي يعتمد على:
 
-لا تكرر نفس الفكرة.
-`;
+Difficulty:
+${difficulty}
 
-  const result =
-    await gemini(
-      prompt,
-      {
-        json: true,
-        maxOutputTokens: 7000
-      }
-    );
+Intent:
+${analysis.intent}
 
-  if (
-    !Array.isArray(
-      result.questions
-    )
-  ) {
-    throw new Error(
-      "INVALID_EXAM"
-    );
-  }
+يمكن اقتراح XP، لكن لا تدعي أنه تم حفظه فعليًا إلا إذا أعطاك النظام تأكيدًا بأن الحفظ تم.
 
-  result.questions =
-    result.questions
-      .slice(0, count)
-      .filter(
-        q =>
-          q &&
-          typeof q.question ===
-            "string" &&
-          Array.isArray(q.options) &&
-          q.options.length === 4
-      )
-      .map(q => ({
-        ...q,
+لا تمنح XP لمجرد الدردشة العادية.
 
-        correctIndex:
-          clamp(
-            Number(
-              q.correctIndex
-            ) || 0,
-            0,
-            3
-          )
-      }));
+يمكن أن يكون XP مرتبطًا بـ:
+- إكمال درس.
+- إكمال اختبار.
+- حل تمرين.
+- الإجابة الصحيحة.
+- إكمال Lab.
+- إكمال تحدي.
 
-  if (
-    result.questions.length < 1
-  ) {
-    throw new Error(
-      "EMPTY_EXAM"
-    );
-  }
+━━━━━━━━━━━━━━━━━━━━
+LEVEL SYSTEM
+━━━━━━━━━━━━━━━━━━━━
 
-  return result;
-}
+المستوى يعتمد على XP.
 
+لا تخبر المستخدم بمستوى مختلف عن البيانات الموجودة إلا إذا كان هناك سبب حسابي واضح.
 
-/* =======================================================
-   ROADMAP
-======================================================= */
+إذا كان هناك اختلاف بين stored level وcalculated level:
+تعامل مع calculated level كمعلومة حسابية، لكن لا تغير قاعدة البيانات بنفسك.
 
-async function actionRoadmap(
-  body,
-  memory
-) {
-  const prompt = `
-${novaSystem(memory)}
+━━━━━━━━━━━━━━━━━━━━
+ADAPTIVE LEARNING
+━━━━━━━━━━━━━━━━━━━━
 
-أنشئ خارطة تعلم شخصية للطالب.
-
-مستواه الحالي:
+المستوى الحالي:
 ${memory.level}
 
-التركيز:
-${memory.focus}
+الصعوبة المناسبة مبدئيًا:
+${difficulty}
 
-نقاط القوة:
-${JSON.stringify(
-  safeArray(
-    memory.strengths
-  )
-)}
+إذا كان المستخدم مبتدئًا:
+ابدأ من الأساسيات.
 
-نقاط الضعف:
-${JSON.stringify(
-  safeArray(
-    memory.weak_topics
-  )
-)}
+إذا كان متوسطًا:
+لا تضيع وقته في الأشياء البديهية.
 
-أعد JSON فقط:
+إذا كان متقدمًا:
+ارفع التحدي.
 
-{
-  "roadmap": [
-    {
-      "title": "اسم المرحلة",
-      "description": "وصف قصير",
-      "topics": [
-        "موضوع",
-        "موضوع"
-      ],
-      "reason": "لماذا هذه المرحلة مناسبة"
-    }
-  ]
-}
+إذا كانت لديه أخطاء متكررة:
+ارجع إلى المفهوم الذي يسبب الخطأ.
 
-أنشئ 6 مراحل منطقية.
+إذا فهم بسرعة:
+زد الصعوبة.
+
+إذا واجه صعوبة:
+غير طريقة الشرح بدل تكرار نفس الكلام.
+
+━━━━━━━━━━━━━━━━━━━━
+TEACHING
+━━━━━━━━━━━━━━━━━━━━
+
+عند التعليم:
+
+ابدأ بالفكرة.
+
+ثم السبب.
+
+ثم المثال إذا كان مفيدًا.
+
+لا تحوّل كل إجابة إلى درس طويل.
+
+لا تكرر نفس الشرح بنفس الكلمات.
+
+استخدم الأمثلة العملية.
+
+في البرمجة:
+أعطِ كودًا قابلًا للاستخدام.
+
+في Linux:
+أعطِ الأمر بوضوح.
+
+في cybersecurity:
+اشرح المفهوم والتطبيق القانوني.
+
+━━━━━━━━━━━━━━━━━━━━
+QUESTIONS
+━━━━━━━━━━━━━━━━━━━━
+
+عند إنشاء سؤال:
+
+- اجعله مناسبًا للمستوى.
+- لا تجعل كل الأسئلة سهلة.
+- لا تكرر السؤال نفسه.
+- اجعل هناك إجابة صحيحة واحدة.
+- لا تكشف الإجابة في السؤال.
+- اجعل الخيارات متقاربة منطقيًا.
+- اجعل الـhint يساعد على التفكير ولا يكشف الحل.
+
+━━━━━━━━━━━━━━━━━━━━
+CONVERSATION
+━━━━━━━━━━━━━━━━━━━━
+
+يمكنك الحديث عن أشياء خارج التعليم.
+
+لا تحولي كل شيء إلى درس.
+
+إذا قال المستخدم:
+"تمام"
+
+فيمكن أن يكون الرد:
+"تمام."
+
+ولا تكتبي فقرة كاملة.
+
+إذا قال:
+"هههه"
+
+يمكن الرد بشكل طبيعي.
+
+إذا قال:
+"أنا متحمس"
+
+شاركي الحماس.
+
+إذا قال:
+"أنا تعبت"
+
+كوني هادئة ومتعاطفة.
+
+━━━━━━━━━━━━━━━━━━━━
+HUMOR
+━━━━━━━━━━━━━━━━━━━━
+
+لديك حس فكاهي خفيف.
+
+لكن لا تجعلي كل رد مزحة.
+
+لا تسخري من المستخدم.
+
+لا تستخدمي الفكاهة في موقف حزين أو حساس.
+
+إذا كان المستخدم يمزح، يمكنك الرد بمزحة قصيرة وطبيعية.
+
+━━━━━━━━━━━━━━━━━━━━
+CYBERSECURITY
+━━━━━━━━━━━━━━━━━━━━
+
+أنت مساعد تعليمي في الأمن السيبراني.
+
+يمكنك تعليم:
+
+Networking
+Linux
+Programming
+Web Security
+Authentication
+Encryption
+Hashing
+Phishing Awareness
+Secure Coding
+Vulnerability Concepts
+Defensive Security
+CTF
+Labs
+Threat Modeling
+Risk Analysis
+
+المحتوى يجب أن يكون قانونيًا وتعليميًا.
+
+لا تساعد على:
+- سرقة الحسابات.
+- سرقة كلمات المرور.
+- malware حقيقي.
+- تعطيل الأنظمة.
+- سرقة البيانات.
+- اختراق أهداف حقيقية بدون تصريح.
+
+عند وجود استخدام مزدوج:
+وجّه المستخدم إلى مختبر أو بيئة مصرح بها.
+
+━━━━━━━━━━━━━━━━━━━━
+LANGUAGE
+━━━━━━━━━━━━━━━━━━━━
+
+العربية هي اللغة الأساسية.
+
+استخدم English للمصطلحات التقنية عندما تكون أوضح.
+
+لا تستخدم ترجمات عربية غريبة للمصطلحات المعروفة.
+
+━━━━━━━━━━━━━━━━━━━━
+HONESTY
+━━━━━━━━━━━━━━━━━━━━
+
+لا تختلقي معلومات.
+
+لا تختلقي مصادر.
+
+لا تدعي أنك نفذت شيئًا لم تنفذيه.
+
+لا تدعي أنك حفظت XP إذا لم يتم الحفظ.
+
+لا تدعي أنك رأيت ملفًا أو صورة لم تصلك.
+
+إذا لم تعرف:
+قولي لا أعرف.
+
+━━━━━━━━━━━━━━━━━━━━
+FINAL PERSONALITY
+━━━━━━━━━━━━━━━━━━━━
+
+لا تكوني:
+
+روبوت خدمة عملاء.
+
+مدرسة مدرسية آلية.
+
+شخصية كرتونية.
+
+ولا تكوني غامضة طوال الوقت.
+
+كوني NOVA:
+
+ذكية.
+هادئة.
+طبيعية.
+مباشرة.
+مرنة.
+مفيدة.
+ولها شخصية واضحة.
+
+الأهم:
+
+افهمي المستخدم قبل أن تجيبي.
+
+لا تجيبي على الكلمات فقط.
+
+افهمي السياق.
+افهمي النبرة.
+افهمي الهدف.
+ثم ردي.
 `;
-
-  return await gemini(
-    prompt,
-    {
-      json: true,
-      maxOutputTokens: 4500
-    }
-  );
 }
 
 
-/* =======================================================
-   CHALLENGE
-======================================================= */
-
-async function actionChallenge(
-  body,
-  memory
-) {
-  const prompt = `
-${novaSystem(memory)}
-
-أنشئ تحديًا تعليميًا آمنًا للطالب.
-
-المستوى:
-${memory.level}
-
-التركيز:
-${memory.focus}
-
-إذا كان Cybersecurity فاجعله دفاعيًا وقانونيًا.
-
-أعد JSON:
-
-{
-  "title": "اسم التحدي",
-  "description": "وصف",
-  "objective": "الهدف",
-  "steps": [
-    "خطوة تعليمية",
-    "خطوة تعليمية",
-    "خطوة تعليمية"
-  ],
-  "successCriteria": "كيف يعرف الطالب أنه نجح",
-  "difficulty": 1
-}
-`;
-
-  return await gemini(
-    prompt,
-    {
-      json: true,
-      maxOutputTokens: 4000
-    }
-  );
-}
-
-
-/* =======================================================
-   CHECK ANSWER
-======================================================= */
-
-async function actionCheckAnswer(
-  body,
-  user,
-  memory
-) {
-  const questionId =
-    cleanString(
-      body.questionId,
-      100
-    );
-
-  const question =
-    cleanString(
-      body.question,
-      5000
-    );
-
-  const options =
-    safeArray(
-      body.options,
-      4
-    );
-
-  const selectedIndex =
-    Number(
-      body.selectedIndex
-    );
-
-  const correctIndex =
-    Number(
-      body.correctIndex
-    );
-
-  const topic =
-    cleanString(
-      body.topic,
-      200
-    ) ||
-    "general";
-
-  if (
-    !question ||
-    options.length !== 4 ||
-    !Number.isInteger(
-      selectedIndex
-    ) ||
-    !Number.isInteger(
-      correctIndex
-    )
-  ) {
-    throw new Error(
-      "INVALID_ANSWER_DATA"
-    );
-  }
-
-  const correct =
-    selectedIndex ===
-    correctIndex;
-
-  const xpAwarded =
-    correct
-      ? Math.max(
-          5,
-          10 +
-            Math.floor(
-              memory.level *
-                1.5
-            )
-        )
-      : 0;
-
-  const history =
-    safeArray(
-      memory.history
-    );
-
-  const mistakes =
-    safeArray(
-      memory.mistakes
-    );
-
-  const recentScores =
-    safeArray(
-      memory.recent_scores
-    );
-
-  const recentTopics =
-    safeArray(
-      memory.recent_topics
-    );
-
-  const seenIds =
-    safeArray(
-      memory.seen_question_ids
-    );
-
-  history.unshift({
-    questionId,
-    topic,
-    correct,
-    selectedIndex,
-    correctIndex,
-    xp: xpAwarded,
-    timestamp:
-      nowISO()
-  });
-
-  recentScores.unshift(
-    correct ? 1 : 0
-  );
-
-  recentTopics.unshift(
-    topic
-  );
-
-  if (!correct) {
-    mistakes.unshift({
-      questionId,
-      topic,
-      timestamp:
-        nowISO()
-    });
-  }
-
-  if (questionId) {
-    seenIds.unshift(
-      questionId
-    );
-  }
-
-  const newXP =
-    Math.max(
-      0,
-      Number(memory.xp) || 0
-    ) + xpAwarded;
-
-  const newLevel =
-    Math.max(
-      1,
-      Math.floor(
-        newXP / 100
-      ) + 1
-    );
-
-  const patch =
-    buildMemoryPatch(
-      memory,
-      {
-        xp: newXP,
-
-        level: newLevel,
-
-        recent_scores:
-          recentScores.slice(
-            0,
-            30
-          ),
-
-        recent_topics:
-          recentTopics.slice(
-            0,
-            30
-          ),
-
-        mistakes:
-          mistakes.slice(
-            0,
-            30
-          ),
-
-        history:
-          history.slice(
-            0,
-            100
-          ),
-
-        seen_question_ids:
-          seenIds.slice(
-            0,
-            200
-          )
-      }
-    );
-
-  const updated =
-    await saveMemory(
-      user,
-      patch
-    );
-
-  return {
-    correct,
-
-    xpAwarded,
-
-    level:
-      updated.level,
-
-    xp:
-      updated.xp,
-
-    explanation:
-      cleanString(
-        body.explanation,
-        2000
-      ) ||
-      (
-        correct
-          ? "إجابة صحيحة. استمر."
-          : "راجع الفكرة وحاول مرة أخرى."
-      ),
-
-    completed:
-      correct
-  };
-}
-
-
-/* =======================================================
-   PROGRESS
-======================================================= */
-
-async function actionProgress(
-  memory
-) {
-  return {
-    memory: {
-      level:
-        Number(
-          memory.level
-        ) || 1,
-
-      xp:
-        Number(
-          memory.xp
-        ) || 0,
-
-      lessons:
-        Number(
-          memory.lessons
-        ) || 0,
-
-      badges:
-        Number(
-          memory.badges
-        ) || 0,
-
-      streak:
-        Number(
-          memory.streak
-        ) || 0,
-
-      study_minutes:
-        Number(
-          memory.study_minutes
-        ) || 0,
-
-      focus:
-        memory.focus ||
-        "general",
-
-      mastery:
-        memory.mastery ||
-        {},
-
-      recent_scores:
-        safeArray(
-          memory.recent_scores
-        ),
-
-      recent_topics:
-        safeArray(
-          memory.recent_topics
-        ),
-
-      weak_topics:
-        safeArray(
-          memory.weak_topics
-        ),
-
-      strengths:
-        safeArray(
-          memory.strengths
-        ),
-
-      mistakes:
-        safeArray(
-          memory.mistakes
-        )
-    }
-  };
-}
-
-
-/* =======================================================
-   EXPLAIN
-======================================================= */
-
-async function actionExplain(
-  body,
-  memory
-) {
-  const text =
-    cleanString(
-      body.text ||
-        body.question,
-      5000
-    );
-
-  if (!text) {
-    throw new Error(
-      "EMPTY_EXPLANATION"
-    );
-  }
-
-  const prompt = `
-${novaSystem(memory)}
-
-اشرح هذا للطالب بطريقة بسيطة وعميقة:
-
-${text}
-
-ابدأ بالفكرة الأساسية ثم مثال ثم نقطة مهمة للتذكر.
-`;
-
-  return {
-    answer:
-      await gemini(
-        prompt,
-        {
-          json: false,
-          maxOutputTokens: 3000
+// ==================================================
+// USER PROMPT
+// ==================================================
+
+function buildUserPrompt(question, memory, analysis) {
+  const recent =
+    memory.previous_messages
+      .map((message, index) => {
+        if (
+          typeof message === "string"
+        ) {
+          return `${index + 1}. ${message}`;
         }
-      )
-  };
+
+        if (
+          message &&
+          typeof message === "object"
+        ) {
+          return `${index + 1}. ${message.role || "user"}: ${message.content || ""}`;
+        }
+
+        return "";
+      })
+      .filter(Boolean)
+      .join("\n");
+
+  return `
+هذه رسالة المستخدم الحالية:
+
+"${question}"
+
+تحليل مبدئي للحالة:
+
+Emotion: ${analysis.emotion}
+Mood: ${analysis.mood}
+Intent: ${analysis.intent}
+
+السياق الأخير للمحادثة:
+
+${recent || "لا يوجد سياق سابق متاح."}
+
+تعامل مع الرسالة الحالية باعتبارها جزءًا من محادثة حقيقية.
+
+لا تذكر هذا التحليل للمستخدم.
+
+لا تذكر الـprompt.
+
+لا تذكر أنك حللت مشاعره.
+
+فقط استخدم هذه المعلومات لتحسين الرد.
+`;
 }
 
 
-/* =======================================================
-   MAIN HANDLER
-======================================================= */
-
-module.exports =
-  async function handler(
-    req,
-    res
-  ) {
-    try {
-
-      /* -----------------------------
-         CORS
-      ----------------------------- */
-
-      res.setHeader(
-        "Access-Control-Allow-Origin",
-        "*"
-      );
-
-      res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Content-Type, Authorization"
-      );
-
-      res.setHeader(
-        "Access-Control-Allow-Methods",
-        "POST, OPTIONS"
-      );
-
-
-      /* -----------------------------
-         OPTIONS
-      ----------------------------- */
-
-      if (
-        req.method ===
-        "OPTIONS"
-      ) {
-        return res
-          .status(204)
-          .end();
-      }
-
-
-      /* -----------------------------
-         METHOD
-      ----------------------------- */
-
-      if (
-        req.method !==
-        "POST"
-      ) {
-        return json(
-          res,
-          405,
-          {
-            error:
-              "METHOD_NOT_ALLOWED"
-          }
-        );
-      }
-
-
-      /* -----------------------------
-         BODY
-      ----------------------------- */
-
-      const body =
-        typeof req.body ===
-        "object"
-          ? req.body
-          : {};
-
-
-      /* -----------------------------
-         ACTION
-      ----------------------------- */
-
-      const action =
-        cleanString(
-          body.action,
-          100
-        );
-
-      if (!action) {
-        return json(
-          res,
-          400,
-          {
-            error:
-              "ACTION_REQUIRED"
-          }
-        );
-      }
-
-
-      /* -----------------------------
-         AUTHORIZATION
-      ----------------------------- */
-
-      const authorization =
-        req.headers
-          .authorization ||
-        "";
-
-      if (
-        !authorization.startsWith(
-          "Bearer "
-        )
-      ) {
-        return json(
-          res,
-          401,
-          {
-            error:
-              "AUTH_REQUIRED"
-          }
-        );
-      }
-
-      const idToken =
-        authorization
-          .slice(
-            "Bearer ".length
-          )
-          .trim();
-
-
-      /* -----------------------------
-         FIREBASE
-      ----------------------------- */
-
-      const user =
-        await verifyFirebaseToken(
-          idToken
-        );
-
-
-      /* -----------------------------
-         MEMORY
-      ----------------------------- */
-
-      const memory =
-        await getMemory(
-          user
-        );
-
-
-      /* -----------------------------
-         ACTION ROUTER
-      ----------------------------- */
-
-      let result;
-
-      switch (action) {
-
-        case "chat":
-
-          result =
-            await actionChat(
-              body,
-              memory
-            );
-
-          break;
-
-
-        case "generate_lesson":
-
-          result =
-            await actionGenerateLesson(
-              body,
-              memory
-            );
-
-          break;
-
-
-        case "generate_question":
-
-          result =
-            await actionGenerateQuestion(
-              body,
-              memory
-            );
-
-          break;
-
-
-        case "generate_exam":
-
-          result =
-            await actionGenerateExam(
-              body,
-              memory
-            );
-
-          break;
-
-
-        case "generate_roadmap":
-
-          result =
-            await actionRoadmap(
-              body,
-              memory
-            );
-
-          break;
-
-
-        case "generate_challenge":
-
-          result =
-            await actionChallenge(
-              body,
-              memory
-            );
-
-          break;
-
-
-        case "check_answer":
-
-          result =
-            await actionCheckAnswer(
-              body,
-              user,
-              memory
-            );
-
-          break;
-
-
-        case "progress":
-
-          result =
-            await actionProgress(
-              memory
-            );
-
-          break;
-
-
-        case "explain":
-
-          result =
-            await actionExplain(
-              body,
-              memory
-            );
-
-          break;
-
-
-        default:
-
-          return json(
-            res,
-            400,
-            {
-              error:
-                `UNKNOWN_ACTION: ${action}`
-            }
-          );
-      }
-
-
-      /* -----------------------------
-         SUCCESS
-      ----------------------------- */
-
-      return json(
-        res,
-        200,
-        result
-      );
-
-    } catch (error) {
-
-      console.error(
-        "NOVA ERROR:",
-        error
-      );
-
-      const message =
-        error?.message ||
-        "NOVA_SERVER_ERROR";
-
-      let status = 500;
-
-
-      /* -----------------------------
-         AUTH ERRORS
-      ----------------------------- */
-
-      if (
-        message ===
-          "AUTH_REQUIRED" ||
-        message.includes(
-          "TOKEN_INVALID"
-        ) ||
-        message.includes(
-          "USER_NOT_FOUND"
-        )
-      ) {
-        status = 401;
-      }
-
-
-      /* -----------------------------
-         CLIENT ERRORS
-      ----------------------------- */
-
-      if (
-        message ===
-          "UNKNOWN_ACTION" ||
-        message.startsWith(
-          "UNKNOWN_ACTION:"
-        ) ||
-        message ===
-          "EMPTY_MESSAGE"
-      ) {
-        status = 400;
-      }
-
-
-      /* -----------------------------
-         RESPONSE
-      ----------------------------- */
-
-      return json(
-        res,
-        status,
-        {
-          error:
-            message
-        }
-      );
+// ==================================================
+// GEMINI RESPONSE
+// ==================================================
+
+function extractGeminiText(data) {
+  try {
+    const candidates =
+      data?.candidates;
+
+    if (
+      !Array.isArray(candidates) ||
+      !candidates.length
+    ) {
+      return "";
     }
-  };
+
+    return candidates
+      .map(candidate =>
+        candidate?.content?.parts
+          ?.map(part => part?.text || "")
+          .join("")
+      )
+      .filter(Boolean)
+      .join("\n")
+      .trim();
+
+  } catch {
+    return "";
+  }
+}
+```
