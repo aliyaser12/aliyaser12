@@ -1,144 +1,592 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Quiz | VANTA</title>
+```
+<title>VANTA — Cyber Quiz</title>
 
-    <link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, sans-serif;
+        background:
+            radial-gradient(circle at top left, #243b80, transparent 40%),
+            radial-gradient(circle at bottom right, #6b1d7d, transparent 40%),
+            #080b18;
+        color: white;
+        padding: 30px 15px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,.15);
+        border-radius: 25px;
+        background: rgba(255,255,255,.08);
+        backdrop-filter: blur(20px);
+    }
+
+    .logo {
+        font-size: 28px;
+        font-weight: 800;
+        letter-spacing: 3px;
+    }
+
+    .xp-box {
+        text-align: right;
+    }
+
+    .xp {
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .level {
+        opacity: .75;
+        font-size: 14px;
+        margin-top: 4px;
+    }
+
+    .quiz-card {
+        padding: 28px;
+        border-radius: 30px;
+        border: 1px solid rgba(255,255,255,.15);
+        background: rgba(255,255,255,.08);
+        backdrop-filter: blur(25px);
+        box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+
+    .progress-text {
+        opacity: .7;
+        margin-bottom: 12px;
+    }
+
+    .progress-bar {
+        height: 8px;
+        background: rgba(255,255,255,.12);
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: #00ff9d;
+        transition: .3s;
+    }
+
+    h1 {
+        font-size: clamp(25px, 5vw, 40px);
+        margin-bottom: 30px;
+    }
+
+    .answers {
+        display: grid;
+        gap: 12px;
+    }
+
+    .answer {
+        width: 100%;
+        padding: 17px;
+        border-radius: 16px;
+        border: 1px solid rgba(255,255,255,.15);
+        background: rgba(255,255,255,.07);
+        color: white;
+        text-align: left;
+        font-size: 16px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    .answer:hover {
+        background: rgba(255,255,255,.14);
+        transform: translateY(-2px);
+    }
+
+    .answer.correct {
+        background: rgba(0,255,157,.2);
+        border-color: #00ff9d;
+    }
+
+    .answer.wrong {
+        background: rgba(255,70,90,.2);
+        border-color: #ff465a;
+    }
+
+    .answer:disabled {
+        cursor: default;
+        transform: none;
+    }
+
+    .feedback {
+        min-height: 28px;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    .next {
+        display: none;
+        width: 100%;
+        margin-top: 20px;
+        padding: 16px;
+        border: 0;
+        border-radius: 16px;
+        background: white;
+        color: #090b16;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .result {
+        display: none;
+        text-align: center;
+    }
+
+    .result-xp {
+        font-size: 55px;
+        font-weight: 900;
+        margin: 20px 0;
+    }
+
+    .restart {
+        padding: 15px 25px;
+        border: 0;
+        border-radius: 15px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+        body {
+            padding: 15px;
+        }
+
+        .header {
+            padding: 16px;
+        }
+
+        .quiz-card {
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 22px;
+        }
+    }
+</style>
+```
+
 </head>
 
 <body>
 
-<header>
-    <h1>VANTA</h1>
+<div class="container">
 
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="learn.html">Learn</a>
-        <a href="labs.html">Labs</a>
-        <a href="ctf.html">CTF</a>
-        <a href="tools.html">Tools</a>
-    </nav>
+```
+<header class="header">
+    <div class="logo">VANTA</div>
+
+    <div class="xp-box">
+        <div class="xp">
+            XP: <span id="xp">0</span>
+        </div>
+
+        <div class="level">
+            Level <span id="level">1</span>
+        </div>
+    </div>
 </header>
 
-<main>
+<main class="quiz-card">
 
-    <section class="page-hero">
-        <p class="eyebrow">VANTA KNOWLEDGE TEST</p>
+    <div id="quizScreen">
 
-        <h2>Cybersecurity Quiz</h2>
+        <div class="progress-text">
+            Question <span id="questionNumber">1</span>
+            /
+            <span id="totalQuestions">10</span>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+
+        <h1 id="question"></h1>
+
+        <div class="answers" id="answers"></div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <button class="next" id="nextButton">
+            Next Question →
+        </button>
+
+    </div>
+
+    <div class="result" id="resultScreen">
+
+        <h1>Quiz Completed</h1>
+
+        <p>Your cybersecurity knowledge is growing.</p>
+
+        <div class="result-xp">
+            +<span id="earnedXP">0</span> XP
+        </div>
 
         <p>
-            Test your cybersecurity knowledge and earn XP
-            by answering security questions.
+            Total XP:
+            <strong id="finalXP">0</strong>
         </p>
-    </section>
 
-    <section class="quiz-container">
+        <p>
+            Level:
+            <strong id="finalLevel">1</strong>
+        </p>
 
-        <div class="quiz-card">
+        <button class="restart" onclick="restartQuiz()">
+            Take Quiz Again
+        </button>
 
-            <span class="question-number">QUESTION 01</span>
-
-            <h3>What does DNS primarily do?</h3>
-
-            <div class="quiz-options">
-
-                <button>Encrypt network traffic</button>
-
-                <button>Translate domain names into IP addresses</button>
-
-                <button>Block malicious websites</button>
-
-                <button>Store passwords</button>
-
-            </div>
-
-        </div>
-
-        <div class="quiz-card">
-
-            <span class="question-number">QUESTION 02</span>
-
-            <h3>Which port is commonly associated with HTTPS?</h3>
-
-            <div class="quiz-options">
-
-                <button>21</button>
-
-                <button>22</button>
-
-                <button>80</button>
-
-                <button>443</button>
-
-            </div>
-
-        </div>
-
-        <div class="quiz-card">
-
-            <span class="question-number">QUESTION 03</span>
-
-            <h3>What is hashing commonly used for?</h3>
-
-            <div class="quiz-options">
-
-                <button>Representing data with a fixed-length digest</button>
-
-                <button>Increasing internet speed</button>
-
-                <button>Creating network cables</button>
-
-                <button>Changing an IP address</button>
-
-            </div>
-
-        </div>
-
-        <div class="quiz-card">
-
-            <span class="question-number">QUESTION 04</span>
-
-            <h3>What is phishing?</h3>
-
-            <div class="quiz-options">
-
-                <button>A type of computer hardware</button>
-
-                <button>A social engineering technique used to trick users</button>
-
-                <button>A network protocol</button>
-
-                <button>A Linux filesystem</button>
-
-            </div>
-
-        </div>
-
-        <div class="quiz-result">
-
-            <h3>Your Progress</h3>
-
-            <p>
-                Answer questions correctly to increase your XP
-                and improve your cybersecurity knowledge.
-            </p>
-
-            <strong>0 XP</strong>
-
-        </div>
-
-    </section>
+    </div>
 
 </main>
+```
 
-<footer>
-    <p>VANTA — Cybersecurity • Education • Research</p>
-</footer>
+</div>
+
+<script>
+
+const questions = [
+    {
+        question: "What is phishing?",
+        answers: [
+            "A social engineering technique used to trick users",
+            "A type of computer hardware",
+            "A network protocol",
+            "A Linux filesystem"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What does HTTPS help provide?",
+        answers: [
+            "Encrypted communication",
+            "More RAM",
+            "Faster CPU performance",
+            "Extra storage"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What is a firewall?",
+        answers: [
+            "A security system that controls network traffic",
+            "A programming language",
+            "A type of monitor",
+            "A database"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What is a strong password?",
+        answers: [
+            "A long and unique password",
+            "Your birthday",
+            "123456",
+            "Your name"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What does malware mean?",
+        answers: [
+            "Malicious software",
+            "A web browser",
+            "A programming framework",
+            "A network cable"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What is two-factor authentication?",
+        answers: [
+            "An additional verification step when signing in",
+            "Two passwords used at the same time",
+            "A type of firewall",
+            "A file compression method"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "Which is safer on an unknown network?",
+        answers: [
+            "Using encrypted connections and avoiding sensitive actions",
+            "Sharing your password",
+            "Disabling security",
+            "Installing unknown software"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What is hashing commonly used for?",
+        answers: [
+            "Creating a fixed-length representation of data",
+            "Increasing screen brightness",
+            "Connecting a keyboard",
+            "Changing a monitor resolution"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What should you do with a suspicious email link?",
+        answers: [
+            "Avoid clicking it and verify the sender",
+            "Click it immediately",
+            "Forward it to everyone",
+            "Enter your password"
+        ],
+        correct: 0
+    },
+
+    {
+        question: "What is the principle of least privilege?",
+        answers: [
+            "Give users only the access they need",
+            "Give everyone administrator access",
+            "Disable all accounts",
+            "Use the same password everywhere"
+        ],
+        correct: 0
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let earnedXP = 0;
+let answered = false;
+
+const XP_PER_CORRECT = 10;
+
+const questionElement =
+    document.getElementById("question");
+
+const answersElement =
+    document.getElementById("answers");
+
+const feedbackElement =
+    document.getElementById("feedback");
+
+const nextButton =
+    document.getElementById("nextButton");
+
+const progressElement =
+    document.getElementById("progress");
+
+const questionNumberElement =
+    document.getElementById("questionNumber");
+
+const totalQuestionsElement =
+    document.getElementById("totalQuestions");
+
+const xpElement =
+    document.getElementById("xp");
+
+const levelElement =
+    document.getElementById("level");
+
+totalQuestionsElement.textContent = questions.length;
+
+function calculateLevel(xp) {
+
+    let level = 1;
+    let required = 100;
+
+    while (xp >= required && level < 100) {
+        xp -= required;
+        level++;
+
+        required =
+            Math.floor(100 * Math.pow(level, 1.15));
+    }
+
+    return level;
+}
+
+function updateXPDisplay() {
+
+    xpElement.textContent = earnedXP;
+    levelElement.textContent =
+        calculateLevel(earnedXP);
+}
+
+function showQuestion() {
+
+    answered = false;
+
+    const question = questions[currentQuestion];
+
+    questionNumberElement.textContent =
+        currentQuestion + 1;
+
+    questionElement.textContent =
+        question.question;
+
+    answersElement.innerHTML = "";
+
+    feedbackElement.textContent = "";
+
+    nextButton.style.display = "none";
+
+    const progress =
+        (currentQuestion / questions.length) * 100;
+
+    progressElement.style.width =
+        progress + "%";
+
+    question.answers.forEach((answer, index) => {
+
+        const button =
+            document.createElement("button");
+
+        button.className = "answer";
+
+        button.textContent = answer;
+
+        button.addEventListener(
+            "click",
+            () => selectAnswer(index, button)
+        );
+
+        answersElement.appendChild(button);
+    });
+}
+
+function selectAnswer(index, selectedButton) {
+
+    if (answered) return;
+
+    answered = true;
+
+    const question =
+        questions[currentQuestion];
+
+    const buttons =
+        document.querySelectorAll(".answer");
+
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+
+    if (index === question.correct) {
+
+        selectedButton.classList.add("correct");
+
+        score++;
+
+        earnedXP += XP_PER_CORRECT;
+
+        feedbackElement.textContent =
+            "Correct! +10 XP";
+
+        updateXPDisplay();
+
+    } else {
+
+        selectedButton.classList.add("wrong");
+
+        buttons[question.correct]
+            .classList.add("correct");
+
+        feedbackElement.textContent =
+            "Not quite. The correct answer is highlighted.";
+    }
+
+    nextButton.style.display = "block";
+}
+
+nextButton.addEventListener("click", () => {
+
+    currentQuestion++;
+
+    if (currentQuestion >= questions.length) {
+        finishQuiz();
+        return;
+    }
+
+    showQuestion();
+});
+
+function finishQuiz() {
+
+    document.getElementById("quizScreen")
+        .style.display = "none";
+
+    document.getElementById("resultScreen")
+        .style.display = "block";
+
+    document.getElementById("earnedXP")
+        .textContent = earnedXP;
+
+    document.getElementById("finalXP")
+        .textContent = earnedXP;
+
+    document.getElementById("finalLevel")
+        .textContent = calculateLevel(earnedXP);
+}
+
+function restartQuiz() {
+
+    currentQuestion = 0;
+    score = 0;
+    earnedXP = 0;
+
+    document.getElementById("quizScreen")
+        .style.display = "block";
+
+    document.getElementById("resultScreen")
+        .style.display = "none";
+
+    updateXPDisplay();
+    showQuestion();
+}
+
+updateXPDisplay();
+showQuestion();
+
+</script>
 
 <script src="app.js"></script>
+
 </body>
 </html>
