@@ -1,384 +1,344 @@
-// VANTA XP SYSTEM
-// Firebase Compat
+(() => {
+    "use strict";
 
-const db = firebase.firestore();
-const auth = firebase.auth();
-
-
-// ================================
-// XP SETTINGS
-// ================================
-
-const XP_REWARDS = {
-  correctAnswer: 10,
-  lessonCompleted: 50,
-  quizCompleted: 100,
-  labCompleted: 75,
-  challengeCompleted: 30
-};
-
-
-// ================================
-// LEVEL SYSTEM
-// ================================
-
-function calculateLevel(xp) {
-  xp = Math.max(0, Number(xp) || 0);
-
-  let level = 1;
-  let required = 100;
-  let remaining = xp;
-
-  while (remaining >= required && level < 100) {
-    remaining -= required;
-    level++;
-
-    required = Math.floor(
-      100 * Math.pow(level, 1.15)
-    );
-  }
-
-  return level;
-}
-
-
-// ================================
-// LEVEL INFORMATION
-// ================================
-
-function getLevelInfo(xp) {
-  xp = Math.max(0, Number(xp) || 0);
-
-  let level = 1;
-  let required = 100;
-  let remaining = xp;
-
-  while (remaining >= required && level < 100) {
-    remaining -= required;
-    level++;
-
-    required = Math.floor(
-      100 * Math.pow(level, 1.15)
-    );
-  }
-
-  return {
-    level: level,
-    xp: xp,
-    xpIntoLevel: remaining,
-    xpForLevel: required,
-    xpToNextLevel: required - remaining,
-    progress: Math.floor(
-      (remaining / required) * 100
-    )
-  };
-}
-
-
-// ================================
-// GET USER XP
-// ================================
-
-async function getXPData() {
-
-  const user = auth.currentUser;
-
-  if (!user) {
-    return null;
-  }
-
-  const ref = db
-    .collection("users")
-    .doc(user.uid);
-
-  const snapshot = await ref.get();
-
-  if (!snapshot.exists) {
-
-    const data = {
-      xp: 0,
-      level: 1,
-      lessonsCompleted: 0,
-      quizzesCompleted: 0,
-      correctAnswers: 0,
-      labsCompleted: 0,
-      challengesCompleted: 0,
-      createdAt:
-        firebase.firestore.FieldValue.serverTimestamp()
+    const getClient = () => {
+        return window.VANTA_SUPABASE || null;
     };
 
-    await ref.set(data);
+    /* =====================================================
+       LEVEL SYSTEM
+    ===================================================== */
 
-    return data;
-  }
+    function calculateLevel(xp = 0) {
+        xp = Math.max(0, Number(xp) || 0);
 
-  const data = snapshot.data();
-
-  return {
-    xp: Number(data.xp) || 0,
-    level: Number(data.level) || 1,
-    lessonsCompleted:
-      Number(data.lessonsCompleted) || 0,
-    quizzesCompleted:
-      Number(data.quizzesCompleted) || 0,
-    correctAnswers:
-      Number(data.correctAnswers) || 0,
-    labsCompleted:
-      Number(data.labsCompleted) || 0,
-    challengesCompleted:
-      Number(data.challengesCompleted) || 0
-  };
-}
-
-
-// ================================
-// ADD XP
-// ================================
-
-async function addXP(amount, reason = "activity") {
-
-  const user = auth.currentUser;
-
-  if (!user) {
-    throw new Error("User is not logged in.");
-  }
-
-  amount = Number(amount);
-
-  if (
-    !Number.isFinite(amount) ||
-    amount <= 0
-  ) {
-    throw new Error("Invalid XP amount.");
-  }
-
-  const ref = db
-    .collection("users")
-    .doc(user.uid);
-
-  const snapshot = await ref.get();
-
-  const oldData =
-    snapshot.exists
-      ? snapshot.data()
-      : {};
-
-  const oldXP =
-    Number(oldData.xp) || 0;
-
-  const newXP =
-    oldXP + amount;
-
-  const oldLevel =
-    calculateLevel(oldXP);
-
-  const newLevel =
-    calculateLevel(newXP);
-
-  await ref.set(
-    {
-      xp: newXP,
-      level: newLevel,
-
-      lastXPAmount: amount,
-      lastXPReason: reason,
-
-      lastXPAt:
-        firebase.firestore.FieldValue.serverTimestamp()
-    },
-    {
-      merge: true
+        return Math.floor(
+            Math.sqrt(xp / 100)
+        ) + 1;
     }
-  );
-
-  return {
-    gained: amount,
-    xp: newXP,
-    level: newLevel,
-
-    levelUp:
-      newLevel > oldLevel
-  };
-}
 
 
-// ================================
-// CORRECT ANSWER
-// ================================
+    function xpForLevel(level) {
+        level = Math.max(1, Number(level) || 1);
 
-async function rewardCorrectAnswer() {
-
-  const user = auth.currentUser;
-
-  if (!user) return null;
-
-  const ref = db
-    .collection("users")
-    .doc(user.uid);
-
-  await ref.set(
-    {
-      correctAnswers:
-        firebase.firestore.FieldValue.increment(1)
-    },
-    {
-      merge: true
+        return Math.pow(level - 1, 2) * 100;
     }
-  );
-
-  return addXP(
-    XP_REWARDS.correctAnswer,
-    "correct_answer"
-  );
-}
 
 
-// ================================
-// LESSON COMPLETED
-// ================================
-
-async function rewardLessonCompleted() {
-
-  const user = auth.currentUser;
-
-  if (!user) return null;
-
-  const ref = db
-    .collection("users")
-    .doc(user.uid);
-
-  await ref.set(
-    {
-      lessonsCompleted:
-        firebase.firestore.FieldValue.increment(1)
-    },
-    {
-      merge: true
+    function xpForNextLevel(level) {
+        return Math.pow(level, 2) * 100;
     }
-  );
-
-  return addXP(
-    XP_REWARDS.lessonCompleted,
-    "lesson_completed"
-  );
-}
 
 
-// ================================
-// QUIZ COMPLETED
-// ================================
+    function getLevelInfo(xp = 0) {
 
-async function rewardQuizCompleted() {
+        xp = Math.max(0, Number(xp) || 0);
 
-  const user = auth.currentUser;
+        const level =
+            calculateLevel(xp);
 
-  if (!user) return null;
+        const currentLevelXP =
+            xpForLevel(level);
 
-  const ref = db
-    .collection("users")
-    .doc(user.uid);
+        const nextLevelXP =
+            xpForNextLevel(level);
 
-  await ref.set(
-    {
-      quizzesCompleted:
-        firebase.firestore.FieldValue.increment(1)
-    },
-    {
-      merge: true
+        const progressXP =
+            xp - currentLevelXP;
+
+        const requiredXP =
+            nextLevelXP - currentLevelXP;
+
+        const progress =
+            requiredXP > 0
+                ? Math.min(
+                    100,
+                    Math.max(
+                        0,
+                        (progressXP / requiredXP) * 100
+                    )
+                )
+                : 100;
+
+        return {
+            level,
+            xp,
+            currentLevelXP,
+            nextLevelXP,
+            progressXP,
+            requiredXP,
+            progress
+        };
     }
-  );
-
-  return addXP(
-    XP_REWARDS.quizCompleted,
-    "quiz_completed"
-  );
-}
 
 
-// ================================
-// LAB COMPLETED
-// ================================
+    /* =====================================================
+       GET USER DATA
+    ===================================================== */
 
-async function rewardLabCompleted() {
+    async function getXPData() {
 
-  const user = auth.currentUser;
+        const supabase =
+            getClient();
 
-  if (!user) return null;
+        if (!supabase) {
+            throw new Error(
+                "Supabase غير متصل."
+            );
+        }
 
-  const ref = db
-    .collection("users")
-    .doc(user.uid);
+        const {
+            data: {
+                user
+            },
+            error: userError
+        } =
+            await supabase.auth.getUser();
 
-  await ref.set(
-    {
-      labsCompleted:
-        firebase.firestore.FieldValue.increment(1)
-    },
-    {
-      merge: true
+        if (
+            userError ||
+            !user
+        ) {
+            return null;
+        }
+
+
+        const {
+            data,
+            error
+        } =
+            await supabase
+                .from("profiles")
+                .select(`
+                    id,
+                    username,
+                    avatar_url,
+                    xp,
+                    level,
+                    achievements_count,
+                    lessons_completed,
+                    quizzes_completed,
+                    labs_completed,
+                    challenges_completed
+                `)
+                .eq("id", user.id)
+                .maybeSingle();
+
+
+        if (error) {
+
+            console.error(
+                "VANTA XP read error:",
+                error
+            );
+
+            throw error;
+        }
+
+
+        if (!data) {
+
+            return {
+                id: user.id,
+                username:
+                    user.user_metadata?.username ||
+                    "VANTA User",
+                xp: 0,
+                level: 1,
+                achievements_count: 0,
+                lessons_completed: 0,
+                quizzes_completed: 0,
+                labs_completed: 0,
+                challenges_completed: 0
+            };
+        }
+
+
+        const info =
+            getLevelInfo(
+                data.xp || 0
+            );
+
+
+        return {
+            ...data,
+            level: info.level
+        };
     }
-  );
-
-  return addXP(
-    XP_REWARDS.labCompleted,
-    "lab_completed"
-  );
-}
 
 
-// ================================
-// CHALLENGE COMPLETED
-// ================================
+    /* =====================================================
+       ADD XP
+    ===================================================== */
 
-async function rewardChallengeCompleted() {
+    async function addXP(
+        amount,
+        reason = "activity"
+    ) {
 
-  const user = auth.currentUser;
+        amount =
+            Number(amount) || 0;
 
-  if (!user) return null;
+        if (amount <= 0) {
+            return null;
+        }
 
-  const ref = db
-    .collection("users")
-    .doc(user.uid);
 
-  await ref.set(
-    {
-      challengesCompleted:
-        firebase.firestore.FieldValue.increment(1)
-    },
-    {
-      merge: true
+        const supabase =
+            getClient();
+
+        if (!supabase) {
+            throw new Error(
+                "Supabase غير متصل."
+            );
+        }
+
+
+        const {
+            data: {
+                user
+            },
+            error: userError
+        } =
+            await supabase.auth.getUser();
+
+
+        if (
+            userError ||
+            !user
+        ) {
+
+            throw new Error(
+                "يجب تسجيل الدخول أولًا."
+            );
+        }
+
+
+        /*
+         * RPC is used so XP changes happen
+         * inside the database rather than
+         * trusting the browser.
+         */
+
+        const {
+            data,
+            error
+        } =
+            await supabase.rpc(
+                "add_user_xp",
+                {
+                    p_user_id:
+                        user.id,
+
+                    p_amount:
+                        amount
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "VANTA XP update error:",
+                error
+            );
+
+            throw error;
+        }
+
+
+        console.log(
+            `VANTA XP +${amount}`,
+            reason
+        );
+
+
+        return data;
     }
-  );
-
-  return addXP(
-    XP_REWARDS.challengeCompleted,
-    "challenge_completed"
-  );
-}
 
 
-// ================================
-// GLOBAL VANTA API
-// ================================
+    /* =====================================================
+       REWARDS
+    ===================================================== */
 
-window.VANTA_XP = {
+    async function rewardCorrectAnswer() {
 
-  getXPData,
+        return addXP(
+            10,
+            "correct_answer"
+        );
+    }
 
-  addXP,
 
-  calculateLevel,
+    async function rewardLessonCompleted() {
 
-  getLevelInfo,
+        return addXP(
+            50,
+            "lesson_completed"
+        );
+    }
 
-  rewardCorrectAnswer,
 
-  rewardLessonCompleted,
+    async function rewardQuizCompleted() {
 
-  rewardQuizCompleted,
+        return addXP(
+            100,
+            "quiz_completed"
+        );
+    }
 
-  rewardLabCompleted,
 
-  rewardChallengeCompleted
+    async function rewardLabCompleted() {
 
-};
+        return addXP(
+            75,
+            "lab_completed"
+        );
+    }
+
+
+    async function rewardChallengeCompleted() {
+
+        return addXP(
+            30,
+            "challenge_completed"
+        );
+    }
+
+
+    /* =====================================================
+       PUBLIC API
+    ===================================================== */
+
+    window.VANTA_XP = {
+
+        getXPData,
+
+        addXP,
+
+        calculateLevel,
+
+        xpForLevel,
+
+        xpForNextLevel,
+
+        getLevelInfo,
+
+        rewardCorrectAnswer,
+
+        rewardLessonCompleted,
+
+        rewardQuizCompleted,
+
+        rewardLabCompleted,
+
+        rewardChallengeCompleted
+
+    };
+
+
+    console.log(
+        "VANTA XP system initialized."
+    );
+
+})();
