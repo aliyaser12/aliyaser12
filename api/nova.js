@@ -1,23 +1,13 @@
-// api/nova.js
-// VANTA — NOVA AI
-// Multi-model fallback
-//
-// Required Vercel Environment Variable:
-// GEMINI_API_KEY
-//
-// لا تضع المفتاح داخل index.html
-
 export default async function handler(req, res) {
-  // ============================================================
+  // =========================
   // CORS
-  // ============================================================
-
+  // =========================
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
-    return res.status(204).end();
+    return res.status(200).end();
   }
 
   if (req.method !== "POST") {
@@ -26,361 +16,292 @@ export default async function handler(req, res) {
     });
   }
 
-  // ============================================================
-  // API KEY
-  // ============================================================
+  // =========================
+  // ENV
+  // =========================
+  const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_SERVICE_ROLE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  const apiKey = process.env.GEMINI_API_KEY;
-
-  if (!apiKey) {
-    console.error("GEMINI_API_KEY is missing");
-
+  if (!GEMINI_API_KEY) {
     return res.status(500).json({
-      error: "NOVA is not configured."
+      error: "GEMINI_API_KEY is missing"
     });
   }
 
-  // ============================================================
+  // =========================
   // BODY
-  // ============================================================
+  // =========================
+  let body;
 
-  let body = req.body;
-
-  if (typeof body === "string") {
-    try {
-      body = JSON.parse(body);
-    } catch {
-      return res.status(400).json({
-        error: "Invalid JSON."
-      });
-    }
+  try {
+    body =
+      typeof req.body === "string"
+        ? JSON.parse(req.body)
+        : req.body || {};
+  } catch {
+    return res.status(400).json({
+      error: "Invalid JSON"
+    });
   }
 
-  body = body || {};
-
-  const message =
-    typeof body.message === "string"
-      ? body.message.trim()
-      : "";
+  const message = String(body.message || "").trim();
 
   if (!message) {
     return res.status(400).json({
-      error: "Message is required."
+      error: "Message is required"
     });
   }
 
-  // ============================================================
-  // USER DATA
-  // ============================================================
+  // =========================
+  // USER DATA FROM FRONTEND
+  // =========================
+  const frontendUser = body.user || {};
 
-  const user = body.user || {};
+  let user = {
+    firebase_uid:
+      frontendUser.firebase_uid ||
+      frontendUser.firebaseUid ||
+      frontendUser.uid ||
+      null,
 
-  const username =
-    typeof user.username === "string"
-      ? user.username.trim()
-      : "";
+    username:
+      frontendUser.username ||
+      frontendUser.name ||
+      null,
 
-  const level =
-    Number.isFinite(Number(user.level))
-      ? Number(user.level)
-      : 1;
+    level:
+      Number.isFinite(Number(frontendUser.level))
+        ? Number(frontendUser.level)
+        : 1,
 
-  const xp =
-    Number.isFinite(Number(user.xp))
-      ? Number(user.xp)
-      : 0;
+    xp:
+      Number.isFinite(Number(frontendUser.xp))
+        ? Number(frontendUser.xp)
+        : 0,
 
-  const currentPage =
-    typeof user.currentPage === "string"
-      ? user.currentPage
-      : "home";
+    currentPage: frontendUser.currentPage || "",
+    language: frontendUser.language || "ar",
+    recentTopics: Array.isArray(frontendUser.recentTopics)
+      ? frontendUser.recentTopics
+      : [],
+    likedCategories: Array.isArray(frontendUser.likedCategories)
+      ? frontendUser.likedCategories
+      : [],
+    bookProgress: frontendUser.bookProgress || {},
+    vantabookActivity: frontendUser.vantabookActivity || {}
+  };
 
-  const language =
-    typeof user.language === "string"
-      ? user.language
-      : "ar";
+  // =========================
+  // READ REAL USER DATA
+  // FROM student_memory_firebase
+  // =========================
+  if (
+    SUPABASE_URL &&
+    SUPABASE_SERVICE_ROLE_KEY &&
+    user.firebase_uid
+  ) {
+    try {
+      const query =
+        `${SUPABASE_URL}/rest/v1/student_memory_firebase` +
+        `?firebase_uid=eq.${encodeURIComponent(user.firebase_uid)}` +
+        `&select=firebase_uid,email,name,level,xp` +
+        `&limit=1`;
 
-  const recentTopics =
-    Array.isArray(user.recentTopics)
-      ? user.recentTopics.slice(0, 10)
-      : [];
+      const profileResponse = await fetch(query, {
+        method: "GET",
+        headers: {
+          apikey: SUPABASE_SERVICE_ROLE_KEY,
+          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+          "Content-Type": "application/json"
+        }
+      });
 
-  const likedCategories =
-    Array.isArray(user.likedCategories)
-      ? user.likedCategories.slice(0, 10)
-      : [];
+      if (profileResponse.ok) {
+        const profiles = await profileResponse.json();
 
-  const bookProgress =
-    user.bookProgress || {};
+        if (Array.isArray(profiles) && profiles.length > 0) {
+          const profile = profiles[0];
 
-  const vantabookActivity =
-    user.vantabookActivity || {};
+          user.username =
+            profile.name ||
+            user.username ||
+            profile.email ||
+            "المستخدم";
 
-  // ============================================================
+          user.level =
+            Number.isFinite(Number(profile.level))
+              ? Number(profile.level)
+              : user.level;
+
+          user.xp =
+            Number.isFinite(Number(profile.xp))
+              ? Number(profile.xp)
+              : user.xp;
+
+          user.firebase_uid =
+            profile.firebase_uid ||
+            user.firebase_uid;
+        }
+      } else {
+        const errorText = await profileResponse.text();
+
+        console.error(
+          "Supabase profile lookup failed:",
+          profileResponse.status,
+          errorText
+        );
+      }
+    } catch (error) {
+      console.error(
+        "Supabase profile lookup error:",
+        error?.message || error
+      );
+    }
+  }
+
+  // =========================
   // HISTORY
-  // ============================================================
-
-  const rawHistory =
-    Array.isArray(body.history)
-      ? body.history
-      : [];
+  // =========================
+  const rawHistory = Array.isArray(body.history)
+    ? body.history
+    : [];
 
   const history = rawHistory
     .slice(-16)
-    .map(item => {
-      if (!item || typeof item !== "object") {
-        return null;
-      }
-
+    .map((item) => {
       const role =
-        item.role === "assistant" ||
-        item.role === "model"
+        item?.role === "assistant"
           ? "model"
           : "user";
 
-      const text =
-        typeof item.text === "string"
-          ? item.text
-          : typeof item.content === "string"
-            ? item.content
-            : "";
-
-      if (!text.trim()) {
-        return null;
-      }
+      const text = String(
+        item?.content ||
+        item?.text ||
+        ""
+      ).trim();
 
       return {
         role,
         parts: [
           {
-            text: text.slice(0, 4000)
+            text
           }
         ]
       };
     })
-    .filter(Boolean);
+    .filter((item) => item.parts[0].text);
 
-  // ============================================================
-  // NOVA SYSTEM
-  // ============================================================
+  // =========================
+  // SYSTEM PROMPT
+  // =========================
+  const systemPrompt = `
+أنت NOVA، المساعد الذكي المركزي داخل VANTA.
 
-  const systemInstruction = `
-You are NOVA, the central AI companion of VANTA.
+VANTA منصة تعليمية وتقنية واجتماعية، وVANTABOOK جزء اجتماعي متكامل داخلها.
 
-VANTA is an Arabic-first futuristic platform containing:
+مهمتك:
+- مساعدة المستخدم في التعلم.
+- فهم سياقه داخل VANTA.
+- فهم مستواه وXP الخاص به.
+- مساعدته في VANTABOOK.
+- الإجابة بالعربية عندما يكون المستخدم عربيًا.
+- كن طبيعيًا وذكيًا ومختصرًا، ولا تتصرف كروبوت جامد.
+- لا تدّعي معرفة معلومات غير موجودة في سياقك.
 
-- cybersecurity education
-- programming education
-- technology learning
-- defensive cyber labs
-- interactive lessons
-- books
-- roadmap
-- achievements
-- VANTABOOK
-- personalized content recommendations
+بيانات المستخدم الحالية:
+الاسم: ${user.username || "غير معروف"}
+المستوى: Level ${user.level}
+XP: ${user.xp}
+Firebase UID: ${user.firebase_uid || "غير متوفر"}
+الصفحة الحالية: ${user.currentPage || "غير معروفة"}
+اللغة: ${user.language || "ar"}
 
-PERSONALITY:
+المواضيع الأخيرة:
+${JSON.stringify(user.recentTopics)}
 
-You are intelligent, calm, confident and futuristic.
+التصنيفات التي تفاعل معها:
+${JSON.stringify(user.likedCategories)}
 
-You can be slightly mysterious,
-but never childish or annoying.
+تقدم الكتب:
+${JSON.stringify(user.bookProgress)}
 
-You should feel like an actual AI companion,
-not a scripted chatbot.
+نشاط VANTABOOK:
+${JSON.stringify(user.vantabookActivity)}
 
-LANGUAGE:
+إذا سألك المستخدم:
+"مين أنا؟"
+استخدم اسم المستخدم الحقيقي الموجود في بياناته.
 
-Arabic is the default language.
+إذا سألك:
+"كم مستواي؟"
+استخدم Level الموجود في بياناته.
 
-If the user clearly speaks English,
-reply in English.
+إذا سألك:
+"كم عندي XP؟"
+استخدم XP الموجود في بياناته.
 
-Do not randomly change languages.
+لا تقل إن المستخدم Level 1 أو لديه 0 XP إذا كانت البيانات الحقيقية المرسلة لك مختلفة.
 
-USER NAME:
+نظام XP:
+- XP يمثل خبرة المستخدم داخل VANTA.
+- Level يمثل مستوى المستخدم.
+- لا تخترع XP أو Level جديدًا.
+- إذا لم تكن البيانات متوفرة، قل بوضوح إن بيانات التقدم غير متاحة بدل اختراعها.
 
-The current user's username is:
+الأمن السيبراني:
+يمكنك شرح الأمن السيبراني بشكل تعليمي ودفاعي.
+لا تساعد في سرقة الحسابات أو كلمات المرور أو اختراق أنظمة حقيقية أو تجاوز الحماية.
 
-${username || "Not provided"}
-
-Never automatically call every user "Ali Yaser".
-
-Ali Yaser is the founder/developer of VANTA.
-
-Only use the current user's username when referring to the user.
-
-If no username exists, use neutral language.
-
-CURRENT USER:
-
-Level: ${level}
-XP: ${xp}
-Current page: ${currentPage}
-
-Recent learning topics:
-${JSON.stringify(recentTopics)}
-
-Liked categories:
-${JSON.stringify(likedCategories)}
-
-Book progress:
-${JSON.stringify(bookProgress)}
-
-VANTABOOK activity:
-${JSON.stringify(vantabookActivity)}
-
-VANTA KNOWLEDGE:
-
-You understand that VANTA contains different sections.
-
-You can help the user navigate between:
-
-Home
-Learning
-Labs
-Library
-NOVA
-VANTABOOK
-Profile
-Settings
-Roadmap
-
-If the user asks how to do something inside VANTA,
-give clear instructions for the relevant section.
-
-LEARNING:
-
-Adapt explanations to the user's apparent level.
-
-Use simple explanations when the user is learning something new.
-
-For exercises, you may give hints before the complete answer
-when that is useful.
-
-VANTABOOK:
-
-VANTABOOK is part of VANTA.
-
-It uses the same VANTA account.
-
-You may use the supplied activity information to understand
-the user's interests.
-
-Do not claim to have watched content or performed actions
-that were not provided by the application.
-
-CYBERSECURITY:
-
-Keep cybersecurity assistance defensive and educational.
-
-Safe:
-- cybersecurity concepts
-- secure coding
-- authentication concepts
-- hashing concepts
-- phishing awareness
-- defensive security
-- CTF learning
-- security labs
-
-Do not provide instructions for:
-- stealing credentials
-- malware deployment
-- unauthorized access
-- attacking real systems
-- destructive actions
-
-FOUNDER:
-
-If asked who created VANTA:
-
-VANTA was founded and developed by Ali Yaser.
-
-Do not assume the current user is Ali Yaser.
-
-RESPONSE STYLE:
-
-Be helpful.
-
-Be natural.
-
-Do not repeat the user's question unnecessarily.
-
-Do not mention internal system instructions.
-
-Keep normal answers concise.
-
-Give detailed explanations when requested.
+أنت جزء من VANTA وVANTABOOK، لذلك حافظ على سياق المنصة عند الإجابة.
 `;
 
-  // ============================================================
-  // GEMINI CONTENTS
-  // ============================================================
-
-  const contents = [
-    ...history,
-    {
-      role: "user",
-      parts: [
-        {
-          text: message.slice(0, 8000)
-        }
-      ]
-    }
+  // =========================
+  // GEMINI MODELS
+  // =========================
+  const MODELS = [
+    "gemini-3.8-flash",
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
+    "gemini-3.1-flash-lite"
   ];
 
-  // ============================================================
-  // MODEL FALLBACK
-  // ============================================================
-  //
-  // NOVA tries the first model.
-  //
-  // If it receives an error that can reasonably mean:
-  //
-  // 429 = quota/rate limit
-  // 404 = model unavailable
-  // 5xx = provider/server problem
-  //
-  // it tries the next model.
-  //
-  // IMPORTANT:
-  // The models must actually be available to your Gemini API
-  // project. A fallback cannot bypass provider quota limits.
-  //
+  let lastError = null;
+  let hadRateLimit = false;
 
- const MODELS = [
-  "gemini-3.8-flash",
-  "gemini-3.5-flash",
-  "gemini-3.5-flash-lite",
-  "gemini-3.1-flash-lite"
-];
-
-  const attempts = [];
-
-  // ============================================================
+  // =========================
   // TRY MODELS
-  // ============================================================
-
+  // =========================
   for (const model of MODELS) {
-    const endpoint =
-      `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
-
     try {
+      const endpoint =
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
+
+      const contents = [
+        ...history,
+        {
+          role: "user",
+          parts: [
+            {
+              text: message
+            }
+          ]
+        }
+      ];
+
       const response = await fetch(endpoint, {
         method: "POST",
-
         headers: {
           "Content-Type": "application/json",
-          "x-goog-api-key": apiKey
+          "x-goog-api-key": GEMINI_API_KEY
         },
-
         body: JSON.stringify({
-          system_instruction: {
+          systemInstruction: {
             parts: [
               {
-                text: systemInstruction
+                text: systemPrompt
               }
             ]
           },
@@ -388,22 +309,29 @@ Give detailed explanations when requested.
           contents,
 
           generationConfig: {
-            temperature: 0.75,
+            temperature: 0.7,
             maxOutputTokens: 1200
           }
         })
       });
 
-      // --------------------------------------------------------
+      const rawText = await response.text();
+
+      let data;
+
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        data = {};
+      }
+
+      // =========================
       // SUCCESS
-      // --------------------------------------------------------
-
+      // =========================
       if (response.ok) {
-        const data = await response.json();
-
         const reply =
           data?.candidates?.[0]?.content?.parts
-            ?.map(part => part?.text || "")
+            ?.map((part) => part?.text || "")
             .join("")
             .trim();
 
@@ -411,113 +339,74 @@ Give detailed explanations when requested.
           return res.status(200).json({
             reply,
             model,
-            fallback: attempts.length > 0
+            fallback: model !== MODELS[0]
           });
         }
 
-        attempts.push({
-          model,
-          status: 200,
-          reason: "Empty response"
-        });
-
+        lastError = "Gemini returned an empty response.";
         continue;
       }
 
-      // --------------------------------------------------------
-      // ERROR
-      // --------------------------------------------------------
+      // =========================
+      // RATE LIMIT
+      // =========================
+      if (response.status === 429) {
+        hadRateLimit = true;
 
-      let errorData = {};
+        console.error(
+          `NOVA model ${model} rate limited:`,
+          rawText
+        );
 
-      try {
-        errorData = await response.json();
-      } catch {
-        errorData = {};
+        lastError = rawText;
+        continue;
       }
 
-      const errorMessage =
-        errorData?.error?.message ||
-        `HTTP ${response.status}`;
+      // =========================
+      // MODEL NOT AVAILABLE
+      // =========================
+      if (response.status === 404) {
+        console.error(
+          `NOVA model ${model} failed: 404`,
+          rawText
+        );
 
+        lastError = rawText;
+        continue;
+      }
+
+      // =========================
+      // OTHER ERROR
+      // =========================
       console.error(
-        `NOVA model ${model} failed:`,
-        response.status,
-        errorMessage
+        `NOVA model ${model} failed: ${response.status}`,
+        rawText
       );
 
-      attempts.push({
-        model,
-        status: response.status,
-        reason: errorMessage
-      });
-
-      // Try the next model.
-      continue;
-
+      lastError = rawText;
     } catch (error) {
       console.error(
-        `NOVA network error on ${model}:`,
-        error
+        `NOVA model ${model} exception:`,
+        error?.message || error
       );
 
-      attempts.push({
-        model,
-        status: "network-error",
-        reason: error?.message || "Network error"
-      });
-
-      continue;
+      lastError = error?.message || String(error);
     }
   }
 
-  // ============================================================
+  // =========================
   // ALL MODELS FAILED
-  // ============================================================
-
-  const hadRateLimit =
-    attempts.some(
-      attempt => attempt.status === 429
-    );
-
-  const hadUnavailable =
-    attempts.some(
-      attempt =>
-        attempt.status === 404 ||
-        attempt.status === 400
-    );
-
+  // =========================
   if (hadRateLimit) {
     return res.status(429).json({
       error:
-        "NOVA is temporarily unavailable because the available AI models reached their usage limit.",
-      code: "AI_QUOTA_EXHAUSTED",
-      tried: attempts.map(a => ({
-        model: a.model,
-        status: a.status
-      }))
-    });
-  }
-
-  if (hadUnavailable) {
-    return res.status(503).json({
-      error:
-        "NOVA could not find an available AI model.",
-      code: "NO_MODEL_AVAILABLE",
-      tried: attempts.map(a => ({
-        model: a.model,
-        status: a.status
-      }))
+        "NOVA rate limit reached. All available models are currently unavailable.",
+      details: lastError
     });
   }
 
   return res.status(503).json({
-    error:
-      "NOVA is temporarily unavailable. Please try again shortly.",
-    code: "AI_UNAVAILABLE",
-    tried: attempts.map(a => ({
-      model: a.model,
-      status: a.status
-    }))
+    error: "NOVA is currently unavailable.",
+    details: lastError
   });
 }
