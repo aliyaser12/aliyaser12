@@ -350,12 +350,12 @@ Give detailed explanations when requested.
   // project. A fallback cannot bypass provider quota limits.
   //
 
-  const MODELS = [
-    "gemini-3.8-flash",
-    "gemini-3.8-flash-lite",
-    "gemini-3.0-flash",
-    "gemini-3.5-flash-lite"
-  ];
+ const MODELS = [
+  "gemini-3.8-flash",
+  "gemini-3.5-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-3.1-flash-lite"
+];
 
   const attempts = [];
 
