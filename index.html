@@ -2,846 +2,1928 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#08080d">
-<title>VANTA</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07070c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>VANTA — Ali Yaser</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+/* =========================================================
+   VANTA 2.0 — SINGLE FILE
+========================================================= */
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
 :root{
- --bg:#07070b;
- --bg2:#0d0d13;
- --card:rgba(20,20,29,.82);
- --card2:#171720;
- --line:rgba(255,255,255,.09);
- --text:#f7f7fa;
- --muted:#92929f;
- --purple:#8b5cf6;
- --violet:#a78bfa;
- --cyan:#22d3ee;
- --pink:#ec4899;
- --green:#34d399;
- --red:#fb7185;
+  --bg:#06070b;
+  --bg2:#0b0c13;
+  --panel:rgba(18,19,29,.78);
+  --panel2:rgba(24,25,37,.88);
+  --line:rgba(255,255,255,.09);
+  --line2:rgba(255,255,255,.15);
+  --text:#f8f8fc;
+  --muted:#9295a5;
+  --purple:#8b5cf6;
+  --violet:#a78bfa;
+  --cyan:#22d3ee;
+  --pink:#ec4899;
+  --blue:#60a5fa;
+  --green:#34d399;
+  --red:#fb7185;
+  --shadow:0 25px 80px rgba(0,0,0,.42);
 }
-html{scroll-behavior:smooth}
+
+html{
+  scroll-behavior:smooth;
+}
+
 body{
- background:
- radial-gradient(circle at 15% 0%,rgba(139,92,246,.13),transparent 30%),
- radial-gradient(circle at 90% 20%,rgba(34,211,238,.08),transparent 25%),
- var(--bg);
- color:var(--text);
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;
- min-height:100vh;
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 10% 0%,rgba(139,92,246,.13),transparent 28%),
+    radial-gradient(circle at 90% 12%,rgba(34,211,238,.08),transparent 25%),
+    radial-gradient(circle at 50% 100%,rgba(236,72,153,.06),transparent 30%),
+    var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Tahoma,Arial,sans-serif;
+  overflow-x:hidden;
 }
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
 
-#app{min-height:100vh}
+button,
+input,
+textarea{
+  font:inherit;
+}
 
-header{
- position:sticky;
- top:0;
- z-index:100;
- height:72px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:20px;
- padding:0 24px;
- background:rgba(7,7,11,.82);
- backdrop-filter:blur(24px);
- border-bottom:1px solid var(--line);
+button{
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+.space{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  overflow:hidden;
+}
+
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  border-radius:50%;
+  background:white;
+  opacity:.4;
+  animation:twinkle 3s infinite ease-in-out;
+}
+
+.star:nth-child(1){top:12%;left:8%;animation-delay:.2s}
+.star:nth-child(2){top:23%;left:24%;animation-delay:1.2s}
+.star:nth-child(3){top:9%;left:67%;animation-delay:.7s}
+.star:nth-child(4){top:35%;left:87%;animation-delay:2s}
+.star:nth-child(5){top:66%;left:12%;animation-delay:1.7s}
+.star:nth-child(6){top:78%;left:74%;animation-delay:.9s}
+.star:nth-child(7){top:52%;left:55%;animation-delay:2.4s}
+.star:nth-child(8){top:91%;left:39%;animation-delay:.5s}
+.star:nth-child(9){top:18%;left:93%;animation-delay:1.5s}
+.star:nth-child(10){top:43%;left:4%;animation-delay:2.1s}
+
+@keyframes twinkle{
+  0%,100%{opacity:.2;transform:scale(.8)}
+  50%{opacity:.9;transform:scale(1.5)}
+}
+
+.orbit{
+  position:absolute;
+  width:520px;
+  height:520px;
+  border:1px solid rgba(139,92,246,.07);
+  border-radius:50%;
+  top:-250px;
+  right:-150px;
+}
+
+.orbit2{
+  position:absolute;
+  width:760px;
+  height:760px;
+  border:1px solid rgba(34,211,238,.045);
+  border-radius:50%;
+  bottom:-480px;
+  left:-260px;
+}
+
+/* =========================================================
+   BOOT SCREEN
+========================================================= */
+
+.boot-screen{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:
+    radial-gradient(circle at center,rgba(139,92,246,.12),transparent 30%),
+    #05060a;
+  transition:opacity .65s ease,visibility .65s ease;
+}
+
+.boot-screen.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.boot-inner{
+  width:min(420px,88%);
+  text-align:center;
+}
+
+.boot-logo{
+  width:92px;
+  height:92px;
+  margin:auto;
+  display:grid;
+  place-items:center;
+  border-radius:29px;
+  font-size:44px;
+  font-weight:950;
+  background:
+    linear-gradient(135deg,#8b5cf6,#ec4899);
+  box-shadow:
+    0 0 80px rgba(139,92,246,.28),
+    inset 0 0 25px rgba(255,255,255,.16);
+  animation:bootFloat 2.4s infinite ease-in-out;
+}
+
+@keyframes bootFloat{
+  0%,100%{transform:translateY(0) rotate(0)}
+  50%{transform:translateY(-9px) rotate(3deg)}
+}
+
+.boot-title{
+  margin-top:25px;
+  font-size:28px;
+  letter-spacing:5px;
+  font-weight:950;
+}
+
+.boot-sub{
+  margin-top:9px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.boot-progress{
+  margin:28px auto 12px;
+  height:4px;
+  width:100%;
+  border-radius:99px;
+  background:rgba(255,255,255,.08);
+  overflow:hidden;
+}
+
+.boot-progress i{
+  display:block;
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,var(--purple),var(--pink),var(--cyan));
+  animation:bootProgress 2.7s ease forwards;
+}
+
+@keyframes bootProgress{
+  to{width:100%}
+}
+
+.boot-status{
+  color:#777b8b;
+  font-size:11px;
+  min-height:17px;
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.app-shell{
+  min-height:100vh;
+}
+
+.main-header{
+  position:sticky;
+  top:0;
+  z-index:500;
+  height:72px;
+  display:flex;
+  align-items:center;
+  gap:25px;
+  padding:0 24px;
+  background:rgba(6,7,11,.74);
+  backdrop-filter:blur(28px) saturate(150%);
+  -webkit-backdrop-filter:blur(28px) saturate(150%);
+  border-bottom:1px solid var(--line);
 }
 
 .brand{
- display:flex;
- align-items:center;
- gap:11px;
- cursor:pointer;
- min-width:max-content;
-}
-.logo{
- width:42px;
- height:42px;
- border-radius:14px;
- display:grid;
- place-items:center;
- font-weight:950;
- font-size:21px;
- background:linear-gradient(135deg,var(--purple),var(--pink));
- box-shadow:0 10px 35px rgba(139,92,246,.28);
-}
-.brand strong{letter-spacing:2px;font-size:19px}
-
-.nav{
- display:flex;
- align-items:center;
- gap:4px;
- overflow:auto;
- scrollbar-width:none;
-}
-.nav::-webkit-scrollbar{display:none}
-.nav button{
- white-space:nowrap;
- border:0;
- background:transparent;
- color:var(--muted);
- padding:10px 13px;
- border-radius:11px;
- transition:.2s;
-}
-.nav button:hover,.nav button.active{
- background:rgba(255,255,255,.07);
- color:#fff;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  min-width:max-content;
+  cursor:pointer;
 }
 
-.head-actions{display:flex;align-items:center;gap:9px}
-.icon-btn{
- width:40px;
- height:40px;
- display:grid;
- place-items:center;
- border:1px solid var(--line);
- border-radius:12px;
- background:rgba(255,255,255,.04);
- color:#fff;
+.brand-logo{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  font-weight:950;
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+  box-shadow:0 8px 28px rgba(139,92,246,.24);
 }
-.avatar{
- width:40px;
- height:40px;
- border-radius:12px;
- display:grid;
- place-items:center;
- font-weight:900;
- background:linear-gradient(135deg,#292935,#15151c);
- border:1px solid var(--line);
- cursor:pointer;
+
+.brand-name{
+  font-size:18px;
+  font-weight:950;
+  letter-spacing:3px;
 }
+
+.main-nav{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:4px;
+  overflow:auto;
+  scrollbar-width:none;
+}
+
+.main-nav::-webkit-scrollbar{
+  display:none;
+}
+
+.main-nav button{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  white-space:nowrap;
+  padding:10px 14px;
+  border-radius:11px;
+  transition:.2s;
+}
+
+.main-nav button:hover,
+.main-nav button.active{
+  color:#fff;
+  background:rgba(255,255,255,.07);
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.header-icon{
+  width:40px;
+  height:40px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  color:white;
+}
+
+.header-avatar{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  background:linear-gradient(135deg,#252536,#11121a);
+  border:1px solid var(--line);
+  cursor:pointer;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
 
 main{
- max-width:1320px;
- margin:auto;
- padding:35px 22px 90px;
+  width:min(1360px,100%);
+  margin:auto;
+  padding:34px 24px 100px;
 }
-.view{display:none;animation:in .25s ease}
-.view.active{display:block}
-@keyframes in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 
-.hero{
- min-height:460px;
- display:grid;
- grid-template-columns:1.25fr .75fr;
- gap:18px;
+.view{
+  display:none;
+  animation:viewIn .3s ease;
 }
-.hero-main,.nova-hero,.panel,.post,.composer,.profile-card{
- border:1px solid var(--line);
- background:var(--card);
- border-radius:25px;
+
+.view.active{
+  display:block;
 }
-.hero-main{
- position:relative;
- overflow:hidden;
- padding:48px;
- background:
- radial-gradient(circle at 80% 10%,rgba(139,92,246,.2),transparent 32%),
- linear-gradient(145deg,#15151f,#0d0d12);
+
+@keyframes viewIn{
+  from{
+    opacity:0;
+    transform:translateY(8px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
 }
-.hero-main:before{
- content:"";
- position:absolute;
- width:280px;height:280px;
- border:1px solid rgba(139,92,246,.12);
- border-radius:50%;
- left:-130px;bottom:-140px;
-}
+
+/* =========================================================
+   COMMON
+========================================================= */
+
 .eyebrow{
- color:var(--cyan);
- font-size:12px;
- letter-spacing:1.5px;
- font-weight:800;
- margin-bottom:18px;
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  margin-bottom:17px;
 }
-.hero h1{
- font-size:clamp(40px,6vw,74px);
- line-height:.98;
- letter-spacing:-3px;
- max-width:750px;
- margin-bottom:23px;
+
+.page-title{
+  margin-bottom:27px;
 }
+
+.page-title h1{
+  font-size:42px;
+  letter-spacing:-1.5px;
+}
+
+.page-title p{
+  color:var(--muted);
+  margin-top:7px;
+}
+
 .gradient{
- background:linear-gradient(90deg,var(--purple),var(--pink),var(--cyan));
- -webkit-background-clip:text;
- color:transparent;
+  background:linear-gradient(90deg,var(--purple),var(--pink),var(--cyan));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
 }
-.hero p{
- max-width:680px;
- color:var(--muted);
- line-height:1.9;
- font-size:16px;
-}
-.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:28px}
-.primary,.secondary,.danger{
- border-radius:12px;
- padding:12px 17px;
- transition:.18s;
-}
+
 .primary{
- border:0;
- color:white;
- background:linear-gradient(135deg,var(--purple),#6d28d9);
+  border:0;
+  color:#fff;
+  background:linear-gradient(135deg,#8b5cf6,#6d28d9);
+  padding:12px 17px;
+  border-radius:12px;
+  box-shadow:0 10px 30px rgba(109,40,217,.2);
 }
+
 .secondary{
- border:1px solid var(--line);
- color:white;
- background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  color:#fff;
+  background:rgba(255,255,255,.045);
+  padding:12px 17px;
+  border-radius:12px;
 }
+
 .danger{
- border:1px solid rgba(251,113,133,.25);
- color:#fecdd3;
- background:rgba(251,113,133,.08);
-}
-.primary:hover,.secondary:hover,.danger:hover{transform:translateY(-1px)}
-
-.nova-hero{
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- text-align:center;
- padding:30px;
- background:
- radial-gradient(circle at 50% 25%,rgba(34,211,238,.12),transparent 38%),
- var(--card);
-}
-.nova-core{
- width:145px;
- height:145px;
- position:relative;
- display:grid;
- place-items:center;
- margin-bottom:28px;
- transform:rotate(30deg);
- border-radius:35px;
- background:linear-gradient(135deg,#8b5cf6,#22d3ee);
- box-shadow:
- 0 0 70px rgba(139,92,246,.25),
- inset 0 0 30px rgba(255,255,255,.18);
-}
-.nova-core:after{
- content:"";
- width:76px;height:76px;
- border:2px solid rgba(255,255,255,.45);
- border-radius:22px;
-}
-.nova-core span{
- position:absolute;
- transform:rotate(-30deg);
- font-size:37px;
- font-weight:950;
- z-index:2;
-}
-.nova-hero h2{font-size:27px;margin-bottom:8px}
-.nova-hero p{color:var(--muted);line-height:1.8;font-size:14px}
-
-.section{margin-top:30px}
-.section-head{
- display:flex;
- justify-content:space-between;
- align-items:end;
- gap:12px;
- margin-bottom:15px;
-}
-.section-head h2{font-size:22px}
-.section-head p{color:var(--muted);font-size:13px;margin-top:5px}
-.text-btn{
- border:0;
- background:none;
- color:var(--cyan);
+  border:1px solid rgba(251,113,133,.25);
+  color:#fecdd3;
+  background:rgba(251,113,133,.07);
+  padding:11px 15px;
+  border-radius:11px;
 }
 
-.grid{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:14px;
+.primary:hover,
+.secondary:hover,
+.danger:hover{
+  transform:translateY(-1px);
 }
+
 .card{
- border:1px solid var(--line);
- background:var(--card);
- border-radius:19px;
- padding:21px;
- transition:.2s;
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:20px;
+  padding:21px;
 }
-.card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-2px)}
+
 .card-icon{
- width:45px;height:45px;
- border-radius:13px;
- display:grid;
- place-items:center;
- background:rgba(139,92,246,.12);
- color:#c4b5fd;
- margin-bottom:16px;
- font-weight:900;
-}
-.card h3{margin-bottom:7px}
-.card p{color:var(--muted);font-size:13px;line-height:1.75}
-.progress{
- height:6px;
- background:#25252d;
- border-radius:99px;
- overflow:hidden;
- margin-top:17px;
-}
-.progress i{
- display:block;height:100%;
- background:linear-gradient(90deg,var(--purple),var(--cyan));
-}
-.card-meta{
- display:flex;
- justify-content:space-between;
- margin-top:12px;
- color:var(--muted);
- font-size:12px;
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:rgba(139,92,246,.11);
+  color:#c4b5fd;
+  font-weight:900;
+  margin-bottom:16px;
 }
 
-.title{margin-bottom:25px}
-.title h1{font-size:38px;margin-bottom:7px}
-.title p{color:var(--muted)}
+.card h3{
+  margin-bottom:7px;
+}
 
-.filters{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.card p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.8;
+}
+
+.grid-3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+/* =========================================================
+   HOME
+========================================================= */
+
+.home-hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);
+  gap:17px;
+}
+
+.hero-main{
+  min-height:485px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:48px;
+  background:
+    radial-gradient(circle at 80% 10%,rgba(139,92,246,.19),transparent 30%),
+    radial-gradient(circle at 5% 90%,rgba(34,211,238,.08),transparent 25%),
+    linear-gradient(145deg,#151621,#0c0d12);
+  box-shadow:var(--shadow);
+}
+
+.hero-main:after{
+  content:"";
+  position:absolute;
+  width:370px;
+  height:370px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.045);
+  right:-190px;
+  bottom:-200px;
+}
+
+.hero-main h1{
+  max-width:800px;
+  font-size:clamp(45px,6vw,76px);
+  line-height:1;
+  letter-spacing:-4px;
+  margin-bottom:23px;
+}
+
+.hero-main p{
+  max-width:690px;
+  color:var(--muted);
+  line-height:1.95;
+  font-size:15px;
+}
+
+.hero-actions{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  margin-top:30px;
+}
+
+.nova-card{
+  min-height:485px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:30px;
+  background:
+    radial-gradient(circle at center 30%,rgba(34,211,238,.11),transparent 35%),
+    var(--panel);
+}
+
+.nova-crystal{
+  width:150px;
+  height:150px;
+  position:relative;
+  display:grid;
+  place-items:center;
+  margin-bottom:27px;
+  border-radius:38px;
+  transform:rotate(30deg);
+  background:linear-gradient(135deg,#8b5cf6,#22d3ee);
+  box-shadow:
+    0 0 80px rgba(139,92,246,.22),
+    inset 0 0 35px rgba(255,255,255,.18);
+}
+
+.nova-crystal:before{
+  content:"";
+  position:absolute;
+  inset:19px;
+  border:2px solid rgba(255,255,255,.3);
+  border-radius:26px;
+}
+
+.nova-crystal span{
+  position:relative;
+  z-index:2;
+  transform:rotate(-30deg);
+  font-size:39px;
+  font-weight:950;
+}
+
+.nova-card h2{
+  font-size:29px;
+}
+
+.nova-card p{
+  color:var(--muted);
+  line-height:1.8;
+  font-size:14px;
+  margin-top:7px;
+}
+
+.section{
+  margin-top:32px;
+}
+
+.section-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:15px;
+  margin-bottom:15px;
+}
+
+.section-head h2{
+  font-size:22px;
+}
+
+.section-head p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:5px;
+}
+
+.text-button{
+  border:0;
+  background:transparent;
+  color:var(--cyan);
+}
+
+/* =========================================================
+   LEARNING / LABS
+========================================================= */
+
+.filters{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
 .filter{
- border:1px solid var(--line);
- color:var(--muted);
- background:transparent;
- padding:9px 13px;
- border-radius:10px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--muted);
+  padding:9px 13px;
+  border-radius:10px;
 }
-.filter.active{background:#fff;color:#08080b}
+
+.filter.active{
+  background:white;
+  color:#08080b;
+}
+
+.progress{
+  height:5px;
+  border-radius:99px;
+  background:#292a33;
+  overflow:hidden;
+  margin-top:18px;
+}
+
+.progress i{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,var(--purple),var(--cyan));
+}
+
+.meta{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:10px;
+}
 
 .lab-badge{
- display:inline-block;
- padding:5px 8px;
- border-radius:7px;
- font-size:10px;
- color:var(--green);
- background:rgba(52,211,153,.09);
- margin-bottom:14px;
+  display:inline-block;
+  color:var(--green);
+  background:rgba(52,211,153,.08);
+  border:1px solid rgba(52,211,153,.12);
+  padding:5px 8px;
+  border-radius:7px;
+  font-size:10px;
+  margin-bottom:14px;
 }
 
-/* VANTABOOK */
-.book-layout{
- display:grid;
- grid-template-columns:220px minmax(0,650px) 260px;
- gap:18px;
- align-items:start;
-}
-.book-side,.book-right{
- position:sticky;
- top:92px;
-}
-.side-card{
- border:1px solid var(--line);
- background:var(--card);
- border-radius:19px;
- padding:13px;
- margin-bottom:13px;
-}
-.side-item{
- width:100%;
- display:flex;
- align-items:center;
- gap:10px;
- padding:11px;
- color:#d7d7df;
- border:0;
- background:transparent;
- border-radius:11px;
- text-align:right;
-}
-.side-item:hover,.side-item.active{background:rgba(255,255,255,.06);color:white}
-.side-icon{
- width:30px;height:30px;
- border-radius:9px;
- display:grid;
- place-items:center;
- background:rgba(255,255,255,.06);
-}
-.book-main{min-width:0}
+/* =========================================================
+   VANTABOOK APP
+========================================================= */
 
-.stories{
- display:flex;
- gap:10px;
- overflow:auto;
- padding:2px 1px 8px;
- scrollbar-width:none;
-}
-.stories::-webkit-scrollbar{display:none}
-.story{
- flex:0 0 75px;
- text-align:center;
- border:0;
- background:none;
- color:white;
-}
-.story-ring{
- width:64px;height:64px;
- border-radius:50%;
- padding:2px;
- margin:auto auto 5px;
- background:linear-gradient(135deg,var(--purple),var(--pink),var(--cyan));
-}
-.story-ring div{
- width:100%;height:100%;
- border-radius:50%;
- display:grid;
- place-items:center;
- background:#191922;
- border:3px solid #0d0d12;
- font-weight:800;
-}
-.story small{
- display:block;
- color:var(--muted);
- overflow:hidden;
- text-overflow:ellipsis;
- white-space:nowrap;
+.book-shell{
+  min-height:720px;
+  border:1px solid var(--line);
+  border-radius:28px;
+  background:rgba(10,11,17,.64);
+  overflow:hidden;
+  box-shadow:var(--shadow);
 }
 
-.composer{padding:17px;margin-top:12px}
-.composer-top{display:flex;gap:10px}
-.composer textarea{
- width:100%;
- min-height:70px;
- resize:none;
- border:0;
- outline:0;
- background:transparent;
- color:white;
- padding:7px;
+.book-header{
+  height:68px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:0 18px;
+  border-bottom:1px solid var(--line);
+  background:rgba(13,14,21,.8);
+  backdrop-filter:blur(20px);
 }
+
+.book-brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:max-content;
+}
+
+.book-logo{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  font-weight:950;
+}
+
+.book-brand strong{
+  letter-spacing:1px;
+}
+
+.book-search{
+  flex:1;
+  max-width:400px;
+  margin:auto;
+  position:relative;
+}
+
+.book-search input{
+  width:100%;
+  border:1px solid var(--line);
+  outline:0;
+  color:white;
+  background:rgba(255,255,255,.045);
+  border-radius:12px;
+  padding:10px 14px;
+}
+
+.book-head-actions{
+  display:flex;
+  gap:7px;
+}
+
+.book-head-actions button{
+  width:38px;
+  height:38px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:white;
+  border-radius:11px;
+}
+
+.book-body{
+  display:grid;
+  grid-template-columns:205px minmax(0,650px) 245px;
+  justify-content:center;
+  gap:17px;
+  padding:20px;
+}
+
+.book-left,
+.book-right{
+  min-width:0;
+}
+
+.book-left{
+  position:sticky;
+  top:90px;
+  height:max-content;
+}
+
+.book-right{
+  position:sticky;
+  top:90px;
+  height:max-content;
+}
+
+.book-side-card{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:18px;
+  padding:11px;
+  margin-bottom:12px;
+}
+
+.book-side-item{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#c7c8d2;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  border-radius:11px;
+  text-align:right;
+}
+
+.book-side-item:hover,
+.book-side-item.active{
+  color:#fff;
+  background:rgba(255,255,255,.065);
+}
+
+.book-side-icon{
+  width:31px;
+  height:31px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:rgba(255,255,255,.05);
+}
+
+.book-center{
+  min-width:0;
+}
+
+.stories-row{
+  display:flex;
+  gap:9px;
+  overflow:auto;
+  scrollbar-width:none;
+  padding:1px 1px 8px;
+}
+
+.stories-row::-webkit-scrollbar{
+  display:none;
+}
+
+.story-item{
+  flex:0 0 70px;
+  border:0;
+  background:none;
+  color:white;
+  text-align:center;
+}
+
+.story-circle{
+  width:61px;
+  height:61px;
+  padding:2px;
+  margin:auto auto 5px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--pink),var(--cyan));
+}
+
+.story-circle-inner{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#171820;
+  border:3px solid #0c0d13;
+  font-weight:900;
+}
+
+.story-item small{
+  display:block;
+  color:var(--muted);
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+}
+
+.book-composer{
+  margin-top:10px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:18px;
+  padding:15px;
+}
+
+.composer-top{
+  display:flex;
+  gap:10px;
+}
+
+.mini-avatar{
+  flex:0 0 39px;
+  width:39px;
+  height:39px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  background:linear-gradient(135deg,#292b3b,#14151e);
+}
+
+.book-composer textarea{
+  width:100%;
+  min-height:64px;
+  resize:none;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:white;
+  line-height:1.7;
+}
+
+.composer-preview{
+  display:none;
+  overflow:hidden;
+  border-radius:14px;
+  margin-top:10px;
+  border:1px solid var(--line);
+  background:#050507;
+}
+
+.composer-preview img,
+.composer-preview video{
+  display:block;
+  width:100%;
+  max-height:380px;
+  object-fit:contain;
+}
+
 .composer-bottom{
- border-top:1px solid var(--line);
- margin-top:10px;
- padding-top:11px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:8px;
-}
-.media-tools{display:flex;gap:6px}
-.media-btn{
- border:0;
- background:rgba(255,255,255,.05);
- color:#ddd;
- border-radius:9px;
- padding:8px 10px;
-}
-.media-btn:hover{background:rgba(255,255,255,.1)}
-.file-input{display:none}
-
-.preview{
- margin-top:12px;
- border-radius:14px;
- overflow:hidden;
- border:1px solid var(--line);
- display:none;
-}
-.preview img,.preview video{
- width:100%;
- max-height:400px;
- object-fit:contain;
- background:#050507;
- display:block;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  border-top:1px solid var(--line);
+  padding-top:10px;
+  margin-top:7px;
 }
 
-.post{padding:18px;margin-top:13px}
+.media-actions{
+  display:flex;
+  gap:5px;
+}
+
+.media-button{
+  border:0;
+  background:rgba(255,255,255,.05);
+  color:#ddd;
+  border-radius:9px;
+  padding:8px 9px;
+}
+
+.file-input{
+  display:none;
+}
+
+.book-post{
+  margin-top:12px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:18px;
+  padding:17px;
+}
+
 .post-head{
- display:flex;
- align-items:center;
- gap:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
-.post-head-info{flex:1}
-.post-head-info strong{display:block}
-.post-head-info small{color:var(--muted)}
-.more{
- border:0;
- background:transparent;
- color:var(--muted);
- font-size:20px;
+
+.post-info{
+  flex:1;
 }
+
+.post-info strong{
+  display:block;
+}
+
+.post-info small{
+  display:block;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.post-more{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  font-size:18px;
+}
+
 .post-text{
- margin-top:15px;
- color:#e2e2e7;
- line-height:1.85;
- white-space:pre-wrap;
- word-break:break-word;
+  color:#e6e6ec;
+  line-height:1.85;
+  white-space:pre-wrap;
+  word-break:break-word;
+  margin-top:13px;
 }
+
 .post-media{
- margin-top:13px;
- overflow:hidden;
- border-radius:15px;
- background:#050507;
- border:1px solid var(--line);
+  margin-top:13px;
+  border-radius:15px;
+  overflow:hidden;
+  background:#050507;
+  border:1px solid var(--line);
 }
-.post-media img,.post-media video{
- width:100%;
- max-height:600px;
- display:block;
- object-fit:contain;
+
+.post-media img,
+.post-media video{
+  width:100%;
+  max-height:620px;
+  display:block;
+  object-fit:contain;
 }
+
 .post-actions{
- display:flex;
- gap:4px;
- border-top:1px solid var(--line);
- margin-top:15px;
- padding-top:11px;
+  display:flex;
+  gap:3px;
+  margin-top:13px;
+  padding-top:10px;
+  border-top:1px solid var(--line);
 }
+
 .post-actions button{
- flex:1;
- border:0;
- color:var(--muted);
- background:transparent;
- padding:9px;
- border-radius:9px;
+  flex:1;
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  border-radius:9px;
+  padding:9px 4px;
 }
-.post-actions button:hover{background:rgba(255,255,255,.05);color:#fff}
-.post-actions button.liked{color:#fb7185}
 
-.book-right h3{font-size:14px;margin-bottom:12px}
-.user-mini{
- display:flex;
- align-items:center;
- gap:10px;
- padding:8px 0;
+.post-actions button:hover{
+  background:rgba(255,255,255,.045);
+  color:#fff;
 }
-.user-mini .avatar{width:34px;height:34px;border-radius:10px}
-.user-mini div:last-child{font-size:13px}
-.user-mini small{display:block;color:var(--muted);margin-top:2px}
 
-/* NOVA */
+.post-actions .liked{
+  color:var(--red);
+}
+
+.empty-book{
+  margin-top:12px;
+  padding:35px 15px;
+  text-align:center;
+  color:var(--muted);
+  border:1px dashed var(--line);
+  border-radius:17px;
+}
+
+.book-right h3{
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+.mini-user{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:8px 0;
+}
+
+.mini-user .mini-avatar{
+  width:34px;
+  height:34px;
+  flex-basis:34px;
+  border-radius:10px;
+}
+
+.mini-user strong{
+  font-size:13px;
+}
+
+.mini-user small{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:2px;
+}
+
+/* =========================================================
+   NOVA
+========================================================= */
+
 .nova-layout{
- display:grid;
- grid-template-columns:310px minmax(0,1fr);
- gap:18px;
+  display:grid;
+  grid-template-columns:290px minmax(0,1fr);
+  gap:17px;
 }
-.nova-about,.chat{
- border:1px solid var(--line);
- background:var(--card);
- border-radius:23px;
-}
-.nova-about{
- padding:28px;
- text-align:center;
-}
-.nova-about p{
- color:var(--muted);
- line-height:1.8;
- font-size:14px;
-}
-.chat{
- min-height:590px;
- display:flex;
- flex-direction:column;
- overflow:hidden;
-}
-.chat-head{
- display:flex;
- align-items:center;
- gap:10px;
- padding:16px 19px;
- border-bottom:1px solid var(--line);
-}
-.online{
- width:9px;height:9px;
- background:var(--green);
- border-radius:50%;
-}
-.messages{
- flex:1;
- min-height:430px;
- padding:20px;
- display:flex;
- flex-direction:column;
- gap:11px;
- overflow:auto;
-}
-.msg{
- max-width:78%;
- padding:11px 14px;
- border-radius:15px;
- line-height:1.75;
- font-size:14px;
- white-space:pre-wrap;
-}
-.msg.nova{align-self:flex-start;background:#191922;color:#ddd}
-.msg.user{align-self:flex-end;background:#6d28d9;color:#fff}
-.chat-input{
- display:flex;
- gap:7px;
- padding:13px;
- border-top:1px solid var(--line);
-}
-.chat-input input{
- flex:1;
- min-width:0;
- background:#0a0a0f;
- color:#fff;
- border:1px solid var(--line);
- outline:none;
- border-radius:12px;
- padding:12px;
-}
-.chat-input button{width:48px;border:0;border-radius:12px;background:var(--purple);color:#fff}
 
-/* PROFILE */
-.profile-card{padding:28px}
-.profile-main{display:flex;align-items:center;gap:17px}
+.nova-profile{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:24px;
+  padding:27px;
+  text-align:center;
+}
+
+.nova-profile .nova-crystal{
+  width:125px;
+  height:125px;
+  margin:0 auto 24px;
+}
+
+.nova-profile p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.8;
+  margin-top:8px;
+}
+
+.nova-chat{
+  min-height:650px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:24px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.nova-chat-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:15px 18px;
+  border-bottom:1px solid var(--line);
+}
+
+.online-dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 12px rgba(52,211,153,.5);
+}
+
+.messages{
+  flex:1;
+  min-height:500px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:19px;
+  overflow:auto;
+}
+
+.message{
+  max-width:78%;
+  padding:11px 14px;
+  border-radius:15px;
+  line-height:1.75;
+  white-space:pre-wrap;
+  font-size:14px;
+}
+
+.message.nova{
+  align-self:flex-start;
+  background:#191a23;
+  color:#ddd;
+}
+
+.message.user{
+  align-self:flex-end;
+  background:#6d28d9;
+  color:white;
+}
+
+.nova-input{
+  display:flex;
+  gap:7px;
+  padding:12px;
+  border-top:1px solid var(--line);
+}
+
+.nova-input input{
+  flex:1;
+  min-width:0;
+  border:1px solid var(--line);
+  outline:0;
+  background:#090a0f;
+  color:white;
+  padding:12px;
+  border-radius:12px;
+}
+
+.nova-input button{
+  width:48px;
+  border:0;
+  border-radius:12px;
+  color:white;
+  background:var(--purple);
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile-card{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:24px;
+  padding:27px;
+}
+
+.profile-top{
+  display:flex;
+  align-items:center;
+  gap:17px;
+}
+
 .big-avatar{
- width:95px;height:95px;
- border-radius:28px;
- display:grid;
- place-items:center;
- font-size:32px;
- font-weight:950;
- background:linear-gradient(135deg,var(--purple),var(--pink));
+  width:96px;
+  height:96px;
+  border-radius:28px;
+  display:grid;
+  place-items:center;
+  font-size:32px;
+  font-weight:950;
+  background:linear-gradient(135deg,var(--purple),var(--pink));
 }
-.profile-main h1{margin-bottom:4px}
-.profile-main p{color:var(--muted)}
+
+.profile-top p{
+  color:var(--muted);
+  margin-top:5px;
+}
+
 .stats{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:10px;
- margin-top:18px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+  margin-top:19px;
 }
+
 .stat{
- padding:17px;
- border:1px solid var(--line);
- border-radius:15px;
- background:rgba(255,255,255,.025);
+  padding:16px;
+  border:1px solid var(--line);
+  border-radius:15px;
+  background:rgba(255,255,255,.025);
 }
-.stat strong{font-size:23px;display:block}
-.stat span{font-size:12px;color:var(--muted)}
+
+.stat strong{
+  display:block;
+  font-size:23px;
+}
+
+.stat span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+/* =========================================================
+   SETTINGS
+========================================================= */
 
 .settings-grid{
- display:grid;
- grid-template-columns:repeat(2,1fr);
- gap:13px;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
 }
-.setting{
- border:1px solid var(--line);
- background:var(--card);
- border-radius:18px;
- padding:18px;
+
+.setting-card{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:19px;
+  padding:18px;
 }
+
 .setting-row{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
 }
-.setting p{color:var(--muted);font-size:13px;margin-top:5px}
+
+.setting-row p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.7;
+  margin-top:5px;
+}
+
 .toggle{
- width:45px;height:25px;
- border:0;border-radius:99px;
- background:#33333d;
- position:relative;
+  width:46px;
+  height:26px;
+  position:relative;
+  border:0;
+  border-radius:99px;
+  background:#333541;
 }
+
 .toggle i{
- position:absolute;
- width:19px;height:19px;
- top:3px;right:3px;
- border-radius:50%;
- background:#fff;
- transition:.2s;
+  position:absolute;
+  top:3px;
+  right:3px;
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:white;
+  transition:.2s;
 }
-.toggle.on{background:var(--purple)}
-.toggle.on i{right:23px}
 
-/* MODAL */
+.toggle.on{
+  background:var(--purple);
+}
+
+.toggle.on i{
+  right:23px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
 .modal{
- position:fixed;
- inset:0;
- z-index:300;
- display:none;
- place-items:center;
- padding:18px;
- background:rgba(0,0,0,.72);
- backdrop-filter:blur(12px);
+  position:fixed;
+  inset:0;
+  z-index:9000;
+  display:none;
+  place-items:center;
+  padding:17px;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(14px);
 }
-.modal.show{display:grid}
+
+.modal.show{
+  display:grid;
+}
+
 .modal-box{
- width:min(520px,100%);
- max-height:90vh;
- overflow:auto;
- border:1px solid var(--line);
- border-radius:22px;
- background:#111118;
- padding:23px;
+  width:min(520px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid var(--line2);
+  border-radius:23px;
+  padding:23px;
+  background:#11121a;
+  box-shadow:var(--shadow);
 }
+
 .modal-head{
- display:flex;
- justify-content:space-between;
- align-items:center;
- margin-bottom:13px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
 }
+
 .close{
- width:35px;height:35px;
- border:0;
- border-radius:10px;
- color:#fff;
- background:rgba(255,255,255,.06);
-}
-.modal p{color:var(--muted);line-height:1.8;font-size:14px}
-.story-view{
- min-height:500px;
- border-radius:17px;
- overflow:hidden;
- background:#050507;
- display:flex;
- align-items:center;
- justify-content:center;
- margin-top:13px;
-}
-.story-view img,.story-view video{
- width:100%;
- max-height:600px;
- object-fit:contain;
+  width:36px;
+  height:36px;
+  border:0;
+  border-radius:10px;
+  color:white;
+  background:rgba(255,255,255,.06);
 }
 
-/* SEARCH */
-.search{
- width:100%;
- padding:14px 16px;
- background:#0d0d13;
- border:1px solid var(--line);
- color:white;
- outline:none;
- border-radius:13px;
- margin-bottom:15px;
+.modal-box p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.8;
 }
 
-/* EMPTY */
-.empty{
- padding:35px 15px;
- text-align:center;
- color:var(--muted);
- border:1px dashed var(--line);
- border-radius:17px;
+.modal-input{
+  width:100%;
+  border:1px solid var(--line);
+  outline:0;
+  background:#090a0f;
+  color:white;
+  padding:12px;
+  border-radius:12px;
+  margin-top:10px;
 }
 
-/* TOAST */
+/* =========================================================
+   VANTABOOK LOGIN
+   IMPORTANT: NOT SHOWN ON VANTA STARTUP
+========================================================= */
+
+.book-login-overlay{
+  position:fixed;
+  inset:0;
+  z-index:8000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at 30% 20%,rgba(139,92,246,.15),transparent 30%),
+    radial-gradient(circle at 75% 80%,rgba(236,72,153,.11),transparent 28%),
+    rgba(4,5,9,.96);
+  backdrop-filter:blur(30px);
+}
+
+.book-login-overlay.show{
+  display:flex;
+}
+
+.login-card{
+  width:min(470px,100%);
+  position:relative;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:30px;
+  padding:31px;
+  background:
+    linear-gradient(145deg,rgba(25,26,38,.94),rgba(12,13,20,.97));
+  box-shadow:
+    0 35px 100px rgba(0,0,0,.65),
+    0 0 80px rgba(139,92,246,.08);
+  animation:loginIn .4s ease;
+}
+
+@keyframes loginIn{
+  from{
+    opacity:0;
+    transform:translateY(18px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.login-close{
+  position:absolute;
+  top:17px;
+  left:17px;
+  width:35px;
+  height:35px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  color:#fff;
+  background:rgba(255,255,255,.05);
+}
+
+.login-brand{
+  text-align:center;
+}
+
+.login-logo{
+  width:70px;
+  height:70px;
+  margin:auto;
+  display:grid;
+  place-items:center;
+  border-radius:22px;
+  font-size:30px;
+  font-weight:950;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  box-shadow:0 15px 45px rgba(139,92,246,.25);
+}
+
+.login-brand h1{
+  margin-top:17px;
+  font-size:27px;
+}
+
+.login-brand p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
+  margin-top:6px;
+}
+
+.social-login{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:24px;
+}
+
+.social-btn{
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  border:1px solid var(--line2);
+  border-radius:13px;
+  color:white;
+  background:rgba(255,255,255,.045);
+}
+
+.social-icon{
+  width:21px;
+  height:21px;
+  display:grid;
+  place-items:center;
+  font-weight:900;
+}
+
+.divider{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  color:#686b78;
+  font-size:11px;
+  margin:22px 0;
+}
+
+.divider:before,
+.divider:after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:var(--line);
+}
+
+.login-form{
+  display:grid;
+  gap:10px;
+}
+
+.login-label{
+  color:#c9cad2;
+  font-size:12px;
+  margin-bottom:-4px;
+}
+
+.login-form input{
+  width:100%;
+  height:47px;
+  border:1px solid var(--line);
+  outline:0;
+  color:white;
+  background:#090a0f;
+  border-radius:12px;
+  padding:0 13px;
+}
+
+.login-form input:focus{
+  border-color:rgba(139,92,246,.55);
+  box-shadow:0 0 0 3px rgba(139,92,246,.08);
+}
+
+.login-submit{
+  width:100%;
+  height:48px;
+  margin-top:4px;
+  border:0;
+  border-radius:13px;
+  color:#fff;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--purple),var(--pink));
+}
+
+.login-note{
+  color:#6f7280;
+  text-align:center;
+  font-size:10px;
+  line-height:1.7;
+  margin-top:17px;
+}
+
+.login-error{
+  display:none;
+  color:#fecdd3;
+  background:rgba(251,113,133,.07);
+  border:1px solid rgba(251,113,133,.15);
+  border-radius:10px;
+  padding:9px;
+  font-size:11px;
+  margin-bottom:2px;
+}
+
+.login-error.show{
+  display:block;
+}
+
+/* =========================================================
+   VANTABOOK LOADING
+========================================================= */
+
+.book-loader{
+  position:fixed;
+  inset:0;
+  z-index:8500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background:#07080d;
+}
+
+.book-loader.show{
+  display:flex;
+}
+
+.book-loader-inner{
+  width:min(350px,85%);
+  text-align:center;
+}
+
+.book-loader-logo{
+  width:78px;
+  height:78px;
+  display:grid;
+  place-items:center;
+  margin:auto;
+  border-radius:25px;
+  font-size:34px;
+  font-weight:950;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+  animation:loaderPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes loaderPulse{
+  0%,100%{
+    transform:scale(1);
+    box-shadow:0 0 25px rgba(236,72,153,.14);
+  }
+  50%{
+    transform:scale(1.06);
+    box-shadow:0 0 65px rgba(139,92,246,.28);
+  }
+}
+
+.book-loader h2{
+  margin-top:20px;
+  letter-spacing:2px;
+}
+
+.book-loader p{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:6px;
+}
+
+.book-loader-bar{
+  height:4px;
+  background:rgba(255,255,255,.07);
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:23px;
+}
+
+.book-loader-bar i{
+  display:block;
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,var(--pink),var(--purple),var(--cyan));
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
 #toast{
- position:fixed;
- z-index:500;
- bottom:24px;
- left:50%;
- transform:translate(-50%,20px);
- opacity:0;
- pointer-events:none;
- padding:12px 17px;
- border-radius:12px;
- border:1px solid var(--line);
- background:#191922;
- color:white;
- transition:.25s;
+  position:fixed;
+  z-index:12000;
+  bottom:24px;
+  left:50%;
+  transform:translate(-50%,20px);
+  opacity:0;
+  pointer-events:none;
+  max-width:90%;
+  text-align:center;
+  padding:12px 17px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#191a23;
+  color:white;
+  transition:.25s;
 }
-#toast.show{opacity:1;transform:translate(-50%,0)}
 
-@media(max-width:1050px){
- .book-layout{grid-template-columns:190px minmax(0,1fr)}
- .book-right{display:none}
- .hero{grid-template-columns:1fr}
- .nova-layout{grid-template-columns:1fr}
+#toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
 }
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:1100px){
+
+  .book-body{
+    grid-template-columns:185px minmax(0,650px);
+  }
+
+  .book-right{
+    display:none;
+  }
+
+  .home-hero{
+    grid-template-columns:1fr;
+  }
+
+  .nova-layout{
+    grid-template-columns:1fr;
+  }
+}
+
 @media(max-width:760px){
- header{height:auto;min-height:68px;padding:10px 13px;flex-wrap:wrap}
- .nav{order:3;width:100%}
- .head-actions .icon-btn{display:none}
- main{padding:23px 13px 70px}
- .hero-main{padding:30px 23px}
- .hero h1{font-size:45px}
- .grid{grid-template-columns:1fr}
- .book-layout{display:block}
- .book-side{display:none}
- .stats{grid-template-columns:repeat(2,1fr)}
- .settings-grid{grid-template-columns:1fr}
- .profile-main{align-items:flex-start;flex-direction:column}
+
+  .main-header{
+    height:auto;
+    min-height:68px;
+    padding:10px 13px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .main-nav{
+    order:3;
+    width:100%;
+    justify-content:flex-start;
+  }
+
+  .header-icon{
+    display:none;
+  }
+
+  main{
+    padding:21px 12px 80px;
+  }
+
+  .hero-main{
+    min-height:440px;
+    padding:31px 23px;
+    border-radius:22px;
+  }
+
+  .hero-main h1{
+    font-size:45px;
+    letter-spacing:-2.5px;
+  }
+
+  .nova-card{
+    min-height:400px;
+    border-radius:22px;
+  }
+
+  .grid-3{
+    grid-template-columns:1fr;
+  }
+
+  .page-title h1{
+    font-size:34px;
+  }
+
+  .book-shell{
+    border-radius:20px;
+    border-left:0;
+    border-right:0;
+  }
+
+  .book-header{
+    height:auto;
+    min-height:65px;
+    padding:10px;
+    flex-wrap:wrap;
+  }
+
+  .book-search{
+    order:3;
+    width:100%;
+    max-width:none;
+  }
+
+  .book-body{
+    display:block;
+    padding:11px;
+  }
+
+  .book-left{
+    display:none;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .profile-top{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .settings-grid{
+    grid-template-columns:1fr;
+  }
+
+  .social-login{
+    grid-template-columns:1fr;
+  }
+
+  .login-card{
+    padding:26px 20px;
+    border-radius:24px;
+  }
+
+  .composer-bottom{
+    align-items:flex-end;
+    flex-direction:column;
+  }
+
+  .media-actions{
+    width:100%;
+  }
+
+  .media-button{
+    flex:1;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div id="app">
+<!-- =========================================================
+     SPACE BACKGROUND
+========================================================= -->
 
-<header>
+<div class="space">
+  <div class="orbit"></div>
+  <div class="orbit2"></div>
+  <i class="star"></i>
+  <i class="star"></i>
+  <i class="star"></i>
+  <i class="star"></i>
+  <i class="star"></i>
+  <i class="star"></i>
+  <i class="star"></i>
+  <i class="star"></i>
+  <i class="star"></i>
+  <i class="star"></i>
+</div>
+
+<!-- =========================================================
+     VANTA STARTUP BOOT
+     THIS IS NOT LOGIN
+========================================================= -->
+
+<div class="boot-screen" id="bootScreen">
+  <div class="boot-inner">
+    <div class="boot-logo">V</div>
+    <div class="boot-title">VANTA</div>
+    <div class="boot-sub">CYBER • LEARN • BUILD • CONNECT</div>
+
+    <div class="boot-progress">
+      <i></i>
+    </div>
+
+    <div class="boot-status" id="bootStatus">
+      Initializing VANTA...
+    </div>
+  </div>
+</div>
+
+<!-- =========================================================
+     MAIN APP
+========================================================= -->
+
+<div class="app-shell">
+
+<header class="main-header">
 
   <div class="brand" onclick="go('home')">
-    <div class="logo">V</div>
-    <strong>VANTA</strong>
+    <div class="brand-logo">V</div>
+    <div class="brand-name">VANTA</div>
   </div>
 
-  <nav class="nav">
-    <button data-page="home" class="active">الرئيسية</button>
-    <button data-page="learn">التعلم</button>
-    <button data-page="labs">المختبرات</button>
-    <button data-page="book">VANTABOOK</button>
-    <button data-page="nova">NOVA</button>
+  <nav class="main-nav">
+
+    <button data-page="home" class="active">
+      الرئيسية
+    </button>
+
+    <button data-page="learn">
+      التعلم
+    </button>
+
+    <button data-page="labs">
+      المختبرات
+    </button>
+
+    <button data-page="nova">
+      NOVA
+    </button>
+
+    <button data-page="book">
+      VANTABOOK
+    </button>
+
   </nav>
 
-  <div class="head-actions">
-    <button class="icon-btn" onclick="go('settings')">⚙</button>
-    <div class="avatar" onclick="go('profile')">A</div>
+  <div class="header-actions">
+
+    <button
+      class="header-icon"
+      onclick="go('settings')"
+      title="الإعدادات"
+    >
+      ⚙
+    </button>
+
+    <div
+      class="header-avatar"
+      onclick="go('profile')"
+    >
+      A
+    </div>
+
   </div>
 
 </header>
 
 <main>
 
-<!-- ================= HOME ================= -->
+<!-- =========================================================
+     HOME
+========================================================= -->
 
 <section id="home" class="view active">
 
-  <div class="hero">
+  <div class="home-hero">
 
     <div class="hero-main">
 
       <div class="eyebrow">
-        VANTA CYBER • LEARN • BUILD • CONNECT
+        VANTA CYBER PLATFORM
       </div>
 
       <h1>
-        مستقبلك في
-        <span class="gradient">الأمن السيبراني.</span>
+        ابنِ مستقبلك
+        <span class="gradient">
+          في عالم التقنية.
+        </span>
       </h1>
 
       <p>
-        VANTA منصة تجمع التعلم العملي، المختبرات، التحديات،
-        NOVA وVANTABOOK في تجربة واحدة.
+        VANTA تجمع التعلم العملي، الأمن السيبراني،
+        المختبرات، NOVA ومجتمع VANTABOOK في تجربة واحدة.
       </p>
 
-      <div class="actions">
-        <button class="primary" onclick="go('learn')">
+      <div class="hero-actions">
+
+        <button
+          class="primary"
+          onclick="go('learn')"
+        >
           ابدأ التعلم
         </button>
 
-        <button class="secondary" onclick="go('book')">
+        <button
+          class="secondary"
+          onclick="enterBook()"
+        >
           افتح VANTABOOK
         </button>
+
       </div>
 
     </div>
 
-    <div class="nova-hero">
+    <div class="nova-card">
 
-      <div class="nova-core">
+      <div class="nova-crystal">
         <span>N</span>
       </div>
 
       <h2>NOVA</h2>
 
       <p>
-        رفيقك داخل VANTA للتعلم والفهم وحل المشكلات.
+        رفيقك الذكي داخل VANTA.
       </p>
 
       <button
@@ -856,27 +1938,38 @@ main{
 
   </div>
 
-
   <div class="section">
 
     <div class="section-head">
+
       <div>
         <h2>استمر من هنا</h2>
-        <p>مساراتك التعليمية الحالية.</p>
+        <p>مسارات تعليمية جاهزة لك.</p>
       </div>
-      <button class="text-btn" onclick="go('learn')">
-        كل المسارات
+
+      <button
+        class="text-button"
+        onclick="go('learn')"
+      >
+        عرض الكل
       </button>
+
     </div>
 
-    <div class="grid">
+    <div class="grid-3">
 
       <div class="card">
         <div class="card-icon">01</div>
         <h3>Cybersecurity Fundamentals</h3>
-        <p>الأساسيات التي تحتاجها لبناء قاعدة قوية.</p>
-        <div class="progress"><i style="width:72%"></i></div>
-        <div class="card-meta">
+        <p>
+          الأساسيات التي تحتاجها لبناء قاعدة قوية.
+        </p>
+
+        <div class="progress">
+          <i style="width:72%"></i>
+        </div>
+
+        <div class="meta">
           <span>72%</span>
           <span>18 درس</span>
         </div>
@@ -885,9 +1978,15 @@ main{
       <div class="card">
         <div class="card-icon">02</div>
         <h3>Networking</h3>
-        <p>الشبكات، البروتوكولات، DNS، TCP/IP والمنافذ.</p>
-        <div class="progress"><i style="width:41%"></i></div>
-        <div class="card-meta">
+        <p>
+          DNS وTCP/IP والمنافذ والبروتوكولات.
+        </p>
+
+        <div class="progress">
+          <i style="width:41%"></i>
+        </div>
+
+        <div class="meta">
           <span>41%</span>
           <span>24 درس</span>
         </div>
@@ -896,9 +1995,15 @@ main{
       <div class="card">
         <div class="card-icon">03</div>
         <h3>Web Security</h3>
-        <p>تعلم أساسيات حماية تطبيقات الويب.</p>
-        <div class="progress"><i style="width:19%"></i></div>
-        <div class="card-meta">
+        <p>
+          أساسيات حماية تطبيقات الويب.
+        </p>
+
+        <div class="progress">
+          <i style="width:19%"></i>
+        </div>
+
+        <div class="meta">
           <span>19%</span>
           <span>30 درس</span>
         </div>
@@ -908,37 +2013,48 @@ main{
 
   </div>
 
-
   <div class="section">
 
     <div class="section-head">
+
       <div>
         <h2>VANTABOOK</h2>
-        <p>مجتمع VANTA في مكان واحد.</p>
+        <p>شبكة VANTA الاجتماعية.</p>
       </div>
-      <button class="text-btn" onclick="go('book')">
+
+      <button
+        class="text-button"
+        onclick="enterBook()"
+      >
         دخول
       </button>
+
     </div>
 
-    <div class="grid">
+    <div class="grid-3">
 
       <div class="card">
         <div class="card-icon">📸</div>
         <h3>Stories</h3>
-        <p>صور وفيديوهات تختفي بعد 24 ساعة.</p>
+        <p>
+          شارك الصور والفيديوهات في Stories.
+        </p>
       </div>
 
       <div class="card">
         <div class="card-icon">🎥</div>
         <h3>Videos</h3>
-        <p>شارك فيديوهاتك ومحتواك مع المجتمع.</p>
+        <p>
+          فيديوهات ومحتوى من مجتمع VANTA.
+        </p>
       </div>
 
       <div class="card">
         <div class="card-icon">👥</div>
         <h3>Communities</h3>
-        <p>مجتمعات متخصصة للنقاش والتعلم.</p>
+        <p>
+          مجتمعات للنقاش والتعلم والمشاركة.
+        </p>
       </div>
 
     </div>
@@ -947,128 +2063,198 @@ main{
 
 </section>
 
-
-<!-- ================= LEARN ================= -->
+<!-- =========================================================
+     LEARN
+========================================================= -->
 
 <section id="learn" class="view">
 
-  <div class="title">
+  <div class="page-title">
     <h1>التعلم</h1>
-    <p>تعلم من الأساسيات إلى المستوى المتقدم.</p>
+    <p>
+      من الأساسيات إلى المستويات المتقدمة.
+    </p>
   </div>
 
   <div class="filters">
+
     <button class="filter active">الكل</button>
-    <button class="filter">الشبكات</button>
+    <button class="filter">Cybersecurity</button>
+    <button class="filter">Networking</button>
     <button class="filter">Linux</button>
     <button class="filter">Web</button>
     <button class="filter">Defense</button>
-    <button class="filter">Cryptography</button>
+
   </div>
 
-  <div class="grid">
+  <div class="grid-3">
 
     <div class="card">
       <div class="card-icon">01</div>
       <h3>Cybersecurity Fundamentals</h3>
-      <p>مقدمة كاملة في الأمن السيبراني.</p>
-      <div class="progress"><i style="width:72%"></i></div>
-      <div class="card-meta"><span>72%</span><span>18 درس</span></div>
+      <p>
+        مقدمة كاملة في الأمن السيبراني.
+      </p>
+      <div class="progress">
+        <i style="width:72%"></i>
+      </div>
+      <div class="meta">
+        <span>72%</span>
+        <span>18 درس</span>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-icon">02</div>
       <h3>Networking</h3>
-      <p>تعلم كيف تتواصل الأجهزة والشبكات.</p>
-      <div class="progress"><i style="width:41%"></i></div>
-      <div class="card-meta"><span>41%</span><span>24 درس</span></div>
+      <p>
+        فهم الشبكات من البداية.
+      </p>
+      <div class="progress">
+        <i style="width:41%"></i>
+      </div>
+      <div class="meta">
+        <span>41%</span>
+        <span>24 درس</span>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-icon">03</div>
       <h3>Linux</h3>
-      <p>الطرفية، الملفات، الصلاحيات والعمليات.</p>
-      <div class="progress"><i style="width:25%"></i></div>
-      <div class="card-meta"><span>25%</span><span>20 درس</span></div>
+      <p>
+        الطرفية والملفات والصلاحيات والعمليات.
+      </p>
+      <div class="progress">
+        <i style="width:25%"></i>
+      </div>
+      <div class="meta">
+        <span>25%</span>
+        <span>20 درس</span>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-icon">04</div>
       <h3>Web Security</h3>
-      <p>أساسيات أمان تطبيقات الويب.</p>
-      <div class="progress"><i style="width:12%"></i></div>
-      <div class="card-meta"><span>12%</span><span>30 درس</span></div>
+      <p>
+        مفاهيم أمن تطبيقات الويب.
+      </p>
+      <div class="progress">
+        <i style="width:12%"></i>
+      </div>
+      <div class="meta">
+        <span>12%</span>
+        <span>30 درس</span>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-icon">05</div>
       <h3>Cryptography</h3>
-      <p>Hashing وEncryption والمفاهيم الأساسية.</p>
-      <div class="progress"><i style="width:0%"></i></div>
-      <div class="card-meta"><span>لم تبدأ</span><span>16 درس</span></div>
+      <p>
+        Hashing وEncryption والمفاهيم الأساسية.
+      </p>
+      <div class="progress">
+        <i style="width:0"></i>
+      </div>
+      <div class="meta">
+        <span>لم تبدأ</span>
+        <span>16 درس</span>
+      </div>
     </div>
 
     <div class="card">
       <div class="card-icon">06</div>
       <h3>Blue Team</h3>
-      <p>المراقبة، الحماية والاستجابة للحوادث.</p>
-      <div class="progress"><i style="width:0%"></i></div>
-      <div class="card-meta"><span>لم تبدأ</span><span>21 درس</span></div>
+      <p>
+        المراقبة والحماية والاستجابة للحوادث.
+      </p>
+      <div class="progress">
+        <i style="width:0"></i>
+      </div>
+      <div class="meta">
+        <span>لم تبدأ</span>
+        <span>21 درس</span>
+      </div>
     </div>
 
   </div>
 
 </section>
 
-
-<!-- ================= LABS ================= -->
+<!-- =========================================================
+     LABS
+========================================================= -->
 
 <section id="labs" class="view">
 
-  <div class="title">
+  <div class="page-title">
     <h1>Cyber Labs</h1>
-    <p>تطبيق المفاهيم بدل حفظها فقط.</p>
+    <p>
+      تطبيق المفاهيم بشكل عملي وآمن.
+    </p>
   </div>
 
-  <div class="grid">
+  <div class="grid-3">
 
     <div class="card">
       <span class="lab-badge">BEGINNER</span>
       <h3>Password Security</h3>
-      <p>افهم ما يجعل كلمة المرور قوية أو ضعيفة.</p>
-      <button class="primary" style="margin-top:17px"
-        onclick="lab('Password Security')">
-        تشغيل
+      <p>
+        افهم خصائص كلمات المرور القوية.
+      </p>
+      <button
+        class="primary"
+        style="margin-top:16px"
+        onclick="openLab('Password Security')"
+      >
+        تشغيل المختبر
       </button>
     </div>
 
     <div class="card">
       <span class="lab-badge">BEGINNER</span>
       <h3>Hashing</h3>
-      <p>تعلم فكرة Hashing وتطبيقاتها الأمنية.</p>
-      <button class="primary" style="margin-top:17px"
-        onclick="lab('Hashing')">
-        تشغيل
+      <p>
+        افهم فكرة Hashing واستخداماتها.
+      </p>
+      <button
+        class="primary"
+        style="margin-top:16px"
+        onclick="openLab('Hashing')"
+      >
+        تشغيل المختبر
       </button>
     </div>
 
     <div class="card">
       <span class="lab-badge">INTERMEDIATE</span>
       <h3>Phishing Awareness</h3>
-      <p>تعرف على علامات رسائل التصيد الإلكتروني.</p>
-      <button class="primary" style="margin-top:17px"
-        onclick="lab('Phishing Awareness')">
-        تشغيل
+      <p>
+        تعلم اكتشاف علامات التصيد.
+      </p>
+      <button
+        class="primary"
+        style="margin-top:16px"
+        onclick="openLab('Phishing Awareness')"
+      >
+        تشغيل المختبر
       </button>
     </div>
 
     <div class="card">
       <span class="lab-badge">INTERMEDIATE</span>
       <h3>Network Analysis</h3>
-      <p>استكشف أساسيات حركة البيانات والشبكات.</p>
-      <button class="primary" style="margin-top:17px"
-        onclick="lab('Network Analysis')">
-        تشغيل
+      <p>
+        أساسيات تحليل حركة البيانات.
+      </p>
+      <button
+        class="primary"
+        style="margin-top:16px"
+        onclick="openLab('Network Analysis')"
+      >
+        تشغيل المختبر
       </button>
     </div>
 
@@ -1076,253 +2262,292 @@ main{
 
 </section>
 
-
-<!-- ================= VANTABOOK ================= -->
+<!-- =========================================================
+     VANTABOOK
+     Separate internal application
+========================================================= -->
 
 <section id="book" class="view">
 
-  <div class="title">
-    <h1>VANTABOOK</h1>
-    <p>مكان الناس، الأفكار، الصور، الفيديوهات والمجتمعات.</p>
-  </div>
+  <div class="book-shell">
 
-  <div class="book-layout">
+    <div class="book-header">
 
-    <aside class="book-side">
+      <div class="book-brand">
+        <div class="book-logo">B</div>
+        <strong>VANTABOOK</strong>
+      </div>
 
-      <div class="side-card">
+      <div class="book-search">
+        <input
+          id="bookSearch"
+          type="search"
+          placeholder="ابحث في VANTABOOK..."
+          oninput="searchBook(this.value)"
+        >
+      </div>
 
-        <button class="side-item active" onclick="bookTab('feed',this)">
-          <span class="side-icon">⌂</span>
-          الرئيسية
+      <div class="book-head-actions">
+
+        <button
+          onclick="toast('الإشعارات الحقيقية تحتاج Backend.')"
+          title="الإشعارات"
+        >
+          ♡
         </button>
 
-        <button class="side-item" onclick="bookTab('explore',this)">
-          <span class="side-icon">⌕</span>
-          استكشاف
+        <button
+          onclick="bookSettings()"
+          title="الإعدادات"
+        >
+          ⚙
         </button>
 
-        <button class="side-item" onclick="bookTab('videos',this)">
-          <span class="side-icon">▶</span>
-          الفيديوهات
-        </button>
-
-        <button class="side-item" onclick="bookTab('communities',this)">
-          <span class="side-icon">♟</span>
-          المجتمعات
-        </button>
-
-        <button class="side-item" onclick="go('profile')">
-          <span class="side-icon">●</span>
-          ملفي
-        </button>
-
-        <button class="side-item" onclick="go('settings')">
-          <span class="side-icon">⚙</span>
-          إعدادات VANTABOOK
+        <button
+          onclick="leaveBook()"
+          title="العودة إلى VANTA"
+        >
+          ←
         </button>
 
       </div>
 
-    </aside>
+    </div>
 
+    <div class="book-body">
 
-    <div class="book-main">
+      <aside class="book-left">
 
-      <!-- STORIES -->
+        <div class="book-side-card">
 
-      <div class="stories" id="stories">
+          <button
+            class="book-side-item active"
+            data-book-tab="feed"
+            onclick="bookTab('feed',this)"
+          >
+            <span class="book-side-icon">⌂</span>
+            الرئيسية
+          </button>
 
-        <button class="story" onclick="newStory()">
-          <div class="story-ring">
-            <div>+</div>
-          </div>
-          <small>قصتك</small>
-        </button>
+          <button
+            class="book-side-item"
+            data-book-tab="explore"
+            onclick="bookTab('explore',this)"
+          >
+            <span class="book-side-icon">⌕</span>
+            استكشاف
+          </button>
 
-        <button class="story" onclick="viewStory(0)">
-          <div class="story-ring">
-            <div>A</div>
-          </div>
-          <small>Ali</small>
-        </button>
+          <button
+            class="book-side-item"
+            data-book-tab="videos"
+            onclick="bookTab('videos',this)"
+          >
+            <span class="book-side-icon">▶</span>
+            الفيديوهات
+          </button>
 
-        <button class="story" onclick="viewStory(1)">
-          <div class="story-ring">
-            <div>N</div>
-          </div>
-          <small>NOVA</small>
-        </button>
+          <button
+            class="book-side-item"
+            data-book-tab="communities"
+            onclick="bookTab('communities',this)"
+          >
+            <span class="book-side-icon">♟</span>
+            المجتمعات
+          </button>
 
-        <button class="story" onclick="viewStory(2)">
-          <div class="story-ring">
-            <div>V</div>
-          </div>
-          <small>VANTA</small>
-        </button>
-
-      </div>
-
-
-      <!-- COMPOSER -->
-
-      <div class="composer">
-
-        <div class="composer-top">
-
-          <div class="avatar">A</div>
-
-          <textarea
-            id="postText"
-            placeholder="ماذا تريد أن تنشر؟"
-          ></textarea>
-
-        </div>
-
-        <div class="preview" id="mediaPreview"></div>
-
-        <div class="composer-bottom">
-
-          <div class="media-tools">
-
-            <label class="media-btn">
-              📷 صورة
-              <input
-                id="imageInput"
-                class="file-input"
-                type="file"
-                accept="image/*"
-                onchange="selectMedia(this,'image')"
-              >
-            </label>
-
-            <label class="media-btn">
-              🎥 فيديو
-              <input
-                id="videoInput"
-                class="file-input"
-                type="file"
-                accept="video/*"
-                onchange="selectMedia(this,'video')"
-              >
-            </label>
-
-            <button class="media-btn" onclick="newStory()">
-              ⭕ Story
-            </button>
-
-          </div>
-
-          <button class="primary" onclick="publish()">
-            نشر
+          <button
+            class="book-side-item"
+            onclick="go('profile')"
+          >
+            <span class="book-side-icon">●</span>
+            ملفي
           </button>
 
         </div>
 
+      </aside>
+
+      <div class="book-center">
+
+        <div
+          class="stories-row"
+          id="storiesRow"
+        ></div>
+
+        <div class="book-composer">
+
+          <div class="composer-top">
+
+            <div class="mini-avatar">
+              A
+            </div>
+
+            <textarea
+              id="postText"
+              placeholder="ماذا تريد أن تشارك؟"
+            ></textarea>
+
+          </div>
+
+          <div
+            class="composer-preview"
+            id="composerPreview"
+          ></div>
+
+          <div class="composer-bottom">
+
+            <div class="media-actions">
+
+              <label class="media-button">
+                📷 صورة
+                <input
+                  id="imageInput"
+                  class="file-input"
+                  type="file"
+                  accept="image/*"
+                  onchange="selectMedia(this,'image')"
+                >
+              </label>
+
+              <label class="media-button">
+                🎥 فيديو
+                <input
+                  id="videoInput"
+                  class="file-input"
+                  type="file"
+                  accept="video/*"
+                  onchange="selectMedia(this,'video')"
+                >
+              </label>
+
+              <button
+                class="media-button"
+                onclick="createStory()"
+              >
+                ⭕ Story
+              </button>
+
+            </div>
+
+            <button
+              class="primary"
+              onclick="publishPost()"
+            >
+              نشر
+            </button>
+
+          </div>
+
+        </div>
+
+        <div id="bookContent"></div>
+
       </div>
 
+      <aside class="book-right">
 
-      <!-- FEED -->
+        <div class="book-side-card">
 
-      <div id="bookContent"></div>
+          <h3>اقتراحات لك</h3>
+
+          <div class="mini-user">
+            <div class="mini-avatar">N</div>
+            <div>
+              <strong>NOVA</strong>
+              <small>VANTA AI</small>
+            </div>
+          </div>
+
+          <div class="mini-user">
+            <div class="mini-avatar">C</div>
+            <div>
+              <strong>Cyber Hub</strong>
+              <small>Security</small>
+            </div>
+          </div>
+
+          <div class="mini-user">
+            <div class="mini-avatar">L</div>
+            <div>
+              <strong>Linux</strong>
+              <small>Community</small>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="book-side-card">
+
+          <h3>المجتمعات</h3>
+
+          <p style="color:var(--muted);font-size:12px;line-height:2">
+            Cybersecurity<br>
+            Linux<br>
+            Programming<br>
+            Minecraft
+          </p>
+
+        </div>
+
+      </aside>
 
     </div>
-
-
-    <aside class="book-right">
-
-      <div class="side-card">
-
-        <h3>اقتراحات لك</h3>
-
-        <div class="user-mini">
-          <div class="avatar">N</div>
-          <div>
-            <strong>NOVA</strong>
-            <small>VANTA AI</small>
-          </div>
-        </div>
-
-        <div class="user-mini">
-          <div class="avatar">C</div>
-          <div>
-            <strong>Cyber Hub</strong>
-            <small>Security</small>
-          </div>
-        </div>
-
-        <div class="user-mini">
-          <div class="avatar">L</div>
-          <div>
-            <strong>Linux</strong>
-            <small>Community</small>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="side-card">
-        <h3>مجتمعات</h3>
-        <p style="color:var(--muted);font-size:13px;line-height:1.8">
-          Cybersecurity<br>
-          Linux<br>
-          Programming<br>
-          Minecraft
-        </p>
-      </div>
-
-    </aside>
 
   </div>
 
 </section>
 
-
-<!-- ================= NOVA ================= -->
+<!-- =========================================================
+     NOVA
+========================================================= -->
 
 <section id="nova" class="view">
 
   <div class="nova-layout">
 
-    <div class="nova-about">
+    <div class="nova-profile">
 
-      <div class="nova-core" style="margin:5px auto 28px">
+      <div class="nova-crystal">
         <span>N</span>
       </div>
 
       <h1>NOVA</h1>
 
-      <p style="margin-top:9px">
+      <p>
         المساعد الذكي داخل VANTA.
-        النسخة الحالية تعمل محليًا بدون API.
+        هذه النسخة تعمل محليًا.
+        ربط AI الحقيقي يتم لاحقًا عبر Backend.
       </p>
 
-      <button class="secondary"
+      <button
+        class="secondary"
         style="margin-top:20px"
-        onclick="clearNova()">
-        مسح المحادثة
+        onclick="clearNova()"
+      >
+        محادثة جديدة
       </button>
 
     </div>
 
+    <div class="nova-chat">
 
-    <div class="chat">
-
-      <div class="chat-head">
-        <span class="online"></span>
+      <div class="nova-chat-head">
+        <span class="online-dot"></span>
         <strong>NOVA Online</strong>
       </div>
 
-      <div class="messages" id="messages">
-
-        <div class="msg nova">
+      <div
+        class="messages"
+        id="messages"
+      >
+        <div class="message nova">
           أهلًا بك في VANTA.
-          أنا NOVA. اسألني عن الشبكات أو Linux أو الأمن السيبراني.
+          أنا NOVA. اسألني عن Linux أو الشبكات أو الأمن السيبراني.
         </div>
-
       </div>
 
-      <div class="chat-input">
+      <div class="nova-input">
 
         <input
           id="novaInput"
@@ -1330,7 +2555,9 @@ main{
           onkeydown="if(event.key==='Enter')sendNova()"
         >
 
-        <button onclick="sendNova()">➤</button>
+        <button onclick="sendNova()">
+          ➤
+        </button>
 
       </div>
 
@@ -1340,26 +2567,31 @@ main{
 
 </section>
 
-
-<!-- ================= PROFILE ================= -->
+<!-- =========================================================
+     PROFILE
+========================================================= -->
 
 <section id="profile" class="view">
 
-  <div class="title">
+  <div class="page-title">
     <h1>صفحتي</h1>
-    <p>صفحة Ali Yaser الخاصة في VANTA.</p>
+    <p>
+      مساحة Ali Yaser داخل VANTA.
+    </p>
   </div>
 
   <div class="profile-card">
 
-    <div class="profile-main">
+    <div class="profile-top">
 
-      <div class="big-avatar">A</div>
+      <div class="big-avatar">
+        A
+      </div>
 
       <div>
         <h1>Ali Yaser</h1>
         <p>@ali_yr_1</p>
-        <p style="margin-top:7px">
+        <p style="margin-top:8px">
           Founder • Developer • VANTA
         </p>
       </div>
@@ -1392,17 +2624,16 @@ main{
 
   </div>
 
-
   <div class="section">
 
     <div class="section-head">
       <div>
         <h2>إنجازاتي</h2>
-        <p>تقدمك داخل VANTA.</p>
+        <p>رحلتك داخل VANTA.</p>
       </div>
     </div>
 
-    <div class="grid">
+    <div class="grid-3">
 
       <div class="card">
         <div class="card-icon">★</div>
@@ -1428,28 +2659,36 @@ main{
 
 </section>
 
-
-<!-- ================= SETTINGS ================= -->
+<!-- =========================================================
+     SETTINGS
+========================================================= -->
 
 <section id="settings" class="view">
 
-  <div class="title">
+  <div class="page-title">
     <h1>الإعدادات</h1>
-    <p>إعدادات VANTA العامة.</p>
+    <p>
+      إعدادات VANTA العامة.
+    </p>
   </div>
 
   <div class="settings-grid">
 
-    <div class="setting">
+    <div class="setting-card">
 
       <div class="setting-row">
 
         <div>
           <strong>المظهر الداكن</strong>
-          <p>استخدام واجهة VANTA الداكنة.</p>
+          <p>
+            واجهة VANTA الداكنة.
+          </p>
         </div>
 
-        <button class="toggle on" onclick="toggleSetting(this)">
+        <button
+          class="toggle on"
+          onclick="toggleSetting(this)"
+        >
           <i></i>
         </button>
 
@@ -1457,17 +2696,21 @@ main{
 
     </div>
 
-
-    <div class="setting">
+    <div class="setting-card">
 
       <div class="setting-row">
 
         <div>
-          <strong>حفظ البيانات محليًا</strong>
-          <p>حفظ بيانات التجربة على الجهاز.</p>
+          <strong>الحفظ المحلي</strong>
+          <p>
+            حفظ بيانات التجربة على جهازك.
+          </p>
         </div>
 
-        <button class="toggle on" onclick="toggleSetting(this)">
+        <button
+          class="toggle on"
+          onclick="toggleSetting(this)"
+        >
           <i></i>
         </button>
 
@@ -1475,16 +2718,21 @@ main{
 
     </div>
 
-    <div class="setting">
+    <div class="setting-card">
 
       <div class="setting-row">
 
         <div>
-          <strong>إعدادات VANTABOOK</strong>
-          <p>الخصوصية والإشعارات والمحتوى.</p>
+          <strong>VANTABOOK</strong>
+          <p>
+            إعدادات التطبيق الاجتماعي.
+          </p>
         </div>
 
-        <button class="secondary" onclick="bookSettings()">
+        <button
+          class="secondary"
+          onclick="bookSettings()"
+        >
           فتح
         </button>
 
@@ -1492,16 +2740,21 @@ main{
 
     </div>
 
-    <div class="setting">
+    <div class="setting-card">
 
       <div class="setting-row">
 
         <div>
           <strong>بيانات التجربة</strong>
-          <p>مسح المنشورات والقصص المحلية.</p>
+          <p>
+            حذف المنشورات والـStories المحلية.
+          </p>
         </div>
 
-        <button class="danger" onclick="clearLocalData()">
+        <button
+          class="danger"
+          onclick="clearLocalData()"
+        >
           مسح
         </button>
 
@@ -1514,18 +2767,175 @@ main{
 </section>
 
 </main>
+
 </div>
 
+<!-- =========================================================
+     VANTABOOK LOGIN
+     ONLY APPEARS WHEN ENTERING VANTABOOK
+========================================================= -->
 
-<!-- ================= MODAL ================= -->
+<div
+  class="book-login-overlay"
+  id="bookLogin"
+>
 
-<div class="modal" id="modal">
+  <div class="login-card">
+
+    <button
+      class="login-close"
+      onclick="closeBookLogin()"
+    >
+      ×
+    </button>
+
+    <div class="login-brand">
+
+      <div class="login-logo">
+        B
+      </div>
+
+      <h1>
+        مرحبًا بك في VANTABOOK
+      </h1>
+
+      <p>
+        ادخل إلى مجتمع VANTA وشارك أفكارك وصورك وفيديوهاتك.
+      </p>
+
+    </div>
+
+    <div class="social-login">
+
+      <button
+        class="social-btn"
+        onclick="socialLogin('Google')"
+      >
+        <span class="social-icon">G</span>
+        Google
+      </button>
+
+      <button
+        class="social-btn"
+        onclick="socialLogin('Apple')"
+      >
+        <span class="social-icon"></span>
+        Apple
+      </button>
+
+    </div>
+
+    <div class="divider">
+      أو باستخدام البريد الإلكتروني
+    </div>
+
+    <div
+      class="login-error"
+      id="loginError"
+    ></div>
+
+    <form
+      class="login-form"
+      onsubmit="emailLogin(event)"
+    >
+
+      <label class="login-label">
+        البريد الإلكتروني
+      </label>
+
+      <input
+        id="loginEmail"
+        type="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+        required
+      >
+
+      <label class="login-label">
+        كلمة المرور
+      </label>
+
+      <input
+        id="loginPassword"
+        type="password"
+        autocomplete="current-password"
+        placeholder="••••••••"
+        minlength="4"
+        required
+      >
+
+      <button
+        class="login-submit"
+        type="submit"
+      >
+        تسجيل الدخول
+      </button>
+
+    </form>
+
+    <div class="login-note">
+      الحسابات الحالية تجريبية ومحلية.
+      Google وApple جاهزان للربط مع Authentication لاحقًا.
+      لا يتم وضع أي API Key داخل هذا الملف.
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     VANTABOOK LOADER
+========================================================= -->
+
+<div
+  class="book-loader"
+  id="bookLoader"
+>
+
+  <div class="book-loader-inner">
+
+    <div class="book-loader-logo">
+      B
+    </div>
+
+    <h2>VANTABOOK</h2>
+
+    <p id="bookLoaderText">
+      Preparing your space...
+    </p>
+
+    <div class="book-loader-bar">
+      <i id="bookLoaderProgress"></i>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div
+  class="modal"
+  id="modal"
+>
 
   <div class="modal-box">
 
     <div class="modal-head">
-      <h2 id="modalTitle">VANTA</h2>
-      <button class="close" onclick="closeModal()">×</button>
+
+      <h2 id="modalTitle">
+        VANTA
+      </h2>
+
+      <button
+        class="close"
+        onclick="closeModal()"
+      >
+        ×
+      </button>
+
     </div>
 
     <div id="modalBody"></div>
@@ -1534,22 +2944,21 @@ main{
 
 </div>
 
-
 <div id="toast"></div>
 
-
 <script>
-
 /* =========================================================
    VANTA CORE
 ========================================================= */
 
 const pages = document.querySelectorAll(".view");
-const nav = document.querySelectorAll(".nav button");
+const mainNav = document.querySelectorAll(".main-nav button");
 
 function go(page){
 
-  pages.forEach(x=>x.classList.remove("active"));
+  pages.forEach(p=>{
+    p.classList.remove("active");
+  });
 
   const target=document.getElementById(page);
 
@@ -1557,21 +2966,76 @@ function go(page){
 
   target.classList.add("active");
 
-  nav.forEach(x=>{
-    x.classList.toggle("active",x.dataset.page===page);
+  mainNav.forEach(btn=>{
+    btn.classList.toggle(
+      "active",
+      btn.dataset.page===page
+    );
   });
 
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 
-  if(page==="book")renderFeed();
+  if(page==="book"){
+    renderStories();
+    renderBookFeed();
+  }
 }
 
-nav.forEach(btn=>{
+mainNav.forEach(btn=>{
   btn.addEventListener("click",()=>{
+    if(btn.dataset.page==="book"){
+      enterBook();
+      return;
+    }
+
     go(btn.dataset.page);
   });
 });
 
+/* =========================================================
+   BOOT
+========================================================= */
+
+const bootStatus=document.getElementById("bootStatus");
+
+const bootMessages=[
+  "Initializing VANTA...",
+  "Loading neural interface...",
+  "Preparing NOVA...",
+  "Loading Cyber Labs...",
+  "Preparing VANTABOOK...",
+  "VANTA ready."
+];
+
+let bootIndex=0;
+
+const bootInterval=setInterval(()=>{
+
+  if(bootIndex<bootMessages.length){
+
+    bootStatus.textContent=
+      bootMessages[bootIndex];
+
+    bootIndex++;
+
+  }else{
+
+    clearInterval(bootInterval);
+
+  }
+
+},450);
+
+setTimeout(()=>{
+
+  document
+    .getElementById("bootScreen")
+    .classList.add("hide");
+
+},3100);
 
 /* =========================================================
    TOAST
@@ -1584,6 +3048,7 @@ function toast(text){
   const el=document.getElementById("toast");
 
   el.textContent=text;
+
   el.classList.add("show");
 
   clearTimeout(toastTimer);
@@ -1593,79 +3058,270 @@ function toast(text){
   },2400);
 }
 
-
 /* =========================================================
    MODAL
 ========================================================= */
 
 function openModal(title,html){
 
-  document.getElementById("modalTitle").textContent=title;
-  document.getElementById("modalBody").innerHTML=html;
-  document.getElementById("modal").classList.add("show");
+  document.getElementById("modalTitle")
+    .textContent=title;
 
+  document.getElementById("modalBody")
+    .innerHTML=html;
+
+  document.getElementById("modal")
+    .classList.add("show");
 }
 
 function closeModal(){
-  document.getElementById("modal").classList.remove("show");
+
+  document.getElementById("modal")
+    .classList.remove("show");
 }
 
-document.getElementById("modal").addEventListener("click",e=>{
-  if(e.target.id==="modal")closeModal();
-});
+document
+  .getElementById("modal")
+  .addEventListener("click",e=>{
+    if(e.target.id==="modal"){
+      closeModal();
+    }
+  });
 
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape")closeModal();
+  if(e.key==="Escape"){
+    closeModal();
+  }
 });
-
 
 /* =========================================================
    LOCAL DATA
 ========================================================= */
 
-const KEY="vanta_demo_data_v1";
+const DATA_KEY="vanta_v2_local_data";
 
-let data=loadData();
+let appData=loadData();
 
 function loadData(){
 
   try{
 
-    const saved=localStorage.getItem(KEY);
+    const saved=
+      localStorage.getItem(DATA_KEY);
 
     if(saved){
 
       const parsed=JSON.parse(saved);
 
-      return {
-        posts:Array.isArray(parsed.posts)?parsed.posts:[],
-        stories:Array.isArray(parsed.stories)?parsed.stories:[]
+      return{
+        posts:Array.isArray(parsed.posts)
+          ?parsed.posts:[],
+        stories:Array.isArray(parsed.stories)
+          ?parsed.stories:[],
+        bookUser:parsed.bookUser||null
       };
 
     }
 
   }catch(e){}
 
-  return {
+  return{
     posts:[],
-    stories:[]
+    stories:[],
+    bookUser:null
   };
-
 }
 
 function saveData(){
 
   try{
-    localStorage.setItem(KEY,JSON.stringify(data));
+
+    localStorage.setItem(
+      DATA_KEY,
+      JSON.stringify(appData)
+    );
+
   }catch(e){
-    toast("تعذر حفظ البيانات محليًا.");
+
+    toast(
+      "تعذر الحفظ. قد تكون مساحة التخزين ممتلئة."
+    );
+
   }
 
 }
 
+/* =========================================================
+   VANTABOOK ENTRY
+========================================================= */
+
+function enterBook(){
+
+  /*
+    IMPORTANT:
+    VANTA itself does NOT require login.
+
+    Only VANTABOOK checks its own local session.
+  */
+
+  if(appData.bookUser){
+
+    openBook();
+
+    return;
+  }
+
+  document
+    .getElementById("bookLogin")
+    .classList.add("show");
+
+}
+
+function closeBookLogin(){
+
+  document
+    .getElementById("bookLogin")
+    .classList.remove("show");
+
+}
+
+function socialLogin(provider){
+
+  /*
+    These buttons are intentionally functional:
+    they explain the current state instead of pretending
+    Google/Apple authentication is already connected.
+
+    Later this function can be replaced with:
+    Supabase Auth / Firebase Auth.
+  */
+
+  showLoginError(
+    provider+
+    " جاهز للربط. Authentication الحقيقي سيتم ربطه لاحقًا."
+  );
+
+}
+
+function showLoginError(message){
+
+  const el=
+    document.getElementById("loginError");
+
+  el.textContent=message;
+
+  el.classList.add("show");
+
+}
+
+function emailLogin(event){
+
+  event.preventDefault();
+
+  const email=
+    document.getElementById("loginEmail")
+      .value.trim();
+
+  const password=
+    document.getElementById("loginPassword")
+      .value;
+
+  const error=
+    document.getElementById("loginError");
+
+  error.classList.remove("show");
+
+  if(!email || !password){
+
+    showLoginError(
+      "أدخل البريد الإلكتروني وكلمة المرور."
+    );
+
+    return;
+  }
+
+  /*
+    LOCAL DEMO SESSION
+  */
+
+  appData.bookUser={
+    email:email,
+    name:email
+      .split("@")[0]
+      .replace(/[._-]/g," "),
+    loginAt:Date.now()
+  };
+
+  saveData();
+
+  closeBookLogin();
+
+  openBook();
+
+}
+
+function openBook(){
+
+  const loader=
+    document.getElementById("bookLoader");
+
+  const progress=
+    document.getElementById(
+      "bookLoaderProgress"
+    );
+
+  const loaderText=
+    document.getElementById(
+      "bookLoaderText"
+    );
+
+  loader.classList.add("show");
+
+  progress.style.transition="none";
+  progress.style.width="0%";
+
+  setTimeout(()=>{
+    progress.style.transition=
+      "width 1.15s cubic-bezier(.2,.8,.2,1)";
+    progress.style.width="100%";
+  },50);
+
+  loaderText.textContent=
+    "Loading your VANTABOOK...";
+
+  setTimeout(()=>{
+    loaderText.textContent=
+      "Preparing your feed...";
+  },420);
+
+  setTimeout(()=>{
+    loaderText.textContent=
+      "Almost there...";
+  },800);
+
+  setTimeout(()=>{
+
+    loader.classList.remove("show");
+
+    go("book");
+
+    renderStories();
+    renderBookFeed();
+
+  },1350);
+
+}
+
+function leaveBook(){
+
+  go("home");
+
+  toast("عدت إلى VANTA.");
+
+}
 
 /* =========================================================
-   VANTABOOK MEDIA
+   MEDIA
 ========================================================= */
 
 let selectedMedia=null;
@@ -1680,11 +3336,13 @@ function selectMedia(input,type){
 
   if(file.size>max){
 
-    toast("الملف أكبر من 15MB في النسخة المحلية.");
+    toast(
+      "النسخة المحلية تسمح بملفات حتى 15MB."
+    );
 
     input.value="";
-    return;
 
+    return;
   }
 
   const reader=new FileReader();
@@ -1697,7 +3355,7 @@ function selectMedia(input,type){
       data:reader.result
     };
 
-    showPreview();
+    renderComposerPreview();
 
   };
 
@@ -1705,16 +3363,19 @@ function selectMedia(input,type){
 
 }
 
-function showPreview(){
+function renderComposerPreview(){
 
-  const box=document.getElementById("mediaPreview");
+  const box=
+    document.getElementById(
+      "composerPreview"
+    );
 
   if(!selectedMedia){
 
     box.style.display="none";
     box.innerHTML="";
-    return;
 
+    return;
   }
 
   box.style.display="block";
@@ -1722,105 +3383,100 @@ function showPreview(){
   if(selectedMedia.type==="image"){
 
     box.innerHTML=`
-      <img src="${selectedMedia.data}" alt="preview">
+      <img
+        src="${selectedMedia.data}"
+        alt="preview"
+      >
     `;
 
   }else{
 
     box.innerHTML=`
-      <video src="${selectedMedia.data}" controls></video>
+      <video
+        src="${selectedMedia.data}"
+        controls
+        playsinline
+      ></video>
     `;
 
   }
 
 }
 
-
 /* =========================================================
-   PUBLISH POST
+   POSTS
 ========================================================= */
 
-function publish(){
+function publishPost(){
 
-  const text=document.getElementById("postText").value.trim();
+  const text=
+    document.getElementById("postText")
+      .value.trim();
 
   if(!text && !selectedMedia){
 
-    toast("اكتب شيئًا أو اختر صورة/فيديو.");
+    toast(
+      "اكتب شيئًا أو اختر صورة/فيديو."
+    );
 
     return;
-
   }
 
   const post={
+
     id:Date.now(),
+
     user:"Ali Yaser",
+
     username:"@ali_yr_1",
+
     text:text,
+
     media:selectedMedia,
+
     liked:false,
+
     likes:0,
+
     saved:false,
-    time:"الآن"
+
+    comments:[],
+
+    created:Date.now()
+
   };
 
-  data.posts.unshift(post);
+  appData.posts.unshift(post);
 
   saveData();
 
-  document.getElementById("postText").value="";
+  document.getElementById(
+    "postText"
+  ).value="";
 
   selectedMedia=null;
 
-  document.getElementById("imageInput").value="";
-  document.getElementById("videoInput").value="";
+  document.getElementById(
+    "imageInput"
+  ).value="";
 
-  showPreview();
+  document.getElementById(
+    "videoInput"
+  ).value="";
 
-  renderFeed();
+  renderComposerPreview();
+
+  renderBookFeed();
 
   updateProfileStats();
 
-  toast("تم نشر المنشور.");
+  toast("تم نشر المنشور محليًا.");
 
 }
 
+function escapeHTML(value){
 
-/* =========================================================
-   FEED
-========================================================= */
-
-function renderFeed(){
-
-  const box=document.getElementById("bookContent");
-
-  if(!box)return;
-
-  const posts=data.posts;
-
-  if(!posts.length){
-
-    box.innerHTML=`
-
-      <div class="empty" style="margin-top:13px">
-        لا توجد منشوراتك بعد.
-        <br>
-        اكتب أول منشور لك من الأعلى.
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-  box.innerHTML=posts.map(post=>postHTML(post)).join("");
-
-}
-
-function escapeHTML(str){
-
-  return String(str||"")
+  return String(value||"")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
@@ -1839,7 +3495,10 @@ function postHTML(post){
 
       media=`
         <div class="post-media">
-          <img src="${post.media.data}" alt="">
+          <img
+            src="${post.media.data}"
+            alt=""
+          >
         </div>
       `;
 
@@ -1847,7 +3506,11 @@ function postHTML(post){
 
       media=`
         <div class="post-media">
-          <video src="${post.media.data}" controls playsinline></video>
+          <video
+            src="${post.media.data}"
+            controls
+            playsinline
+          ></video>
         </div>
       `;
 
@@ -1857,28 +3520,44 @@ function postHTML(post){
 
   return`
 
-    <article class="post">
+    <article class="book-post">
 
       <div class="post-head">
 
-        <div class="avatar">A</div>
+        <div class="mini-avatar">
+          A
+        </div>
 
-        <div class="post-head-info">
-          <strong>${escapeHTML(post.user)}</strong>
-          <small>${escapeHTML(post.username)} • ${post.time}</small>
+        <div class="post-info">
+
+          <strong>
+            ${escapeHTML(post.user)}
+          </strong>
+
+          <small>
+            ${escapeHTML(post.username)}
+            • ${formatTime(post.created)}
+          </small>
+
         </div>
 
         <button
-          class="more"
+          class="post-more"
           onclick="postMenu(${post.id})"
-        >•••</button>
+        >
+          •••
+        </button>
 
       </div>
 
       ${
         post.text
-        ? `<div class="post-text">${escapeHTML(post.text)}</div>`
-        : ""
+        ?
+        `<div class="post-text">
+          ${escapeHTML(post.text)}
+        </div>`
+        :
+        ""
       }
 
       ${media}
@@ -1889,20 +3568,27 @@ function postHTML(post){
           class="${post.liked?"liked":""}"
           onclick="likePost(${post.id})"
         >
-          ${post.liked?"♥":"♡"} ${post.likes}
+          ${post.liked?"♥":"♡"}
+          ${post.likes}
         </button>
 
-        <button onclick="commentPost(${post.id})">
-          💬 تعليق
+        <button
+          onclick="commentPost(${post.id})"
+        >
+          💬
+          ${post.comments?.length||0}
         </button>
 
         <button
           onclick="savePost(${post.id})"
         >
-          ${post.saved?"🔖":"▫"} حفظ
+          ${post.saved?"🔖":"▫"}
+          حفظ
         </button>
 
-        <button onclick="sharePost(${post.id})">
+        <button
+          onclick="sharePost(${post.id})"
+        >
           ↗ مشاركة
         </button>
 
@@ -1914,13 +3600,79 @@ function postHTML(post){
 
 }
 
+function formatTime(timestamp){
+
+  const diff=
+    Date.now()-timestamp;
+
+  const minutes=
+    Math.floor(diff/60000);
+
+  if(minutes<1)return"الآن";
+
+  if(minutes<60){
+    return"منذ "+minutes+" د";
+  }
+
+  const hours=
+    Math.floor(minutes/60);
+
+  if(hours<24){
+    return"منذ "+hours+" س";
+  }
+
+  const days=
+    Math.floor(hours/24);
+
+  return"منذ "+days+" يوم";
+
+}
 
 /* =========================================================
-   LIKE / SAVE / COMMENT / SHARE
+   FEED
+========================================================= */
+
+function renderBookFeed(){
+
+  const box=
+    document.getElementById(
+      "bookContent"
+    );
+
+  if(!box)return;
+
+  if(!appData.posts.length){
+
+    box.innerHTML=`
+      <div class="empty-book">
+        <strong style="color:#fff">
+          لا توجد منشورات بعد
+        </strong>
+        <br><br>
+        كن أول شخص ينشر شيئًا في VANTABOOK.
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML=
+    appData.posts
+      .map(postHTML)
+      .join("");
+
+}
+
+/* =========================================================
+   LIKE / SAVE
 ========================================================= */
 
 function findPost(id){
-  return data.posts.find(x=>x.id===id);
+
+  return appData.posts.find(
+    p=>p.id===id
+  );
+
 }
 
 function likePost(id){
@@ -1931,10 +3683,12 @@ function likePost(id){
 
   post.liked=!post.liked;
 
-  post.likes += post.liked ? 1 : -1;
+  post.likes+=
+    post.liked?1:-1;
 
   saveData();
-  renderFeed();
+
+  renderBookFeed();
 
 }
 
@@ -1947,50 +3701,14 @@ function savePost(id){
   post.saved=!post.saved;
 
   saveData();
-  renderFeed();
 
-  toast(post.saved?"تم حفظ المنشور.":"تم إلغاء الحفظ.");
+  renderBookFeed();
 
-}
-
-function commentPost(id){
-
-  const post=findPost(id);
-
-  if(!post)return;
-
-  openModal(
-    "التعليقات",
-    `
-      <p>التعليقات الحقيقية بين المستخدمين تحتاج Database.</p>
-
-      <input
-        id="commentInput"
-        class="search"
-        placeholder="اكتب تعليقًا..."
-        style="margin-top:14px"
-      >
-
-      <button
-        class="primary"
-        onclick="localComment()"
-      >
-        إضافة محليًا
-      </button>
-    `
+  toast(
+    post.saved
+      ?"تم حفظ المنشور."
+      :"تم إلغاء الحفظ."
   );
-
-}
-
-function localComment(){
-
-  const input=document.getElementById("commentInput");
-
-  if(!input || !input.value.trim())return;
-
-  toast("تمت إضافة التعليق في النسخة التجريبية.");
-
-  closeModal();
 
 }
 
@@ -2000,9 +3718,13 @@ function sharePost(id){
 
   if(!post)return;
 
-  const text=post.text || "منشور من VANTABOOK";
+  const text=
+    post.text||
+    "منشور من VANTABOOK";
 
-  if(navigator.share){
+  if(
+    navigator.share
+  ){
 
     navigator.share({
       title:"VANTABOOK",
@@ -2011,22 +3733,162 @@ function sharePost(id){
 
   }else{
 
-    navigator.clipboard?.writeText(text);
+    if(
+      navigator.clipboard
+    ){
 
-    toast("تم نسخ محتوى المنشور.");
+      navigator.clipboard
+        .writeText(text);
+
+      toast(
+        "تم نسخ محتوى المنشور."
+      );
+
+    }else{
+
+      toast(
+        "المشاركة غير متاحة على هذا المتصفح."
+      );
+
+    }
 
   }
 
 }
+
+/* =========================================================
+   COMMENTS
+========================================================= */
+
+function commentPost(id){
+
+  const post=findPost(id);
+
+  if(!post)return;
+
+  const comments=
+    post.comments||[];
+
+  openModal(
+    "التعليقات",
+    `
+
+      <div
+        style="
+          display:flex;
+          flex-direction:column;
+          gap:9px;
+          margin-bottom:15px;
+        "
+      >
+
+        ${
+          comments.length
+          ?
+          comments.map(c=>`
+            <div
+              style="
+                padding:10px;
+                border:1px solid var(--line);
+                border-radius:11px;
+                background:rgba(255,255,255,.03)
+              "
+            >
+              <strong style="font-size:12px">
+                ${escapeHTML(c.user)}
+              </strong>
+
+              <div
+                style="
+                  color:#ccc;
+                  font-size:12px;
+                  margin-top:4px
+                "
+              >
+                ${escapeHTML(c.text)}
+              </div>
+            </div>
+          `).join("")
+          :
+          `<p>لا توجد تعليقات بعد.</p>`
+        }
+
+      </div>
+
+      <input
+        id="commentInput"
+        class="modal-input"
+        placeholder="اكتب تعليقًا..."
+      >
+
+      <button
+        class="primary"
+        style="margin-top:10px;width:100%"
+        onclick="addComment(${id})"
+      >
+        إضافة تعليق
+      </button>
+
+    `
+  );
+
+}
+
+function addComment(id){
+
+  const input=
+    document.getElementById(
+      "commentInput"
+    );
+
+  if(!input)return;
+
+  const text=input.value.trim();
+
+  if(!text){
+
+    toast("اكتب تعليقًا أولًا.");
+
+    return;
+  }
+
+  const post=findPost(id);
+
+  if(!post)return;
+
+  if(!post.comments){
+    post.comments=[];
+  }
+
+  post.comments.push({
+    user:"Ali Yaser",
+    text:text,
+    created:Date.now()
+  });
+
+  saveData();
+
+  closeModal();
+
+  renderBookFeed();
+
+  toast("تمت إضافة التعليق محليًا.");
+
+}
+
+/* =========================================================
+   POST MENU
+========================================================= */
 
 function postMenu(id){
 
   openModal(
     "خيارات المنشور",
     `
+
       <button
-        class="secondary"
-        style="width:100%;margin-bottom:8px"
+        class="danger"
+        style="width:100%"
         onclick="deletePost(${id})"
       >
         حذف المنشور
@@ -2034,11 +3896,12 @@ function postMenu(id){
 
       <button
         class="secondary"
-        style="width:100%"
+        style="width:100%;margin-top:8px"
         onclick="closeModal()"
       >
         إلغاء
       </button>
+
     `
   );
 
@@ -2046,71 +3909,87 @@ function postMenu(id){
 
 function deletePost(id){
 
-  data.posts=data.posts.filter(x=>x.id!==id);
+  appData.posts=
+    appData.posts.filter(
+      p=>p.id!==id
+    );
 
   saveData();
-  renderFeed();
-  updateProfileStats();
+
   closeModal();
+
+  renderBookFeed();
+
+  updateProfileStats();
 
   toast("تم حذف المنشور.");
 
 }
 
-
 /* =========================================================
    STORIES
 ========================================================= */
 
-function newStory(){
+function createStory(){
 
   openModal(
     "إنشاء Story",
     `
+
       <p>
-        اختر صورة أو فيديو. في النسخة المحلية ستظهر القصة على هذا الجهاز.
+        اختر صورة أو فيديو من جهازك.
+        سيتم حفظه محليًا في هذه النسخة.
       </p>
 
       <label
         class="secondary"
-        style="display:inline-block;margin-top:14px"
+        style="
+          display:block;
+          text-align:center;
+          margin-top:15px;
+        "
       >
         اختيار صورة أو فيديو
 
         <input
           id="storyInput"
-          type="file"
           class="file-input"
+          type="file"
           accept="image/*,video/*"
-          onchange="createStory(this)"
+          onchange="saveStory(this)"
         >
 
       </label>
+
     `
   );
 
 }
 
-function createStory(input){
+function saveStory(input){
 
   const file=input.files[0];
 
   if(!file)return;
 
-  const max=15*1024*1024;
+  const max=
+    15*1024*1024;
 
   if(file.size>max){
 
-    toast("الملف أكبر من 15MB.");
-    return;
+    toast(
+      "الحد المحلي 15MB."
+    );
 
+    return;
   }
 
-  const reader=new FileReader();
+  const reader=
+    new FileReader();
 
   reader.onload=()=>{
 
-    data.stories.unshift({
+    appData.stories.unshift({
 
       id:Date.now(),
 
@@ -2118,8 +3997,9 @@ function createStory(input){
 
       media:{
         type:file.type.startsWith("video/")
-          ? "video"
-          : "image",
+          ?"video"
+          :"image",
+
         data:reader.result
       },
 
@@ -2133,7 +4013,9 @@ function createStory(input){
 
     renderStories();
 
-    toast("تم نشر الـ Story.");
+    toast(
+      "تم نشر الـStory محليًا."
+    );
 
   };
 
@@ -2143,105 +4025,199 @@ function createStory(input){
 
 function renderStories(){
 
-  const box=document.getElementById("stories");
+  const box=
+    document.getElementById(
+      "storiesRow"
+    );
 
   if(!box)return;
 
-  const mine=data.stories;
+  const mine=
+    appData.stories.slice(0,8);
 
   box.innerHTML=`
 
-    <button class="story" onclick="newStory()">
-      <div class="story-ring">
-        <div>+</div>
+    <button
+      class="story-item"
+      onclick="createStory()"
+    >
+
+      <div class="story-circle">
+
+        <div class="story-circle-inner">
+          +
+        </div>
+
       </div>
+
       <small>قصتك</small>
+
     </button>
 
     ${
-      mine.slice(0,8).map((s,i)=>`
+      mine.map((story,index)=>`
 
         <button
-          class="story"
-          onclick="viewUserStory(${i})"
+          class="story-item"
+          onclick="viewMyStory(${index})"
         >
-          <div class="story-ring">
-            <div>A</div>
+
+          <div class="story-circle">
+
+            <div class="story-circle-inner">
+              A
+            </div>
+
           </div>
+
           <small>Ali</small>
+
         </button>
 
       `).join("")
     }
 
-    <button class="story" onclick="viewStory(0)">
-      <div class="story-ring">
-        <div>N</div>
+    <button
+      class="story-item"
+      onclick="demoStory('NOVA')"
+    >
+
+      <div class="story-circle">
+
+        <div class="story-circle-inner">
+          N
+        </div>
+
       </div>
+
       <small>NOVA</small>
+
     </button>
 
-    <button class="story" onclick="viewStory(1)">
-      <div class="story-ring">
-        <div>V</div>
+    <button
+      class="story-item"
+      onclick="demoStory('VANTA')"
+    >
+
+      <div class="story-circle">
+
+        <div class="story-circle-inner">
+          V
+        </div>
+
       </div>
+
       <small>VANTA</small>
+
     </button>
 
   `;
 
 }
 
-function viewUserStory(index){
+function viewMyStory(index){
 
-  const story=data.stories[index];
+  const story=
+    appData.stories[index];
 
   if(!story)return;
 
-  const media=story.media.type==="image"
-    ? `<img src="${story.media.data}" alt="">`
-    : `<video src="${story.media.data}" controls autoplay playsinline></video>`;
+  let media="";
+
+  if(
+    story.media.type==="image"
+  ){
+
+    media=`
+      <img
+        src="${story.media.data}"
+        style="
+          width:100%;
+          max-height:600px;
+          object-fit:contain;
+          border-radius:15px;
+        "
+      >
+    `;
+
+  }else{
+
+    media=`
+      <video
+        src="${story.media.data}"
+        controls
+        autoplay
+        playsinline
+        style="
+          width:100%;
+          max-height:600px;
+          object-fit:contain;
+          border-radius:15px;
+        "
+      ></video>
+    `;
+
+  }
 
   openModal(
     "Ali Yaser • Story",
-    `<div class="story-view">${media}</div>`
+    media
   );
 
 }
 
-function viewStory(index){
-
-  const examples=[
-    {
-      title:"NOVA",
-      text:"تعلم شيئًا جديدًا اليوم."
-    },
-    {
-      title:"VANTA",
-      text:"Welcome to VANTA."
-    }
-  ];
-
-  const item=examples[index];
-
-  if(!item)return;
+function demoStory(name){
 
   openModal(
-    item.title,
+    name,
     `
-      <div class="story-view">
-        <div style="text-align:center;padding:30px">
-          <div class="nova-core" style="margin:0 auto 25px">
+
+      <div
+        style="
+          min-height:430px;
+          display:grid;
+          place-items:center;
+          text-align:center;
+          border-radius:16px;
+          background:
+            radial-gradient(
+              circle,
+              rgba(139,92,246,.2),
+              transparent 50%
+            ),
+            #08090e;
+        "
+      >
+
+        <div>
+
+          <div
+            class="nova-crystal"
+            style="
+              margin:0 auto 25px;
+              width:110px;
+              height:110px;
+            "
+          >
             <span>N</span>
           </div>
-          <h2>${item.text}</h2>
+
+          <h2>
+            ${
+              name==="NOVA"
+              ?"تعلم شيئًا جديدًا اليوم."
+              :"Welcome to VANTA."
+            }
+          </h2>
+
         </div>
+
       </div>
+
     `
   );
 
 }
-
 
 /* =========================================================
    BOOK TABS
@@ -2249,56 +4225,75 @@ function viewStory(index){
 
 function bookTab(type,button){
 
-  document.querySelectorAll(".side-item")
-    .forEach(x=>x.classList.remove("active"));
+  document
+    .querySelectorAll(".book-side-item")
+    .forEach(btn=>{
+      btn.classList.remove("active");
+    });
 
-  if(button)button.classList.add("active");
+  if(button){
+    button.classList.add("active");
+  }
+
+  const box=
+    document.getElementById(
+      "bookContent"
+    );
 
   if(type==="feed"){
 
-    renderFeed();
+    renderBookFeed();
+
     return;
-
   }
-
-  const box=document.getElementById("bookContent");
 
   if(type==="videos"){
 
-    const videos=data.posts.filter(
-      x=>x.media?.type==="video"
-    );
+    const videos=
+      appData.posts.filter(
+        p=>p.media?.type==="video"
+      );
 
-    box.innerHTML=videos.length
-      ? videos.map(postHTML).join("")
-      : `<div class="empty">لا توجد فيديوهات حتى الآن.</div>`;
+    box.innerHTML=
+      videos.length
+      ?
+      videos.map(postHTML).join("")
+      :
+      `<div class="empty-book">
+        لا توجد فيديوهات بعد.
+      </div>`;
 
     return;
-
   }
 
   if(type==="explore"){
 
     box.innerHTML=`
 
-      <div class="grid" style="margin-top:13px">
+      <div class="grid-3">
 
         <div class="card">
           <div class="card-icon">🛡</div>
           <h3>Cybersecurity</h3>
-          <p>استكشف محتوى الأمن السيبراني.</p>
+          <p>
+            محتوى الأمن السيبراني.
+          </p>
         </div>
 
         <div class="card">
-          <div class="card-icon">⌘</div>
+          <div class="card-icon">&lt;/&gt;</div>
           <h3>Programming</h3>
-          <p>مجتمع البرمجة والتطوير.</p>
+          <p>
+            البرمجة والتطوير.
+          </p>
         </div>
 
         <div class="card">
           <div class="card-icon">🎮</div>
           <h3>Gaming</h3>
-          <p>محتوى الألعاب والمجتمعات.</p>
+          <p>
+            الألعاب والمجتمعات.
+          </p>
         </div>
 
       </div>
@@ -2306,19 +4301,37 @@ function bookTab(type,button){
     `;
 
     return;
-
   }
 
   if(type==="communities"){
 
     box.innerHTML=`
 
-      <div class="grid" style="margin-top:13px">
+      <div class="grid-3">
 
-        ${communityCard("Cybersecurity","🛡","12.4K")}
-        ${communityCard("Linux","⌘","8.2K")}
-        ${communityCard("Programming","</>","15.8K")}
-        ${communityCard("Minecraft","◆","6.1K")}
+        ${communityCard(
+          "Cybersecurity",
+          "🛡",
+          "12.4K"
+        )}
+
+        ${communityCard(
+          "Linux",
+          "⌘",
+          "8.2K"
+        )}
+
+        ${communityCard(
+          "Programming",
+          "</>",
+          "15.8K"
+        )}
+
+        ${communityCard(
+          "Minecraft",
+          "◆",
+          "6.1K"
+        )}
 
       </div>
 
@@ -2328,21 +4341,34 @@ function bookTab(type,button){
 
 }
 
-function communityCard(name,icon,count){
+function communityCard(
+  name,
+  icon,
+  count
+){
 
   return`
 
     <div class="card">
 
-      <div class="card-icon">${icon}</div>
+      <div class="card-icon">
+        ${icon}
+      </div>
 
-      <h3>${name}</h3>
+      <h3>
+        ${name}
+      </h3>
 
-      <p>${count} عضو</p>
+      <p>
+        ${count} عضو
+      </p>
 
       <button
         class="secondary"
-        style="margin-top:15px;width:100%"
+        style="
+          margin-top:15px;
+          width:100%
+        "
         onclick="joinCommunity('${name}')"
       >
         انضمام
@@ -2356,52 +4382,127 @@ function communityCard(name,icon,count){
 
 function joinCommunity(name){
 
-  toast("انضممت إلى مجتمع "+name+" محليًا.");
+  toast(
+    "تم الانضمام إلى "+
+    name+
+    " محليًا."
+  );
 
 }
 
-
 /* =========================================================
-   NOVA
+   SEARCH
 ========================================================= */
 
-function addNovaMessage(text,type){
+function searchBook(query){
 
-  const box=document.getElementById("messages");
+  const q=
+    String(query||"")
+      .trim()
+      .toLowerCase();
 
-  const div=document.createElement("div");
+  if(!q){
 
-  div.className="msg "+type;
+    renderBookFeed();
+
+    return;
+  }
+
+  const results=
+    appData.posts.filter(post=>{
+
+      const text=
+        (
+          post.text+
+          " "+
+          post.user+
+          " "+
+          post.username
+        ).toLowerCase();
+
+      return text.includes(q);
+
+    });
+
+  const box=
+    document.getElementById(
+      "bookContent"
+    );
+
+  if(!results.length){
+
+    box.innerHTML=`
+      <div class="empty-book">
+        لا توجد نتائج لـ "${escapeHTML(q)}".
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML=
+    results.map(postHTML).join("");
+
+}
+
+/* =========================================================
+   NOVA LOCAL
+========================================================= */
+
+function addNovaMessage(
+  text,
+  type
+){
+
+  const box=
+    document.getElementById(
+      "messages"
+    );
+
+  const div=
+    document.createElement("div");
+
+  div.className=
+    "message "+type;
 
   div.textContent=text;
 
   box.appendChild(div);
 
-  box.scrollTop=box.scrollHeight;
+  box.scrollTop=
+    box.scrollHeight;
 
 }
 
 function sendNova(){
 
-  const input=document.getElementById("novaInput");
+  const input=
+    document.getElementById(
+      "novaInput"
+    );
 
-  const q=input.value.trim();
+  const q=
+    input.value.trim();
 
   if(!q)return;
 
-  addNovaMessage(q,"user");
+  addNovaMessage(
+    q,
+    "user"
+  );
 
   input.value="";
 
   setTimeout(()=>{
 
-    const lower=q.toLowerCase();
+    const lower=
+      q.toLowerCase();
 
     let answer=
-      "أنا NOVA. في هذه النسخة أعمل محليًا. عندما نربطني بـ AI API حقيقي سأستطيع معالجة الأسئلة بشكل أوسع.";
+      "أنا NOVA في النسخة المحلية. ربط الذكاء الاصطناعي الحقيقي يتم لاحقًا عبر Backend آمن.";
 
     if(
-      lower.includes("dns") ||
+      lower.includes("dns")||
       q.includes("دي ان اس")
     ){
 
@@ -2409,32 +4510,43 @@ function sendNova(){
         "DNS هو النظام الذي يحول أسماء النطاقات إلى عناوين IP حتى تستطيع الأجهزة الوصول إلى الخوادم.";
 
     }else if(
-      lower.includes("linux") ||
+      lower.includes("linux")||
       q.includes("لينكس")
     ){
 
       answer=
-        "ابدأ في Linux بفهم الملفات والمجلدات، الصلاحيات، العمليات، الشبكات والطرفية.";
+        "ابدأ في Linux بفهم الملفات والمجلدات والصلاحيات والعمليات والشبكات والطرفية.";
 
     }else if(
-      lower.includes("hash") ||
-      q.includes("هاش") ||
-      q.includes("تشفير")
+      lower.includes("hash")||
+      q.includes("هاش")
     ){
 
       answer=
-        "Hashing يحول البيانات إلى قيمة ثابتة الطول، ويستخدم كثيرًا للتحقق من البيانات وتخزين كلمات المرور بطريقة مناسبة.";
+        "Hashing يحول البيانات إلى قيمة ثابتة الطول. يستخدم في التحقق من البيانات وتطبيقات أمنية متعددة.";
 
     }else if(
       q.includes("vanta")
     ){
 
       answer=
-        "VANTA هي المنصة. وأنا NOVA جزء من التجربة التعليمية داخلها.";
+        "VANTA هي المنصة، وأنا NOVA جزء من التجربة التعليمية داخلها.";
+
+    }else if(
+      q.includes("سلام")||
+      q.includes("هلا")||
+      q.includes("مرحبا")
+    ){
+
+      answer=
+        "أهلًا بك! 🚀 ماذا تريد أن نتعلم اليوم؟";
 
     }
 
-    addNovaMessage(answer,"nova");
+    addNovaMessage(
+      answer,
+      "nova"
+    );
 
   },450);
 
@@ -2442,51 +4554,66 @@ function sendNova(){
 
 function clearNova(){
 
-  document.getElementById("messages").innerHTML=`
-    <div class="msg nova">
-      تم بدء محادثة جديدة. كيف أساعدك؟
+  document.getElementById(
+    "messages"
+  ).innerHTML=`
+
+    <div class="message nova">
+      تم بدء محادثة جديدة.
+      كيف أساعدك؟
     </div>
+
   `;
 
 }
-
 
 /* =========================================================
    LABS
 ========================================================= */
 
-function lab(name){
+function openLab(name){
 
   openModal(
     name,
     `
+
       <p>
-        هذا المختبر التعليمي يعمل كواجهة محلية الآن.
-        بيئة Cyber Range حقيقية مع تشغيل أوامر تحتاج Backend معزول وآمن.
+        هذا المختبر التعليمي يعمل حاليًا
+        داخل الواجهة المحلية.
+        تشغيل Cyber Range حقيقي يحتاج
+        Backend معزول وآمن.
       </p>
 
-      <div class="card" style="margin-top:15px">
+      <div
+        class="card"
+        style="margin-top:15px"
+      >
 
-        <h3>مهمة المختبر</h3>
+        <h3>
+          مهمة المختبر
+        </h3>
 
         <p style="margin-top:8px">
-          افهم المفهوم ثم اختر الإجابة المناسبة.
+          افهم المفهوم ثم أكمل المهمة.
         </p>
 
         <button
           class="primary"
           style="margin-top:15px"
-          onclick="toast('أحسنت! +50 XP');closeModal()"
+          onclick="
+            closeModal();
+            toast('أحسنت! +50 XP');
+          "
         >
           إكمال المهمة
         </button>
 
       </div>
+
     `
   );
 
 }
-
 
 /* =========================================================
    PROFILE
@@ -2494,12 +4621,19 @@ function lab(name){
 
 function updateProfileStats(){
 
-  const el=document.getElementById("statPosts");
+  const el=
+    document.getElementById(
+      "statPosts"
+    );
 
-  if(el)el.textContent=data.posts.length;
+  if(el){
+
+    el.textContent=
+      appData.posts.length;
+
+  }
 
 }
-
 
 /* =========================================================
    SETTINGS
@@ -2511,8 +4645,8 @@ function toggleSetting(button){
 
   toast(
     button.classList.contains("on")
-      ? "تم التفعيل."
-      : "تم التعطيل."
+      ?"تم التفعيل."
+      :"تم التعطيل."
   );
 
 }
@@ -2522,103 +4656,181 @@ function bookSettings(){
   openModal(
     "إعدادات VANTABOOK",
     `
-      <div class="setting" style="margin-top:5px">
 
-        <div class="setting-row">
+      <div
+        class="setting-card"
+        style="margin-top:5px"
+      >
 
-          <div>
-            <strong>الخصوصية</strong>
-            <p>
-              في النسخة الحقيقية ستتحكم هنا بمن يستطيع رؤية المحتوى.
-            </p>
-          </div>
+        <strong>
+          الحساب
+        </strong>
 
-        </div>
+        <p
+          style="
+            color:var(--muted);
+            margin-top:7px;
+            font-size:12px
+          "
+        >
+          ${
+            appData.bookUser
+            ?
+            "مسجل محليًا باسم "+
+            escapeHTML(appData.bookUser.email)
+            :
+            "لا يوجد حساب محلي."
+          }
+        </p>
 
       </div>
 
-      <div class="setting" style="margin-top:10px">
+      <div
+        class="setting-card"
+        style="margin-top:10px"
+      >
 
-        <div class="setting-row">
+        <strong>
+          الخصوصية
+        </strong>
 
-          <div>
-            <strong>Stories</strong>
-            <p>إدارة ظهور القصص والمشاهدات.</p>
-          </div>
-
-        </div>
+        <p
+          style="
+            color:var(--muted);
+            margin-top:7px;
+            font-size:12px
+          "
+        >
+          الخصوصية الحقيقية بين المستخدمين
+          تحتاج Database وAuthentication.
+        </p>
 
       </div>
+
+      ${
+        appData.bookUser
+        ?
+        `
+          <button
+            class="danger"
+            style="
+              width:100%;
+              margin-top:10px
+            "
+            onclick="bookLogout()"
+          >
+            تسجيل الخروج من VANTABOOK
+          </button>
+        `
+        :
+        ""
+      }
+
     `
   );
 
 }
+
+function bookLogout(){
+
+  appData.bookUser=null;
+
+  saveData();
+
+  closeModal();
+
+  leaveBook();
+
+  toast(
+    "تم تسجيل الخروج من VANTABOOK."
+  );
+
+}
+
+/* =========================================================
+   CLEAR LOCAL DATA
+========================================================= */
 
 function clearLocalData(){
 
   openModal(
-    "مسح البيانات",
+    "مسح البيانات المحلية",
     `
+
       <p>
-        سيتم حذف المنشورات والـ Stories المخزنة على هذا الجهاز.
+        سيتم حذف منشوراتك وStories
+        والحساب التجريبي المحلي من هذا الجهاز.
       </p>
 
       <button
         class="danger"
-        style="margin-top:15px"
-        onclick="confirmClear()"
+        style="
+          margin-top:15px;
+          width:100%
+        "
+        onclick="confirmClearData()"
       >
-        نعم، امسحها
+        نعم، امسح البيانات
       </button>
+
     `
   );
 
 }
 
-function confirmClear(){
+function confirmClearData(){
 
-  data={
+  appData={
     posts:[],
-    stories:[]
+    stories:[],
+    bookUser:null
   };
 
   saveData();
 
-  renderFeed();
   renderStories();
+  renderBookFeed();
   updateProfileStats();
 
   closeModal();
 
-  toast("تم مسح البيانات المحلية.");
+  toast(
+    "تم مسح البيانات المحلية."
+  );
 
 }
-
 
 /* =========================================================
    FILTERS
 ========================================================= */
 
-document.querySelectorAll(".filter").forEach(button=>{
+document
+  .querySelectorAll(".filter")
+  .forEach(button=>{
 
-  button.addEventListener("click",()=>{
+    button.addEventListener(
+      "click",
+      ()=>{
 
-    document.querySelectorAll(".filter")
-      .forEach(x=>x.classList.remove("active"));
+        document
+          .querySelectorAll(".filter")
+          .forEach(x=>{
+            x.classList.remove("active");
+          });
 
-    button.classList.add("active");
+        button.classList.add("active");
+
+      }
+    );
 
   });
 
-});
-
-
 /* =========================================================
-   STARTUP
+   INITIALIZE
 ========================================================= */
 
-renderFeed();
 renderStories();
+renderBookFeed();
 updateProfileStats();
 
 </script>
