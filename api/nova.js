@@ -9,7 +9,7 @@ const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 // يمكنك تغيير الموديل من Vercel Environment Variables
 // إذا لم تضع GEMINI_MODEL سيستخدم هذا الموديل.
 const GEMINI_MODEL =
-  process.env.GEMINI_MODEL || "gemini-2.5-flash";
+  process.env.GEMINI_MODEL || "gemini-3.8-flash";
 
 
 // --------------------------------------------------
