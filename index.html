@@ -2,1277 +2,1160 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VANTA — منصة المستقبل</title>
+<meta name="description" content="VANTA — Cybersecurity, Programming, Technology & VANTABOOK">
 
-<title>VANTA — Ali Yaser</title>
-
-<meta name="description"
-content="VANTA — منصة تعليمية وتقنية واجتماعية من تطوير Ali Yaser.">
-
-<link rel="icon" href="vanta.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
-  --bg:#07080d;
-  --bg2:#0c0e17;
-  --panel:rgba(20,22,34,.72);
-  --panel2:rgba(255,255,255,.055);
-  --border:rgba(255,255,255,.10);
-  --text:#f6f7fb;
-  --muted:#9298aa;
-  --cyan:#55e7ff;
-  --violet:#9b6cff;
-  --pink:#ff4fb3;
-  --blue:#4d7cff;
-  --green:#54e39b;
-  --danger:#ff5e72;
-  --shadow:0 25px 80px rgba(0,0,0,.45);
+  --bg:#07070c;
+  --bg2:#0c0b14;
+  --panel:rgba(20,19,31,.72);
+  --panel2:rgba(29,27,43,.72);
+  --line:rgba(255,255,255,.10);
+  --line2:rgba(255,255,255,.17);
+  --text:#f7f5ff;
+  --muted:#a8a4b8;
+  --dim:#777286;
+
+  --cyan:#5cecff;
+  --violet:#9b7cff;
+  --pink:#ff5fbd;
+  --blue:#638dff;
+  --green:#55e6a5;
+  --red:#ff657c;
+  --yellow:#ffd166;
+
+  --shadow:0 24px 80px rgba(0,0,0,.42);
   --radius:24px;
+  --radius2:16px;
 }
 
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  margin:0;
+  min-height:100vh;
   background:
-    radial-gradient(circle at 15% 10%,rgba(91,65,255,.16),transparent 28%),
-    radial-gradient(circle at 90% 25%,rgba(255,55,164,.10),transparent 25%),
-    radial-gradient(circle at 50% 100%,rgba(40,180,255,.09),transparent 35%),
+    radial-gradient(circle at 15% 15%,rgba(155,124,255,.12),transparent 28%),
+    radial-gradient(circle at 85% 20%,rgba(92,236,255,.08),transparent 25%),
+    radial-gradient(circle at 50% 90%,rgba(255,95,189,.07),transparent 30%),
     var(--bg);
   color:var(--text);
-  min-height:100vh;
+  font-family:Cairo,sans-serif;
   overflow-x:hidden;
 }
 
-button,
-input,
-textarea,
-select{
-  font:inherit;
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:#08080d}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(var(--violet),var(--cyan));
+  border-radius:20px;
 }
 
-button{
-  cursor:pointer;
+/* =========================
+   BACKGROUND
+========================= */
+.bg-glow{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
+  overflow:hidden;
 }
-
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
+.bg-glow:before,
+.bg-glow:after{
+  content:"";
+  position:absolute;
+  border-radius:50%;
+  filter:blur(100px);
+  opacity:.16;
 }
-
-a{
-  color:inherit;
-  text-decoration:none;
+.bg-glow:before{
+  width:400px;
+  height:400px;
+  background:var(--violet);
+  top:-180px;
+  right:-100px;
 }
-
-.hidden{
-  display:none!important;
+.bg-glow:after{
+  width:360px;
+  height:360px;
+  background:var(--cyan);
+  bottom:-180px;
+  left:-100px;
 }
 
 /* =========================
    BOOT
 ========================= */
-
 #boot{
   position:fixed;
   inset:0;
   z-index:99999;
-  background:
-    radial-gradient(circle at 50% 45%,rgba(102,73,255,.16),transparent 30%),
-    #05060a;
   display:flex;
   align-items:center;
   justify-content:center;
-  transition:opacity .7s,visibility .7s;
+  background:#05050a;
+  transition:.7s ease;
 }
-
 #boot.hide{
   opacity:0;
   visibility:hidden;
+  pointer-events:none;
 }
-
-.bootBox{
-  width:min(520px,90%);
+.boot-box{
+  width:min(500px,90%);
   text-align:center;
 }
-
-.bootLogo{
-  width:92px;
-  height:92px;
+.boot-symbol{
+  width:110px;
+  height:110px;
   margin:auto;
-  border-radius:28px;
   display:grid;
   place-items:center;
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:5px;
-  background:
-    linear-gradient(145deg,rgba(85,231,255,.2),rgba(155,108,255,.25)),
-    rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.15);
+  border:1px solid rgba(92,236,255,.3);
+  border-radius:32px;
+  background:linear-gradient(145deg,rgba(155,124,255,.16),rgba(92,236,255,.08));
   box-shadow:
-    0 0 60px rgba(115,92,255,.25),
-    inset 0 0 40px rgba(255,255,255,.04);
-  animation:bootPulse 2.2s infinite;
+    0 0 80px rgba(155,124,255,.18),
+    inset 0 0 30px rgba(255,255,255,.04);
+  animation:bootFloat 2.5s ease-in-out infinite;
 }
-
-@keyframes bootPulse{
-  50%{
-    transform:scale(1.04);
-    box-shadow:
-      0 0 100px rgba(85,231,255,.18),
-      inset 0 0 40px rgba(255,255,255,.06);
-  }
+.boot-symbol b{
+  font-size:3.5rem;
+  background:linear-gradient(135deg,var(--cyan),var(--violet),var(--pink));
+  -webkit-background-clip:text;
+  color:transparent;
 }
-
-.bootTitle{
-  margin-top:28px;
-  font-size:42px;
-  font-weight:900;
+@keyframes bootFloat{
+  50%{transform:translateY(-8px) rotate(2deg)}
+}
+.boot-title{
+  margin-top:24px;
+  font-size:3rem;
+  font-weight:800;
   letter-spacing:8px;
 }
-
-.bootText{
+.boot-sub{
   color:var(--muted);
-  margin-top:12px;
+  font-family:"JetBrains Mono";
+  font-size:.75rem;
 }
-
-.bootLine{
-  margin-top:30px;
-  height:4px;
-  border-radius:20px;
-  background:rgba(255,255,255,.08);
+.boot-progress{
+  height:5px;
+  margin:30px 0 12px;
+  border-radius:10px;
+  background:#15141e;
   overflow:hidden;
 }
-
-.bootProgress{
-  width:0%;
+#bootFill{
+  width:0;
   height:100%;
-  background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));
-  transition:width .15s;
+  background:linear-gradient(90deg,var(--violet),var(--cyan),var(--pink));
+  transition:.15s;
 }
-
-.bootActions{
-  margin-top:22px;
+#bootPercent{
+  color:var(--dim);
+  font-family:"JetBrains Mono";
+  font-size:.75rem;
+}
+.boot-actions{
+  margin-top:25px;
   display:flex;
-  gap:10px;
   justify-content:center;
+  gap:10px;
 }
 
-.bootActions button{
-  padding:11px 18px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  color:white;
-  background:rgba(255,255,255,.06);
+/* =========================
+   NAV
+========================= */
+.nav{
+  position:sticky;
+  top:0;
+  z-index:500;
+  height:76px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:0 24px;
+  background:rgba(7,7,12,.76);
+  backdrop-filter:blur(25px);
+  border-bottom:1px solid var(--line);
 }
+.brand{
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-weight:800;
+  letter-spacing:3px;
+  font-size:1.15rem;
+}
+.brand-mark{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border-radius:13px;
+  background:linear-gradient(135deg,rgba(155,124,255,.2),rgba(92,236,255,.14));
+  border:1px solid var(--line2);
+  box-shadow:0 0 30px rgba(155,124,255,.12);
+}
+.brand-mark span{
+  background:linear-gradient(135deg,var(--cyan),var(--violet),var(--pink));
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.nav-links{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:9px 11px;
+  border-radius:12px;
+  white-space:nowrap;
+  font-size:.78rem;
+  transition:.25s;
+}
+.nav-link:hover,
+.nav-link.active{
+  color:white;
+  background:rgba(255,255,255,.07);
+}
+.nav-link.active{
+  box-shadow:inset 0 -2px var(--cyan);
+}
+.nav-actions{
+  display:flex;
+  gap:8px;
+  flex-shrink:0;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn{
+  border:1px solid var(--line2);
+  color:var(--text);
+  background:rgba(255,255,255,.055);
+  border-radius:14px;
+  padding:11px 16px;
+  transition:.2s;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  border-color:rgba(92,236,255,.4);
+  background:rgba(255,255,255,.09);
+}
+.btn.primary{
+  border:0;
+  color:#07070c;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
+}
+.btn.pink{
+  border:0;
+  background:linear-gradient(135deg,var(--pink),var(--violet));
+}
+.btn.danger{
+  color:white;
+  background:rgba(255,101,124,.12);
+  border-color:rgba(255,101,124,.3);
+}
+.btn.small{padding:8px 11px;font-size:.78rem}
 
 /* =========================
    APP
 ========================= */
-
-#app{
-  min-height:100vh;
-}
-
-header{
-  position:sticky;
-  top:0;
-  z-index:1000;
-  backdrop-filter:blur(25px);
-  background:rgba(5,6,10,.72);
-  border-bottom:1px solid rgba(255,255,255,.07);
-}
-
-.nav{
-  max-width:1450px;
-  margin:auto;
-  padding:13px 20px;
-  display:flex;
-  align-items:center;
-  gap:18px;
-}
-
-.logo{
-  min-width:max-content;
-  font-size:21px;
-  font-weight:950;
-  letter-spacing:4px;
-  background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.navLinks{
-  display:flex;
-  gap:6px;
-  flex:1;
-  overflow-x:auto;
-  scrollbar-width:none;
-}
-
-.navLinks::-webkit-scrollbar{
-  display:none;
-}
-
-.navBtn{
-  white-space:nowrap;
-  border:1px solid transparent;
-  background:transparent;
-  color:#aeb3c3;
-  padding:9px 13px;
-  border-radius:13px;
-  transition:.25s;
-}
-
-.navBtn:hover,
-.navBtn.active{
-  color:white;
-  background:rgba(255,255,255,.07);
-  border-color:rgba(255,255,255,.08);
-}
-
-.userMini{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  min-width:max-content;
-}
-
-.avatar{
-  width:38px;
-  height:38px;
-  border-radius:13px;
-  object-fit:cover;
-  background:linear-gradient(135deg,var(--violet),var(--cyan));
-  border:1px solid rgba(255,255,255,.14);
-}
-
-.userName{
-  max-width:120px;
-  overflow:hidden;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-  font-size:13px;
-}
-
 main{
-  max-width:1450px;
+  width:min(1400px,100%);
   margin:auto;
-  padding:28px 20px 80px;
+  padding:30px 24px 100px;
 }
-
 .page{
   display:none;
   animation:pageIn .35s ease;
 }
-
-.page.active{
-  display:block;
-}
-
+.page.active{display:block}
 @keyframes pageIn{
-  from{
-    opacity:0;
-    transform:translateY(12px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:none}
 }
-
-/* =========================
-   COMMON
-========================= */
 
 .hero{
-  min-height:520px;
+  min-height:560px;
   display:grid;
   grid-template-columns:1.2fr .8fr;
-  gap:25px;
   align-items:center;
+  gap:40px;
 }
-
-.heroText h1{
-  font-size:clamp(42px,7vw,88px);
+.hero h1{
+  margin:0;
+  font-size:clamp(3rem,7vw,6.5rem);
   line-height:.95;
-  font-weight:950;
   letter-spacing:-4px;
 }
-
-.gradientText{
-  background:linear-gradient(90deg,var(--cyan),#b36cff,var(--pink));
+.gradient-text{
+  background:linear-gradient(110deg,var(--cyan),var(--violet),var(--pink));
   -webkit-background-clip:text;
   color:transparent;
 }
-
-.heroText p{
-  margin-top:25px;
-  color:#a8adbd;
+.hero p{
   max-width:650px;
-  line-height:1.9;
-  font-size:17px;
-}
-
-.actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:28px;
-}
-
-.btn{
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:12px 17px;
-  color:white;
-  background:rgba(255,255,255,.055);
-  transition:.25s;
-}
-
-.btn:hover{
-  transform:translateY(-2px);
-  background:rgba(255,255,255,.09);
-}
-
-.btn.primary{
-  border:none;
-  background:linear-gradient(110deg,var(--blue),var(--violet),var(--pink));
-  box-shadow:0 10px 35px rgba(118,83,255,.25);
-}
-
-.sectionTitle{
-  margin:15px 0 20px;
-}
-
-.sectionTitle h2{
-  font-size:31px;
-}
-
-.sectionTitle p{
   color:var(--muted);
-  margin-top:6px;
+  line-height:2;
+  font-size:1.05rem;
+}
+.hero-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:25px;
+}
+
+.nova-orb{
+  width:min(400px,80vw);
+  aspect-ratio:1;
+  margin:auto;
+  display:grid;
+  place-items:center;
+  position:relative;
+}
+.nova-core{
+  width:190px;
+  height:190px;
+  border-radius:48px;
+  display:grid;
+  place-items:center;
+  background:
+    linear-gradient(145deg,rgba(155,124,255,.22),rgba(92,236,255,.09));
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:
+    0 0 80px rgba(155,124,255,.2),
+    inset 0 0 50px rgba(92,236,255,.05);
+  transform:rotate(45deg);
+}
+.nova-core span{
+  transform:rotate(-45deg);
+  font-size:4rem;
+  font-weight:900;
+  background:linear-gradient(135deg,var(--cyan),var(--violet),var(--pink));
+  -webkit-background-clip:text;
+  color:transparent;
+}
+.orbit{
+  position:absolute;
+  inset:15%;
+  border:1px solid rgba(92,236,255,.16);
+  border-radius:50%;
+  animation:spin 10s linear infinite;
+}
+.orbit.o2{
+  inset:4%;
+  transform:rotate(65deg);
+  border-color:rgba(255,95,189,.14);
+  animation-duration:15s;
+  animation-direction:reverse;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.section-head{
+  margin:45px 0 22px;
+}
+.section-head small{
+  color:var(--cyan);
+  font-family:"JetBrains Mono";
+}
+.section-head h2{
+  margin:6px 0;
+  font-size:2rem;
+}
+.section-head p{
+  color:var(--muted);
 }
 
 .grid{
   display:grid;
   gap:16px;
 }
-
-.grid3{
-  grid-template-columns:repeat(3,1fr);
-}
-
-.grid4{
-  grid-template-columns:repeat(4,1fr);
-}
+.grid3{grid-template-columns:repeat(3,1fr)}
+.grid4{grid-template-columns:repeat(4,1fr)}
+.grid2{grid-template-columns:repeat(2,1fr)}
 
 .card{
-  border:1px solid var(--border);
-  background:linear-gradient(
-    145deg,
-    rgba(255,255,255,.07),
-    rgba(255,255,255,.025)
-  );
-  backdrop-filter:blur(22px);
+  border:1px solid var(--line);
+  background:var(--panel);
+  backdrop-filter:blur(20px);
   border-radius:var(--radius);
+  padding:22px;
   box-shadow:var(--shadow);
 }
-
-/* =========================
-   HERO CORE
-========================= */
-
-.core{
-  min-height:430px;
-  border-radius:40px;
-  border:1px solid rgba(255,255,255,.10);
-  background:
-    radial-gradient(circle at 50% 45%,rgba(126,88,255,.25),transparent 25%),
-    linear-gradient(145deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
-  position:relative;
-  overflow:hidden;
+.card:hover{
+  border-color:var(--line2);
+}
+.card h3{margin:8px 0}
+.card p{
+  color:var(--muted);
+  line-height:1.8;
+}
+.icon-box{
+  width:50px;
+  height:50px;
   display:grid;
   place-items:center;
-}
-
-.core::before{
-  content:"";
-  width:240px;
-  height:240px;
-  border-radius:50%;
-  border:1px solid rgba(85,231,255,.25);
-  box-shadow:
-    0 0 80px rgba(85,231,255,.10),
-    inset 0 0 80px rgba(155,108,255,.12);
-  animation:coreSpin 12s linear infinite;
-}
-
-.core::after{
-  content:"";
-  position:absolute;
-  width:110px;
-  height:110px;
-  border-radius:30px;
-  transform:rotate(45deg);
-  background:
-    linear-gradient(135deg,
-      rgba(85,231,255,.85),
-      rgba(155,108,255,.7),
-      rgba(255,79,179,.7)
-    );
-  box-shadow:
-    0 0 80px rgba(155,108,255,.45);
-  animation:coreFloat 4s ease-in-out infinite;
-}
-
-@keyframes coreSpin{
-  to{transform:rotate(360deg)}
-}
-
-@keyframes coreFloat{
-  50%{transform:rotate(45deg) scale(1.08)}
-}
-
-.coreLabel{
-  position:absolute;
-  z-index:2;
-  text-align:center;
-}
-
-.coreLabel strong{
-  display:block;
-  font-size:40px;
-  letter-spacing:6px;
-}
-
-.coreLabel span{
-  color:#a4a9b9;
-  font-size:12px;
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(92,236,255,.12),rgba(155,124,255,.14));
+  border:1px solid var(--line);
+  font-size:1.4rem;
 }
 
 /* =========================
    STATS
 ========================= */
-
-.stat{
-  padding:22px;
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
 }
-
+.stat{
+  padding:18px;
+  border-radius:18px;
+  background:var(--panel);
+  border:1px solid var(--line);
+}
 .stat strong{
   display:block;
-  font-size:30px;
+  font-size:1.8rem;
 }
-
-.stat span{
-  color:var(--muted);
-  font-size:13px;
-}
-
-/* =========================
-   NOVA
-========================= */
-
-.novaLayout{
-  display:grid;
-  grid-template-columns:290px 1fr;
-  gap:18px;
-  min-height:700px;
-}
-
-.novaSide{
-  padding:22px;
-}
-
-.novaOrb{
-  width:115px;
-  height:115px;
-  margin:15px auto 20px;
-  border-radius:35px;
-  transform:rotate(45deg);
-  background:linear-gradient(135deg,var(--cyan),var(--violet),var(--pink));
-  box-shadow:0 0 80px rgba(155,108,255,.35);
-}
-
-.novaOrbInner{
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  transform:rotate(-45deg);
-  font-weight:950;
-  letter-spacing:4px;
-}
-
-.novaSide p{
-  text-align:center;
-  color:var(--muted);
-  line-height:1.7;
-}
-
-.chat{
-  display:flex;
-  flex-direction:column;
-  min-height:700px;
-  overflow:hidden;
-}
-
-.chatHead{
-  padding:18px 22px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-.chatStatus{
-  color:var(--green);
-  font-size:12px;
-}
-
-.messages{
-  flex:1;
-  padding:22px;
-  overflow:auto;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-/*
-  أهم نقطة:
-  الفقاعة لا تأخذ عرض الشاشة.
-  max-width + width:max-content
-  تجعلها حسب الكلام.
-*/
-
-.msg{
-  width:fit-content;
-  max-width:min(72%,620px);
-  padding:11px 14px;
-  border-radius:18px;
-  line-height:1.7;
-  white-space:pre-wrap;
-  word-break:break-word;
-  animation:msgIn .25s ease;
-}
-
-@keyframes msgIn{
-  from{
-    opacity:0;
-    transform:translateY(5px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.msg.nova{
-  align-self:flex-start;
-  background:rgba(255,255,255,.055);
-  border:1px solid rgba(255,255,255,.08);
-  border-top-right-radius:6px;
-}
-
-.msg.user{
-  align-self:flex-end;
-  background:linear-gradient(120deg,#3d63dd,#7853df);
-  border-top-left-radius:6px;
-}
-
-.typing{
-  align-self:flex-start;
-  color:#8f96a8;
-  font-size:13px;
-  padding:8px 13px;
-}
-
-.chatInput{
-  padding:15px;
-  border-top:1px solid var(--border);
-  display:flex;
-  gap:9px;
-}
-
-.chatInput input{
-  flex:1;
-  min-width:0;
-  color:white;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.11);
-  border-radius:15px;
-  padding:13px 15px;
-  outline:none;
-  caret-color:var(--cyan);
-}
-
-.chatInput input:focus{
-  border-color:rgba(85,231,255,.5);
-  box-shadow:0 0 0 3px rgba(85,231,255,.06);
-}
-
-.chatInput button{
-  border:none;
-  color:white;
-  background:linear-gradient(120deg,var(--blue),var(--violet));
-  border-radius:15px;
-  padding:0 20px;
-}
+.stat span{color:var(--muted);font-size:.8rem}
 
 /* =========================
    LIBRARY
 ========================= */
-
-.libraryHero{
-  padding:35px;
-  margin-bottom:25px;
-  border-radius:30px;
-  background:
-    linear-gradient(120deg,
-      rgba(85,231,255,.09),
-      rgba(155,108,255,.12),
-      rgba(255,79,179,.07)
-    );
-  border:1px solid var(--border);
-}
-
-.books{
+.book-shelf{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
   gap:20px;
 }
-
 .book{
-  min-height:350px;
-  padding:18px;
+  min-height:300px;
   position:relative;
   overflow:hidden;
   cursor:pointer;
-  transition:.3s;
-}
-
-.book:hover{
-  transform:translateY(-8px) rotateX(2deg);
-}
-
-.bookCover{
-  height:235px;
-  border-radius:18px;
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  align-items:flex-end;
-  padding:18px;
+  padding:24px;
+  border-radius:24px;
   border:1px solid rgba(255,255,255,.12);
   background:
-    linear-gradient(145deg,
-      rgba(85,231,255,.25),
-      rgba(155,108,255,.20),
-      rgba(255,79,179,.22)
-    );
-  box-shadow:
-    15px 20px 50px rgba(0,0,0,.35),
-    inset 0 0 60px rgba(255,255,255,.04);
+    linear-gradient(145deg,rgba(155,124,255,.18),rgba(92,236,255,.04)),
+    rgba(18,17,27,.8);
+  transition:.3s;
 }
-
-.bookCover::before{
+.book:hover{
+  transform:translateY(-8px) rotateX(2deg);
+  border-color:rgba(92,236,255,.35);
+  box-shadow:0 30px 80px rgba(0,0,0,.45),0 0 35px rgba(155,124,255,.12);
+}
+.book:before{
   content:"";
   position:absolute;
-  inset:15px;
-  border:1px solid rgba(255,255,255,.16);
-  border-radius:12px;
+  inset:12px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  pointer-events:none;
 }
-
-.bookCover::after{
-  content:"VANTA";
+.book-number{
+  font-family:"JetBrains Mono";
+  color:var(--cyan);
+}
+.book h3{
   position:absolute;
-  top:24px;
+  bottom:60px;
   right:24px;
-  font-size:10px;
-  letter-spacing:4px;
-  color:rgba(255,255,255,.65);
+  left:24px;
+  font-size:1.45rem;
 }
-
-.bookTitle{
-  position:relative;
-  z-index:2;
-  font-size:21px;
-  font-weight:850;
-}
-
-.bookMeta{
-  margin-top:12px;
-  display:flex;
-  justify-content:space-between;
+.book p{
+  position:absolute;
+  bottom:22px;
   color:var(--muted);
-  font-size:12px;
+  font-size:.78rem;
 }
 
 /* =========================
-   READER
+   LESSON READER
 ========================= */
-
 .reader{
-  position:fixed;
-  inset:0;
-  z-index:5000;
-  background:rgba(4,5,9,.88);
-  backdrop-filter:blur(25px);
-  display:none;
-}
-
-.reader.open{
-  display:flex;
-}
-
-.readerShell{
-  width:min(1250px,96%);
-  height:92vh;
+  max-width:950px;
   margin:auto;
-  display:grid;
-  grid-template-columns:270px 1fr;
-  overflow:hidden;
-  border:1px solid var(--border);
-  border-radius:28px;
-  background:#0a0c13;
-  box-shadow:0 30px 120px rgba(0,0,0,.65);
 }
-
-.lessonSide{
-  border-left:1px solid var(--border);
-  padding:18px;
-  overflow:auto;
-}
-
-.lessonSide h3{
-  margin-bottom:16px;
-}
-
-.lessonBtn{
-  width:100%;
-  text-align:right;
-  color:#aab0c0;
-  background:transparent;
-  border:1px solid transparent;
-  padding:12px;
-  border-radius:13px;
-  margin-bottom:7px;
-}
-
-.lessonBtn.active,
-.lessonBtn:hover{
-  color:white;
-  background:rgba(255,255,255,.06);
-  border-color:rgba(255,255,255,.08);
-}
-
-.lessonContent{
-  overflow:auto;
-  padding:35px;
-}
-
-.readerTop{
+.reader-top{
   display:flex;
   justify-content:space-between;
+  gap:12px;
   align-items:center;
-  gap:15px;
-  margin-bottom:30px;
+  margin-bottom:18px;
 }
-
-.closeBtn{
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.05);
-  color:white;
-  width:40px;
-  height:40px;
-  border-radius:12px;
+.lesson-progress{
+  height:6px;
+  background:#181720;
+  border-radius:10px;
+  overflow:hidden;
 }
-
-.lessonContent h1{
-  font-size:40px;
-  margin-bottom:15px;
+#lessonProgressFill{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--violet),var(--cyan));
 }
-
-.lessonContent h2{
-  margin-top:35px;
-  margin-bottom:12px;
+.lesson-body{
+  font-size:1.02rem;
+  line-height:2.1;
 }
-
-.lessonContent p{
-  color:#b9becd;
-  line-height:2;
-  font-size:16px;
-  margin-bottom:16px;
-}
-
-.lessonContent ul{
-  color:#b9becd;
-  line-height:2;
-  padding-right:25px;
-}
-
-.lessonCode{
+.lesson-body h2{font-size:2rem}
+.lesson-body h3{font-size:1.3rem;color:var(--cyan)}
+.lesson-body code{
+  display:block;
   direction:ltr;
   text-align:left;
+  padding:18px;
   overflow:auto;
-  padding:20px;
-  margin:20px 0;
-  border-radius:17px;
-  background:#05060a;
-  border:1px solid rgba(255,255,255,.08);
-  color:#cbd5ff;
+  border-radius:14px;
+  background:#06060b;
+  border:1px solid var(--line);
+  color:#baf8ff;
+  font-family:"JetBrains Mono";
 }
-
-.lessonBottom{
+.lesson-nav{
   display:flex;
   justify-content:space-between;
+  margin-top:25px;
   gap:10px;
-  margin-top:40px;
-  padding-top:20px;
-  border-top:1px solid var(--border);
 }
 
 /* =========================
    LABS
 ========================= */
-
-.labCard{
-  padding:22px;
+.lab-terminal{
+  direction:ltr;
+  text-align:left;
+  border-radius:18px;
+  background:#050509;
+  border:1px solid var(--line);
+  padding:18px;
+  font-family:"JetBrains Mono";
 }
-
-.labIcon{
-  width:52px;
-  height:52px;
-  border-radius:16px;
-  display:grid;
-  place-items:center;
-  background:rgba(255,255,255,.07);
-  font-size:23px;
-  margin-bottom:16px;
-}
-
-.labCard h3{
-  margin-bottom:8px;
-}
-
-.labCard p{
-  color:var(--muted);
+.terminal-output{
+  min-height:100px;
+  white-space:pre-wrap;
+  color:#bdf9ff;
   line-height:1.7;
 }
-
-.labBox{
-  padding:25px;
-  margin-top:25px;
-}
-
-.field{
-  margin-top:15px;
-}
-
-.field label{
-  display:block;
-  margin-bottom:7px;
-  color:#c7cbda;
-  font-size:13px;
-}
-
-.field input,
-.field textarea,
-.field select{
+.terminal-input{
   width:100%;
-  background:rgba(0,0,0,.3);
-  border:1px solid var(--border);
-  color:white;
-  border-radius:14px;
-  padding:13px;
-  outline:none;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#fff;
+  caret-color:var(--cyan);
+  font-family:"JetBrains Mono";
 }
 
-.meter{
-  margin-top:12px;
-  height:8px;
-  background:rgba(255,255,255,.07);
-  border-radius:20px;
+/* =========================
+   PASSWORD TEST
+========================= */
+.password-test{
+  max-width:800px;
+  margin:auto;
+}
+.password-input{
+  width:100%;
+  padding:16px;
+  border-radius:15px;
+  border:1px solid var(--line2);
+  outline:none;
+  background:rgba(0,0,0,.25);
+  color:white;
+  direction:ltr;
+  text-align:left;
+  caret-color:var(--cyan);
+}
+.password-meter{
+  height:9px;
+  margin:14px 0;
+  border-radius:10px;
+  background:#191821;
   overflow:hidden;
 }
-
-.meterBar{
+#passwordFill{
   height:100%;
   width:0;
-  transition:.25s;
+  transition:.3s;
 }
-
-.labResult{
-  margin-top:15px;
-  padding:15px;
-  border-radius:15px;
+.password-result{
+  border-radius:16px;
+  padding:16px;
   background:rgba(255,255,255,.04);
-  color:#b8bdcb;
+  border:1px solid var(--line);
 }
 
 /* =========================
    VANTABOOK
 ========================= */
-
-.vantaBookLayout{
-  display:grid;
-  grid-template-columns:1fr 320px;
-  gap:20px;
-}
-
-.feed{
+.vb-head{
   display:flex;
-  flex-direction:column;
-  gap:18px;
+  justify-content:space-between;
+  gap:15px;
+  align-items:center;
+  margin-bottom:20px;
+}
+.vb-tabs{
+  display:flex;
+  gap:6px;
+  overflow:auto;
+  scrollbar-width:none;
+}
+.vb-tab{
+  white-space:nowrap;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  border-radius:13px;
+  padding:9px 14px;
+}
+.vb-tab.active{
+  color:#fff;
+  border-color:rgba(92,236,255,.3);
+  background:rgba(92,236,255,.08);
 }
 
-.storyRow{
+.stories{
   display:flex;
   gap:13px;
   overflow:auto;
-  padding-bottom:5px;
+  padding:5px 2px 18px;
 }
-
 .story{
-  min-width:76px;
+  min-width:78px;
   text-align:center;
+  cursor:pointer;
 }
-
-.storyRing{
-  width:67px;
-  height:67px;
+.story-avatar{
+  width:68px;
+  height:68px;
   margin:auto;
   padding:3px;
   border-radius:50%;
-  background:linear-gradient(135deg,var(--cyan),var(--violet),var(--pink));
+  background:linear-gradient(135deg,var(--pink),var(--violet),var(--cyan));
 }
-
-.storyRing img{
+.story-avatar img,
+.avatar img{
   width:100%;
   height:100%;
-  border-radius:50%;
   object-fit:cover;
-  border:3px solid #0b0d14;
+  border-radius:50%;
+}
+.story-avatar .initial,
+.avatar .initial{
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#181722;
+  font-weight:800;
+}
+.story-name{
+  margin-top:5px;
+  font-size:.7rem;
+  color:var(--muted);
 }
 
-.story span{
-  display:block;
-  font-size:11px;
-  margin-top:6px;
-  color:#a9aebd;
-  overflow:hidden;
-  text-overflow:ellipsis;
+.feed{
+  max-width:680px;
+  margin:auto;
+  display:grid;
+  gap:18px;
 }
-
 .post{
   overflow:hidden;
+  padding:0;
 }
-
-.postHead{
+.post-head{
   display:flex;
   align-items:center;
   gap:10px;
   padding:15px;
 }
-
-.postHead img{
+.avatar{
   width:42px;
   height:42px;
-  border-radius:14px;
-  object-fit:cover;
+  flex-shrink:0;
 }
-
-.postAuthor{
-  font-weight:750;
+.post-user{
+  flex:1;
 }
-
-.postDate{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:3px;
+.post-user strong{display:block}
+.post-user span{
+  color:var(--dim);
+  font-size:.7rem;
 }
-
-.postText{
-  padding:0 17px 16px;
-  color:#d3d6df;
-  line-height:1.8;
-}
-
-.postMedia{
+.post-media{
   width:100%;
-  max-height:620px;
+  max-height:700px;
   object-fit:cover;
+  background:#050509;
   display:block;
-  background:#05060a;
 }
-
-.postActions{
-  display:flex;
-  gap:5px;
-  padding:10px;
-  border-top:1px solid rgba(255,255,255,.06);
-}
-
-.actionBtn{
-  border:none;
-  background:transparent;
-  color:#aeb3c2;
-  padding:9px 12px;
-  border-radius:12px;
-}
-
-.actionBtn:hover{
-  background:rgba(255,255,255,.06);
-  color:white;
-}
-
-.composer{
-  padding:18px;
-}
-
-.composer textarea{
-  min-height:100px;
-  resize:vertical;
-}
-
-.composerActions{
-  display:flex;
-  justify-content:space-between;
-  margin-top:12px;
-  gap:10px;
-}
-
-.profileSide{
-  padding:22px;
-  height:max-content;
-  position:sticky;
-  top:85px;
-}
-
-.profileLarge{
-  width:85px;
-  height:85px;
-  border-radius:25px;
-  object-fit:cover;
-  margin-bottom:15px;
-}
-
-.profileSide p{
-  color:var(--muted);
+.post-body{padding:15px}
+.post-caption{
+  color:#eee;
   line-height:1.7;
+  white-space:pre-wrap;
+}
+.post-actions{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 0;
+}
+.action{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  padding:8px;
+  border-radius:10px;
+}
+.action:hover{background:rgba(255,255,255,.06);color:#fff}
+.action.liked{color:var(--pink)}
+.action.saved{color:var(--cyan)}
+.comments{
+  border-top:1px solid var(--line);
+  margin-top:8px;
+  padding-top:10px;
+}
+.comment{
+  padding:5px 0;
+  color:var(--muted);
+  font-size:.83rem;
+}
+.comment strong{color:#fff}
+.comment-form{
+  display:flex;
+  gap:7px;
+  margin-top:8px;
+}
+.comment-form input{
+  flex:1;
+  min-width:0;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:white;
+  outline:none;
+  border-radius:12px;
+  padding:9px;
+}
+.empty{
+  text-align:center;
+  padding:50px 20px;
+  color:var(--muted);
 }
 
 /* =========================
-   ACCOUNT
+   PROFILE
 ========================= */
-
-.account{
-  max-width:850px;
-  margin:auto;
+.profile-cover{
+  min-height:180px;
+  border-radius:25px;
+  background:
+    linear-gradient(120deg,rgba(155,124,255,.35),rgba(92,236,255,.13),rgba(255,95,189,.2));
+  border:1px solid var(--line);
 }
-
-.accountCard{
-  padding:30px;
-}
-
-.accountAvatar{
-  width:100px;
-  height:100px;
-  border-radius:30px;
-  object-fit:cover;
-  display:block;
-  margin-bottom:15px;
-}
-
-.authTabs{
+.profile-info{
   display:flex;
-  gap:7px;
-  margin-bottom:20px;
+  gap:20px;
+  align-items:flex-end;
+  margin:-50px 25px 0;
+  position:relative;
 }
-
-.authTab{
-  flex:1;
-  padding:11px;
-  border-radius:13px;
-  border:1px solid var(--border);
-  color:#aeb4c3;
-  background:rgba(255,255,255,.04);
+.profile-avatar{
+  width:110px;
+  height:110px;
+  border-radius:30px;
+  border:4px solid var(--bg);
+  overflow:hidden;
+  background:#161520;
 }
-
-.authTab.active{
-  color:white;
-  background:rgba(255,255,255,.09);
-}
-
-.form{
-  display:grid;
-  gap:12px;
-}
-
-.form input{
+.profile-avatar img{
   width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background:rgba(0,0,0,.28);
-  color:white;
+  height:100%;
+  object-fit:cover;
+}
+.profile-name h2{margin:0}
+.profile-name p{color:var(--muted)}
+
+/* =========================
+   FORMS
+========================= */
+.field{margin-bottom:14px}
+.field label{
+  display:block;
+  color:var(--muted);
+  font-size:.8rem;
+  margin-bottom:6px;
+}
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  border:1px solid var(--line2);
   outline:none;
+  color:#fff;
+  background:rgba(0,0,0,.25);
+  border-radius:13px;
+  padding:12px;
+}
+.field textarea{min-height:100px;resize:vertical}
+
+/* =========================
+   MODAL
+========================= */
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(12px);
+}
+.modal.open{display:flex}
+.modal-box{
+  width:min(620px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid var(--line2);
+  border-radius:26px;
+  background:#101018;
+  box-shadow:0 40px 100px rgba(0,0,0,.65);
+  padding:24px;
+}
+.modal-box.wide{width:min(1000px,100%)}
+.modal-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:18px;
+}
+.close{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  color:#fff;
 }
 
-.socialAuth{
+/* =========================
+   AUTH
+========================= */
+.auth-tabs{
+  display:flex;
+  gap:6px;
+  margin-bottom:18px;
+}
+.auth-tab{
+  flex:1;
+  padding:10px;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--muted);
+  border-radius:12px;
+}
+.auth-tab.active{
+  color:#fff;
+  background:rgba(155,124,255,.1);
+}
+.oauth{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:12px;
+  gap:8px;
+  margin-top:10px;
+}
+.auth-note{
+  color:var(--dim);
+  font-size:.72rem;
+  line-height:1.7;
+  margin-top:14px;
 }
 
-.accountNote{
-  margin-top:15px;
+/* =========================
+   NOVA
+========================= */
+#novaFab{
+  position:fixed;
+  bottom:22px;
+  left:22px;
+  z-index:900;
+  width:62px;
+  height:62px;
+  border-radius:21px;
+  border:1px solid rgba(92,236,255,.3);
+  background:linear-gradient(145deg,rgba(155,124,255,.28),rgba(92,236,255,.14));
+  color:white;
+  box-shadow:0 15px 45px rgba(0,0,0,.45),0 0 35px rgba(155,124,255,.15);
+  font-weight:900;
+  font-size:1.2rem;
+}
+#novaPanel{
+  position:fixed;
+  z-index:1000;
+  bottom:95px;
+  left:22px;
+  width:min(430px,calc(100vw - 30px));
+  height:min(650px,calc(100vh - 120px));
+  display:none;
+  flex-direction:column;
+  overflow:hidden;
+  border-radius:26px;
+  background:rgba(13,12,21,.94);
+  border:1px solid var(--line2);
+  box-shadow:0 30px 100px rgba(0,0,0,.65);
+  backdrop-filter:blur(25px);
+}
+#novaPanel.open{display:flex}
+.nova-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px;
+  border-bottom:1px solid var(--line);
+}
+.nova-icon{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,var(--violet),var(--cyan));
+  color:#08080d;
+  font-weight:900;
+}
+.nova-head-info{flex:1}
+.nova-head-info strong{display:block}
+.nova-head-info span{
+  color:var(--green);
+  font-size:.65rem;
+}
+.nova-messages{
+  flex:1;
+  overflow:auto;
+  padding:15px;
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+}
+.nova-message{
+  width:max-content;
+  max-width:82%;
+  padding:10px 13px;
+  border-radius:16px;
+  line-height:1.65;
+  font-size:.85rem;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+.nova-message.bot{
+  align-self:flex-start;
+  background:rgba(255,255,255,.065);
+  border:1px solid var(--line);
+  border-top-left-radius:5px;
+}
+.nova-message.user{
+  align-self:flex-end;
+  background:linear-gradient(135deg,rgba(155,124,255,.24),rgba(92,236,255,.12));
+  border:1px solid rgba(155,124,255,.2);
+  border-top-right-radius:5px;
+}
+.nova-typing{
+  width:max-content;
+  display:flex;
+  gap:4px;
+  padding:10px 12px;
+  background:rgba(255,255,255,.06);
+  border-radius:15px;
+}
+.nova-typing i{
+  width:5px;height:5px;
+  border-radius:50%;
+  background:var(--cyan);
+  animation:typing .8s infinite;
+}
+.nova-typing i:nth-child(2){animation-delay:.15s}
+.nova-typing i:nth-child(3){animation-delay:.3s}
+@keyframes typing{
+  50%{transform:translateY(-4px);opacity:.5}
+}
+.nova-suggestions{
+  display:flex;
+  gap:6px;
+  overflow:auto;
+  padding:7px 12px;
+}
+.nova-suggestions button{
+  white-space:nowrap;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
   color:var(--muted);
-  font-size:12px;
-  line-height:1.7;
+  border-radius:10px;
+  padding:7px 9px;
+  font-size:.68rem;
+}
+.nova-input-row{
+  display:flex;
+  gap:7px;
+  padding:12px;
+  border-top:1px solid var(--line);
+}
+#novaInput{
+  flex:1;
+  min-width:0;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  caret-color:var(--cyan);
+  background:rgba(255,255,255,.055) !important;
+  border:1px solid var(--line2);
+  outline:none;
+  border-radius:14px;
+  padding:11px;
+  direction:rtl;
+}
+#novaInput::placeholder{color:#777}
+#novaSend{
+  width:45px;
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--cyan),var(--violet));
 }
 
 /* =========================
    TOAST
 ========================= */
-
 #toast{
   position:fixed;
-  bottom:22px;
-  left:50%;
-  transform:translateX(-50%) translateY(30px);
-  z-index:99999;
-  padding:12px 18px;
+  top:90px;
+  right:20px;
+  z-index:5000;
+  max-width:350px;
+  padding:12px 16px;
   border-radius:14px;
-  background:rgba(20,22,31,.92);
-  border:1px solid var(--border);
-  color:white;
+  background:#171620;
+  border:1px solid var(--line2);
+  box-shadow:var(--shadow);
+  transform:translateY(-20px);
   opacity:0;
   pointer-events:none;
   transition:.3s;
-  backdrop-filter:blur(20px);
 }
-
 #toast.show{
   opacity:1;
-  transform:translateX(-50%) translateY(0);
+  transform:none;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer{
+  border-top:1px solid var(--line);
+  padding:30px 24px;
+  color:var(--muted);
+}
+.footer-inner{
+  width:min(1400px,100%);
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  gap:30px;
+}
+.footer-brand p{
+  max-width:450px;
+  line-height:1.8;
+  font-size:.8rem;
+}
+.footer-links{
+  display:flex;
+  gap:35px;
+}
+.footer-links a{
+  display:block;
+  margin:6px 0;
+  font-size:.78rem;
+}
+.footer-bottom{
+  width:min(1400px,100%);
+  margin:25px auto 0;
+  padding-top:15px;
+  border-top:1px solid var(--line);
+  font-size:.7rem;
+  display:flex;
+  justify-content:space-between;
 }
 
 /* =========================
    RESPONSIVE
 ========================= */
-
 @media(max-width:1050px){
-  .hero{
-    grid-template-columns:1fr;
-  }
-
-  .books{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .grid4{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .novaLayout{
-    grid-template-columns:1fr;
-  }
-
-  .novaSide{
-    display:none;
-  }
-
-  .vantaBookLayout{
-    grid-template-columns:1fr;
-  }
-
-  .profileSide{
-    position:static;
-  }
+  .nav{padding:0 12px}
+  .nav-links{justify-content:flex-start}
+  .hero{grid-template-columns:1fr}
+  .hero-copy{text-align:center}
+  .hero p{margin-left:auto;margin-right:auto}
+  .hero-actions{justify-content:center}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid4{grid-template-columns:repeat(2,1fr)}
 }
-
 @media(max-width:700px){
-  .nav{
-    padding:10px;
-    gap:8px;
-  }
-
-  .logo{
-    font-size:17px;
-  }
-
-  .userName{
-    display:none;
-  }
-
-  main{
-    padding:18px 12px 60px;
-  }
-
-  .hero{
-    min-height:auto;
-    padding:25px 0;
-  }
-
-  .heroText h1{
-    font-size:51px;
-  }
-
-  .core{
-    min-height:300px;
-  }
-
-  .grid3,
-  .grid4,
-  .books{
-    grid-template-columns:1fr;
-  }
-
-  .readerShell{
-    width:100%;
-    height:100%;
-    border-radius:0;
-    grid-template-columns:1fr;
-  }
-
-  .lessonSide{
-    display:none;
-  }
-
-  .lessonContent{
-    padding:22px 17px;
-  }
-
-  .lessonContent h1{
-    font-size:30px;
-  }
-
-  .msg{
-    max-width:86%;
-  }
-
-  .socialAuth{
-    grid-template-columns:1fr;
+  main{padding:20px 13px 80px}
+  .nav{height:68px}
+  .brand small{display:none}
+  .nav-actions .btn span{display:none}
+  .hero{min-height:auto;padding:40px 0}
+  .hero h1{font-size:3.3rem;letter-spacing:-2px}
+  .nova-orb{width:300px}
+  .nova-core{width:140px;height:140px}
+  .nova-core span{font-size:3rem}
+  .grid3,.grid2{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .profile-info{margin:-40px 10px 0;align-items:center}
+  .profile-avatar{width:85px;height:85px}
+  .profile-name h2{font-size:1.1rem}
+  .footer-inner{flex-direction:column}
+  .footer-links{flex-wrap:wrap}
+  .footer-bottom{flex-direction:column;gap:8px}
+  #novaPanel{
+    left:10px;
+    bottom:82px;
+    width:calc(100vw - 20px);
   }
 }
 </style>
@@ -1280,591 +1163,503 @@ main{
 
 <body>
 
-<!-- =========================
-     BOOT
-========================= -->
+<div class="bg-glow"></div>
 
-<section id="boot">
-  <div class="bootBox">
-
-    <div class="bootLogo">V</div>
-
-    <div class="bootTitle">VANTA</div>
-
-    <div class="bootText" id="bootText">
-      Initializing VANTA...
+<!-- BOOT -->
+<div id="boot">
+  <div class="boot-box">
+    <div class="boot-symbol"><b>V</b></div>
+    <div class="boot-title">VANTA</div>
+    <div class="boot-sub">INITIALIZING VANTA ENVIRONMENT</div>
+    <div class="boot-progress">
+      <div id="bootFill"></div>
     </div>
-
-    <div class="bootLine">
-      <div class="bootProgress" id="bootProgress"></div>
+    <div id="bootPercent">0%</div>
+    <div class="boot-actions">
+      <button class="btn primary" id="enterVanta">دخول إلى VANTA</button>
+      <button class="btn" id="skipBoot">تخطي</button>
     </div>
-
-    <div class="bootActions">
-      <button id="enterVanta">دخول</button>
-      <button id="skipBoot">تخطي</button>
-    </div>
-
   </div>
-</section>
+</div>
 
-<!-- =========================
-     APP
-========================= -->
-
-<div id="app">
-
-<header>
-
-<nav class="nav">
-
-  <div class="logo">VANTA</div>
-
-  <div class="navLinks">
-
-    <button class="navBtn active" data-page="home">الرئيسية</button>
-    <button class="navBtn" data-page="nova">NOVA</button>
-    <button class="navBtn" data-page="learning">التعلّم</button>
-    <button class="navBtn" data-page="labs">المختبرات</button>
-    <button class="navBtn" data-page="library">المكتبة</button>
-    <button class="navBtn" data-page="book">VANTABOOK</button>
-    <button class="navBtn" data-page="profile">الحساب</button>
-
+<!-- NAV -->
+<header class="nav">
+  <div class="brand">
+    <div class="brand-mark"><span>V</span></div>
+    <div>VANTA</div>
   </div>
 
-  <div class="userMini">
+  <nav class="nav-links">
+    <button class="nav-link active" data-page="home">الرئيسية</button>
+    <button class="nav-link" data-page="learn">التعلّم</button>
+    <button class="nav-link" data-page="labs">المختبرات</button>
+    <button class="nav-link" data-page="library">المكتبة</button>
+    <button class="nav-link" data-page="vantabook">VANTABOOK</button>
+    <button class="nav-link" data-page="roadmap">المسار</button>
+    <button class="nav-link" data-page="dashboard">لوحتي</button>
+    <button class="nav-link" data-page="profile">حسابي</button>
+    <button class="nav-link" data-page="settings">الإعدادات</button>
+  </nav>
 
-    <img
-      id="navAvatar"
-      class="avatar"
-      src="https://ui-avatars.com/api/?name=VANTA&background=151827&color=fff"
-    >
-
-    <span id="navName" class="userName">زائر</span>
-
+  <div class="nav-actions">
+    <button class="btn small" id="accountButton">
+      <span id="accountLabel">تسجيل الدخول</span>
+    </button>
   </div>
-
-</nav>
-
 </header>
 
 <main>
 
 <!-- =========================
-     HOME
+ HOME
 ========================= -->
-
-<section id="page-home" class="page active">
+<section class="page active" id="page-home">
 
   <div class="hero">
-
-    <div class="heroText">
-
-      <div style="color:var(--cyan);font-size:13px;margin-bottom:15px">
-        VANTA / SYSTEM ONLINE
+    <div class="hero-copy">
+      <div style="color:var(--cyan);font-family:'JetBrains Mono';font-size:.75rem">
+        // VANTA SYSTEM
       </div>
 
       <h1>
-        تعلّم.
-        <br>
-        <span class="gradientText">اكتشف.</span>
-        <br>
-        ابنِ.
+        ادخل إلى<br>
+        <span class="gradient-text">VANTA</span>
       </h1>
 
       <p>
-        VANTA مساحة تجمع التعليم والتقنية والأمن السيبراني
-        والتجربة الاجتماعية في نظام واحد.
+        منصة تجمع التعلم، الأمن السيبراني، البرمجة، المختبرات،
+        الذكاء الاصطناعي وVANTABOOK في تجربة واحدة.
       </p>
 
-      <div class="actions">
-
-        <button class="btn primary" onclick="go('library')">
-          افتح المكتبة
-        </button>
-
-        <button class="btn" onclick="go('nova')">
-          تحدث مع NOVA
-        </button>
-
-        <button class="btn" onclick="go('labs')">
-          ادخل المختبرات
-        </button>
-
+      <div class="hero-actions">
+        <button class="btn primary" data-page-go="library">ابدأ من المكتبة</button>
+        <button class="btn" data-page-go="labs">جرّب المختبرات</button>
+        <button class="btn pink" id="openNovaHero">اسأل NOVA</button>
       </div>
-
     </div>
 
-    <div class="core">
-
-      <div class="coreLabel">
-
-        <strong>NOVA</strong>
-
-        <span>VANTA INTELLIGENCE CORE</span>
-
-      </div>
-
+    <div class="nova-orb">
+      <div class="orbit"></div>
+      <div class="orbit o2"></div>
+      <div class="nova-core"><span>V</span></div>
     </div>
-
   </div>
 
-  <div class="grid grid4">
-
-    <div class="card stat">
-      <strong>08</strong>
-      <span>كتب تعليمية</span>
-    </div>
-
-    <div class="card stat">
-      <strong>24+</strong>
-      <span>درسًا تفاعليًا</span>
-    </div>
-
-    <div class="card stat">
-      <strong>06</strong>
-      <span>مختبرات</span>
-    </div>
-
-    <div class="card stat">
-      <strong>∞</strong>
-      <span>مساحة للتطور</span>
-    </div>
-
+  <div class="stats">
+    <div class="stat"><strong id="statLevel">1</strong><span>المستوى</span></div>
+    <div class="stat"><strong id="statXP">0</strong><span>XP</span></div>
+    <div class="stat"><strong>12</strong><span>كتاب ودروس</span></div>
+    <div class="stat"><strong>9</strong><span>مختبرات</span></div>
   </div>
 
-</section>
-
-<!-- =========================
-     NOVA
-========================= -->
-
-<section id="page-nova" class="page">
-
-  <div class="sectionTitle">
-
-    <h2>NOVA</h2>
-
-    <p>
-      الذكاء المركزي داخل VANTA.
-    </p>
-
-  </div>
-
-  <div class="novaLayout">
-
-    <aside class="card novaSide">
-
-      <div class="novaOrb">
-        <div class="novaOrbInner">N</div>
-      </div>
-
-      <h3 style="text-align:center">NOVA</h3>
-
-      <p>
-        تفهم سياقك داخل VANTA،
-        مستوى تقدمك،
-        الكتب التي تدرسها،
-        ونشاطك داخل VANTABOOK.
-      </p>
-
-    </aside>
-
-    <div class="card chat">
-
-      <div class="chatHead">
-
-        <div>
-          <strong>NOVA</strong>
-          <div style="color:var(--muted);font-size:12px">
-            VANTA Intelligence
-          </div>
-        </div>
-
-        <span class="chatStatus">● ONLINE</span>
-
-      </div>
-
-      <div id="messages" class="messages">
-
-        <div class="msg nova">
-          أنا NOVA. كيف أساعدك اليوم؟
-        </div>
-
-      </div>
-
-      <form id="novaForm" class="chatInput">
-
-        <input
-          id="novaInput"
-          autocomplete="off"
-          placeholder="اكتب سؤالك لـ NOVA..."
-        >
-
-        <button type="submit">إرسال</button>
-
-      </form>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- =========================
-     LEARNING
-========================= -->
-
-<section id="page-learning" class="page">
-
-  <div class="sectionTitle">
-
-    <h2>التعلّم</h2>
-
-    <p>
-      تقدّمك داخل منظومة VANTA.
-    </p>
-
+  <div class="section-head">
+    <small>// VANTA ECOSYSTEM</small>
+    <h2>كل شيء في مكان واحد</h2>
   </div>
 
   <div class="grid grid3">
-
-    <div class="card stat">
-      <strong id="xpDisplay">0</strong>
-      <span>XP</span>
+    <div class="card">
+      <div class="icon-box">📚</div>
+      <h3>المكتبة</h3>
+      <p>كتب إلكترونية تفاعلية، وكل كتاب يحتوي على عدة دروس طويلة ومنظمة.</p>
+      <button class="btn small" data-page-go="library">فتح المكتبة</button>
     </div>
 
-    <div class="card stat">
-      <strong id="levelDisplay">1</strong>
-      <span>Level</span>
+    <div class="card">
+      <div class="icon-box">🧪</div>
+      <h3>المختبرات</h3>
+      <p>تجارب تفاعلية آمنة مثل اختبار قوة كلمة المرور والهاش والتصيد.</p>
+      <button class="btn small" data-page-go="labs">دخول المختبرات</button>
     </div>
 
-    <div class="card stat">
-      <strong id="bookProgressDisplay">0%</strong>
-      <span>التقدم</span>
+    <div class="card">
+      <div class="icon-box">🤖</div>
+      <h3>NOVA</h3>
+      <p>مساعد VANTA يفهم سياقك الحالي ويمكنه مساعدتك أثناء الدراسة.</p>
+      <button class="btn small" id="openNovaCard">فتح NOVA</button>
     </div>
+  </div>
+</section>
 
+<!-- =========================
+ LEARN
+========================= -->
+<section class="page" id="page-learn">
+
+  <div class="section-head">
+    <small>// LEARNING</small>
+    <h2>التعلّم داخل الكتب</h2>
+    <p>الدروس ليست صفحات منفصلة؛ كل مسار تعليمي موجود داخل كتاب في المكتبة.</p>
   </div>
 
-  <div style="margin-top:30px">
-
-    <div class="sectionTitle">
-      <h2>ابدأ من الكتب</h2>
+  <div class="grid grid3">
+    <div class="card">
+      <div class="icon-box">🛡️</div>
+      <h3>الأمن السيبراني</h3>
+      <p>أساسيات الشبكات، Linux، المصادقة، التشفير، الويب والأمن الدفاعي.</p>
+      <button class="btn small" data-book="cyber">فتح الكتاب</button>
     </div>
 
-    <div id="learningBooks" class="books"></div>
+    <div class="card">
+      <div class="icon-box">💻</div>
+      <h3>البرمجة</h3>
+      <p>HTML وCSS وJavaScript وPython مع تمارين عملية.</p>
+      <button class="btn small" data-book="programming">فتح الكتاب</button>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">⚙️</div>
+      <h3>التقنية</h3>
+      <p>أنظمة التشغيل، Git، الخوادم، الويب ومفاهيم الحوسبة.</p>
+      <button class="btn small" data-book="technology">فتح الكتاب</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- =========================
+ LIBRARY
+========================= -->
+<section class="page" id="page-library">
+
+  <div class="section-head">
+    <small>// VANTA LIBRARY</small>
+    <h2>المكتبة الإلكترونية</h2>
+    <p>اختر كتابًا لفتح واجهة القراءة التفاعلية.</p>
+  </div>
+
+  <div class="book-shelf" id="bookShelf"></div>
+
+</section>
+
+<!-- =========================
+ READER
+========================= -->
+<section class="page" id="page-reader">
+
+  <div class="reader">
+
+    <div class="reader-top">
+      <button class="btn small" id="backLibrary">← المكتبة</button>
+      <span id="readerBookTitle"></span>
+    </div>
+
+    <div class="lesson-progress">
+      <div id="lessonProgressFill"></div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div style="color:var(--cyan);font-family:'JetBrains Mono';font-size:.7rem" id="lessonNumber"></div>
+      <div class="lesson-body" id="lessonBody"></div>
+    </div>
+
+    <div class="lesson-nav">
+      <button class="btn" id="previousLesson">الدرس السابق</button>
+      <button class="btn primary" id="nextLesson">الدرس التالي</button>
+      <button class="btn pink" id="askNovaLesson">اسأل NOVA</button>
+    </div>
 
   </div>
 
 </section>
 
 <!-- =========================
-     LABS
+ LABS
 ========================= -->
+<section class="page" id="page-labs">
 
-<section id="page-labs" class="page">
-
-  <div class="sectionTitle">
-
-    <h2>Cyber Labs</h2>
-
-    <p>
-      مختبرات تفاعلية تعليمية ودفاعية.
-    </p>
-
+  <div class="section-head">
+    <small>// CYBER RANGE</small>
+    <h2>المختبرات التفاعلية</h2>
+    <p>تجارب تعليمية دفاعية وآمنة داخل VANTA.</p>
   </div>
 
-  <div class="grid grid3">
+  <div class="grid grid2">
 
-    <div class="card labCard">
-
-      <div class="labIcon">🔐</div>
-
+    <div class="card">
+      <div class="icon-box">🔐</div>
       <h3>اختبار قوة كلمة المرور</h3>
-
-      <p>
-        اختبر قوة كلمة مرورك محليًا بدون إرسالها إلى أي خادم.
-      </p>
-
-      <button class="btn primary" style="margin-top:18px"
-        onclick="openLab('password')">
-        ابدأ الاختبار
-      </button>
-
-    </div>
-
-    <div class="card labCard">
-
-      <div class="labIcon">#</div>
-
-      <h3>SHA-256 Hash Lab</h3>
-
-      <p>
-        تعلّم مفهوم الـHashing عمليًا باستخدام Web Crypto.
-      </p>
-
-      <button class="btn" style="margin-top:18px"
-        onclick="openLab('hash')">
-        افتح المختبر
-      </button>
-
-    </div>
-
-    <div class="card labCard">
-
-      <div class="labIcon">🎣</div>
-
-      <h3>Phishing Lab</h3>
-
-      <p>
-        تعلّم كيف تميز رسائل التصيد الإلكتروني.
-      </p>
-
-      <button class="btn" style="margin-top:18px"
-        onclick="openLab('phishing')">
-        ابدأ
-      </button>
-
-    </div>
-
-    <div class="card labCard">
-
-      <div class="labIcon">🧩</div>
-
-      <h3>Security Challenge</h3>
-
-      <p>
-        أسئلة قصيرة لاختبار فهمك للمفاهيم الأمنية.
-      </p>
-
-      <button class="btn" style="margin-top:18px"
-        onclick="openLab('challenge')">
-        تحدّاني
-      </button>
-
-    </div>
-
-    <div class="card labCard">
-
-      <div class="labIcon">🛡️</div>
-
-      <h3>Defense Simulator</h3>
-
-      <p>
-        اختر الإجراء الدفاعي المناسب أمام سيناريو أمني.
-      </p>
-
-      <button class="btn" style="margin-top:18px"
-        onclick="openLab('defense')">
-        ابدأ
-      </button>
-
-    </div>
-
-    <div class="card labCard">
-
-      <div class="labIcon">🧠</div>
-
-      <h3>Cyber Quiz</h3>
-
-      <p>
-        اختبر معلوماتك في الأمن والشبكات والخصوصية.
-      </p>
-
-      <button class="btn" style="margin-top:18px"
-        onclick="openLab('quiz')">
-        ابدأ
-      </button>
-
-    </div>
-
-  </div>
-
-  <div id="labWorkspace" class="card labBox hidden"></div>
-
-</section>
-
-<!-- =========================
-     LIBRARY
-========================= -->
-
-<section id="page-library" class="page">
-
-  <div class="libraryHero">
-
-    <div style="color:var(--cyan);font-size:12px">
-      VANTA DIGITAL ARCHIVE
-    </div>
-
-    <h1 style="font-size:42px;margin-top:10px">
-      المكتبة
-    </h1>
-
-    <p style="color:var(--muted);margin-top:10px;line-height:1.8">
-      لا توجد صفحات فارغة.
-      اختر كتابًا وستدخل إلى تجربة تعليمية كاملة.
-    </p>
-
-  </div>
-
-  <div id="booksGrid" class="books"></div>
-
-</section>
-
-<!-- =========================
-     VANTABOOK
-========================= -->
-
-<section id="page-book" class="page">
-
-  <div class="sectionTitle">
-
-    <h2>VANTABOOK</h2>
-
-    <p>
-      المساحة الاجتماعية داخل VANTA.
-    </p>
-
-  </div>
-
-  <div class="vantaBookLayout">
-
-    <div class="feed">
-
-      <div class="card storyRow" id="stories"></div>
-
-      <div class="card composer">
-
-        <textarea
-          id="postText"
-          placeholder="ماذا يدور في بالك؟"
-        ></textarea>
-
-        <div class="composerActions">
-
-          <label class="btn">
-            📷 صورة / فيديو
-            <input
-              id="postMedia"
-              type="file"
-              accept="image/*,video/*"
-              hidden
-            >
-          </label>
-
-          <button
-            class="btn primary"
-            onclick="publishPost()">
-            نشر
-          </button>
-
-        </div>
-
-        <div id="postPreview"
-             style="margin-top:12px"></div>
-
-      </div>
-
-      <div id="posts"></div>
-
-    </div>
-
-    <aside class="card profileSide">
-
-      <img
-        id="bookProfileAvatar"
-        class="profileLarge"
-        src="https://ui-avatars.com/api/?name=VANTA&background=151827&color=fff"
+      <p>اكتب كلمة مرور تجريبية وشاهد كيف تتغير قوتها.</p>
+
+      <input
+        id="passwordTest"
+        class="password-input"
+        type="text"
+        placeholder="اكتب كلمة مرور تجريبية"
+        autocomplete="off"
       >
 
-      <h3 id="bookProfileName">زائر VANTA</h3>
-
-      <p style="margin-top:8px">
-        حسابك في VANTABOOK مرتبط بحساب VANTA نفسه.
-      </p>
-
-      <div class="actions">
-
-        <button class="btn"
-          onclick="go('profile')">
-          الملف الشخصي
-        </button>
-
-        <button class="btn"
-          onclick="openAuth()">
-          تسجيل الدخول
-        </button>
-
+      <div class="password-meter">
+        <div id="passwordFill"></div>
       </div>
 
-    </aside>
+      <div class="password-result" id="passwordResult">
+        ابدأ الاختبار...
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">#️⃣</div>
+      <h3>Hash Playground</h3>
+      <p>شاهد فكرة الهاش بشكل مبسط.</p>
+
+      <input
+        id="hashInput"
+        class="password-input"
+        type="text"
+        placeholder="اكتب نصًا"
+        autocomplete="off"
+      >
+
+      <div class="lab-terminal" style="margin-top:12px">
+        <div id="hashOutput" class="terminal-output">
+          في انتظار الإدخال...
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">🎣</div>
+      <h3>اكتشف التصيد</h3>
+      <p>هل تستطيع اكتشاف العلامات المشبوهة في رسالة افتراضية؟</p>
+
+      <div style="padding:15px;border-radius:15px;background:rgba(255,255,255,.04);line-height:1.8">
+        <b>رسالة:</b><br>
+        "تهانينا! تم اختيار حسابك لجائزة. اضغط الرابط الآن لتأكيد بياناتك."
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn small" data-phishing="yes">تصيد</button>
+        <button class="btn small" data-phishing="no">رسالة طبيعية</button>
+      </div>
+
+      <div id="phishingResult" style="margin-top:10px;color:var(--muted)"></div>
+    </div>
+
+    <div class="card">
+      <div class="icon-box">⌨️</div>
+      <h3>Terminal Basics</h3>
+      <p>تعلم أوامر الطرفية الأساسية داخل محاكاة بسيطة.</p>
+
+      <div class="lab-terminal">
+        <div id="terminalOutput" class="terminal-output">
+VANTA Terminal
+اكتب: help
+        </div>
+        <input
+          id="terminalInput"
+          class="terminal-input"
+          placeholder="command..."
+          autocomplete="off"
+        >
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- =========================
+ VANTABOOK
+========================= -->
+<section class="page" id="page-vantabook">
+
+  <div class="vb-head">
+    <div>
+      <small style="color:var(--cyan);font-family:'JetBrains Mono'">// VANTABOOK</small>
+      <h2 style="margin:5px 0">VANTABOOK</h2>
+    </div>
+
+    <button class="btn primary" id="newPostButton">＋ نشر</button>
+  </div>
+
+  <div class="vb-tabs">
+    <button class="vb-tab active" data-vb="feed">الرئيسية</button>
+    <button class="vb-tab" data-vb="explore">استكشاف</button>
+    <button class="vb-tab" data-vb="saved">المحفوظات</button>
+    <button class="vb-tab" data-vb="profile">ملفي</button>
+  </div>
+
+  <div class="stories" id="stories"></div>
+
+  <div class="feed" id="vantabookFeed"></div>
+
+</section>
+
+<!-- =========================
+ ROADMAP
+========================= -->
+<section class="page" id="page-roadmap">
+
+  <div class="section-head">
+    <small>// ROADMAP</small>
+    <h2>مسار VANTA</h2>
+    <p>تقدم خطوة خطوة، واستخدم الكتب والمختبرات وNOVA معًا.</p>
+  </div>
+
+  <div class="grid grid2">
+    <div class="card">
+      <h3>01 — الأساسيات</h3>
+      <p>الحاسب، الإنترنت، Linux، الطرفية، الملفات.</p>
+    </div>
+    <div class="card">
+      <h3>02 — الشبكات</h3>
+      <p>IP، DNS، HTTP، المنافذ، البروتوكولات.</p>
+    </div>
+    <div class="card">
+      <h3>03 — البرمجة</h3>
+      <p>HTML، CSS، JavaScript، Python.</p>
+    </div>
+    <div class="card">
+      <h3>04 — الأمن</h3>
+      <p>المصادقة، كلمات المرور، الهاش، الويب والأمن الدفاعي.</p>
+    </div>
+    <div class="card">
+      <h3>05 — المختبرات</h3>
+      <p>تطبيق ما تعلمته من خلال تجارب آمنة.</p>
+    </div>
+    <div class="card">
+      <h3>06 — المشاريع</h3>
+      <p>ابنِ مشاريعك الخاصة داخل بيئة VANTA.</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- =========================
+ DASHBOARD
+========================= -->
+<section class="page" id="page-dashboard">
+
+  <div class="section-head">
+    <small>// DASHBOARD</small>
+    <h2>لوحتك</h2>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><strong id="dashLevel">1</strong><span>المستوى</span></div>
+    <div class="stat"><strong id="dashXP">0</strong><span>XP</span></div>
+    <div class="stat"><strong id="dashPosts">0</strong><span>منشورات</span></div>
+    <div class="stat"><strong id="dashProgress">0%</strong><span>تقدم الكتب</span></div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3>نشاطك</h3>
+    <p id="dashboardMessage">
+      سجّل دخولك حتى يحفظ VANTA تقدمك.
+    </p>
+  </div>
+
+</section>
+
+<!-- =========================
+ PROFILE
+========================= -->
+<section class="page" id="page-profile">
+
+  <div class="profile-cover"></div>
+
+  <div class="profile-info">
+    <div class="profile-avatar" id="profileAvatar"></div>
+
+    <div class="profile-name">
+      <h2 id="profileName">زائر VANTA</h2>
+      <p id="profileUsername">@guest</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px">
+    <h3>ملفك</h3>
+
+    <div class="field">
+      <label>الاسم الظاهر</label>
+      <input id="profileDisplayName" placeholder="اسمك">
+    </div>
+
+    <div class="field">
+      <label>اسم المستخدم</label>
+      <input id="profileUsernameInput" placeholder="username">
+    </div>
+
+    <div class="field">
+      <label>نبذة</label>
+      <textarea id="profileBio" placeholder="اكتب نبذة عنك"></textarea>
+    </div>
+
+    <div class="field">
+      <label>صورة الملف الشخصي</label>
+      <input id="avatarUpload" type="file" accept="image/*">
+    </div>
+
+    <button class="btn primary" id="saveProfile">حفظ التغييرات</button>
+  </div>
+
+</section>
+
+<!-- =========================
+ SETTINGS
+========================= -->
+<section class="page" id="page-settings">
+
+  <div class="section-head">
+    <small>// SETTINGS</small>
+    <h2>الإعدادات</h2>
+  </div>
+
+  <div class="grid grid2">
+
+    <div class="card">
+      <h3>الحساب</h3>
+      <p id="settingsAccount">غير مسجل الدخول</p>
+      <button class="btn" id="settingsAccountButton">إدارة الحساب</button>
+    </div>
+
+    <div class="card">
+      <h3>اللغة</h3>
+      <p>VANTA يعمل حاليًا بواجهة عربية RTL.</p>
+    </div>
+
+    <div class="card">
+      <h3>الصوت</h3>
+      <p>يمكن لـ VANTA تشغيل رسالة الترحيب عند دخولك.</p>
+      <button class="btn" id="testVoice">تجربة صوت NOVA</button>
+    </div>
+
+    <div class="card">
+      <h3>حول VANTA</h3>
+      <p>منصة VANTA من تأسيس وتطوير علي ياسر.</p>
+      <button class="btn" id="creditsButton">صفحة الحقوق</button>
+    </div>
 
   </div>
 
 </section>
 
 <!-- =========================
-     PROFILE
+ CREDITS
 ========================= -->
+<section class="page" id="page-credits">
 
-<section id="page-profile" class="page">
+  <div style="max-width:800px;margin:80px auto;text-align:center">
 
-  <div class="account">
+    <div class="boot-symbol" style="width:100px;height:100px">
+      <b>V</b>
+    </div>
 
-    <div class="card accountCard">
+    <h1 class="gradient-text">VANTA</h1>
 
-      <h2>الحساب</h2>
-
-      <p style="color:var(--muted);margin-top:7px">
-        نفس الحساب يستخدم في VANTA وVANTABOOK.
+    <div class="card" style="margin-top:25px">
+      <h2>تأسيس وتطوير</h2>
+      <h1>علي ياسر</h1>
+      <p>
+        Founder · Developer · Owner
       </p>
 
-      <div style="margin-top:25px">
-
-        <img
-          id="profileAvatar"
-          class="accountAvatar"
-          src="https://ui-avatars.com/api/?name=VANTA&background=151827&color=fff"
-        >
-
-        <input
-          id="avatarFile"
-          type="file"
-          accept="image/*"
-        >
-
+      <div style="margin-top:25px;padding-top:20px;border-top:1px solid var(--line)">
+        <p>
+          © <span id="copyrightYear"></span> VANTA.
+          جميع الحقوق محفوظة.
+        </p>
       </div>
-
-      <div class="field">
-
-        <label>اسم العرض</label>
-
-        <input
-          id="profileName"
-          placeholder="اسمك"
-        >
-
-      </div>
-
-      <button
-        class="btn primary"
-        style="margin-top:15px"
-        onclick="saveProfile()">
-        حفظ الملف
-      </button>
-
-      <div id="profileInfo"
-           style="margin-top:20px;color:var(--muted)">
-        غير مسجل الدخول.
-      </div>
-
-      <button
-        id="logoutBtn"
-        class="btn hidden"
-        style="margin-top:15px"
-        onclick="logout()">
-        تسجيل الخروج
-      </button>
-
     </div>
 
   </div>
@@ -1873,584 +1668,466 @@ main{
 
 </main>
 
-</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="brand">
+        <div class="brand-mark"><span>V</span></div>
+        VANTA
+      </div>
+      <p>
+        منصة تعليمية وتقنية تجمع التعلم العملي، المختبرات، NOVA وVANTABOOK.
+      </p>
+    </div>
 
-<!-- =========================
-     AUTH MODAL
-========================= -->
-
-<div id="authModal"
-     class="reader">
-
-  <div class="card"
-       style="
-       width:min(480px,94%);
-       margin:auto;
-       padding:28px;
-       ">
-
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      ">
+    <div class="footer-links">
+      <div>
+        <b>VANTA</b>
+        <a href="#" data-page-go="home">الرئيسية</a>
+        <a href="#" data-page-go="library">المكتبة</a>
+        <a href="#" data-page-go="labs">المختبرات</a>
+      </div>
 
       <div>
-        <h2 id="authTitle">تسجيل الدخول</h2>
-        <p style="color:var(--muted);margin-top:5px">
-          حساب واحد لـ VANTA وVANTABOOK
-        </p>
+        <b>VANTABOOK</b>
+        <a href="#" data-page-go="vantabook">الرئيسية</a>
+        <a href="#" data-vb-action="profile">الملف</a>
       </div>
-
-      <button class="closeBtn"
-        onclick="closeAuth()">
-        ×
-      </button>
-
     </div>
-
-    <div class="authTabs" style="margin-top:25px">
-
-      <button
-        class="authTab active"
-        id="loginTab"
-        onclick="setAuthMode('login')">
-        دخول
-      </button>
-
-      <button
-        class="authTab"
-        id="signupTab"
-        onclick="setAuthMode('signup')">
-        إنشاء حساب
-      </button>
-
-    </div>
-
-    <div class="form">
-
-      <input
-        id="authName"
-        placeholder="اسم المستخدم"
-        class="hidden"
-      >
-
-      <input
-        id="authEmail"
-        type="email"
-        placeholder="البريد الإلكتروني"
-      >
-
-      <input
-        id="authPassword"
-        type="password"
-        placeholder="كلمة المرور"
-      >
-
-      <button
-        class="btn primary"
-        onclick="submitAuth()">
-        متابعة
-      </button>
-
-    </div>
-
-    <div class="socialAuth">
-
-      <button
-        class="btn"
-        onclick="oauth('google')">
-        Google
-      </button>
-
-      <button
-        class="btn"
-        onclick="oauth('apple')">
-        Apple
-      </button>
-
-    </div>
-
-    <div class="accountNote">
-      يمكنك دخول VANTA كزائر بدون إنشاء حساب.
-      الحساب يصبح مطلوبًا فقط عند الحاجة إلى ميزات شخصية مثل النشر والحفظ.
-    </div>
-
   </div>
 
-</div>
+  <div class="footer-bottom">
+    <span>© <span id="footerYear"></span> VANTA — علي ياسر</span>
+    <span>Built for learning & creativity.</span>
+  </div>
+</footer>
 
-<!-- =========================
-     READER
-========================= -->
+<!-- NOVA -->
+<button id="novaFab">N</button>
 
-<div id="reader" class="reader">
+<div id="novaPanel">
 
-  <div class="readerShell">
+  <div class="nova-head">
+    <div class="nova-icon">N</div>
 
-    <aside class="lessonSide">
+    <div class="nova-head-info">
+      <strong>NOVA</strong>
+      <span>ONLINE</span>
+    </div>
 
-      <h3 id="readerBookTitle">الكتاب</h3>
+    <button class="close" id="novaClose">×</button>
+  </div>
 
-      <div id="lessonList"></div>
+  <div class="nova-messages" id="novaMessages"></div>
 
-    </aside>
+  <div class="nova-suggestions">
+    <button data-nova-q="ما هو الأمن السيبراني؟">الأمن السيبراني</button>
+    <button data-nova-q="ماذا أدرس الآن؟">ماذا أدرس؟</button>
+    <button data-nova-q="اشرح لي الهاش">اشرح الهاش</button>
+  </div>
 
-    <article class="lessonContent">
-
-      <div class="readerTop">
-
-        <div>
-          <div style="color:var(--cyan);font-size:12px">
-            VANTA DIGITAL BOOK
-          </div>
-
-          <div id="lessonCounter"
-               style="color:var(--muted);font-size:12px;margin-top:5px">
-          </div>
-        </div>
-
-        <button
-          class="closeBtn"
-          onclick="closeReader()">
-          ×
-        </button>
-
-      </div>
-
-      <div id="lessonBody"></div>
-
-      <div class="lessonBottom">
-
-        <button
-          id="prevLesson"
-          class="btn"
-          onclick="changeLesson(-1)">
-          ← السابق
-        </button>
-
-        <button
-          class="btn primary"
-          onclick="askNovaAboutLesson()">
-          🤖 اسأل NOVA
-        </button>
-
-        <button
-          id="nextLesson"
-          class="btn"
-          onclick="changeLesson(1)">
-          التالي →
-        </button>
-
-      </div>
-
-    </article>
-
+  <div class="nova-input-row">
+    <input
+      id="novaInput"
+      placeholder="اسأل NOVA..."
+      autocomplete="off"
+    >
+    <button id="novaSend">➤</button>
   </div>
 
 </div>
 
 <div id="toast"></div>
 
+<!-- AUTH MODAL -->
+<div class="modal" id="authModal">
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <h2 id="authTitle">تسجيل الدخول</h2>
+      <button class="close" data-close="authModal">×</button>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" data-auth-mode="login">دخول</button>
+      <button class="auth-tab" data-auth-mode="signup">حساب جديد</button>
+    </div>
+
+    <div class="field">
+      <label>البريد الإلكتروني</label>
+      <input id="authEmail" type="email" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <label>كلمة المرور</label>
+      <input id="authPassword" type="password" autocomplete="current-password">
+    </div>
+
+    <button class="btn primary" style="width:100%" id="authSubmit">
+      تسجيل الدخول
+    </button>
+
+    <div class="oauth">
+      <button class="btn" id="googleLogin">Google</button>
+      <button class="btn" id="appleLogin">Apple</button>
+    </div>
+
+    <div class="auth-note">
+      Google مربوط مع Supabase ويمكن استخدامه مباشرة.
+      Apple مجهز في الواجهة ويمكن تفعيله لاحقًا من Supabase بدون تغيير تصميم VANTA.
+    </div>
+
+    <div id="authMessage" style="margin-top:12px;color:var(--muted)"></div>
+
+  </div>
+</div>
+
+<!-- ACCOUNT MODAL -->
+<div class="modal" id="accountModal">
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <h2>الحساب</h2>
+      <button class="close" data-close="accountModal">×</button>
+    </div>
+
+    <div id="accountContent"></div>
+
+  </div>
+</div>
+
+<!-- POST MODAL -->
+<div class="modal" id="postModal">
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <h2>منشور جديد</h2>
+      <button class="close" data-close="postModal">×</button>
+    </div>
+
+    <div class="field">
+      <label>اكتب شيئًا</label>
+      <textarea id="postCaption" placeholder="ماذا تريد أن تنشر؟"></textarea>
+    </div>
+
+    <div class="field">
+      <label>صورة أو فيديو</label>
+      <input id="postMedia" type="file" accept="image/*,video/*">
+    </div>
+
+    <div id="postPreview"></div>
+
+    <button class="btn primary" style="width:100%" id="publishPost">
+      نشر
+    </button>
+
+  </div>
+</div>
+
+<!-- STORY MODAL -->
+<div class="modal" id="storyModal">
+  <div class="modal-box">
+
+    <div class="modal-head">
+      <h2>استوري</h2>
+      <button class="close" data-close="storyModal">×</button>
+    </div>
+
+    <div id="storyViewer" style="text-align:center"></div>
+
+    <div class="field" style="margin-top:15px">
+      <label>رفع استوري جديدة</label>
+      <input id="storyUpload" type="file" accept="image/*,video/*">
+    </div>
+
+    <button class="btn primary" id="publishStory">
+      نشر الاستوري
+    </button>
+
+  </div>
+</div>
+
+<!-- GENERIC MODAL -->
+<div class="modal" id="genericModal">
+  <div class="modal-box wide">
+
+    <div class="modal-head">
+      <h2 id="genericTitle"></h2>
+      <button class="close" data-close="genericModal">×</button>
+    </div>
+
+    <div id="genericBody"></div>
+
+  </div>
+</div>
+
 <script>
+"use strict";
 
-/* =========================================================
-   VANTA CONFIG
-========================================================= */
-
-const CONFIG = {
-  SUPABASE_URL: "https://mknbfymmwuesjffbmkmu.supabase.co",
-  SUPABASE_ANON_KEY: "sb_publishable_fLJzcNmcjgSYGh9-EspBuQ_nJlDnZby",
-  NOVA_ENDPOINT: "/api/nova",
-  STORAGE_BUCKET: "vanta-media"
-};
-
-
-/* =========================================================
+/* ============================================================
    SUPABASE
-========================================================= */
+============================================================ */
 
-let supabaseClient = null;
+const SUPABASE_URL =
+  "https://mknbfymmwuesjffbmkmu.supabase.co";
 
-if(
-  CONFIG.SUPABASE_URL &&
-  CONFIG.SUPABASE_ANON_KEY &&
-  window.supabase
-){
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_fLJzcNmcjgSYGh9-EspBuQ_nJlDnZby";
 
-  supabaseClient =
-    window.supabase.createClient(
-      CONFIG.SUPABASE_URL,
-      CONFIG.SUPABASE_ANON_KEY
-    );
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
-}
+const MEDIA_BUCKET = "vanta-media";
 
+let currentUser = null;
+let currentProfile = null;
+let authMode = "login";
+let currentBook = null;
+let currentLesson = 0;
+let currentVBMode = "feed";
 
-/* =========================================================
-   STATE
-========================================================= */
+/* ============================================================
+   UTILS
+============================================================ */
 
-const state = {
-
-  user:null,
-
-  profile:null,
-
-  xp:0,
-
-  level:1,
-
-  currentBook:null,
-
-  lessonIndex:0,
-
-  posts:[],
-
-  stories:[],
-
-  novaHistory:[],
-
-  interactions:
-    JSON.parse(
-      localStorage.getItem("vanta_interactions") || "{}"
-    )
-
-};
-
-
-/* =========================================================
-   HELPERS
-========================================================= */
+const $ = id => document.getElementById(id);
 
 function toast(message){
-
-  const el =
-    document.getElementById("toast");
-
+  const el = $("toast");
   el.textContent = message;
-
   el.classList.add("show");
 
-  clearTimeout(window.__toast);
+  clearTimeout(window.__toastTimer);
 
-  window.__toast =
-    setTimeout(
-      ()=>el.classList.remove("show"),
-      2600
-    );
-
+  window.__toastTimer =
+    setTimeout(() => el.classList.remove("show"),3000);
 }
 
-
-function esc(value){
-
+function escapeHTML(value){
   return String(value ?? "")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
-
 }
 
-
-function avatarUrl(name){
-
-  return "https://ui-avatars.com/api/?name="+
-    encodeURIComponent(name || "VANTA")+
-    "&background=151827&color=fff";
-
+function initials(name){
+  return (name || "V")
+    .trim()
+    .slice(0,1)
+    .toUpperCase();
 }
 
+function getName(){
+  if(currentProfile?.display_name)
+    return currentProfile.display_name;
 
-/* =========================================================
+  if(currentProfile?.username)
+    return currentProfile.username;
+
+  if(currentUser?.email)
+    return currentUser.email.split("@")[0];
+
+  return "زائر VANTA";
+}
+
+/* ============================================================
    NAVIGATION
-========================================================= */
+============================================================ */
 
-function go(page){
+function showPage(page){
 
-  document
-    .querySelectorAll(".page")
-    .forEach(
-      p=>p.classList.remove("active")
-    );
+  document.querySelectorAll(".page")
+    .forEach(p => p.classList.remove("active"));
 
-  const target =
-    document.getElementById(
-      "page-"+page
-    );
+  const target = $("page-" + page);
 
   if(!target) return;
 
   target.classList.add("active");
 
-  document
-    .querySelectorAll(".navBtn")
-    .forEach(
-      b=>{
-        b.classList.toggle(
-          "active",
-          b.dataset.page===page
-        );
-      }
-    );
+  document.querySelectorAll(".nav-link")
+    .forEach(btn => {
+      btn.classList.toggle(
+        "active",
+        btn.dataset.page === page
+      );
+    });
 
   window.scrollTo({
     top:0,
     behavior:"smooth"
   });
 
-  if(page==="book"){
-    loadFeed();
-  }
+  if(page === "vantabook")
+    loadVantaBook();
 
-  if(page==="library"){
-    renderBooks();
-  }
+  if(page === "dashboard")
+    renderDashboard();
 
+  if(page === "profile")
+    renderProfile();
 }
 
+document.querySelectorAll(".nav-link")
+.forEach(btn => {
+  btn.addEventListener("click", () => {
+    showPage(btn.dataset.page);
+  });
+});
 
-/* =========================================================
-   BOOT
-========================================================= */
+document.querySelectorAll("[data-page-go]")
+.forEach(btn => {
+  btn.addEventListener("click", e => {
+    e.preventDefault();
+    showPage(btn.dataset.pageGo);
+  });
+});
 
-let bootDone=false;
+/* ============================================================
+   BOOT + VOICE
+============================================================ */
 
-function finishBoot(){
+let bootValue = 0;
 
-  if(bootDone) return;
+const bootTimer = setInterval(() => {
 
-  bootDone=true;
+  bootValue += Math.floor(Math.random()*8)+3;
 
-  document
-    .getElementById("boot")
-    .classList.add("hide");
+  if(bootValue >= 100){
+    bootValue = 100;
+    clearInterval(bootTimer);
+  }
 
-  speakWelcome();
+  $("bootFill").style.width = bootValue + "%";
+  $("bootPercent").textContent = bootValue + "%";
 
-}
+},120);
 
+function welcomeVoice(){
 
-function speakWelcome(){
+  const name = getName();
 
   if(!("speechSynthesis" in window))
     return;
 
-  const name =
-    state.profile?.name ||
-    state.user?.user_metadata?.name ||
-    state.user?.email?.split("@")[0] ||
-    "";
-
-  const text =
-    name
-      ? `Welcome to VANTA, ${name}.`
-      : `Welcome to VANTA.`;
-
-  const voice =
-    new SpeechSynthesisUtterance(text);
-
-  voice.lang="en-US";
-  voice.rate=.82;
-  voice.pitch=.72;
-  voice.volume=.8;
-
   speechSynthesis.cancel();
 
-  /*
-   المتصفح قد يمنع الصوت التلقائي.
-   عندها يعمل بعد الضغط على دخول/تخطي.
-  */
-
-  try{
-    speechSynthesis.speak(voice);
-  }catch{}
-
-}
-
-
-function startBoot(){
-
-  const progress =
-    document.getElementById("bootProgress");
-
   const text =
-    document.getElementById("bootText");
+    currentUser
+      ? `Welcome to VANTA, ${name}.`
+      : "Welcome to VANTA.";
 
-  let n=0;
+  const utterance = new SpeechSynthesisUtterance(text);
 
-  const timer =
-    setInterval(()=>{
+  utterance.lang = "en-US";
+  utterance.rate = .88;
+  utterance.pitch = .55;
+  utterance.volume = .9;
 
-      n+=4;
+  const voices = speechSynthesis.getVoices();
 
-      progress.style.width=n+"%";
+  const preferred =
+    voices.find(v =>
+      /male|david|mark|daniel|alex/i.test(v.name)
+    );
 
-      if(n<30)
-        text.textContent="Loading VANTA core...";
+  if(preferred)
+    utterance.voice = preferred;
 
-      else if(n<55)
-        text.textContent="Connecting intelligence...";
-
-      else if(n<80)
-        text.textContent="Preparing digital archive...";
-
-      else
-        text.textContent="System ready.";
-
-      if(n>=100){
-
-        clearInterval(timer);
-
-        setTimeout(
-          finishBoot,
-          350
-        );
-
-      }
-
-    },55);
-
+  speechSynthesis.speak(utterance);
 }
 
+function enterVanta(){
 
-document
-  .getElementById("enterVanta")
-  .onclick=finishBoot;
+  $("boot").classList.add("hide");
 
-document
-  .getElementById("skipBoot")
-  .onclick=finishBoot;
+  setTimeout(() => {
+    welcomeVoice();
+  },300);
+}
 
+$("enterVanta").addEventListener("click",enterVanta);
+$("skipBoot").addEventListener("click",enterVanta);
 
-/* =========================================================
+window.speechSynthesis?.getVoices();
+
+/* ============================================================
    AUTH
-========================================================= */
+============================================================ */
 
-let authMode="login";
+function openAuth(mode="login"){
+  authMode = mode;
 
+  $("authModal").classList.add("open");
 
-function openAuth(){
-
-  document
-    .getElementById("authModal")
-    .classList.add("open");
-
-}
-
-
-function closeAuth(){
-
-  document
-    .getElementById("authModal")
-    .classList.remove("open");
-
-}
-
-
-function setAuthMode(mode){
-
-  authMode=mode;
-
-  const signup =
-    mode==="signup";
-
-  document
-    .getElementById("authName")
-    .classList.toggle(
-      "hidden",
-      !signup
-    );
-
-  document
-    .getElementById("loginTab")
-    .classList.toggle(
+  document.querySelectorAll(".auth-tab")
+  .forEach(x => {
+    x.classList.toggle(
       "active",
-      !signup
+      x.dataset.authMode === mode
     );
+  });
 
-  document
-    .getElementById("signupTab")
-    .classList.toggle(
-      "active",
-      signup
-    );
-
-  document
-    .getElementById("authTitle")
-    .textContent =
-      signup
-        ? "إنشاء حساب"
-        : "تسجيل الدخول";
-
+  $("authTitle").textContent =
+    mode === "login"
+      ? "تسجيل الدخول"
+      : "إنشاء حساب";
 }
 
+$("accountButton").addEventListener("click",() => {
 
-async function submitAuth(){
-
-  if(!supabaseClient){
-
-    toast("ضع بيانات Supabase في CONFIG أولًا.");
-
-    return;
-
+  if(currentUser){
+    renderAccountModal();
+    $("accountModal").classList.add("open");
+  }else{
+    openAuth("login");
   }
 
-  const email =
-    document
-      .getElementById("authEmail")
-      .value
-      .trim();
+});
 
-  const password =
-    document
-      .getElementById("authPassword")
-      .value;
+document.querySelectorAll(".auth-tab")
+.forEach(btn => {
+  btn.addEventListener("click",() => {
+    openAuth(btn.dataset.authMode);
+  });
+});
 
-  const name =
-    document
-      .getElementById("authName")
-      .value
-      .trim();
+$("authSubmit").addEventListener("click",async () => {
+
+  const email = $("authEmail").value.trim();
+  const password = $("authPassword").value;
 
   if(!email || !password){
-
-    toast("أدخل البريد وكلمة المرور.");
-
+    $("authMessage").textContent =
+      "أدخل البريد وكلمة المرور.";
     return;
-
   }
+
+  $("authMessage").textContent = "جاري الاتصال...";
 
   try{
 
     let result;
 
-    if(authMode==="signup"){
+    if(authMode === "login"){
 
       result =
-        await supabaseClient.auth.signUp({
-
+        await supabaseClient.auth.signInWithPassword({
           email,
-          password,
-
-          options:{
-            data:{
-              name:name || email.split("@")[0]
-            }
-          }
-
+          password
         });
 
     }else{
 
       result =
-        await supabaseClient.auth.signInWithPassword({
-
+        await supabaseClient.auth.signUp({
           email,
           password
-
         });
 
     }
@@ -2458,2689 +2135,2080 @@ async function submitAuth(){
     if(result.error)
       throw result.error;
 
-    toast(
-      authMode==="signup"
-        ? "تم إنشاء الحساب."
-        : "تم تسجيل الدخول."
-    );
+    if(authMode === "signup"){
 
-    closeAuth();
+      $("authMessage").textContent =
+        "تم إنشاء الحساب. تحقق من بريدك إذا طلب Supabase ذلك.";
 
-    await loadCurrentUser();
+    }else{
+
+      $("authModal").classList.remove("open");
+      toast("تم تسجيل الدخول.");
+
+    }
 
   }catch(error){
 
-    console.error(error);
-
-    toast(
-      error?.message ||
-      "حدث خطأ في تسجيل الدخول."
-    );
+    $("authMessage").textContent =
+      error.message || "حدث خطأ.";
 
   }
 
-}
+});
 
-
-async function oauth(provider){
-
-  if(!supabaseClient){
-
-    toast("ضع بيانات Supabase في CONFIG أولًا.");
-
-    return;
-
-  }
+$("googleLogin").addEventListener("click",async () => {
 
   const {error} =
     await supabaseClient.auth.signInWithOAuth({
-
-      provider,
-
+      provider:"google",
       options:{
-        redirectTo:
-          window.location.origin +
-          window.location.pathname
+        redirectTo:window.location.origin
       }
-
     });
 
   if(error)
     toast(error.message);
 
-}
+});
 
+$("appleLogin").addEventListener("click",async () => {
 
-async function logout(){
+  const {error} =
+    await supabaseClient.auth.signInWithOAuth({
+      provider:"apple",
+      options:{
+        redirectTo:window.location.origin
+      }
+    });
 
-  if(!supabaseClient)
-    return;
+  if(error)
+    toast(
+      "Apple غير مفعّل حاليًا في Supabase. Google يعمل."
+    );
 
-  await supabaseClient.auth.signOut();
+});
 
-  state.user=null;
-  state.profile=null;
-
-  updateUserUI();
-
-  toast("تم تسجيل الخروج.");
-
-}
-
-
-/* =========================================================
-   USER / PROFILE
-========================================================= */
-
-async function loadCurrentUser(){
-
-  if(!supabaseClient){
-
-    updateUserUI();
-
-    return;
-
-  }
+async function loadAuth(){
 
   const {
-    data,
-    error
+    data:{session}
   } =
-    await supabaseClient.auth.getUser();
+    await supabaseClient.auth.getSession();
 
-  if(error){
+  currentUser = session?.user || null;
 
-    console.error(error);
-
-    return;
-
-  }
-
-  state.user =
-    data?.user || null;
-
-  if(state.user){
-
+  if(currentUser)
     await loadProfile();
 
-  }
-
-  updateUserUI();
-
+  updateAccountUI();
 }
 
+supabaseClient.auth.onAuthStateChange(
+  async (_event,session) => {
+
+    currentUser = session?.user || null;
+
+    if(currentUser)
+      await loadProfile();
+    else
+      currentProfile = null;
+
+    updateAccountUI();
+  }
+);
 
 async function loadProfile(){
 
-  if(!supabaseClient || !state.user)
+  if(!currentUser)
     return;
 
   const {data,error} =
     await supabaseClient
-      .from("student_memory_firebase")
-      .select("firebase_uid,email,name,level,xp")
-      .eq(
-        "firebase_uid",
-        state.user.id
-      )
+      .from("profiles")
+      .select("*")
+      .eq("id",currentUser.id)
       .maybeSingle();
 
   if(error){
-
-    console.warn(
-      "Profile load:",
-      error
-    );
-
-  }
-
-  if(data){
-
-    state.profile=data;
-
-    state.xp=
-      Number(data.xp)||0;
-
-    state.level=
-      Number(data.level)||1;
-
-  }else{
-
-    state.profile={
-
-      firebase_uid:state.user.id,
-
-      email:state.user.email,
-
-      name:
-        state.user.user_metadata?.name ||
-        state.user.email?.split("@")[0] ||
-        "مستخدم",
-
-      level:1,
-
-      xp:0
-
-    };
-
-    state.xp=0;
-    state.level=1;
-
-  }
-
-}
-
-
-function updateUserUI(){
-
-  const name =
-    state.profile?.name ||
-    state.user?.user_metadata?.name ||
-    state.user?.email?.split("@")[0] ||
-    "زائر";
-
-  const avatar =
-    state.profile?.avatar_url ||
-    avatarUrl(name);
-
-  document
-    .getElementById("navName")
-    .textContent=name;
-
-  document
-    .getElementById("navAvatar")
-    .src=avatar;
-
-  document
-    .getElementById("bookProfileName")
-    .textContent=name;
-
-  document
-    .getElementById("bookProfileAvatar")
-    .src=avatar;
-
-  document
-    .getElementById("profileAvatar")
-    .src=avatar;
-
-  document
-    .getElementById("profileName")
-    .value =
-      state.profile?.name ||
-      (
-        state.user?.user_metadata?.name || ""
-      );
-
-  document
-    .getElementById("profileInfo")
-    .textContent =
-      state.user
-        ? `${state.user.email || ""} • Level ${state.level} • ${state.xp} XP`
-        : "غير مسجل الدخول.";
-
-  document
-    .getElementById("logoutBtn")
-    .classList.toggle(
-      "hidden",
-      !state.user
-    );
-
-  document
-    .getElementById("xpDisplay")
-    .textContent=state.xp;
-
-  document
-    .getElementById("levelDisplay")
-    .textContent=state.level;
-
-}
-
-
-async function saveProfile(){
-
-  if(!state.user){
-
-    openAuth();
-
-    return;
-
-  }
-
-  const name =
-    document
-      .getElementById("profileName")
-      .value
-      .trim();
-
-  if(!name){
-
-    toast("اكتب اسمًا أولًا.");
-
-    return;
-
-  }
-
-  if(!supabaseClient){
-
-    toast("Supabase غير مربوط.");
-
-    return;
-
-  }
-
-  try{
-
-    await supabaseClient.auth.updateUser({
-
-      data:{
-        name
-      }
-
-    });
-
-    /*
-      تحديث جدول البيانات.
-    */
-
-    const {error} =
-      await supabaseClient
-        .from("student_memory_firebase")
-        .upsert({
-
-          firebase_uid:state.user.id,
-
-          email:state.user.email,
-
-          name,
-
-          xp:state.xp,
-
-          level:state.level
-
-        },{
-          onConflict:"firebase_uid"
-        });
-
-    if(error)
-      console.warn(error);
-
-    await loadProfile();
-
-    updateUserUI();
-
-    toast("تم حفظ الملف.");
-
-  }catch(error){
-
     console.error(error);
-
-    toast("تعذر حفظ الملف.");
-
+    return;
   }
 
+  currentProfile = data;
 }
 
+function updateAccountUI(){
 
-/* =========================================================
-   XP
-========================================================= */
+  $("accountLabel").textContent =
+    currentUser
+      ? getName()
+      : "تسجيل الدخول";
 
-async function addXP(amount){
+  if($("settingsAccount"))
+    $("settingsAccount").textContent =
+      currentUser
+        ? currentUser.email
+        : "غير مسجل الدخول";
 
-  state.xp+=amount;
-
-  /*
-    مستوى بسيط:
-    كل 100 XP = مستوى إضافي.
-  */
-
-  state.level=
-    Math.max(
-      1,
-      Math.floor(state.xp/100)+1
-    );
-
-  updateUserUI();
-
-  if(
-    supabaseClient &&
-    state.user
-  ){
-
-    await supabaseClient
-      .from("student_memory_firebase")
-      .upsert({
-
-        firebase_uid:state.user.id,
-
-        email:state.user.email,
-
-        name:
-          state.profile?.name ||
-          state.user.user_metadata?.name ||
-          state.user.email?.split("@")[0],
-
-        xp:state.xp,
-
-        level:state.level
-
-      },{
-        onConflict:"firebase_uid"
-      });
-
-  }
-
+  updateStats();
 }
 
+function renderAccountModal(){
 
-/* =========================================================
-   BOOK CATALOG
-========================================================= */
+  const name = getName();
 
-const BOOKS=[
+  $("accountContent").innerHTML = `
 
-{
- id:"cyber",
- title:"Cybersecurity Foundations",
- category:"Cybersecurity",
- color:"cyan",
+    <div class="card">
 
- lessons:[
+      <div style="display:flex;gap:12px;align-items:center">
 
- {
-  title:"مقدمة في الأمن السيبراني",
+        <div class="avatar">
+          ${
+            currentProfile?.avatar_url
+              ? `<img src="${escapeHTML(currentProfile.avatar_url)}">`
+              : `<div class="initial">${escapeHTML(initials(name))}</div>`
+          }
+        </div>
 
-  body:`
-  <h1>مقدمة في الأمن السيبراني</h1>
-
-  <p>
-  الأمن السيبراني ليس مجرد محاولة اختراق أجهزة الآخرين.
-  المجال الحقيقي أوسع بكثير: حماية الأنظمة والبيانات
-  والهويات والخدمات من الوصول غير المصرح به أو التلاعب
-  أو التعطيل.
-  </p>
-
-  <h2>الأهداف الأساسية</h2>
-
-  <p>
-  غالبًا يتم شرح أهداف الأمن السيبراني من خلال ثلاثة
-  مفاهيم أساسية: السرية، والسلامة، والتوافر.
-  </p>
-
-  <ul>
-    <li>السرية: منع الأشخاص غير المصرح لهم من قراءة البيانات.</li>
-    <li>السلامة: منع تعديل البيانات بطريقة غير مصرح بها.</li>
-    <li>التوافر: إبقاء الأنظمة والخدمات متاحة عند الحاجة.</li>
-  </ul>
-
-  <h2>لماذا نحتاج الأمن؟</h2>
-
-  <p>
-  لأن التطبيقات الحديثة تعتمد على الحسابات وقواعد البيانات
-  والخدمات السحابية وواجهات API. خطأ واحد في التصميم قد
-  يسمح بتسريب معلومات أو فقدان حسابات أو تعطيل خدمة.
-  </p>
-
-  <div class="lessonCode">
-  CIA = Confidentiality + Integrity + Availability
-  </div>
-
-  <p>
-  في VANTA ستتعلم المفاهيم من خلال أمثلة ومختبرات تفاعلية
-  بدل حفظ التعريفات فقط.
-  </p>
-  `
-
- },
-
- {
-  title:"الهويات وكلمات المرور",
-
-  body:`
-  <h1>الهويات وكلمات المرور</h1>
-
-  <p>
-  الحساب هو بوابة المستخدم إلى النظام. لذلك تعتبر عملية
-  المصادقة Authentication من أهم أجزاء أي تطبيق.
-  </p>
-
-  <h2>كلمة المرور</h2>
-
-  <p>
-  كلمة المرور القوية لا تعتمد فقط على وجود الرموز.
-  الطول والتنوع وعدم إعادة استخدام كلمة المرور عوامل مهمة.
-  </p>
-
-  <h2>Hashing</h2>
-
-  <p>
-  الأنظمة الحديثة لا ينبغي أن تخزن كلمات المرور كنصوص
-  واضحة. تستخدم تقنيات hashing مناسبة لتخزين تمثيل
-  غير قابل للاستخدام ككلمة مرور مباشرة.
-  </p>
-
-  <p>
-  جرّب مختبر SHA-256 في قسم المختبرات لفهم الفكرة عمليًا.
-  </p>
-  `
-
- },
-
- {
-  title:"الهجمات الاجتماعية",
-
-  body:`
-  <h1>الهجمات الاجتماعية</h1>
-
-  <p>
-  أحيانًا لا يحتاج المهاجم إلى كسر النظام تقنيًا.
-  قد يحاول إقناع الشخص نفسه بإعطائه المعلومات.
-  </p>
-
-  <h2>Phishing</h2>
-
-  <p>
-  التصيد يعتمد على رسائل أو صفحات مزيفة تحاول دفع المستخدم
-  إلى اتخاذ إجراء مثل تسجيل الدخول أو فتح ملف.
-  </p>
-
-  <h2>علامات التحذير</h2>
-
-  <ul>
-    <li>طلب عاجل وغير معتاد.</li>
-    <li>رابط لا يطابق الموقع الحقيقي.</li>
-    <li>طلب كلمة المرور أو رمز التحقق.</li>
-    <li>أخطاء أو صياغة غير معتادة.</li>
-  </ul>
-  `
-
- }
-
- ]
-},
-
-{
- id:"web",
- title:"Web Engineering",
- category:"Web",
-
- lessons:[
-
- {
-  title:"كيف يعمل الويب",
-
-  body:`
-  <h1>كيف يعمل الويب</h1>
-
-  <p>
-  عندما تفتح موقعًا، يرسل المتصفح طلبًا إلى خادم.
-  الخادم يعيد استجابة تحتوي على البيانات المطلوبة.
-  </p>
-
-  <h2>Frontend</h2>
-
-  <p>
-  HTML وCSS وJavaScript تشكل الجزء الذي يتفاعل معه المستخدم.
-  </p>
-
-  <h2>Backend</h2>
-
-  <p>
-  الخادم يتعامل مع قواعد البيانات والمصادقة والمنطق
-  الذي لا يجب وضعه في المتصفح.
-  </p>
-  `
-
- },
-
- {
-  title:"JavaScript والتفاعل",
-
-  body:`
-  <h1>JavaScript والتفاعل</h1>
-
-  <p>
-  JavaScript يجعل الصفحة تفاعلية. يمكنه الاستماع إلى
-  ضغط الأزرار وتغيير الواجهة وإرسال طلبات إلى API.
-  </p>
-
-  <div class="lessonCode">
-  button.addEventListener("click", () => {
-      console.log("VANTA");
-  });
-  </div>
-
-  <p>
-  في VANTA تستخدم JavaScript لإدارة التنقل والكتب
-  والمختبرات وواجهة NOVA وVANTABOOK.
-  </p>
-  `
-
- },
-
- {
-  title:"واجهات API",
-
-  body:`
-  <h1>واجهات API</h1>
-
-  <p>
-  API هي الطريقة التي تتواصل بها أجزاء الأنظمة المختلفة.
-  يمكن للواجهة الأمامية إرسال طلب إلى Backend ثم استقبال
-  النتيجة.
-  </p>
-
-  <p>
-  لا يجب وضع المفاتيح السرية داخل JavaScript الذي يصل
-  إلى المتصفح.
-  </p>
-  `
-
- }
-
- ]
-},
-
-{
- id:"python",
- title:"Python Core",
- category:"Programming",
-
- lessons:[
-
- {
-  title:"المتغيرات",
-
-  body:`
-  <h1>المتغيرات في Python</h1>
-
-  <p>
-  المتغير يسمح لك بتخزين قيمة واستخدامها لاحقًا.
-  </p>
-
-  <div class="lessonCode">
-  name = "VANTA"
-  xp = 100
-  print(name)
-  </div>
-
-  <p>
-  Python لغة مناسبة جدًا للتعلم وبناء الأدوات وتحليل البيانات.
-  </p>
-  `
-
- },
-
- {
-  title:"الشروط",
-
-  body:`
-  <h1>الشروط</h1>
-
-  <p>
-  الشروط تسمح للبرنامج باتخاذ قرار بناءً على قيمة معينة.
-  </p>
-
-  <div class="lessonCode">
-  if xp >= 100:
-      print("Level Up")
-  else:
-      print("Keep learning")
-  </div>
-  `
-
- },
-
- {
-  title:"الحلقات",
-
-  body:`
-  <h1>الحلقات</h1>
-
-  <p>
-  تستخدم الحلقات لتكرار عملية عدة مرات.
-  </p>
-
-  <div class="lessonCode">
-  for i in range(5):
-      print(i)
-  </div>
-  `
-
- }
-
- ]
-},
-
-{
- id:"linux",
- title:"Linux Systems",
- category:"Systems",
-
- lessons:[
-
- {
-  title:"نظام الملفات",
-
-  body:`
-  <h1>نظام الملفات في Linux</h1>
-
-  <p>
-  Linux ينظم الملفات والمجلدات بطريقة هرمية تبدأ من
-  الجذر /.
-  </p>
-
-  <div class="lessonCode">
-  /
-  ├── home
-  ├── etc
-  ├── var
-  └── usr
-  </div>
-  `
-
- },
-
- {
-  title:"الطرفية",
-
-  body:`
-  <h1>الطرفية</h1>
-
-  <p>
-  الطرفية توفر طريقة مباشرة للتعامل مع النظام.
-  </p>
-
-  <div class="lessonCode">
-  pwd
-  ls
-  cd
-  mkdir
-  </div>
-  `
-
- },
-
- {
-  title:"الصلاحيات",
-
-  body:`
-  <h1>الصلاحيات</h1>
-
-  <p>
-  Linux يعتمد على نظام صلاحيات لحماية الملفات والعمليات.
-  </p>
-  `
-
- }
-
- ]
-},
-
-{
- id:"network",
- title:"Network Intelligence",
- category:"Networking",
-
- lessons:[
-
- {
-  title:"أساسيات الشبكات",
-
-  body:`
-  <h1>أساسيات الشبكات</h1>
-
-  <p>
-  الشبكة تسمح للأجهزة بتبادل البيانات باستخدام بروتوكولات
-  وقواعد محددة.
-  </p>
-
-  <h2>IP</h2>
-
-  <p>
-  عنوان IP يحدد واجهة جهاز داخل شبكة معينة.
-  </p>
-  `
-
- },
-
- {
-  title:"DNS",
-
-  body:`
-  <h1>DNS</h1>
-
-  <p>
-  DNS يحول أسماء النطاقات التي يستطيع الإنسان قراءتها
-  إلى عناوين IP تستخدمها الأنظمة.
-  </p>
-  `
-
- },
-
- {
-  title:"HTTP وHTTPS",
-
-  body:`
-  <h1>HTTP وHTTPS</h1>
-
-  <p>
-  HTTPS يستخدم TLS لحماية الاتصال بين المتصفح والخادم
-  من التنصت والتلاعب أثناء النقل.
-  </p>
-  `
-
- }
-
- ]
-},
-
-{
- id:"ai",
- title:"AI & NOVA",
- category:"Artificial Intelligence",
-
- lessons:[
-
- {
-  title:"ما هو الذكاء الاصطناعي؟",
-
-  body:`
-  <h1>ما هو الذكاء الاصطناعي؟</h1>
-
-  <p>
-  الذكاء الاصطناعي يشير إلى أنظمة تستطيع تنفيذ مهام
-  تتطلب عادةً معالجة وفهمًا أو استدلالًا.
-  </p>
-  `
-
- },
-
- {
-  title:"النماذج اللغوية",
-
-  body:`
-  <h1>النماذج اللغوية</h1>
-
-  <p>
-  النماذج اللغوية تتعامل مع النصوص من خلال تعلم الأنماط
-  الإحصائية في كميات كبيرة من البيانات.
-  </p>
-  `
-
- },
-
- {
-  title:"بناء مساعد ذكي",
-
-  body:`
-  <h1>بناء مساعد ذكي</h1>
-
-  <p>
-  NOVA في VANTA مثال على دمج نموذج ذكاء اصطناعي مع
-  سياق المستخدم وبيانات المنصة.
-  </p>
-  `
-
- }
-
- ]
-},
-
-{
- id:"defense",
- title:"Digital Defense",
- category:"Defense",
-
- lessons:[
-
- {
-  title:"الدفاع متعدد الطبقات",
-
-  body:`
-  <h1>الدفاع متعدد الطبقات</h1>
-
-  <p>
-  لا تعتمد الأنظمة الآمنة على إجراء واحد.
-  تستخدم عدة طبقات بحيث لا يؤدي فشل طبقة واحدة إلى
-  انهيار النظام بالكامل.
-  </p>
-  `
-
- },
-
- {
-  title:"التحديثات",
-
-  body:`
-  <h1>التحديثات الأمنية</h1>
-
-  <p>
-  تحديث الأنظمة والمكتبات يقلل من التعرض للمشكلات
-  الأمنية المعروفة.
-  </p>
-  `
-
- },
-
- {
-  title:"المراقبة",
-
-  body:`
-  <h1>المراقبة الأمنية</h1>
-
-  <p>
-  تسجيل الأحداث ومراجعتها يساعد على اكتشاف النشاط
-  غير المعتاد والاستجابة له.
-  </p>
-  `
-
- }
-
- ]
-},
-
-{
- id:"future",
- title:"Future Builder",
- category:"Technology",
-
- lessons:[
-
- {
-  title:"فكرة المنتج",
-
-  body:`
-  <h1>من الفكرة إلى المنتج</h1>
-
-  <p>
-  المنتج الجيد يبدأ بمشكلة حقيقية، ثم يحولها إلى تجربة
-  بسيطة يمكن للمستخدم فهمها والاستفادة منها.
-  </p>
-  `
-
- },
-
- {
-  title:"تصميم التجربة",
-
-  body:`
-  <h1>تصميم التجربة</h1>
-
-  <p>
-  الواجهة ليست مجرد ألوان. التنقل والحالات والأزرار
-  وسرعة الوصول للمعلومة كلها جزء من المنتج.
-  </p>
-  `
-
- },
-
- {
-  title:"الإطلاق",
-
-  body:`
-  <h1>الإطلاق</h1>
-
-  <p>
-  بعد البناء تأتي مرحلة الاختبار والمراقبة والتحسين
-  المستمر.
-  </p>
-  `
-
- }
-
- ]
-}
-
-];
-
-
-/* =========================================================
-   LIBRARY
-========================================================= */
-
-function renderBooks(){
-
-  const grids=[
-    document.getElementById("booksGrid"),
-    document.getElementById("learningBooks")
-  ];
-
-  grids.forEach(grid=>{
-
-    if(!grid) return;
-
-    grid.innerHTML="";
-
-    BOOKS.forEach(book=>{
-
-      const el =
-        document.createElement("div");
-
-      el.className="card book";
-
-      el.innerHTML=`
-
-        <div class="bookCover">
-
-          <div class="bookTitle">
-            ${esc(book.title)}
+        <div>
+          <strong>${escapeHTML(name)}</strong>
+          <div style="color:var(--muted);font-size:.75rem">
+            ${escapeHTML(currentUser?.email || "")}
           </div>
-
         </div>
 
-        <div class="bookMeta">
+      </div>
 
-          <span>${esc(book.category)}</span>
+      <div style="margin-top:15px">
+        <button class="btn danger" id="signOutButton">
+          تسجيل الخروج
+        </button>
+      </div>
 
-          <span>
-            ${book.lessons.length} دروس
-          </span>
+    </div>
+  `;
 
-        </div>
+  $("signOutButton").addEventListener("click",async () => {
 
-      `;
+    await supabaseClient.auth.signOut();
 
-      el.onclick=
-        ()=>openBook(book.id);
+    $("accountModal").classList.remove("open");
 
-      grid.appendChild(el);
+    toast("تم تسجيل الخروج.");
+
+    showPage("home");
+  });
+}
+
+/* ============================================================
+   BOOKS
+============================================================ */
+
+const BOOKS = {
+
+  cyber:{
+    title:"الأمن السيبراني",
+    category:"CYBERSECURITY",
+    description:"من الأساسيات إلى مفاهيم الأمن الدفاعي.",
+    lessons:[
+      {
+        title:"ما هو الأمن السيبراني؟",
+        body:`
+          <h2>مقدمة في الأمن السيبراني</h2>
+
+          <p>
+          الأمن السيبراني هو مجموعة من الممارسات والتقنيات
+          التي تهدف إلى حماية الأنظمة والشبكات والبيانات
+          من الوصول غير المصرح به أو التلف أو سوء الاستخدام.
+          </p>
+
+          <h3>الأهداف الأساسية</h3>
+
+          <p>
+          يمكن التفكير في الأمن من خلال السرية، السلامة،
+          والتوافر. النظام الجيد يحاول منع كشف البيانات
+          لغير المصرح لهم، ويحافظ على صحتها، ويضمن توفرها
+          للمستخدمين المصرح لهم.
+          </p>
+
+          <h3>لماذا نتعلم الأساسيات؟</h3>
+
+          <p>
+          لأن فهم طريقة عمل النظام أهم من حفظ أدوات كثيرة.
+          عندما تعرف كيف يعمل HTTP وDNS والمستخدمون والملفات
+          والمصادقة، يصبح فهم المشكلات الأمنية أسهل بكثير.
+          </p>
+        `
+      },
+      {
+        title:"الشبكات",
+        body:`
+          <h2>أساسيات الشبكات</h2>
+
+          <p>
+          الأجهزة تتواصل باستخدام بروتوكولات وقواعد محددة.
+          من أهم المفاهيم IP وDNS والمنافذ وHTTP.
+          </p>
+
+          <h3>DNS</h3>
+
+          <p>
+          DNS يحول أسماء النطاقات إلى عناوين يمكن للشبكات
+          استخدامها للوصول إلى الخوادم.
+          </p>
+
+          <h3>HTTP</h3>
+
+          <p>
+          HTTP هو أحد البروتوكولات الأساسية للويب.
+          عندما يفتح المتصفح صفحة، يرسل طلبًا إلى خادم
+          ثم يستقبل استجابة.
+          </p>
+
+          <code>
+GET / HTTP/1.1
+Host: example.com
+          </code>
+        `
+      },
+      {
+        title:"كلمات المرور والمصادقة",
+        body:`
+          <h2>المصادقة</h2>
+
+          <p>
+          المصادقة هي عملية التأكد من هوية المستخدم.
+          </p>
+
+          <p>
+          لا ينبغي تخزين كلمات المرور كنصوص مكشوفة.
+          الأنظمة الحديثة تستخدم تقنيات مشتقة من دوال
+          التجزئة وخوارزميات مخصصة لتخزين كلمات المرور
+          بشكل أكثر أمانًا.
+          </p>
+
+          <h3>تجربة</h3>
+
+          <p>
+          انتقل إلى مختبر اختبار قوة كلمة المرور في VANTA
+          وجرب كلمات مرور مختلفة ولا تستخدم كلمة مرورك الحقيقية.
+          </p>
+        `
+      }
+    ]
+  },
+
+  programming:{
+    title:"البرمجة",
+    category:"PROGRAMMING",
+    description:"أساسيات بناء صفحات وتطبيقات الويب.",
+    lessons:[
+      {
+        title:"كيف يعمل الويب؟",
+        body:`
+          <h2>الويب من الداخل</h2>
+
+          <p>
+          المتصفح يعرض HTML ويطبق CSS وينفذ JavaScript.
+          هذه التقنيات الثلاث تشكل أساس كثير من تطبيقات الويب.
+          </p>
+
+          <h3>HTML</h3>
+
+          <p>HTML تحدد بنية الصفحة.</p>
+
+          <code>
+&lt;h1&gt;Hello VANTA&lt;/h1&gt;
+          </code>
+        `
+      },
+      {
+        title:"CSS",
+        body:`
+          <h2>التصميم باستخدام CSS</h2>
+
+          <p>
+          CSS تتحكم بالألوان والمسافات والخطوط والتخطيط
+          والاستجابة لمختلف أحجام الشاشات.
+          </p>
+
+          <code>
+.card {
+  border-radius: 20px;
+  padding: 20px;
+}
+          </code>
+        `
+      },
+      {
+        title:"JavaScript",
+        body:`
+          <h2>JavaScript</h2>
+
+          <p>
+          JavaScript تجعل صفحات الويب تفاعلية.
+          تستطيع التعامل مع الأحداث وتغيير الصفحة
+          والتواصل مع APIs.
+          </p>
+
+          <code>
+button.addEventListener("click", () => {
+  console.log("VANTA");
+});
+          </code>
+        `
+      }
+    ]
+  },
+
+  technology:{
+    title:"التقنية",
+    category:"TECHNOLOGY",
+    description:"أنظمة التشغيل، Git، الخوادم والتقنيات الحديثة.",
+    lessons:[
+      {
+        title:"أنظمة التشغيل",
+        body:`
+          <h2>ما هو نظام التشغيل؟</h2>
+
+          <p>
+          نظام التشغيل يدير موارد الجهاز ويوفر واجهة
+          للبرامج والمستخدمين للتعامل مع العتاد.
+          </p>
+
+          <h3>أمثلة</h3>
+          <p>Windows، Linux، macOS، Android وغيرها.</p>
+        `
+      },
+      {
+        title:"Git",
+        body:`
+          <h2>Git</h2>
+
+          <p>
+          Git نظام للتحكم في الإصدارات يسمح بتتبع التغييرات
+          والعمل على المشاريع بشكل منظم.
+          </p>
+
+          <code>
+git init
+git add .
+git commit -m "first commit"
+          </code>
+        `
+      }
+    ]
+  }
+
+};
+
+function renderLibrary(){
+
+  const shelf = $("bookShelf");
+
+  shelf.innerHTML = Object.entries(BOOKS)
+  .map(([id,book],index) => `
+
+    <div class="book" data-book-open="${id}">
+
+      <div class="book-number">
+        BOOK ${String(index+1).padStart(2,"0")}
+      </div>
+
+      <h3>${escapeHTML(book.title)}</h3>
+
+      <p>
+        ${book.lessons.length} دروس ·
+        ${escapeHTML(book.category)}
+      </p>
+
+    </div>
+
+  `).join("");
+
+  shelf.querySelectorAll("[data-book-open]")
+  .forEach(book => {
+
+    book.addEventListener("click",() => {
+
+      openBook(book.dataset.bookOpen);
 
     });
 
   });
 
 }
-
-
-/* =========================================================
-   BOOK READER
-========================================================= */
 
 function openBook(id){
 
-  const book =
-    BOOKS.find(
-      b=>b.id===id
-    );
-
-  if(!book) return;
-
-  state.currentBook=book;
-  state.lessonIndex=0;
-
-  document
-    .getElementById("reader")
-    .classList.add("open");
-
-  renderReader();
-
-}
-
-
-function closeReader(){
-
-  document
-    .getElementById("reader")
-    .classList.remove("open");
-
-}
-
-
-function renderReader(){
-
-  const book =
-    state.currentBook;
-
-  if(!book) return;
-
-  document
-    .getElementById("readerBookTitle")
-    .textContent=book.title;
-
-  const list =
-    document.getElementById("lessonList");
-
-  list.innerHTML="";
-
-  book.lessons.forEach(
-    (lesson,index)=>{
-
-      const btn =
-        document.createElement("button");
-
-      btn.className=
-        "lessonBtn"+
-        (
-          index===state.lessonIndex
-            ? " active"
-            : ""
-        );
-
-      btn.textContent=
-        `${index+1}. ${lesson.title}`;
-
-      btn.onclick=()=>{
-
-        state.lessonIndex=index;
-
-        renderReader();
-
-      };
-
-      list.appendChild(btn);
-
-    }
-  );
-
-  const lesson =
-    book.lessons[
-      state.lessonIndex
-    ];
-
-  document
-    .getElementById("lessonCounter")
-    .textContent=
-      `الدرس ${state.lessonIndex+1} من ${book.lessons.length}`;
-
-  document
-    .getElementById("lessonBody")
-    .innerHTML=lesson.body;
-
-  document
-    .getElementById("prevLesson")
-    .disabled=
-      state.lessonIndex===0;
-
-  document
-    .getElementById("nextLesson")
-    .disabled=
-      state.lessonIndex===book.lessons.length-1;
-
-}
-
-
-async function changeLesson(direction){
-
-  if(!state.currentBook)
+  if(!BOOKS[id])
     return;
 
-  const next=
-    state.lessonIndex+direction;
+  currentBook = id;
+  currentLesson = 0;
 
-  if(
-    next<0 ||
-    next>=state.currentBook.lessons.length
-  )
-    return;
+  showPage("reader");
 
-  state.lessonIndex=next;
-
-  await addXP(10);
-
-  renderReader();
+  renderLesson();
 
 }
 
+function renderLesson(){
 
-function askNovaAboutLesson(){
+  const book = BOOKS[currentBook];
 
-  if(!state.currentBook)
+  if(!book)
     return;
 
   const lesson =
-    state.currentBook.lessons[
-      state.lessonIndex
-    ];
+    book.lessons[currentLesson];
 
-  go("nova");
+  $("readerBookTitle").textContent =
+    book.title;
 
-  const input =
-    document.getElementById("novaInput");
+  $("lessonNumber").textContent =
+    `LESSON ${currentLesson+1} / ${book.lessons.length}`;
 
-  input.value =
-    `اشرح لي درس "${lesson.title}" من كتاب "${state.currentBook.title}" بطريقة سهلة.`;
+  $("lessonBody").innerHTML = `
+    <h1>${escapeHTML(lesson.title)}</h1>
+    ${lesson.body}
+  `;
 
-  input.focus();
+  const percent =
+    ((currentLesson+1)/book.lessons.length)*100;
 
+  $("lessonProgressFill").style.width =
+    percent + "%";
+
+  $("previousLesson").disabled =
+    currentLesson === 0;
+
+  $("nextLesson").textContent =
+    currentLesson === book.lessons.length-1
+      ? "إكمال الكتاب"
+      : "الدرس التالي";
 }
 
+$("backLibrary").addEventListener("click",() => {
+  showPage("library");
+});
 
-/* =========================================================
-   LAB SYSTEM
-========================================================= */
+$("previousLesson").addEventListener("click",() => {
 
-function openLab(type){
+  if(currentLesson <= 0)
+    return;
 
-  const box =
-    document.getElementById("labWorkspace");
+  currentLesson--;
+  renderLesson();
 
-  box.classList.remove("hidden");
+});
 
-  if(type==="password")
-    renderPasswordLab(box);
+$("nextLesson").addEventListener("click",async () => {
 
-  if(type==="hash")
-    renderHashLab(box);
+  const book = BOOKS[currentBook];
 
-  if(type==="phishing")
-    renderPhishingLab(box);
+  if(currentLesson < book.lessons.length-1){
 
-  if(type==="challenge")
-    renderChallengeLab(box);
+    currentLesson++;
+    renderLesson();
 
-  if(type==="defense")
-    renderDefenseLab(box);
+  }else{
 
-  if(type==="quiz")
-    renderQuizLab(box);
+    await awardXP(25);
 
-  box.scrollIntoView({
-    behavior:"smooth",
-    block:"start"
+    toast("أكملت الكتاب! +25 XP");
+
+    showPage("library");
+  }
+
+});
+
+document.querySelectorAll("[data-book]")
+.forEach(btn => {
+
+  btn.addEventListener("click",() => {
+
+    openBook(btn.dataset.book);
+
   });
 
-}
+});
 
+$("askNovaLesson").addEventListener("click",() => {
 
-/* PASSWORD */
+  openNova();
 
-function renderPasswordLab(box){
+  setTimeout(() => {
 
-  box.innerHTML=`
+    $("novaInput").value =
+      `اشرح لي الدرس الحالي: ${BOOKS[currentBook].lessons[currentLesson].title}`;
 
-    <h2>🔐 اختبار قوة كلمة المرور</h2>
+    $("novaInput").focus();
 
-    <p style="color:var(--muted);margin-top:7px">
-      الاختبار يتم داخل جهازك ولا يتم إرسال كلمة المرور.
-    </p>
+  },100);
 
-    <div class="field">
+});
 
-      <label>كلمة المرور</label>
+/* ============================================================
+   XP
+============================================================ */
 
-      <input
-        id="passwordLabInput"
-        type="password"
-        placeholder="اكتب كلمة للتجربة..."
-      >
+async function awardXP(amount){
 
-    </div>
-
-    <div class="meter">
-      <div
-        id="passwordMeter"
-        class="meterBar">
-      </div>
-    </div>
-
-    <div
-      id="passwordResult"
-      class="labResult">
-      ابدأ الكتابة.
-    </div>
-
-  `;
-
-  document
-    .getElementById("passwordLabInput")
-    .addEventListener(
-      "input",
-      evaluatePassword
-    );
-
-}
-
-
-function evaluatePassword(){
-
-  const password =
-    document
-      .getElementById("passwordLabInput")
-      .value;
-
-  let score=0;
-
-  if(password.length>=8)
-    score++;
-
-  if(password.length>=12)
-    score++;
-
-  if(/[a-z]/.test(password))
-    score++;
-
-  if(/[A-Z]/.test(password))
-    score++;
-
-  if(/[0-9]/.test(password))
-    score++;
-
-  if(/[^A-Za-z0-9]/.test(password))
-    score++;
-
-  const percent=
-    Math.min(
-      100,
-      Math.round(score/6*100)
-    );
-
-  const meter=
-    document.getElementById("passwordMeter");
-
-  meter.style.width=
-    percent+"%";
-
-  const result=
-    document.getElementById("passwordResult");
-
-  if(!password){
-
-    result.textContent=
-      "ابدأ الكتابة.";
-
+  if(!currentUser || !currentProfile)
     return;
+
+  const xp =
+    Number(currentProfile.xp || 0) + amount;
+
+  const level =
+    Math.max(1,Math.floor(xp/100)+1);
+
+  const {data,error} =
+    await supabaseClient
+      .from("profiles")
+      .update({
+        xp,
+        level
+      })
+      .eq("id",currentUser.id)
+      .select()
+      .single();
+
+  if(!error && data){
+
+    currentProfile = data;
+
+    updateStats();
 
   }
 
-  let label="ضعيفة";
+}
 
-  if(score>=3)
-    label="متوسطة";
+function updateStats(){
 
-  if(score>=5)
-    label="قوية";
+  const xp =
+    Number(currentProfile?.xp || 0);
 
-  result.innerHTML=
-    `<strong>${label}</strong><br>
-     الطول: ${password.length} • التقييم: ${percent}%`;
+  const level =
+    Number(currentProfile?.level || 1);
+
+  $("statXP").textContent = xp;
+  $("statLevel").textContent = level;
+
+  $("dashXP").textContent = xp;
+  $("dashLevel").textContent = level;
 
 }
 
+/* ============================================================
+   PASSWORD LAB
+============================================================ */
 
-/* HASH */
+$("passwordTest").addEventListener("input",e => {
 
-function renderHashLab(box){
+  const value = e.target.value;
 
-  box.innerHTML=`
+  let score = 0;
 
-    <h2># SHA-256 Hash Lab</h2>
+  if(value.length >= 8) score += 20;
+  if(value.length >= 12) score += 20;
+  if(/[a-z]/.test(value)) score += 15;
+  if(/[A-Z]/.test(value)) score += 15;
+  if(/[0-9]/.test(value)) score += 15;
+  if(/[^A-Za-z0-9]/.test(value)) score += 15;
 
-    <div class="field">
+  const fill = $("passwordFill");
 
-      <label>النص</label>
+  fill.style.width = score + "%";
 
-      <input
-        id="hashInput"
-        placeholder="اكتب أي نص..."
-      >
+  let text = "ضعيفة";
 
-    </div>
+  if(score >= 80)
+    text = "قوية";
+  else if(score >= 55)
+    text = "متوسطة";
 
-    <div
-      id="hashResult"
-      class="labResult">
-      سيظهر الـHash هنا.
-    </div>
+  $("passwordResult").innerHTML =
+    value
+      ? `<b>${text}</b><br><span style="color:var(--muted)">قوة تقريبية: ${score}%</span>`
+      : "ابدأ الاختبار...";
 
-  `;
+  if(value.length >= 12 && score >= 80)
+    awardXP(5);
 
-  document
-    .getElementById("hashInput")
-    .addEventListener(
-      "input",
-      makeHash
-    );
+});
 
-}
+/* ============================================================
+   HASH PLAYGROUND
+============================================================ */
 
+$("hashInput").addEventListener("input",async e => {
 
-async function makeHash(){
-
-  const value=
-    document
-      .getElementById("hashInput")
-      .value;
+  const value = e.target.value;
 
   if(!value){
-
-    document
-      .getElementById("hashResult")
-      .textContent=
-        "سيظهر الـHash هنا.";
-
+    $("hashOutput").textContent =
+      "في انتظار الإدخال...";
     return;
-
   }
 
-  const data=
-    new TextEncoder()
-      .encode(value);
+  const data =
+    new TextEncoder().encode(value);
 
-  const hash=
+  const hash =
     await crypto.subtle.digest(
       "SHA-256",
       data
     );
 
-  const hex=
-    [...new Uint8Array(hash)]
-      .map(
-        b=>b
-          .toString(16)
-          .padStart(2,"0")
-      )
-      .join("");
+  const bytes =
+    [...new Uint8Array(hash)];
 
-  document
-    .getElementById("hashResult")
-    .textContent=hex;
+  const hex =
+    bytes.map(
+      b => b.toString(16).padStart(2,"0")
+    ).join("");
 
-}
+  $("hashOutput").textContent =
+    hex;
 
+});
 
-/* PHISHING */
+/* ============================================================
+   PHISHING LAB
+============================================================ */
 
-function renderPhishingLab(box){
+document.querySelectorAll("[data-phishing]")
+.forEach(btn => {
 
-  box.innerHTML=`
+  btn.addEventListener("click",() => {
 
-    <h2>🎣 Phishing Lab</h2>
+    const answer = btn.dataset.phishing;
 
-    <p style="color:var(--muted)">
-      هل الرسالة التالية تبدو آمنة؟
-    </p>
+    if(answer === "yes"){
 
-    <div class="card"
-      style="padding:18px;margin-top:15px">
+      $("phishingResult").innerHTML =
+        `<span style="color:var(--green)">صحيح.</span> توجد علامات واضحة مثل الاستعجال ووعد بجائزة وطلب الضغط على رابط.`;
 
-      <strong>
-        Security Alert
-      </strong>
+      awardXP(10);
 
-      <p style="margin-top:10px;color:#bbb">
-        سيتم إيقاف حسابك خلال 10 دقائق.
-        اضغط على الرابط لتأكيد كلمة المرور.
-      </p>
+    }else{
 
-      <p style="margin-top:10px;color:var(--danger)">
-        verify-account-example.com
-      </p>
-
-    </div>
-
-    <div class="actions">
-
-      <button class="btn"
-        onclick="phishingAnswer(false)">
-        آمنة
-      </button>
-
-      <button class="btn primary"
-        onclick="phishingAnswer(true)">
-        تصيد
-      </button>
-
-    </div>
-
-    <div id="phishingResult"
-      class="labResult">
-    </div>
-
-  `;
-
-}
-
-
-function phishingAnswer(correct){
-
-  const result=
-    document.getElementById(
-      "phishingResult"
-    );
-
-  if(correct){
-
-    result.textContent=
-      "صحيح. الطلب العاجل للحصول على كلمة المرور ورابط غير موثوق من علامات التصيد.";
-
-    addXP(15);
-
-  }else{
-
-    result.textContent=
-      "راجع العلامات: طلب كلمة المرور + استعجال + رابط غير موثوق.";
-
-  }
-
-}
-
-
-/* CHALLENGE */
-
-function renderChallengeLab(box){
-
-  box.innerHTML=`
-
-    <h2>🧩 Security Challenge</h2>
-
-    <p style="color:var(--muted)">
-      لديك نظام يحتوي على حسابات مستخدمين.
-      ما الإجراء الذي يقلل أثر سرقة كلمة المرور؟
-    </p>
-
-    <div class="actions">
-
-      <button class="btn"
-        onclick="challengeAnswer(1)">
-        استخدام نفس كلمة المرور للجميع
-      </button>
-
-      <button class="btn"
-        onclick="challengeAnswer(2)">
-        MFA + كلمات مرور قوية
-      </button>
-
-      <button class="btn"
-        onclick="challengeAnswer(3)">
-        تعطيل التحديثات
-      </button>
-
-    </div>
-
-    <div id="challengeResult"
-      class="labResult">
-    </div>
-
-  `;
-
-}
-
-
-function challengeAnswer(answer){
-
-  const result=
-    document.getElementById(
-      "challengeResult"
-    );
-
-  if(answer===2){
-
-    result.textContent=
-      "إجابة صحيحة. MFA تضيف طبقة تحقق إضافية.";
-
-    addXP(15);
-
-  }else{
-
-    result.textContent=
-      "ليست الإجابة المناسبة. فكر في طبقة إضافية للمصادقة.";
-
-  }
-
-}
-
-
-/* DEFENSE */
-
-function renderDefenseLab(box){
-
-  box.innerHTML=`
-
-    <h2>🛡️ Defense Simulator</h2>
-
-    <p style="color:var(--muted)">
-      اكتشفت محاولة تسجيل دخول غير معتادة.
-      ما الخطوة المناسبة؟
-    </p>
-
-    <div class="actions">
-
-      <button class="btn"
-        onclick="defenseAnswer(1)">
-        تجاهلها
-      </button>
-
-      <button class="btn"
-        onclick="defenseAnswer(2)">
-        مراجعة السجلات وطلب تحقق إضافي
-      </button>
-
-      <button class="btn"
-        onclick="defenseAnswer(3)">
-        نشر بيانات المستخدم
-      </button>
-
-    </div>
-
-    <div id="defenseResult"
-      class="labResult">
-    </div>
-
-  `;
-
-}
-
-
-function defenseAnswer(answer){
-
-  const result=
-    document.getElementById(
-      "defenseResult"
-    );
-
-  if(answer===2){
-
-    result.textContent=
-      "صحيح. المراقبة والتحقق الإضافي يساعدان في الاستجابة للحوادث.";
-
-    addXP(15);
-
-  }else{
-
-    result.textContent=
-      "هذا لا يمثل استجابة دفاعية مناسبة.";
-
-  }
-
-}
-
-
-/* QUIZ */
-
-function renderQuizLab(box){
-
-  box.innerHTML=`
-
-    <h2>🧠 Cyber Quiz</h2>
-
-    <p style="color:var(--muted)">
-      ماذا يفعل HTTPS؟
-    </p>
-
-    <div class="actions">
-
-      <button class="btn"
-        onclick="quizAnswer(1)">
-        يزيد سرعة الإنترنت
-      </button>
-
-      <button class="btn"
-        onclick="quizAnswer(2)">
-        يحمي الاتصال باستخدام TLS
-      </button>
-
-      <button class="btn"
-        onclick="quizAnswer(3)">
-        يحذف الفيروسات تلقائيًا
-      </button>
-
-    </div>
-
-    <div id="quizResult"
-      class="labResult">
-    </div>
-
-  `;
-
-}
-
-
-function quizAnswer(answer){
-
-  const result=
-    document.getElementById(
-      "quizResult"
-    );
-
-  if(answer===2){
-
-    result.textContent=
-      "صحيح. HTTPS يستخدم TLS لحماية الاتصال.";
-
-    addXP(15);
-
-  }else{
-
-    result.textContent=
-      "ليست الإجابة الصحيحة.";
-
-  }
-
-}
-
-
-/* =========================================================
-   NOVA
-========================================================= */
-
-function addMessage(role,text){
-
-  const messages=
-    document.getElementById(
-      "messages"
-    );
-
-  const div=
-    document.createElement("div");
-
-  div.className=
-    "msg "+role;
-
-  div.textContent=text;
-
-  messages.appendChild(div);
-
-  messages.scrollTop=
-    messages.scrollHeight;
-
-}
-
-
-function addTyping(){
-
-  const messages=
-    document.getElementById(
-      "messages"
-    );
-
-  const div=
-    document.createElement("div");
-
-  div.id="novaTyping";
-
-  div.className="typing";
-
-  div.textContent="NOVA تكتب...";
-
-  messages.appendChild(div);
-
-  messages.scrollTop=
-    messages.scrollHeight;
-
-}
-
-
-function removeTyping(){
-
-  document
-    .getElementById("novaTyping")
-    ?.remove();
-
-}
-
-
-function shortNovaText(text){
-
-  /*
-    لا نقص إجابة NOVA بالقوة لأن ذلك قد يقطع المعنى.
-    لكن نطلب من النموذج في السياق أن يكون مختصرًا،
-    والفقاعة نفسها تتكيف مع النص.
-  */
-
-  return String(text || "").trim();
-
-}
-
-
-async function askNova(message){
-
-  const input=
-    document.getElementById(
-      "novaInput"
-    );
-
-  if(!message)
-    return;
-
-  addMessage(
-    "user",
-    message
-  );
-
-  state.novaHistory.push({
-    role:"user",
-    content:message
-  });
-
-  input.value="";
-
-  addTyping();
-
-  try{
-
-    const recentTopics =
-      state.novaHistory
-        .slice(-8)
-        .map(x=>x.content);
-
-    const userContext={
-
-      firebase_uid:
-        state.user?.id || null,
-
-      uid:
-        state.user?.id || null,
-
-      username:
-        state.profile?.name ||
-        state.user?.user_metadata?.name ||
-        state.user?.email?.split("@")[0] ||
-        "زائر",
-
-      name:
-        state.profile?.name ||
-        state.user?.user_metadata?.name ||
-        state.user?.email?.split("@")[0] ||
-        "زائر",
-
-      level:state.level,
-
-      xp:state.xp,
-
-      currentPage:
-        document
-          .querySelector(".page.active")
-          ?.id
-          ?.replace("page-","") ||
-        "home",
-
-      language:"ar",
-
-      recentTopics,
-
-      likedCategories:
-        Object.keys(state.interactions),
-
-      bookProgress:
-        state.currentBook
-          ? {
-              [state.currentBook.id]:
-                state.lessonIndex
-            }
-          : {},
-
-      vantabookActivity:{
-        posts:state.posts.length,
-        stories:state.stories.length
-      }
-
-    };
-
-    const response=
-      await fetch(
-        CONFIG.NOVA_ENDPOINT,
-        {
-          method:"POST",
-
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-
-          body:JSON.stringify({
-
-            message,
-
-            user:userContext,
-
-            history:
-              state.novaHistory
-                .slice(-16)
-
-          })
-
-        }
-      );
-
-    const data=
-      await response.json();
-
-    if(!response.ok)
-      throw new Error(
-        data?.error ||
-        "NOVA request failed"
-      );
-
-    const reply=
-      shortNovaText(
-        data?.reply ||
-        "لم أحصل على رد."
-      );
-
-    removeTyping();
-
-    addMessage(
-      "nova",
-      reply
-    );
-
-    state.novaHistory.push({
-      role:"assistant",
-      content:reply
-    });
-
-  }catch(error){
-
-    console.error(error);
-
-    removeTyping();
-
-    addMessage(
-      "nova",
-      "تعذر الاتصال بـ NOVA الآن."
-    );
-
-  }
-
-}
-
-
-document
-  .getElementById("novaForm")
-  .addEventListener(
-    "submit",
-    e=>{
-
-      e.preventDefault();
-
-      const value=
-        document
-          .getElementById("novaInput")
-          .value
-          .trim();
-
-      if(value)
-        askNova(value);
+      $("phishingResult").innerHTML =
+        `<span style="color:var(--red)">ليست الإجابة الصحيحة.</span> الرسالة تحتوي على عدة علامات تصيد.`;
 
     }
-  );
-
-
-/* =========================================================
-   VANTABOOK
-========================================================= */
-
-function requireLogin(){
-
-  if(state.user)
-    return true;
-
-  openAuth();
-
-  toast(
-    "سجّل الدخول لاستخدام هذه الميزة."
-  );
-
-  return false;
-
-}
-
-
-function recordInteraction(category){
-
-  state.interactions[category] =
-    (state.interactions[category] || 0)+1;
-
-  localStorage.setItem(
-    "vanta_interactions",
-    JSON.stringify(
-      state.interactions
-    )
-  );
-
-}
-
-
-/*
-  Recommendation score:
-  ليست نسخة من خوارزمية TikTok.
-  هذه طبقة أولية محلية يمكن تطويرها لاحقًا
-  باستخدام بيانات السيرفر.
-*/
-
-function recommendationScore(post){
-
-  let score=0;
-
-  const category=
-    post.category || "general";
-
-  score +=
-    (state.interactions[category] || 0)*4;
-
-  score +=
-    Math.max(
-      0,
-      24-
-      Math.floor(
-        (Date.now() -
-          new Date(post.created_at || Date.now()))
-        /3600000
-      )
-    );
-
-  score +=
-    (post.likes_count || 0)*2;
-
-  return score;
-
-}
-
-
-async function loadFeed(){
-
-  if(!supabaseClient){
-
-    renderDemoFeed();
-
-    return;
-
-  }
-
-  try{
-
-    const {data,error}=
-      await supabaseClient
-        .from("posts")
-        .select("*")
-        .order(
-          "created_at",
-          {
-            ascending:false
-          }
-        )
-        .limit(50);
-
-    if(error)
-      throw error;
-
-    state.posts=
-      (data || [])
-        .sort(
-          (a,b)=>
-            recommendationScore(b)-
-            recommendationScore(a)
-        );
-
-    renderPosts();
-
-  }catch(error){
-
-    console.error(error);
-
-    renderDemoFeed();
-
-  }
-
-}
-
-
-function renderDemoFeed(){
-
-  state.posts=[
-
-    {
-      id:"demo1",
-      user_id:"demo",
-      author_name:"VANTA",
-      content:"مرحبًا بك في VANTABOOK. هذه تجربة منشور حقيقية داخل الواجهة.",
-      media_url:"",
-      media_type:null,
-      category:"technology",
-      likes_count:12,
-      created_at:new Date().toISOString()
-    },
-
-    {
-      id:"demo2",
-      user_id:"demo2",
-      author_name:"NOVA",
-      content:"تفاعل مع المحتوى وسنستخدم تفاعلاتك لاحقًا لتحسين التوصيات.",
-      media_url:"",
-      media_type:null,
-      category:"ai",
-      likes_count:8,
-      created_at:new Date().toISOString()
-    }
-
-  ];
-
-  renderPosts();
-
-}
-
-
-function renderPosts(){
-
-  const container=
-    document.getElementById(
-      "posts"
-    );
-
-  container.innerHTML="";
-
-  state.posts.forEach(post=>{
-
-    const card=
-      document.createElement("article");
-
-    card.className=
-      "card post";
-
-    const name=
-      post.author_name ||
-      post.name ||
-      "مستخدم VANTA";
-
-    const avatar=
-      post.avatar_url ||
-      avatarUrl(name);
-
-    let media="";
-
-    if(post.media_url){
-
-      if(post.media_type==="video"){
-
-        media=
-          `<video
-            class="postMedia"
-            src="${esc(post.media_url)}"
-            controls
-            playsinline>
-          </video>`;
-
-      }else{
-
-        media=
-          `<img
-            class="postMedia"
-            src="${esc(post.media_url)}"
-            loading="lazy">`;
-
-      }
-
-    }
-
-    card.innerHTML=`
-
-      <div class="postHead">
-
-        <img src="${esc(avatar)}">
-
-        <div>
-
-          <div class="postAuthor">
-            ${esc(name)}
-          </div>
-
-          <div class="postDate">
-            ${new Date(
-              post.created_at || Date.now()
-            ).toLocaleString("ar-SA")}
-          </div>
-
-        </div>
-
-      </div>
-
-      ${
-        post.content
-          ? `<div class="postText">
-              ${esc(post.content)}
-             </div>`
-          : ""
-      }
-
-      ${media}
-
-      <div class="postActions">
-
-        <button class="actionBtn"
-          onclick="likePost('${esc(post.id)}')">
-          ❤️ إعجاب
-        </button>
-
-        <button class="actionBtn"
-          onclick="commentPost('${esc(post.id)}')">
-          💬 تعليق
-        </button>
-
-        <button class="actionBtn"
-          onclick="savePost('${esc(post.id)}')">
-          🔖 حفظ
-        </button>
-
-        <button class="actionBtn"
-          onclick="sharePost('${esc(post.id)}')">
-          ↗ مشاركة
-        </button>
-
-      </div>
-
-      <div
-        id="comments-${esc(post.id)}"
-        style="padding:0 15px 15px">
-      </div>
-
-    `;
-
-    container.appendChild(card);
 
   });
 
+});
+
+/* ============================================================
+   TERMINAL LAB
+============================================================ */
+
+$("terminalInput").addEventListener("keydown",e => {
+
+  if(e.key !== "Enter")
+    return;
+
+  const command =
+    e.target.value.trim().toLowerCase();
+
+  const output = $("terminalOutput");
+
+  let result = "";
+
+  if(command === "help"){
+
+    result =
+`Available commands:
+help
+clear
+whoami
+pwd
+ls
+date`;
+
+  }else if(command === "whoami"){
+
+    result = "vanta-user";
+
+  }else if(command === "pwd"){
+
+    result = "/home/vanta";
+
+  }else if(command === "ls"){
+
+    result = "books  labs  projects  notes";
+
+  }else if(command === "date"){
+
+    result = new Date().toString();
+
+  }else if(command === "clear"){
+
+    output.textContent = "";
+    e.target.value = "";
+    return;
+
+  }else if(command){
+
+    result =
+      `command not found: ${command}`;
+
+  }
+
+  output.textContent +=
+    `\n> ${command}\n${result}`;
+
+  e.target.value = "";
+
+});
+
+/* ============================================================
+   PROFILE
+============================================================ */
+
+function renderProfile(){
+
+  const name = getName();
+
+  $("profileName").textContent =
+    name;
+
+  $("profileUsername").textContent =
+    currentProfile?.username
+      ? "@" + currentProfile.username
+      : "@guest";
+
+  $("profileDisplayName").value =
+    currentProfile?.display_name || "";
+
+  $("profileUsernameInput").value =
+    currentProfile?.username || "";
+
+  $("profileBio").value =
+    currentProfile?.bio || "";
+
+  const avatar =
+    $("profileAvatar");
+
+  avatar.innerHTML =
+    currentProfile?.avatar_url
+      ? `<img src="${escapeHTML(currentProfile.avatar_url)}">`
+      : `<div class="initial">${escapeHTML(initials(name))}</div>`;
 }
 
+$("saveProfile").addEventListener("click",async () => {
 
-async function publishPost(){
-
-  if(!requireLogin())
+  if(!currentUser){
+    openAuth();
     return;
-
-  const content=
-    document
-      .getElementById("postText")
-      .value
-      .trim();
-
-  const file=
-    document
-      .getElementById("postMedia")
-      .files[0];
-
-  if(!content && !file){
-
-    toast("اكتب شيئًا أو اختر صورة/فيديو.");
-
-    return;
-
   }
 
-  if(!supabaseClient){
+  const update = {
+    display_name:
+      $("profileDisplayName").value.trim(),
 
-    toast(
-      "Supabase غير مربوط. الواجهة تعمل، لكن النشر الحقيقي يحتاج الربط."
-    );
+    username:
+      $("profileUsernameInput").value.trim(),
 
-    return;
+    bio:
+      $("profileBio").value.trim()
+  };
 
-  }
-
-  try{
-
-    let media_url=null;
-    let media_type=null;
-
-    if(file){
-
-      const extension=
-        file.name
-          .split(".")
-          .pop();
-
-      const path=
-        `${state.user.id}/${crypto.randomUUID()}.${extension}`;
-
-      const upload=
-        await supabaseClient
-          .storage
-          .from(CONFIG.STORAGE_BUCKET)
-          .upload(
-            path,
-            file,
-            {
-              upsert:false
-            }
-          );
-
-      if(upload.error)
-        throw upload.error;
-
-      const publicUrl=
-        supabaseClient
-          .storage
-          .from(CONFIG.STORAGE_BUCKET)
-          .getPublicUrl(path);
-
-      media_url=
-        publicUrl.data.publicUrl;
-
-      media_type=
-        file.type.startsWith("video")
-          ? "video"
-          : "image";
-
-    }
-
-    const {error}=
-      await supabaseClient
-        .from("posts")
-        .insert({
-
-          user_id:state.user.id,
-
-          content,
-
-          media_url,
-
-          media_type
-
-        });
-
-    if(error)
-      throw error;
-
-    document
-      .getElementById("postText")
-      .value="";
-
-    document
-      .getElementById("postMedia")
-      .value="";
-
-    toast("تم نشر المنشور.");
-
-    await addXP(5);
-
-    await loadFeed();
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error?.message ||
-      "تعذر نشر المنشور."
-    );
-
-  }
-
-}
-
-
-async function likePost(postId){
-
-  if(!requireLogin())
-    return;
-
-  recordInteraction("general");
-
-  if(!supabaseClient)
-    return;
-
-  const {error}=
+  const {data,error} =
     await supabaseClient
-      .from("likes")
-      .insert({
+      .from("profiles")
+      .update(update)
+      .eq("id",currentUser.id)
+      .select()
+      .single();
 
-        post_id:postId,
+  if(error){
 
-        user_id:state.user.id
+    toast(error.message);
+    return;
 
+  }
+
+  currentProfile = data;
+
+  updateAccountUI();
+  renderProfile();
+
+  toast("تم حفظ الملف.");
+
+});
+
+$("avatarUpload").addEventListener("change",async e => {
+
+  if(!currentUser){
+    openAuth();
+    return;
+  }
+
+  const file = e.target.files[0];
+
+  if(!file)
+    return;
+
+  const ext =
+    file.name.split(".").pop();
+
+  const path =
+    `avatars/${currentUser.id}/${Date.now()}.${ext}`;
+
+  const {error} =
+    await supabaseClient
+      .storage
+      .from(MEDIA_BUCKET)
+      .upload(path,file,{
+        upsert:false,
+        contentType:file.type
       });
 
-  if(error &&
-     !String(error.message)
-       .toLowerCase()
-       .includes("duplicate")
-  ){
+  if(error){
 
-    console.error(error);
+    toast(error.message);
+    return;
 
   }
 
-  toast("تم تسجيل الإعجاب.");
+  const {data} =
+    supabaseClient
+      .storage
+      .from(MEDIA_BUCKET)
+      .getPublicUrl(path);
 
-}
-
-
-async function savePost(postId){
-
-  if(!requireLogin())
-    return;
-
-  if(!supabaseClient)
-    return;
-
-  const {error}=
+  const {error:updateError} =
     await supabaseClient
-      .from("saves")
-      .insert({
+      .from("profiles")
+      .update({
+        avatar_url:data.publicUrl
+      })
+      .eq("id",currentUser.id);
 
-        post_id:postId,
+  if(updateError){
 
-        user_id:state.user.id
+    toast(updateError.message);
+    return;
 
+  }
+
+  await loadProfile();
+  renderProfile();
+
+  toast("تم تحديث صورة الحساب.");
+
+});
+
+/* ============================================================
+   VANTABOOK — STORAGE
+============================================================ */
+
+async function uploadMedia(file,folder){
+
+  if(!currentUser)
+    throw new Error("يجب تسجيل الدخول أولًا.");
+
+  const ext =
+    file.name.split(".").pop();
+
+  const path =
+    `${folder}/${currentUser.id}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+
+  const {error} =
+    await supabaseClient
+      .storage
+      .from(MEDIA_BUCKET)
+      .upload(path,file,{
+        upsert:false,
+        contentType:file.type
       });
 
   if(error)
-    console.error(error);
+    throw error;
 
-  toast("تم الحفظ.");
+  const {data} =
+    supabaseClient
+      .storage
+      .from(MEDIA_BUCKET)
+      .getPublicUrl(path);
+
+  return {
+    url:data.publicUrl,
+    type:file.type.startsWith("video/")
+      ? "video"
+      : "image"
+  };
 
 }
 
+/* ============================================================
+   CREATE POST
+============================================================ */
 
-async function commentPost(postId){
+$("newPostButton").addEventListener("click",() => {
 
-  if(!requireLogin())
+  if(!currentUser){
+    openAuth();
+    return;
+  }
+
+  $("postModal").classList.add("open");
+
+});
+
+$("postMedia").addEventListener("change",e => {
+
+  const file = e.target.files[0];
+
+  if(!file){
+
+    $("postPreview").innerHTML = "";
     return;
 
-  const text=
-    prompt("اكتب تعليقك:");
+  }
 
-  if(!text?.trim())
+  const url =
+    URL.createObjectURL(file);
+
+  $("postPreview").innerHTML =
+    file.type.startsWith("video/")
+      ? `<video src="${url}" controls style="width:100%;border-radius:15px;margin-bottom:12px"></video>`
+      : `<img src="${url}" style="width:100%;border-radius:15px;margin-bottom:12px">`;
+
+});
+
+$("publishPost").addEventListener("click",async () => {
+
+  if(!currentUser){
+    openAuth();
     return;
+  }
 
-  if(!supabaseClient)
-    return;
+  const caption =
+    $("postCaption").value.trim();
 
-  const {error}=
+  const file =
+    $("postMedia").files[0];
+
+  try{
+
+    let media = null;
+
+    if(file)
+      media =
+        await uploadMedia(file,"posts");
+
+    const {data,error} =
+      await supabaseClient
+        .from("vantabook_posts")
+        .insert({
+          user_id:currentUser.id,
+          caption,
+          media_url:media?.url || null,
+          media_type:media?.type || null
+        })
+        .select()
+        .single();
+
+    if(error)
+      throw error;
+
+    $("postCaption").value = "";
+    $("postMedia").value = "";
+    $("postPreview").innerHTML = "";
+
+    $("postModal").classList.remove("open");
+
+    await awardXP(10);
+
+    toast("تم نشر المنشور +10 XP");
+
+    loadVantaBook();
+
+  }catch(error){
+
+    toast(error.message);
+
+  }
+
+});
+
+/* ============================================================
+   STORIES
+============================================================ */
+
+async function loadStories(){
+
+  const container = $("stories");
+
+  const {data,error} =
     await supabaseClient
-      .from("comments")
-      .insert({
-
-        post_id:postId,
-
-        user_id:state.user.id,
-
-        content:text.trim()
-
-      });
+      .from("vantabook_stories")
+      .select("*")
+      .order("created_at",{ascending:false})
+      .limit(30);
 
   if(error){
 
     console.error(error);
 
-    toast("تعذر إضافة التعليق.");
+    container.innerHTML =
+      `<div class="empty">تعذر تحميل الاستوريات.</div>`;
 
     return;
 
   }
 
-  toast("تم إضافة التعليق.");
+  const own =
+    currentUser
+      ? `
+        <div class="story" id="newStoryButton">
+          <div class="story-avatar">
+            <div class="initial">＋</div>
+          </div>
+          <div class="story-name">استوري</div>
+        </div>
+      `
+      : "";
 
-}
+  container.innerHTML =
+    own +
+    (data || []).map(story => `
 
+      <div class="story" data-story-id="${story.id}">
 
-async function sharePost(postId){
+        <div class="story-avatar">
 
-  const url=
-    window.location.origin +
-    window.location.pathname +
-    "#post-"+postId;
+          ${
+            story.media_url
+              ? `<img src="${escapeHTML(story.media_url)}">`
+              : `<div class="initial">V</div>`
+          }
 
-  try{
+        </div>
 
-    if(navigator.share){
-
-      await navigator.share({
-        title:"VANTABOOK",
-        url
-      });
-
-    }else{
-
-      await navigator.clipboard.writeText(url);
-
-      toast("تم نسخ رابط المنشور.");
-
-    }
-
-  }catch{}
-
-}
-
-
-/* =========================================================
-   STORIES
-========================================================= */
-
-async function loadStories(){
-
-  const container=
-    document.getElementById(
-      "stories"
-    );
-
-  container.innerHTML=`
-
-    <label class="story"
-      style="cursor:pointer">
-
-      <div class="storyRing">
-
-        <img
-          src="${avatarUrl(
-            state.profile?.name || "أنت"
-          )}">
+        <div class="story-name">
+          ${escapeHTML(
+            story.username || "VANTA"
+          )}
+        </div>
 
       </div>
 
-      <span>+ Story</span>
+    `).join("");
 
-      <input
-        id="storyInput"
-        type="file"
-        accept="image/*,video/*"
-        hidden>
+  $("newStoryButton")?.addEventListener(
+    "click",
+    () => $("storyModal").classList.add("open")
+  );
 
-    </label>
+  container.querySelectorAll("[data-story-id]")
+  .forEach(el => {
 
-  `;
+    el.addEventListener("click",async () => {
 
-  document
-    .getElementById("storyInput")
-    .addEventListener(
-      "change",
-      uploadStory
-    );
+      const story =
+        data.find(
+          x => String(x.id) === String(el.dataset.storyId)
+        );
+
+      if(!story)
+        return;
+
+      $("storyViewer").innerHTML =
+        story.media_type === "video"
+          ? `<video src="${escapeHTML(story.media_url)}" controls autoplay style="max-width:100%;max-height:65vh;border-radius:18px"></video>`
+          : `<img src="${escapeHTML(story.media_url)}" style="max-width:100%;max-height:65vh;border-radius:18px">`;
+
+      $("storyModal").classList.add("open");
+
+    });
+
+  });
 
 }
 
+$("publishStory").addEventListener("click",async () => {
 
-async function uploadStory(event){
-
-  if(!requireLogin())
+  if(!currentUser){
+    openAuth();
     return;
+  }
 
-  const file=
-    event.target.files[0];
+  const file =
+    $("storyUpload").files[0];
 
-  if(!file)
+  if(!file){
+    toast("اختر صورة أو فيديو.");
     return;
-
-  if(!supabaseClient){
-
-    toast("Supabase غير مربوط.");
-
-    return;
-
   }
 
   try{
 
-    const extension=
-      file.name.split(".").pop();
+    const media =
+      await uploadMedia(file,"stories");
 
-    const path=
-      `${state.user.id}/stories/${crypto.randomUUID()}.${extension}`;
-
-    const upload=
+    const {error} =
       await supabaseClient
-        .storage
-        .from(CONFIG.STORAGE_BUCKET)
-        .upload(
-          path,
-          file,
-          {
-            upsert:false
-          }
-        );
-
-    if(upload.error)
-      throw upload.error;
-
-    const url=
-      supabaseClient
-        .storage
-        .from(CONFIG.STORAGE_BUCKET)
-        .getPublicUrl(path)
-        .data
-        .publicUrl;
-
-    const {error}=
-      await supabaseClient
-        .from("stories")
+        .from("vantabook_stories")
         .insert({
-
-          user_id:state.user.id,
-
-          media_url:url,
-
-          media_type:
-            file.type.startsWith("video")
-              ? "video"
-              : "image"
-
+          user_id:currentUser.id,
+          media_url:media.url,
+          media_type:media.type
         });
 
     if(error)
       throw error;
 
-    toast("تم نشر الـStory.");
+    $("storyModal").classList.remove("open");
+    $("storyUpload").value = "";
 
-    await loadStories();
+    toast("تم نشر الاستوري.");
+
+    loadStories();
 
   }catch(error){
 
+    toast(error.message);
+
+  }
+
+});
+
+/* ============================================================
+   VANTABOOK FEED
+============================================================ */
+
+async function loadVantaBook(){
+
+  await loadStories();
+
+  const feed =
+    $("vantabookFeed");
+
+  let query =
+    supabaseClient
+      .from("vantabook_posts")
+      .select("*")
+      .order("created_at",{ascending:false})
+      .limit(50);
+
+  if(currentVBMode === "saved"){
+
+    if(!currentUser){
+
+      feed.innerHTML =
+        `<div class="empty">سجّل الدخول لرؤية المحفوظات.</div>`;
+
+      return;
+
+    }
+
+  }
+
+  const {data,error} =
+    await query;
+
+  if(error){
+
     console.error(error);
 
-    toast(
-      error?.message ||
-      "تعذر نشر الـStory."
+    feed.innerHTML =
+      `<div class="empty">تعذر تحميل VANTABOOK.<br>${escapeHTML(error.message)}</div>`;
+
+    return;
+
+  }
+
+  let posts = data || [];
+
+  if(currentVBMode === "saved" && currentUser){
+
+    const {data:saved} =
+      await supabaseClient
+        .from("vantabook_saved")
+        .select("post_id")
+        .eq("user_id",currentUser.id);
+
+    const ids =
+      new Set(
+        (saved || []).map(x => x.post_id)
+      );
+
+    posts =
+      posts.filter(p => ids.has(p.id));
+
+  }
+
+  if(currentVBMode === "explore"){
+
+    posts =
+      [...posts].sort(
+        () => Math.random()-.5
+      );
+
+  }
+
+  if(!posts.length){
+
+    feed.innerHTML =
+      `<div class="empty">
+        لا توجد منشورات حاليًا.
+      </div>`;
+
+    return;
+
+  }
+
+  const userIds =
+    [...new Set(posts.map(p => p.user_id))];
+
+  let profiles = [];
+
+  if(userIds.length){
+
+    const result =
+      await supabaseClient
+        .from("profiles")
+        .select("id,username,display_name,avatar_url")
+        .in("id",userIds);
+
+    profiles =
+      result.data || [];
+
+  }
+
+  feed.innerHTML =
+    posts.map(post => {
+
+      const profile =
+        profiles.find(
+          p => p.id === post.user_id
+        );
+
+      return renderPost(post,profile);
+
+    }).join("");
+
+  attachPostEvents();
+
+}
+
+function renderPost(post,profile){
+
+  const name =
+    profile?.display_name ||
+    profile?.username ||
+    "VANTA User";
+
+  const avatar =
+    profile?.avatar_url
+      ? `<img src="${escapeHTML(profile.avatar_url)}">`
+      : `<div class="initial">${escapeHTML(initials(name))}</div>`;
+
+  const media =
+    post.media_type === "video"
+      ? `<video class="post-media" src="${escapeHTML(post.media_url)}" controls playsinline></video>`
+      : post.media_url
+        ? `<img class="post-media" src="${escapeHTML(post.media_url)}" loading="lazy">`
+        : "";
+
+  return `
+
+    <article class="card post" data-post-id="${post.id}">
+
+      <div class="post-head">
+
+        <div class="avatar">
+          ${avatar}
+        </div>
+
+        <div class="post-user">
+          <strong>${escapeHTML(name)}</strong>
+          <span>${new Date(post.created_at).toLocaleString("ar-SA")}</span>
+        </div>
+
+        ${
+          currentUser?.id === post.user_id
+            ? `<button class="action delete-post">•••</button>`
+            : ""
+        }
+
+      </div>
+
+      ${media}
+
+      <div class="post-body">
+
+        ${
+          post.caption
+            ? `<div class="post-caption">${escapeHTML(post.caption)}</div>`
+            : ""
+        }
+
+        <div class="post-actions">
+
+          <button class="action like-post">
+            ♡ <span class="like-count">0</span>
+          </button>
+
+          <button class="action save-post">
+            🔖
+          </button>
+
+          <button class="action share-post">
+            ↗
+          </button>
+
+        </div>
+
+        <div class="comments">
+
+          <div class="comments-list">
+            جاري تحميل التعليقات...
+          </div>
+
+          ${
+            currentUser
+              ? `
+                <div class="comment-form">
+                  <input
+                    class="comment-input"
+                    placeholder="أضف تعليقًا..."
+                  >
+                  <button class="btn small comment-send">
+                    إرسال
+                  </button>
+                </div>
+              `
+              : ""
+          }
+
+        </div>
+
+      </div>
+
+    </article>
+
+  `;
+
+}
+
+async function attachPostEvents(){
+
+  const cards =
+    document.querySelectorAll(".post");
+
+  for(const card of cards){
+
+    const postId =
+      card.dataset.postId;
+
+    const likeButton =
+      card.querySelector(".like-post");
+
+    const saveButton =
+      card.querySelector(".save-post");
+
+    const shareButton =
+      card.querySelector(".share-post");
+
+    const deleteButton =
+      card.querySelector(".delete-post");
+
+    await loadPostState(
+      postId,
+      card
+    );
+
+    likeButton?.addEventListener(
+      "click",
+      () => toggleLike(postId,card)
+    );
+
+    saveButton?.addEventListener(
+      "click",
+      () => toggleSave(postId,card)
+    );
+
+    shareButton?.addEventListener(
+      "click",
+      async () => {
+
+        const url =
+          window.location.href;
+
+        if(navigator.share){
+
+          await navigator.share({
+            title:"VANTABOOK",
+            url
+          });
+
+        }else{
+
+          await navigator.clipboard.writeText(url);
+
+          toast("تم نسخ الرابط.");
+
+        }
+
+      }
+    );
+
+    deleteButton?.addEventListener(
+      "click",
+      () => deletePost(postId)
+    );
+
+    card.querySelector(".comment-send")
+    ?.addEventListener(
+      "click",
+      () => addComment(postId,card)
     );
 
   }
 
 }
 
+async function loadPostState(postId,card){
 
-/* =========================================================
-   POST PREVIEW
-========================================================= */
+  const likeCount =
+    card.querySelector(".like-count");
 
-document
-  .getElementById("postMedia")
-  .addEventListener(
-    "change",
-    event=>{
+  const {count} =
+    await supabaseClient
+      .from("vantabook_likes")
+      .select("*",{count:"exact",head:true})
+      .eq("post_id",postId);
 
-      const file=
-        event.target.files[0];
+  likeCount.textContent =
+    count || 0;
 
-      const preview=
-        document.getElementById(
-          "postPreview"
-        );
+  const comments =
+    card.querySelector(".comments-list");
 
-      preview.innerHTML="";
+  const {data} =
+    await supabaseClient
+      .from("vantabook_comments")
+      .select("*")
+      .eq("post_id",postId)
+      .order("created_at",{ascending:true})
+      .limit(20);
 
-      if(!file)
-        return;
+  if(!data?.length){
 
-      const url=
-        URL.createObjectURL(file);
+    comments.innerHTML =
+      `<span style="color:var(--dim);font-size:.75rem">لا توجد تعليقات بعد.</span>`;
 
-      if(file.type.startsWith("video")){
+  }else{
 
-        preview.innerHTML=
-          `<video
-            src="${url}"
-            controls
-            style="
-              width:100%;
-              max-height:400px;
-              border-radius:16px;
-            ">
-          </video>`;
+    const ids =
+      [...new Set(data.map(x => x.user_id))];
 
-      }else{
+    const result =
+      await supabaseClient
+        .from("profiles")
+        .select("id,display_name,username")
+        .in("id",ids);
 
-        preview.innerHTML=
-          `<img
-            src="${url}"
-            style="
-              width:100%;
-              max-height:400px;
-              object-fit:cover;
-              border-radius:16px;
-            ">`;
+    const ps =
+      result.data || [];
 
-      }
+    comments.innerHTML =
+      data.map(comment => {
 
-    }
-  );
+        const p =
+          ps.find(x => x.id === comment.user_id);
 
+        return `
+          <div class="comment">
+            <strong>
+              ${escapeHTML(
+                p?.display_name ||
+                p?.username ||
+                "User"
+              )}
+            </strong>
+            ${escapeHTML(comment.content)}
+          </div>
+        `;
 
-/* =========================================================
-   INIT
-========================================================= */
-
-document
-  .querySelectorAll(".navBtn")
-  .forEach(
-    btn=>{
-      btn.addEventListener(
-        "click",
-        ()=>go(btn.dataset.page)
-      );
-    }
-  );
-
-
-async function init(){
-
-  renderBooks();
-
-  loadStories();
-
-  renderDemoFeed();
-
-  await loadCurrentUser();
-
-  updateUserUI();
-
-  if(supabaseClient){
-
-    supabaseClient
-      .auth
-      .onAuthStateChange(
-        async (_event,session)=>{
-
-          state.user=
-            session?.user || null;
-
-          if(state.user)
-            await loadProfile();
-
-          updateUserUI();
-
-          if(state.user)
-            await loadFeed();
-
-        }
-      );
+      }).join("");
 
   }
 
 }
 
+async function toggleLike(postId,card){
 
-startBoot();
+  if(!currentUser){
+    openAuth();
+    return;
+  }
 
-init();
+  const button =
+    card.querySelector(".like-post");
+
+  const {data} =
+    await supabaseClient
+      .from("vantabook_likes")
+      .select("id")
+      .eq("post_id",postId)
+      .eq("user_id",currentUser.id)
+      .maybeSingle();
+
+  if(data){
+
+    await supabaseClient
+      .from("vantabook_likes")
+      .delete()
+      .eq("id",data.id);
+
+    button.classList.remove("liked");
+
+  }else{
+
+    await supabaseClient
+      .from("vantabook_likes")
+      .insert({
+        post_id:postId,
+        user_id:currentUser.id
+      });
+
+    button.classList.add("liked");
+
+    await trackInteraction(
+      postId,
+      "like"
+    );
+
+  }
+
+  await loadPostState(postId,card);
+
+}
+
+async function toggleSave(postId,card){
+
+  if(!currentUser){
+    openAuth();
+    return;
+  }
+
+  const {data} =
+    await supabaseClient
+      .from("vantabook_saved")
+      .select("id")
+      .eq("post_id",postId)
+      .eq("user_id",currentUser.id)
+      .maybeSingle();
+
+  if(data){
+
+    await supabaseClient
+      .from("vantabook_saved")
+      .delete()
+      .eq("id",data.id);
+
+    card.querySelector(".save-post")
+      .classList.remove("saved");
+
+    toast("تمت إزالة الحفظ.");
+
+  }else{
+
+    await supabaseClient
+      .from("vantabook_saved")
+      .insert({
+        post_id:postId,
+        user_id:currentUser.id
+      });
+
+    card.querySelector(".save-post")
+      .classList.add("saved");
+
+    await trackInteraction(
+      postId,
+      "save"
+    );
+
+    toast("تم حفظ المنشور.");
+
+  }
+
+}
+
+async function addComment(postId,card){
+
+  if(!currentUser){
+    openAuth();
+    return;
+  }
+
+  const input =
+    card.querySelector(".comment-input");
+
+  const content =
+    input.value.trim();
+
+  if(!content)
+    return;
+
+  const {error} =
+    await supabaseClient
+      .from("vantabook_comments")
+      .insert({
+        post_id:postId,
+        user_id:currentUser.id,
+        content
+      });
+
+  if(error){
+
+    toast(error.message);
+    return;
+
+  }
+
+  input.value = "";
+
+  await trackInteraction(
+    postId,
+    "comment"
+  );
+
+  await loadPostState(
+    postId,
+    card
+  );
+
+}
+
+async function deletePost(postId){
+
+  if(!currentUser)
+    return;
+
+  if(!confirm("حذف هذا المنشور؟"))
+    return;
+
+  const {error} =
+    await supabaseClient
+      .from("vantabook_posts")
+      .delete()
+      .eq("id",postId)
+      .eq("user_id",currentUser.id);
+
+  if(error){
+
+    toast(error.message);
+    return;
+
+  }
+
+  toast("تم حذف المنشور.");
+
+  loadVantaBook();
+
+}
+
+/* ============================================================
+   RECOMMENDATION / INTERACTIONS
+============================================================ */
+
+async function trackInteraction(postId,type){
+
+  if(!currentUser)
+    return;
+
+  await supabaseClient
+    .from("vantabook_interactions")
+    .insert({
+      user_id:currentUser.id,
+      post_id:postId,
+      interaction_type:type
+    });
+
+}
+
+/*
+  هذا هو أساس خوارزمية VANTABOOK:
+  likes + saves + comments + recency + interaction history.
+  يمكن لاحقًا نقل الحساب بالكامل إلى backend/server
+  للحصول على توصيات أقوى على نطاق كبير.
+*/
+
+/* ============================================================
+   VANTABOOK TABS
+============================================================ */
+
+document.querySelectorAll(".vb-tab")
+.forEach(tab => {
+
+  tab.addEventListener("click",() => {
+
+    document.querySelectorAll(".vb-tab")
+      .forEach(x => x.classList.remove("active"));
+
+    tab.classList.add("active");
+
+    currentVBMode =
+      tab.dataset.vb;
+
+    loadVantaBook();
+
+  });
+
+});
+
+/* ============================================================
+   NOVA
+============================================================ */
+
+function openNova(){
+
+  $("novaPanel").classList.add("open");
+
+  if(!$("novaMessages").children.length)
+    addNovaMessage(
+      "bot",
+      `أهلًا بك في VANTA، ${getName()}. أنا NOVA. كيف أساعدك؟`
+    );
+
+}
+
+function closeNova(){
+
+  $("novaPanel").classList.remove("open");
+
+}
+
+function addNovaMessage(role,text){
+
+  const box =
+    document.createElement("div");
+
+  box.className =
+    `nova-message ${role}`;
+
+  box.textContent =
+    text;
+
+  $("novaMessages").appendChild(box);
+
+  $("novaMessages").scrollTop =
+    $("novaMessages").scrollHeight;
+
+}
+
+function novaTyping(){
+
+  const box =
+    document.createElement("div");
+
+  box.className =
+    "nova-typing";
+
+  box.innerHTML =
+    "<i></i><i></i><i></i>";
+
+  $("novaMessages").appendChild(box);
+
+  $("novaMessages").scrollTop =
+    $("novaMessages").scrollHeight;
+
+  return box;
+}
+
+async function askNova(question){
+
+  const typing =
+    novaTyping();
+
+  try{
+
+    const context = {
+
+      user:
+        currentProfile
+          ? {
+              id:currentProfile.id,
+              username:currentProfile.username,
+              display_name:currentProfile.display_name,
+              level:currentProfile.level,
+              xp:currentProfile.xp
+            }
+          : null,
+
+      page:
+        document.querySelector(".page.active")
+          ?.id
+          ?.replace("page-","") || "home",
+
+      book:
+        currentBook
+          ? BOOKS[currentBook]?.title
+          : null,
+
+      lesson:
+        currentBook
+          ? BOOKS[currentBook]?.lessons[currentLesson]?.title
+          : null,
+
+      vantabookMode:
+        currentVBMode
+
+    };
+
+    const response =
+      await fetch("/api/nova",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+
+          question,
+
+          user_id:
+            currentUser?.id || null,
+
+          firebase_uid:
+            currentUser?.id || null,
+
+          context
+
+        })
+      });
+
+    if(!response.ok)
+      throw new Error(
+        `NOVA server ${response.status}`
+      );
+
+    const data =
+      await response.json();
+
+    typing.remove();
+
+    const answer =
+      data.answer ||
+      data.response ||
+      data.text ||
+      data.output;
+
+    if(!answer)
+      throw new Error("لم يرجع الخادم نصًا.");
+
+    addNovaMessage(
+      "bot",
+      String(answer)
+    );
+
+  }catch(error){
+
+    typing.remove();
+
+    addNovaMessage(
+      "bot",
+      "تعذر الاتصال بخادم NOVA حاليًا. جرّب مرة أخرى."
+    );
+
+    console.error(error);
+
+  }
+
+}
+
+async function sendNova(){
+
+  const input =
+    $("novaInput");
+
+  const question =
+    input.value.trim();
+
+  if(!question)
+    return;
+
+  addNovaMessage(
+    "user",
+    question
+  );
+
+  input.value = "";
+
+  await askNova(question);
+
+}
+
+$("novaFab").addEventListener(
+  "click",
+  openNova
+);
+
+$("openNovaHero").addEventListener(
+  "click",
+  openNova
+);
+
+$("openNovaCard").addEventListener(
+  "click",
+  openNova
+);
+
+$("novaClose").addEventListener(
+  "click",
+  closeNova
+);
+
+$("novaSend").addEventListener(
+  "click",
+  sendNova
+);
+
+$("novaInput").addEventListener(
+  "keydown",
+  e => {
+
+    if(e.key === "Enter")
+      sendNova();
+
+  }
+);
+
+document.querySelectorAll("[data-nova-q]")
+.forEach(btn => {
+
+  btn.addEventListener("click",() => {
+
+    openNova();
+
+    $("novaInput").value =
+      btn.dataset.novaQ;
+
+    $("novaInput").focus();
+
+  });
+
+});
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+
+$("settingsAccountButton")
+.addEventListener("click",() => {
+
+  if(currentUser)
+    renderAccountModal(),
+    $("accountModal").classList.add("open");
+  else
+    openAuth();
+
+});
+
+$("testVoice").addEventListener("click",welcomeVoice);
+
+$("creditsButton").addEventListener("click",() => {
+
+  showPage("credits");
+
+});
+
+/* ============================================================
+   MODALS
+============================================================ */
+
+document.querySelectorAll("[data-close]")
+.forEach(btn => {
+
+  btn.addEventListener("click",() => {
+
+    const id =
+      btn.dataset.close;
+
+    $(id)?.classList.remove("open");
+
+  });
+
+});
+
+document.querySelectorAll(".modal")
+.forEach(modal => {
+
+  modal.addEventListener("click",e => {
+
+    if(e.target === modal)
+      modal.classList.remove("open");
+
+  });
+
+});
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+async function renderDashboard(){
+
+  updateStats();
+
+  if(!currentUser){
+
+    $("dashboardMessage").textContent =
+      "سجّل الدخول حتى يحفظ VANTA تقدمك ومنشوراتك وتفاعلاتك.";
+
+    $("dashPosts").textContent = "0";
+
+    return;
+
+  }
+
+  const {count} =
+    await supabaseClient
+      .from("vantabook_posts")
+      .select("*",{count:"exact",head:true})
+      .eq("user_id",currentUser.id);
+
+  $("dashPosts").textContent =
+    count || 0;
+
+  $("dashboardMessage").textContent =
+    `مرحبًا ${getName()} — بيانات حسابك محفوظة في VANTA.`;
+
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+
+$("footerYear").textContent =
+  new Date().getFullYear();
+
+$("copyrightYear").textContent =
+  new Date().getFullYear();
+
+renderLibrary();
+
+loadAuth().then(() => {
+
+  renderProfile();
+  renderDashboard();
+
+});
+
+/* ============================================================
+   AUTO OPEN LIBRARY AFTER LOAD
+============================================================ */
 
 </script>
 
