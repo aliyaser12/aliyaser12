@@ -1,256 +1,178 @@
 
-const MODELS = (
-  process.env.GEMINI_MODELS ||
-  [
-    "gemini-3.8-flash",
-    "gemini-3.5-flash",
-    "gemini-3.0-flash"
-  ].join(",")
-)
-  .split(",")
-  .map(model => model.trim())
-  .filter(Boolean);
+import express from "express";
+import cors from "cors";
+import { GoogleGenAI } from "@google/genai";
 
-const MAX_HISTORY = 10;
-const MAX_MESSAGE_LENGTH = 12000;
+const app = express();
 
-function send(res, status, data) {
-  return res.status(status).json(data);
+app.use(cors());
+app.use(express.json({ limit: "30kb" }));
+
+const ai = new GoogleGenAI({
+  apiKey: process.env.GEMINI_API_KEY
+});
+
+// ترتيب المحاولة: من الأسرع والأحدث إلى الاحتياطي
+const MODELS = [
+  "gemini-3.8-flash",
+  "gemini-3.6-flash",
+  "gemini-3.5-flash",
+  "gemini-3.5-flash-lite",
+  "gemini-3.1-flash-lite",
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite",
+  "gemini-2.5-pro"
+];
+
+const SYSTEM_PROMPT = `
+أنت NOVA، المساعد الذكي لمشروع VANTA،
+من تطوير علي ياسر.
+
+- تحدث بالعربية افتراضياً وافهم اللهجات العربية.
+- ساعد في البرمجة والحاسوب والأمن السيبراني والتعليم.
+- أعط إجابات واضحة ومفيدة وأكواداً كاملة عند الحاجة.
+- لا تدّع تنفيذ شيء لم تنفذه.
+- في الأمن السيبراني، التزم بالتعلم والدفاع
+  والاختبارات المصرح بها.
+`;
+
+function getStatus(error) {
+  return Number(
+    error?.status ??
+    error?.code ??
+    error?.response?.status ??
+    0
+  );
 }
 
-function getText(value, limit = MAX_MESSAGE_LENGTH) {
-  return typeof value === "string"
-    ? value.trim().slice(0, limit)
-    : "";
-}
+function shouldFallback(error) {
+  const status = getStatus(error);
+  const message = String(error?.message || "").toLowerCase();
 
-function normalizeHistory(history) {
-  if (!Array.isArray(history)) return [];
-
-  return history
-    .slice(-MAX_HISTORY)
-    .map(item => {
-      const role = item?.role || item?.sender;
-      const text =
-        item?.content ||
-        item?.text ||
-        item?.message ||
-        "";
-
-      if (typeof text !== "string" || !text.trim()) {
-        return null;
-      }
-
-      return {
-        role:
-          ["assistant", "model", "nova"].includes(
-            String(role).toLowerCase()
-          )
-            ? "model"
-            : "user",
-        parts: [{ text: text.slice(0, 4000) }]
-      };
-    })
-    .filter(Boolean);
-}
-
-function shouldFallback(status, message = "") {
-  // أخطاء مؤقتة أو نموذج غير متاح
-  if ([404, 408, 429, 500, 502, 503, 504].includes(status)) {
+  // الضغط أو عطل مؤقت في الخدمة
+  if ([408, 429, 500, 502, 503, 504].includes(status)) {
     return true;
   }
 
-  // بعض أخطاء النموذج تكون 400، لكن ليست كل أخطاء 400 قابلة للتبديل
-  const text = message.toLowerCase();
+  // النموذج غير متاح أو لم يعد مدعوماً
+  if (
+    status === 404 ||
+    message.includes("model not found") ||
+    message.includes("model is not found") ||
+    message.includes("not supported for generatecontent")
+  ) {
+    return true;
+  }
 
-  return (
-    status === 400 &&
-    (
-      text.includes("model") ||
-      text.includes("unsupported") ||
-      text.includes("not found")
-    )
-  );
+  return false;
 }
 
-async function askModel(model, apiKey, systemPrompt, history, message) {
+app.get("/api/nova/health", (_req, res) => {
+  res.json({
+    service: "NOVA",
+    status: "online",
+    provider: "Google Gemini",
+    fallbackEnabled: true
+  });
+});
+
+app.get("/api/nova/models", (_req, res) => {
+  res.json({
+    provider: "Google Gemini",
+    models: MODELS
+  });
+});
+
+app.post("/api/nova", async (req, res) => {
+  const { message, history = [] } = req.body || {};
+
+  if (typeof message !== "string" || !message.trim()) {
+    return res.status(400).json({
+      error: "اكتب رسالتك أولاً"
+    });
+  }
+
+  const safeHistory = Array.isArray(history)
+    ? history
+        .filter(
+          item =>
+            item &&
+            ["user", "model", "assistant"].includes(item.role) &&
+            typeof item.content === "string"
+        )
+        .slice(-10)
+        .map(item => ({
+          role: item.role === "assistant" ? "model" : item.role,
+          parts: [
+            { text: item.content.slice(0, 3000) }
+          ]
+        }))
+    : [];
+
   const contents = [
-    ...history,
+    ...safeHistory,
     {
       role: "user",
-      parts: [{ text: message }]
+      parts: [{ text: message.trim().slice(0, 5000) }]
     }
   ];
 
-  const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": apiKey
-      },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: systemPrompt }]
-        },
-        contents,
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 4096
-        }
-      }),
-      signal: AbortSignal.timeout(45000)
-    }
-  );
-
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    const error = new Error(
-      data?.error?.message || `Gemini returned HTTP ${response.status}`
-    );
-    error.status = response.status;
-    throw error;
-  }
-
-  const reply = (data?.candidates?.[0]?.content?.parts || [])
-    .map(part => part.text || "")
-    .join("")
-    .trim();
-
-  if (!reply) {
-    const error = new Error("The model returned an empty response.");
-    error.status = 503;
-    throw error;
-  }
-
-  return reply;
-}
-
-module.exports = async function handler(req, res) {
-  if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-    return send(res, 405, {
-      error: "Method not allowed. Use POST."
-    });
-  }
-
-  const apiKey = process.env.GEMINI_API_KEY;
-
-  if (!apiKey) {
-    return send(res, 500, {
-      error: "GEMINI_API_KEY is missing in Vercel Environment Variables."
-    });
-  }
-
-  const body = req.body || {};
-  const message = getText(body.message, MAX_MESSAGE_LENGTH + 1);
-
-  if (!message) {
-    return send(res, 400, {
-      error: "اكتب رسالتك أولًا."
-    });
-  }
-
-  if (message.length > MAX_MESSAGE_LENGTH) {
-    return send(res, 413, {
-      error: "الرسالة طويلة جدًا. اختصرها وحاول مرة ثانية."
-    });
-  }
-
-  const history = normalizeHistory(body.history);
-
-  const context = body.context && typeof body.context === "object"
-    ? body.context
-    : {};
-
-  const systemPrompt = `
-أنت NOVA، المساعد الذكي الرسمي لمنصة VANTA التعليمية.
-مؤسس المنصة ومطورها هو علي ياسر.
-
-قواعدك:
-- تحدث بلغة المستخدم، وكن طبيعيًا وواضحًا.
-- ساعد في تعلم الحاسوب ومكوناته وأنظمة التشغيل والشبكات والبرمجة وتطوير الويب والأمن السيبراني.
-- علّم اختبار الاختراق الأخلاقي داخل بيئات مصرح بها وآمنة.
-- أنشئ دروسًا منظمة، أمثلة عملية، أسئلة واختبارات عند الطلب.
-- إذا لم يفهم المستخدم، اشرح بطريقة أبسط ولا تكرر الشرح نفسه حرفيًا.
-- لا تدّعِ أنك حفظت درسًا أو غيرت إعدادًا أو نفذت إجراءً لم تنفذه فعليًا.
-- إذا لم تعرف معلومة، وضح ذلك بدل اختلاقها.
-- حافظ على سياق المحادثة والرسائل السابقة.
-- اجعل إجاباتك مفيدة ومباشرة، مع تفاصيل إضافية عندما يطلبها المستخدم.
-
-سياق المنصة:
-${JSON.stringify({
-  product: getText(context.product, 100),
-  page: getText(context.page, 100),
-  lessons: Array.isArray(context.lessons)
-    ? context.lessons.slice(0, 20)
-    : [],
-  user: {
-    name: getText(context.user?.name, 100)
-  }
-})}
-`;
-
-  const errors = [];
+  const failures = [];
 
   for (const model of MODELS) {
     try {
-      const reply = await askModel(
+      const response = await ai.models.generateContent({
         model,
-        apiKey,
-        systemPrompt,
-        history,
-        message
-      );
+        contents,
+        config: {
+          systemInstruction: SYSTEM_PROMPT
+        }
+      });
 
-      return send(res, 200, {
+      const reply = response.text;
+
+      if (!reply) {
+        throw new Error("Empty response from model");
+      }
+
+      return res.json({
         reply,
         model,
-        fallbackUsed: errors.length > 0
+        provider: "Google Gemini",
+        fallbackUsed: failures.length > 0
       });
     } catch (error) {
-      const status = Number(error.status || 0);
+      const status = getStatus(error);
 
       console.error(
-        `[NOVA] Model ${model} failed:`,
-        status,
-        error.message
+        `NOVA model ${model} failed; status=${status}`
       );
 
-      errors.push({ model, status });
+      failures.push({ model, status });
 
-      // أخطاء إعدادات الحساب أو المفتاح لا تستفيد من تبديل النموذج
-      if (
-        status === 401 ||
-        status === 403 ||
-        (
-          status === 400 &&
-          !shouldFallback(status, error.message)
-        )
-      ) {
-        return send(res, 502, {
-          error:
-            "تعذر تشغيل Gemini بسبب مشكلة في المفتاح أو إعدادات الطلب. راجع سجلات Vercel.",
-          model
+      if (!shouldFallback(error)) {
+        // أخطاء المفتاح أو الصلاحيات أو الطلب
+        // لا تُعالج بتبديل النماذج.
+        return res.status(
+          status >= 400 && status < 500 ? status : 500
+        ).json({
+          error: "تعذر تنفيذ الطلب. تحقق من إعدادات Gemini API."
         });
       }
 
-      if (!shouldFallback(status, error.message) && status !== 0) {
-        return send(res, 502, {
-          error: "تعذر إكمال الطلب إلى Gemini.",
-          model
-        });
-      }
-
-      // انتقل تلقائيًا إلى النموذج التالي
+      // ننتقل تلقائياً للنموذج التالي.
+      // لا نعرض تفاصيل داخلية أو مفاتيح للمستخدم.
     }
   }
 
-  return send(res, 503, {
-    error:
-      "كل نماذج NOVA المتاحة فشلت حاليًا. تحقق من النماذج المدعومة وحدود الاستخدام في حساب Gemini ثم حاول لاحقًا.",
-    failedModels: errors.map(item => item.model)
+  return res.status(503).json({
+    error: "كل نماذج NOVA الاحتياطية مشغولة أو غير متاحة حالياً. جرّب لاحقاً.",
+    attemptedModels: failures.map(item => item.model)
   });
-};
+});
+
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => {
+  console.log(`NOVA Gemini API running on port ${port}`);
+});
