@@ -2642,17 +2642,19 @@ main{
    VANTA CORE
 ============================================================ */
 
+
 const SUPABASE_URL =
-  https://gvbwgzsxypeplowmbhuw.supabase.co
+  "https://gvbwgzsxypeplowmbhuw.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-  sb_publishable_bMQzc2UsTZE7vAUa_BzBzQ_1jaiWkK_
+  "sb_publishable_bMQzc2UsTZE7vAUa_BzBzQ_1jaiWkK_";
 
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
+
 
 let currentUser = null;
 let currentProfile = null;
