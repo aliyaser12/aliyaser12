@@ -1175,28 +1175,40 @@
             input.value = "";
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Simulated intelligent response from NOVA
-            setTimeout(() => {
-                let reply = "أهلاً بك. بصفتي مساعدك الذكي في VANTA CYBER، أنصحك بمراجعة درس 'أساسيات أمن المعلومات' أو تجربة طرفية Linux لاختبار الأوامر بنفسك.";
-                if(text.includes('SQL') || text.includes('حقن')) {
-                    reply = "ثغرة SQL Injection تحدث عندما تُمرر مدخلات المستخدم مباشرة إلى الاستعلام دون تنقية. الحل دائماً استخدام Prepared Statements.";
-                } else if(text.includes('تشفير') || text.includes('SHA')) {
-                    reply = "التشفير عملية ذات اتجاهين، بينما التجزئة (Hashing) اتجاه واحد. يمكنك تجربتها مباشرة في مختبر التشفير في تبويب المختبرات!";
-                } else if(text.includes('علي ياسر') || text.includes('مؤسس')) {
-                    reply = "المؤسس والمطور الرئيسي للمنصة هو المهندس علي ياسر (Ali Yaser). يمكنك زيارة موقعه الشخصي aliyaser12.vercel.app لمعرفة المزيد.";
+            
+            try {
+                const response = await fetch("/api/nova", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ question: text })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.ok || !data.reply) {
+                    throw new Error(data.error || "تعذر الحصول على رد نوفا");
                 }
 
                 chatBox.innerHTML += `
                     <div class="flex items-start gap-3">
                         <div class="w-8 h-8 rounded-lg bg-vanta-gold text-white flex items-center justify-center text-xs font-bold flex-shrink-0">NOVA</div>
-                        <div class="bg-white p-4 rounded-2xl rounded-tr-none border border-vanta-border shadow-sm text-sm text-vanta-dark max-w-xl">
-                            ${reply}
-                        </div>
+                        <div class="bg-white p-4 rounded-2xl rounded-tr-none border border-vanta-border shadow-sm text-sm text-vanta-dark max-w-xl whitespace-pre-wrap"></div>
                     </div>
                 `;
+
+                chatBox.lastElementChild.querySelector("div:last-child").textContent = data.reply;
                 chatBox.scrollTop = chatBox.scrollHeight;
-            }, 600);
+
+            } catch (error) {
+                chatBox.innerHTML += `
+                    <div class="p-3 text-red-600 text-sm">تعذر الاتصال بنوفا. تأكد من إعدادات API.</div>
+                `;
+                console.error("NOVA API error:", error);
+            }
         }
+
 
         // Modal Helpers
         function openModal(id) {
