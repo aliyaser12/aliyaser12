@@ -1,10 +1,10 @@
 
+
 const MODELS = [
-  "gemini-3.8-flash",
-  "gemini-3.7-flash",
   "gemini-3.8-flash",
   "gemini-3.5-flash-lite"
 ];
+
 
 const SYSTEM_PROMPT = `
 أنت NOVA، المساعد الذكي الرسمي لمنصة VANTA CYBER.
