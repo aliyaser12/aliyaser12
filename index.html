@@ -1150,64 +1150,93 @@
             `;
         }
 
+        
         // NOVA AI Assistant Logic
         function handleNovaInput(e) {
-            if(e.key === 'Enter') {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
                 sendNovaMessage();
             }
         }
 
-        function sendNovaMessage() {
-            const input = document.getElementById('nova-input');
-            const chatBox = document.getElementById('nova-chat-box');
-            const text = input.value.trim();
-            if(!text) return;
+        async function sendNovaMessage() {
+            const input = document.getElementById("nova-input");
+            const chatBox = document.getElementById("nova-chat-box");
 
-            // Append User Message
-            chatBox.innerHTML += `
-                <div class="flex items-start gap-3 justify-end">
-                    <div class="bg-vanta-dark text-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm max-w-xl">
-                        ${text}
-                    </div>
-                    <div class="w-8 h-8 rounded-lg bg-vanta-dark text-white flex items-center justify-center text-xs font-bold flex-shrink-0">أنت</div>
-                </div>
-            `;
+            if (!input || !chatBox) return;
+
+            const text = input.value.trim();
+            if (!text) return;
+
             input.value = "";
+
+            // Display user message safely
+            const userRow = document.createElement("div");
+            userRow.className = "flex items-start gap-3 justify-end";
+
+            const userBubble = document.createElement("div");
+            userBubble.className =
+                "bg-vanta-dark text-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm max-w-xl whitespace-pre-wrap break-words";
+            userBubble.textContent = text;
+
+            const userAvatar = document.createElement("div");
+            userAvatar.className =
+                "w-8 h-8 rounded-lg bg-vanta-dark text-white flex items-center justify-center text-xs font-bold flex-shrink-0";
+            userAvatar.textContent = "أنت";
+
+            userRow.append(userBubble, userAvatar);
+            chatBox.appendChild(userRow);
+
+            // Create NOVA's loading bubble
+            const novaRow = document.createElement("div");
+            novaRow.className = "flex items-start gap-3";
+
+            const novaAvatar = document.createElement("div");
+            novaAvatar.className =
+                "w-8 h-8 rounded-lg bg-vanta-gold text-white flex items-center justify-center text-xs font-bold flex-shrink-0";
+            novaAvatar.textContent = "NOVA";
+
+            const novaBubble = document.createElement("div");
+            novaBubble.className =
+                "bg-white p-4 rounded-2xl rounded-tr-none border border-vanta-border shadow-sm text-sm text-vanta-dark max-w-xl whitespace-pre-wrap break-words";
+            novaBubble.textContent = "نوفا تفكر في إجابتك...";
+
+            novaRow.append(novaAvatar, novaBubble);
+            chatBox.appendChild(novaRow);
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            
             try {
                 const response = await fetch("/api/nova", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ question: text })
+                    body: JSON.stringify({
+                        question: text
+                    })
                 });
 
                 const data = await response.json();
 
                 if (!response.ok || !data.ok || !data.reply) {
-                    throw new Error(data.error || "تعذر الحصول على رد نوفا");
+                    throw new Error(
+                        data.error || data.details ||
+                        `خطأ في الاتصال (${response.status})`
+                    );
                 }
 
-                chatBox.innerHTML += `
-                    <div class="flex items-start gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-vanta-gold text-white flex items-center justify-center text-xs font-bold flex-shrink-0">NOVA</div>
-                        <div class="bg-white p-4 rounded-2xl rounded-tr-none border border-vanta-border shadow-sm text-sm text-vanta-dark max-w-xl whitespace-pre-wrap"></div>
-                    </div>
-                `;
-
-                chatBox.lastElementChild.querySelector("div:last-child").textContent = data.reply;
-                chatBox.scrollTop = chatBox.scrollHeight;
+                // Display the actual Gemini response
+                novaBubble.textContent = data.reply;
 
             } catch (error) {
-                chatBox.innerHTML += `
-                    <div class="p-3 text-red-600 text-sm">تعذر الاتصال بنوفا. تأكد من إعدادات API.</div>
-                `;
+                novaBubble.textContent =
+                    "تعذر الاتصال بنوفا. تأكد من إعداد API ومفتاح Gemini.";
                 console.error("NOVA API error:", error);
             }
+
+            chatBox.scrollTop = chatBox.scrollHeight;
         }
+
 
 
         // Modal Helpers
