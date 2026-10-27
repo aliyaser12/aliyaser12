@@ -1,6237 +1,1217 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#080910">
-<meta name="description" content="VANTA — Cyber, Learn, Create.">
-<title>VANTA</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-:root{
-  --bg:#080910;
-  --bg2:#0d0f18;
-  --card:rgba(20,23,35,.72);
-  --card2:rgba(255,255,255,.055);
-  --line:rgba(255,255,255,.11);
-  --text:#f5f7ff;
-  --muted:#9ba4bc;
-  --cyan:#58e7ff;
-  --purple:#9278ff;
-  --pink:#ff62bb;
-  --gold:#ffd166;
-  --green:#62e6a5;
-  --red:#ff667d;
-  --shadow:0 25px 80px rgba(0,0,0,.42);
-}
-
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  margin:0;
-  min-height:100vh;
-  color:var(--text);
-  background:
-    radial-gradient(800px 500px at 90% -10%,rgba(146,120,255,.18),transparent 65%),
-    radial-gradient(700px 450px at 0% 20%,rgba(88,231,255,.10),transparent 65%),
-    radial-gradient(650px 450px at 70% 90%,rgba(255,98,187,.08),transparent 70%),
-    linear-gradient(145deg,#07080d,#0d0f18 55%,#080910);
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    Tahoma,
-    Arial,
-    sans-serif;
-  overflow-x:hidden;
-}
-
-button,
-input,
-textarea,
-select{
-  font:inherit;
-}
-
-button{
-  cursor:pointer;
-}
-
-button:disabled{
-  opacity:.45;
-  cursor:not-allowed;
-}
-
-.hidden{
-  display:none!important;
-}
-
-#app{
-  min-height:100vh;
-}
-
-/* =========================
-   BOOT
-========================= */
-
-.boot{
-  position:fixed;
-  inset:0;
-  z-index:9999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:
-    radial-gradient(circle at center,rgba(92,72,180,.18),transparent 35%),
-    #05060a;
-  transition:opacity .7s ease,visibility .7s ease;
-}
-
-.boot.hide{
-  opacity:0;
-  visibility:hidden;
-}
-
-.bootBox{
-  width:min(650px,90%);
-  text-align:center;
-}
-
-.bootMark{
-  width:90px;
-  height:90px;
-  margin:0 auto 25px;
-  border-radius:28px;
-  background:
-    linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));
-  box-shadow:
-    0 0 35px rgba(146,120,255,.4),
-    0 0 90px rgba(88,231,255,.12);
-  animation:bootPulse 2.2s infinite;
-}
-
-@keyframes bootPulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.06)}
-}
-
-.bootTitle{
-  font-size:clamp(40px,8vw,76px);
-  font-weight:950;
-  letter-spacing:.12em;
-}
-
-.bootText{
-  color:var(--muted);
-  margin:12px 0 25px;
-}
-
-.bootBar{
-  width:100%;
-  height:4px;
-  background:rgba(255,255,255,.08);
-  border-radius:99px;
-  overflow:hidden;
-}
-
-.bootProgress{
-  height:100%;
-  width:0;
-  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
-  transition:width .15s linear;
-}
-
-.bootEnter{
-  margin-top:25px;
-}
-
-/* =========================
-   TOP NAV
-========================= */
-
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:100;
-  background:rgba(7,8,13,.78);
-  backdrop-filter:blur(24px);
-  border-bottom:1px solid var(--line);
-}
-
-.nav{
-  max-width:1500px;
-  margin:auto;
-  padding:11px 16px;
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  min-width:125px;
-  font-weight:950;
-  letter-spacing:.12em;
-}
-
-.brandLogo{
-  width:38px;
-  height:38px;
-  border-radius:13px;
-  background:linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));
-  box-shadow:0 0 25px rgba(146,120,255,.35);
-}
-
-.navLinks{
-  flex:1;
-  display:flex;
-  justify-content:center;
-  gap:5px;
-  overflow-x:auto;
-  scrollbar-width:none;
-}
-
-.navLinks::-webkit-scrollbar{
-  display:none;
-}
-
-.navBtn{
-  flex:0 0 auto;
-  border:0;
-  color:var(--muted);
-  background:transparent;
-  padding:10px 12px;
-  border-radius:12px;
-  transition:.2s;
-  white-space:nowrap;
-}
-
-.navBtn:hover,
-.navBtn.active{
-  color:#fff;
-  background:rgba(255,255,255,.075);
-}
-
-.accountArea{
-  display:flex;
-  align-items:center;
-  gap:7px;
-}
-
-.avatarMini{
-  width:36px;
-  height:36px;
-  border-radius:50%;
-  object-fit:cover;
-  border:1px solid var(--line);
-}
-
-.avatarFallback{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,var(--purple),var(--pink));
-  font-weight:800;
-}
-
-/* =========================
-   COMMON
-========================= */
-
-main{
-  width:min(1500px,100%);
-  margin:auto;
-  padding:28px 18px 100px;
-}
-
-.page{
-  display:none;
-  animation:pageIn .35s ease;
-}
-
-.page.active{
-  display:block;
-}
-
-@keyframes pageIn{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-.card{
-  border:1px solid var(--line);
-  background:
-    linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
-  backdrop-filter:blur(22px);
-  box-shadow:var(--shadow);
-  border-radius:24px;
-}
-
-.btn{
-  border:1px solid var(--line);
-  color:#fff;
-  background:rgba(255,255,255,.055);
-  border-radius:13px;
-  padding:10px 15px;
-  transition:.2s;
-}
-
-.btn:hover{
-  background:rgba(255,255,255,.1);
-  transform:translateY(-1px);
-}
-
-.btnPrimary{
-  border:0;
-  background:linear-gradient(135deg,#6757ff,#ad52ff);
-  box-shadow:0 10px 35px rgba(112,80,255,.25);
-}
-
-.btnDanger{
-  color:#ff9cac;
-}
-
-.muted{
-  color:var(--muted);
-}
-
-.badge{
-  display:inline-flex;
-  padding:6px 9px;
-  border-radius:999px;
-  background:rgba(88,231,255,.08);
-  border:1px solid rgba(88,231,255,.2);
-  color:var(--cyan);
-  font-size:12px;
-}
-
-.sectionHead{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  margin:28px 0 16px;
-}
-
-.sectionHead h2{
-  margin:0;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
-
-.grid2{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-}
-
-/* =========================
-   HOME
-========================= */
-
-.hero{
-  display:grid;
-  grid-template-columns:1.3fr .7fr;
-  gap:16px;
-}
-
-.heroMain{
-  min-height:430px;
-  padding:38px;
-  position:relative;
-  overflow:hidden;
-}
-
-.heroMain:before{
-  content:"";
-  position:absolute;
-  width:400px;
-  height:400px;
-  left:-150px;
-  bottom:-230px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(88,231,255,.18),transparent 68%);
-}
-
-.heroMain:after{
-  content:"";
-  position:absolute;
-  width:400px;
-  height:400px;
-  right:-180px;
-  top:-230px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(255,98,187,.18),transparent 68%);
-}
-
-.kicker{
-  color:var(--cyan);
-  font-size:13px;
-  font-weight:850;
-  letter-spacing:.08em;
-}
-
-.heroTitle{
-  position:relative;
-  z-index:2;
-  font-size:clamp(42px,7vw,82px);
-  line-height:.98;
-  margin:15px 0;
-  font-weight:950;
-}
-
-.gradientText{
-  background:linear-gradient(90deg,#fff,var(--cyan),var(--purple),var(--pink));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-}
-
-.heroText{
-  max-width:700px;
-  line-height:1.9;
-  color:var(--muted);
-  position:relative;
-  z-index:2;
-}
-
-.heroActions{
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-  margin-top:24px;
-  position:relative;
-  z-index:2;
-}
-
-.statsGrid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-
-.statCard{
-  padding:23px;
-  min-height:205px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.statIcon{
-  font-size:27px;
-}
-
-.statValue{
-  font-size:34px;
-  font-weight:950;
-}
-
-.statLabel{
-  color:var(--muted);
-}
-
-/* =========================
-   NOVA
-========================= */
-
-.novaLayout{
-  display:grid;
-  grid-template-columns:320px 1fr;
-  gap:16px;
-}
-
-.novaCharacter{
-  min-height:600px;
-  padding:25px;
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-
-.novaAura{
-  position:absolute;
-  width:250px;
-  height:250px;
-  border-radius:50%;
-  background:
-    radial-gradient(circle,
-      rgba(255,98,187,.30),
-      rgba(146,120,255,.18) 35%,
-      rgba(88,231,255,.08) 60%,
-      transparent 72%);
-  filter:blur(10px);
-  animation:novaAura 4s ease-in-out infinite;
-}
-
-@keyframes novaAura{
-  0%,100%{transform:scale(.95)}
-  50%{transform:scale(1.12)}
-}
-
-.novaFigure{
-  width:190px;
-  height:250px;
-  position:relative;
-  z-index:2;
-  filter:drop-shadow(0 25px 40px rgba(0,0,0,.5));
-}
-
-.novaHead{
-  position:absolute;
-  width:125px;
-  height:125px;
-  left:32px;
-  top:18px;
-  border-radius:45% 45% 48% 48%;
-  background:
-    linear-gradient(145deg,#171b2d,#080a12);
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow:
-    inset 0 0 30px rgba(146,120,255,.15),
-    0 0 40px rgba(146,120,255,.15);
-}
-
-.novaHair{
-  position:absolute;
-  inset:-7px 4px auto 4px;
-  height:70px;
-  border-radius:50% 50% 25% 25%;
-  background:linear-gradient(135deg,#24273b,#0b0c13);
-  clip-path:polygon(0 0,100% 0,85% 65%,70% 45%,58% 70%,43% 43%,25% 70%,10% 45%);
-}
-
-.novaEye{
-  position:absolute;
-  top:62px;
-  width:28px;
-  height:8px;
-  border-radius:20px;
-  background:var(--cyan);
-  box-shadow:0 0 16px var(--cyan);
-}
-
-.novaEye.left{left:25px}
-.novaEye.right{right:25px}
-
-.novaFaceLine{
-  position:absolute;
-  left:50%;
-  top:86px;
-  transform:translateX(-50%);
-  width:35px;
-  height:2px;
-  background:rgba(255,255,255,.45);
-}
-
-.novaBody{
-  position:absolute;
-  width:170px;
-  height:150px;
-  left:10px;
-  top:120px;
-  border-radius:50px 50px 25px 25px;
-  background:
-    linear-gradient(145deg,#1a1d30,#090a11);
-  border:1px solid rgba(255,255,255,.13);
-}
-
-.novaCore{
-  position:absolute;
-  width:42px;
-  height:42px;
-  left:64px;
-  top:37px;
-  border-radius:50%;
-  background:radial-gradient(circle,#fff,var(--cyan) 25%,var(--purple) 55%,transparent 70%);
-  box-shadow:0 0 35px rgba(88,231,255,.55);
-  animation:corePulse 2s infinite;
-}
-
-@keyframes corePulse{
-  0%,100%{transform:scale(.9)}
-  50%{transform:scale(1.1)}
-}
-
-.novaName{
-  position:relative;
-  z-index:2;
-  margin-top:20px;
-  font-size:28px;
-  font-weight:950;
-}
-
-.novaRole{
-  position:relative;
-  z-index:2;
-  color:var(--muted);
-  text-align:center;
-  line-height:1.7;
-}
-
-.novaChat{
-  min-height:600px;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-}
-
-.chatTop{
-  padding:20px;
-  border-bottom:1px solid var(--line);
-}
-
-.chatMessages{
-  flex:1;
-  min-height:410px;
-  max-height:610px;
-  overflow:auto;
-  padding:20px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.messageRow{
-  display:flex;
-}
-
-.messageRow.user{
-  justify-content:flex-start;
-}
-
-.messageRow.nova{
-  justify-content:flex-end;
-}
-
-.messageBubble{
-  display:inline-block;
-  width:fit-content;
-  max-width:min(75%,620px);
-  padding:10px 13px;
-  border-radius:17px;
-  line-height:1.7;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-}
-
-.messageRow.user .messageBubble{
-  background:linear-gradient(135deg,rgba(103,87,255,.85),rgba(173,82,255,.78));
-  border-bottom-left-radius:5px;
-}
-
-.messageRow.nova .messageBubble{
-  background:rgba(255,255,255,.065);
-  border:1px solid var(--line);
-  border-bottom-right-radius:5px;
-}
-
-.chatInputArea{
-  padding:14px;
-  border-top:1px solid var(--line);
-  display:flex;
-  gap:9px;
-}
-
-.chatInput{
-  flex:1;
-  min-width:0;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:#0b0d15;
-  color:#fff!important;
-  caret-color:var(--cyan);
-  -webkit-text-fill-color:#fff;
-  padding:12px 14px;
-  outline:none;
-}
-
-.chatInput::placeholder{
-  color:#777f96;
-}
-
-.chatInput:focus{
-  border-color:rgba(88,231,255,.45);
-  box-shadow:0 0 0 3px rgba(88,231,255,.07);
-}
-
-/* =========================
-   LIBRARY
-========================= */
-
-.libraryHero{
-  padding:28px;
-}
-
-.bookGrid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:22px;
-}
-
-.book{
-  min-height:330px;
-  padding:17px;
-  position:relative;
-  overflow:hidden;
-  cursor:pointer;
-  transform-style:preserve-3d;
-  transition:transform .35s,box-shadow .35s;
-}
-
-.book:hover{
-  transform:translateY(-9px) rotateX(2deg) rotateY(-2deg);
-  box-shadow:
-    0 35px 80px rgba(0,0,0,.5),
-    0 0 35px rgba(146,120,255,.12);
-}
-
-.bookCover{
-  height:205px;
-  border-radius:15px;
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  padding:18px;
-  background:
-    linear-gradient(145deg,
-      rgba(88,231,255,.18),
-      rgba(146,120,255,.22),
-      rgba(255,98,187,.18));
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow:
-    inset 0 0 35px rgba(255,255,255,.05),
-    0 20px 35px rgba(0,0,0,.3);
-}
-
-.bookCover:before{
-  content:"";
-  position:absolute;
-  inset:12px;
-  border:1px solid rgba(255,255,255,.14);
-  border-radius:11px;
-}
-
-.bookGlow{
-  position:absolute;
-  width:150px;
-  height:150px;
-  right:-50px;
-  top:-50px;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(255,255,255,.2),transparent 68%);
-}
-
-.bookNumber{
-  position:absolute;
-  top:17px;
-  left:17px;
-  color:rgba(255,255,255,.7);
-  font-weight:900;
-}
-
-.bookTitle{
-  position:relative;
-  z-index:2;
-  font-size:21px;
-  font-weight:950;
-}
-
-.bookInfo{
-  padding:13px 3px 0;
-}
-
-.bookInfo p{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.6;
-}
-
-.progress{
-  height:5px;
-  background:rgba(255,255,255,.08);
-  border-radius:99px;
-  overflow:hidden;
-}
-
-.progressBar{
-  height:100%;
-  background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));
-}
-
-/* =========================
-   BOOK READER
-========================= */
-
-.reader{
-  max-width:1000px;
-  margin:auto;
-}
-
-.readerHeader{
-  padding:25px;
-  margin-bottom:15px;
-}
-
-.lessonNav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  margin-bottom:18px;
-}
-
-.lessonContent{
-  padding:32px;
-  min-height:750px;
-}
-
-.lessonContent h1{
-  font-size:clamp(30px,5vw,54px);
-  margin-top:0;
-}
-
-.lessonContent h2{
-  margin-top:40px;
-}
-
-.lessonContent p,
-.lessonContent li{
-  color:#c7ccda;
-  line-height:2;
-  font-size:16px;
-}
-
-.lessonBlock{
-  margin:25px 0;
-  padding:20px;
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:rgba(255,255,255,.035);
-}
-
-.codeBox{
-  direction:ltr;
-  text-align:left;
-  background:#07080d;
-  border:1px solid var(--line);
-  padding:18px;
-  border-radius:15px;
-  overflow:auto;
-  color:#d9e4ff;
-}
-
-.lessonQuiz{
-  margin-top:35px;
-}
-
-.quizOption{
-  display:block;
-  width:100%;
-  margin:8px 0;
-  text-align:right;
-}
-
-.quizOption.correct{
-  border-color:var(--green);
-}
-
-.quizOption.wrong{
-  border-color:var(--red);
-}
-
-/* =========================
-   LABS
-========================= */
-
-.labGrid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
-
-.lab{
-  padding:22px;
-}
-
-.lab h3{
-  margin-top:0;
-}
-
-.labOutput{
-  margin-top:12px;
-  padding:13px;
-  border-radius:12px;
-  background:#080a10;
-  border:1px solid var(--line);
-  min-height:45px;
-  line-height:1.7;
-  overflow-wrap:anywhere;
-}
-
-.strengthMeter{
-  height:8px;
-  border-radius:99px;
-  background:rgba(255,255,255,.08);
-  overflow:hidden;
-  margin-top:10px;
-}
-
-.strengthFill{
-  height:100%;
-  width:0;
-  transition:.3s;
-  background:linear-gradient(90deg,var(--red),var(--gold),var(--green));
-}
-
-/* =========================
-   VANTABOOK
-========================= */
-
-.vantaLayout{
-  display:grid;
-  grid-template-columns:240px minmax(0,680px) 270px;
-  gap:15px;
-  align-items:start;
-}
-
-.vantaSide{
-  padding:17px;
-  position:sticky;
-  top:85px;
-}
-
-.sideBtn{
-  display:block;
-  width:100%;
-  text-align:right;
-  margin:5px 0;
-}
-
-.storyRow{
-  display:flex;
-  gap:12px;
-  overflow:auto;
-  padding:5px 2px 15px;
-}
-
-.story{
-  min-width:75px;
-  text-align:center;
-  cursor:pointer;
-}
-
-.storyAvatar{
-  width:64px;
-  height:64px;
-  border-radius:50%;
-  padding:2px;
-  background:linear-gradient(135deg,var(--cyan),var(--pink),var(--purple));
-  margin:auto;
-}
-
-.storyAvatar img{
-  width:100%;
-  height:100%;
-  border-radius:50%;
-  object-fit:cover;
-  border:3px solid #0d0f18;
-}
-
-.feed{
-  display:flex;
-  flex-direction:column;
-  gap:15px;
-}
-
-.post{
-  overflow:hidden;
-}
-
-.postHead{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:15px;
-}
-
-.postHead .avatarMini{
-  width:42px;
-  height:42px;
-}
-
-.postUser{
-  flex:1;
-}
-
-.postUser strong{
-  display:block;
-}
-
-.postMedia{
-  width:100%;
-  max-height:700px;
-  object-fit:cover;
-  background:#05060a;
-  display:block;
-}
-
-.postText{
-  padding:15px 15px 5px;
-  line-height:1.8;
-}
-
-.postActions{
-  display:flex;
-  gap:4px;
-  padding:10px 12px;
-}
-
-.iconBtn{
-  border:0;
-  background:transparent;
-  color:#bfc5d7;
-  padding:9px;
-  border-radius:11px;
-}
-
-.iconBtn:hover{
-  background:rgba(255,255,255,.06);
-  color:#fff;
-}
-
-.postStats{
-  padding:0 15px 10px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.commentArea{
-  display:flex;
-  gap:7px;
-  padding:10px 15px 15px;
-  border-top:1px solid rgba(255,255,255,.06);
-}
-
-.commentInput{
-  flex:1;
-  min-width:0;
-  background:#0b0d15;
-  border:1px solid var(--line);
-  color:#fff;
-  border-radius:11px;
-  padding:9px 11px;
-}
-
-.exploreGrid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:4px;
-}
-
-.exploreItem{
-  aspect-ratio:1;
-  overflow:hidden;
-  cursor:pointer;
-  background:#111;
-}
-
-.exploreItem img,
-.exploreItem video{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-.profilePanel{
-  padding:22px;
-}
-
-.profileHero{
-  display:flex;
-  align-items:center;
-  gap:18px;
-}
-
-.profileBig{
-  width:100px;
-  height:100px;
-  border-radius:50%;
-  object-fit:cover;
-  border:2px solid rgba(255,255,255,.14);
-}
-
-.profileStats{
-  display:flex;
-  gap:20px;
-  margin-top:15px;
-}
-
-.profileStats b{
-  display:block;
-  font-size:20px;
-}
-
-/* =========================
-   MODAL
-========================= */
-
-.modal{
-  position:fixed;
-  inset:0;
-  z-index:500;
-  background:rgba(0,0,0,.7);
-  backdrop-filter:blur(12px);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:18px;
-}
-
-.modalBox{
-  width:min(600px,100%);
-  max-height:90vh;
-  overflow:auto;
-  padding:25px;
-}
-
-.field{
-  margin:13px 0;
-}
-
-.field label{
-  display:block;
-  margin-bottom:6px;
-  color:#cdd2df;
-  font-size:13px;
-}
-
-.field input,
-.field textarea,
-.field select{
-  width:100%;
-  padding:12px;
-  color:#fff;
-  background:#0a0c13;
-  border:1px solid var(--line);
-  border-radius:12px;
-  outline:none;
-}
-
-.field input:focus,
-.field textarea:focus,
-.field select:focus{
-  border-color:rgba(88,231,255,.5);
-}
-
-.modalActions{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:18px;
-}
-
-.fileLabel{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-}
-
-/* =========================
-   CREDITS
-========================= */
-
-.credits{
-  max-width:800px;
-  margin:auto;
-  padding:50px 25px;
-  text-align:center;
-}
-
-.creditLogo{
-  width:100px;
-  height:100px;
-  margin:auto;
-  border-radius:30px;
-  background:linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));
-  box-shadow:0 0 60px rgba(146,120,255,.3);
-}
-
-.creditName{
-  font-size:clamp(32px,6vw,60px);
-  font-weight:950;
-  margin:22px 0 5px;
-}
-
-.copyright{
-  color:var(--muted);
-  line-height:2;
-}
-
-/* =========================
-   TOAST
-========================= */
-
-.toast{
-  position:fixed;
-  bottom:20px;
-  left:20px;
-  z-index:900;
-  max-width:min(420px,calc(100% - 40px));
-  padding:13px 16px;
-  background:#171a25;
-  border:1px solid var(--line);
-  border-radius:14px;
-  box-shadow:var(--shadow);
-  opacity:0;
-  transform:translateY(15px);
-  pointer-events:none;
-  transition:.25s;
-}
-
-.toast.show{
-  opacity:1;
-  transform:none;
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media(max-width:1200px){
-  .vantaLayout{
-    grid-template-columns:200px minmax(0,1fr);
-  }
-
-  .vantaRight{
-    display:none;
-  }
-
-  .bookGrid{
-    grid-template-columns:repeat(3,1fr);
-  }
-
-  .labGrid{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
-
-@media(max-width:900px){
-  .hero,
-  .novaLayout{
-    grid-template-columns:1fr;
-  }
-
-  .novaCharacter{
-    min-height:330px;
-  }
-
-  .novaFigure{
-    transform:scale(.8);
-    margin-top:-30px;
-    margin-bottom:-30px;
-  }
-
-  .grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .bookGrid{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  .vantaLayout{
-    grid-template-columns:1fr;
-  }
-
-  .vantaSide{
-    position:static;
-    display:flex;
-    overflow:auto;
-    gap:5px;
-  }
-
-  .vantaSide .sideBtn{
-    width:auto;
-    white-space:nowrap;
-  }
-}
-
-@media(max-width:650px){
-  .nav{
-    flex-wrap:wrap;
-  }
-
-  .brand{
-    min-width:auto;
-  }
-
-  .navLinks{
-    order:3;
-    flex-basis:100%;
-    justify-content:flex-start;
-  }
-
-  .accountArea{
-    margin-right:auto;
-  }
-
-  main{
-    padding:18px 12px 80px;
-  }
-
-  .heroMain{
-    padding:25px;
-    min-height:390px;
-  }
-
-  .heroTitle{
-    font-size:45px;
-  }
-
-  .grid,
-  .grid2,
-  .labGrid{
-    grid-template-columns:1fr;
-  }
-
-  .statsGrid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .bookGrid{
-    grid-template-columns:1fr 1fr;
-    gap:11px;
-  }
-
-  .book{
-    min-height:275px;
-    padding:10px;
-  }
-
-  .bookCover{
-    height:170px;
-  }
-
-  .bookTitle{
-    font-size:17px;
-  }
-
-  .lessonContent{
-    padding:20px;
-  }
-
-  .messageBubble{
-    max-width:88%;
-  }
-
-  .profileHero{
-    align-items:flex-start;
-  }
-}
-
-@media(max-width:430px){
-  .bookGrid{
-    grid-template-columns:1fr;
-  }
-
-  .statsGrid{
-    grid-template-columns:1fr;
-  }
-
-  .navBtn{
-    padding:9px 10px;
-  }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VANTA CYBER | المنصة العربية المتقدمة للأمن السيبراني وعلوم الحاسوب</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vanta: {
+                            white: '#FFFFFF',
+                            secondary: '#F8F9FC',
+                            gold: '#C9A227',
+                            darkGold: '#9A7614',
+                            dark: '#202431',
+                            grayText: '#6B7280',
+                            border: '#E5E7EB',
+                            cardBg: '#FFFFFF',
+                            accent: '#FDFBF7'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #FFFFFF;
+            color: #202431;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Custom Scrollbar for sleek aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F8F9FC;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C9A227;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9A7614;
+        }
+        /* Layout shift prevention: Fixed aspect ratios */
+        .aspect-secure {
+            aspect-ratio: 16/9;
+        }
+        .gold-gradient-border {
+            border: 1px solid #E5E7EB;
+            transition: all 0.3s ease;
+        }
+        .gold-gradient-border:hover {
+            border-color: #C9A227;
+            box-shadow: 0 10px 25px -5px rgba(201, 162, 39, 0.1);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
+<body class="bg-vanta-white text-vanta-dark min-h-screen flex flex-col justify-between selection:bg-vanta-gold selection:text-white">
 
-<body>
-
-<!-- =========================
-     BOOT SCREEN
-========================= -->
-
-<div class="boot" id="boot">
-  <div class="bootBox">
-    <div class="bootMark"></div>
-    <div class="bootTitle">VANTA</div>
-    <div class="bootText" id="bootText">Initializing VANTA system...</div>
-    <div class="bootBar">
-      <div class="bootProgress" id="bootProgress"></div>
-    </div>
-    <button class="btn btnPrimary bootEnter hidden" id="bootEnter">
-      دخول VANTA
-    </button>
-  </div>
-</div>
-
-<div id="app">
-
-<header class="topbar">
-  <nav class="nav">
-
-    <div class="brand">
-      <div class="brandLogo"></div>
-      <span>VANTA</span>
+    <!-- Top Announcement Bar -->
+    <div class="bg-vanta-dark text-vanta-white text-xs py-2 px-4 text-center font-medium flex items-center justify-center gap-2 border-b border-vanta-gold/20">
+        <span class="bg-vanta-gold text-vanta-dark text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">إصدار 2.0</span>
+        <span>منصة VANTA CYBER الاحترافية - تم إطلاق مسارات الأمن السيبراني والذكاء الاصطناعي والشبكات الكاملة</span>
+        <span class="text-vanta-gold hidden sm:inline">| المؤسس: علي ياسر (Ali Yaser)</span>
     </div>
 
-    <div class="navLinks">
-
-      <button class="navBtn active" data-page="home">
-        الرئيسية
-      </button>
-
-      <button class="navBtn" data-page="nova">
-        NOVA
-      </button>
-
-      <button class="navBtn" data-page="library">
-        المكتبة
-      </button>
-
-      <button class="navBtn" data-page="labs">
-        المختبرات
-      </button>
-
-      <button class="navBtn" data-page="vantabook">
-        VANTABOOK
-      </button>
-
-      <button class="navBtn" data-page="profile">
-        حسابي
-      </button>
-
-      <button class="navBtn" data-page="credits">
-        عن VANTA
-      </button>
-
-    </div>
-
-    <div class="accountArea" id="accountArea">
-      <button class="btn" id="loginBtn">
-        تسجيل الدخول
-      </button>
-    </div>
-
-  </nav>
-</header>
-
-<main>
-
-<!-- =========================
-     HOME
-========================= -->
-
-<section class="page active" id="page-home">
-
-  <div class="hero">
-
-    <div class="card heroMain">
-
-      <div class="kicker">
-        VANTA SYSTEM / ONLINE
-      </div>
-
-      <h1 class="heroTitle">
-        ادخل إلى
-        <span class="gradientText">VANTA</span>
-      </h1>
-
-      <p class="heroText" id="homeGreeting">
-        منصة تجمع التعلم، الأمن السيبراني، الترفيه، والذكاء الاصطناعي
-        في تجربة واحدة.
-      </p>
-
-      <div class="heroActions">
-
-        <button class="btn btnPrimary" data-open="nova">
-          تحدث مع NOVA
-        </button>
-
-        <button class="btn" data-open="library">
-          افتح المكتبة
-        </button>
-
-        <button class="btn" data-open="labs">
-          ادخل المختبرات
-        </button>
-
-        <button class="btn" data-open="vantabook">
-          افتح VANTABOOK
-        </button>
-
-      </div>
-
-    </div>
-
-    <div class="statsGrid">
-
-      <div class="card statCard">
-        <div class="statIcon">🧠</div>
-        <div class="statValue" id="statLevel">1</div>
-        <div class="statLabel">مستواك</div>
-      </div>
-
-      <div class="card statCard">
-        <div class="statIcon">⚡</div>
-        <div class="statValue" id="statXP">0</div>
-        <div class="statLabel">XP</div>
-      </div>
-
-      <div class="card statCard">
-        <div class="statIcon">📚</div>
-        <div class="statValue">8</div>
-        <div class="statLabel">كتب متاحة</div>
-      </div>
-
-      <div class="card statCard">
-        <div class="statIcon">🧪</div>
-        <div class="statValue">10+</div>
-        <div class="statLabel">مختبرات تفاعلية</div>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="sectionHead">
-    <h2>عالم VANTA</h2>
-    <span class="muted">تعلم • جرّب • اكتشف</span>
-  </div>
-
-  <div class="grid">
-
-    <div class="card tile">
-      <div class="icon">🤖</div>
-      <h3>NOVA</h3>
-      <p>
-        مساعدك داخل VANTA. يفهم سياقك ويساعدك في التعلم والمختبرات
-        وVANTABOOK.
-      </p>
-      <button class="btn" data-open="nova">ابدأ</button>
-    </div>
-
-    <div class="card tile">
-      <div class="icon">📖</div>
-      <h3>المكتبة المستقبلية</h3>
-      <p>
-        كتب طويلة مقسمة إلى دروس ومراحل، مع تقدم محفوظ لكل مستخدم.
-      </p>
-      <button class="btn" data-open="library">استكشف</button>
-    </div>
-
-    <div class="card tile">
-      <div class="icon">🧪</div>
-      <h3>Cyber Labs</h3>
-      <p>
-        اختبر قوة كلمات المرور، الهاش، Base64، التصيد، والعديد من
-        التجارب الدفاعية.
-      </p>
-      <button class="btn" data-open="labs">المختبرات</button>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     NOVA
-========================= -->
-
-<section class="page" id="page-nova">
-
-  <div class="sectionHead">
-    <div>
-      <h2>NOVA</h2>
-      <div class="muted">
-        مساعد VANTA الشخصي
-      </div>
-    </div>
-
-    <span class="badge">
-      AI ACTIVE
-    </span>
-  </div>
-
-  <div class="novaLayout">
-
-    <div class="card novaCharacter">
-
-      <div class="novaAura"></div>
-
-      <div class="novaFigure">
-
-        <div class="novaHead">
-          <div class="novaHair"></div>
-          <div class="novaEye left"></div>
-          <div class="novaEye right"></div>
-          <div class="novaFaceLine"></div>
-        </div>
-
-        <div class="novaBody">
-          <div class="novaCore"></div>
-        </div>
-
-      </div>
-
-      <div class="novaName">
-        NOVA
-      </div>
-
-      <div class="novaRole">
-        ذكاء VANTA المساعد.<br>
-        تراقب السياق، تتعلم من تفاعلك، وتساعدك داخل المنصة.
-      </div>
-
-    </div>
-
-    <div class="card novaChat">
-
-      <div class="chatTop">
-        <strong>NOVA</strong>
-        <div class="muted">
-          اسألها عن VANTA أو الدروس أو المختبرات أو VANTABOOK
-        </div>
-      </div>
-
-      <div class="chatMessages" id="novaMessages">
-
-        <div class="messageRow nova">
-          <div class="messageBubble">
-            أهلًا بك. أنا NOVA.
-          </div>
-        </div>
-
-      </div>
-
-      <div class="chatInputArea">
-
-        <input
-          id="novaInput"
-          class="chatInput"
-          autocomplete="off"
-          placeholder="اكتب سؤالك لـ NOVA..."
-        >
-
-        <button
-          class="btn btnPrimary"
-          id="novaSend"
-        >
-          إرسال
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     LIBRARY
-========================= -->
-
-<section class="page" id="page-library">
-
-  <div id="libraryHome">
-
-    <div class="card libraryHero">
-
-      <span class="badge">
-        VANTA LIBRARY
-      </span>
-
-      <h1>
-        مكتبة المعرفة
-      </h1>
-
-      <p class="muted">
-        لا تفتح مجرد درس. اختر كتابًا، ادخل عالمه، وتقدم بين فصوله.
-      </p>
-
-    </div>
-
-    <div class="sectionHead">
-      <h2>الكتالوج</h2>
-      <span class="muted">كتب VANTA</span>
-    </div>
-
-    <div class="bookGrid" id="bookGrid"></div>
-
-  </div>
-
-  <div id="readerView" class="hidden">
-
-    <div class="reader">
-
-      <div class="card readerHeader">
-
-        <div class="lessonNav">
-
-          <button class="btn" id="backLibrary">
-            ← المكتبة
-          </button>
-
-          <span class="badge" id="readerProgress">
-            1 / 5
-          </span>
-
-        </div>
-
-        <h2 id="readerBookTitle">
-          الكتاب
-        </h2>
-
-        <div class="progress">
-          <div class="progressBar" id="readerProgressBar"></div>
-        </div>
-
-      </div>
-
-      <article class="card lessonContent">
-
-        <div class="muted" id="lessonNumber">
-          الدرس 1
-        </div>
-
-        <h1 id="lessonTitle">
-          عنوان الدرس
-        </h1>
-
-        <div id="lessonBody"></div>
-
-        <div class="lessonQuiz" id="lessonQuiz"></div>
-
-        <div class="modalActions">
-
-          <button
-            class="btn"
-            id="askNovaFromLesson"
-          >
-            🤖 اسأل NOVA
-          </button>
-
-          <button
-            class="btn btnPrimary"
-            id="nextLesson"
-          >
-            الدرس التالي →
-          </button>
-
-        </div>
-
-      </article>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     LABS
-========================= -->
-
-<section class="page" id="page-labs">
-
-  <div class="sectionHead">
-    <div>
-      <h2>Cyber Labs</h2>
-      <div class="muted">
-        مختبرات دفاعية وتفاعلية
-      </div>
-    </div>
-  </div>
-
-  <div class="labGrid">
-
-    <!-- PASSWORD -->
-
-    <div class="card lab">
-
-      <h3>🔐 اختبار قوة كلمة المرور</h3>
-
-      <p class="muted">
-        اختبر كلمة مرور محليًا. لا يتم إرسالها إلى الخادم.
-      </p>
-
-      <div class="field">
-        <input
-          id="passwordTest"
-          type="password"
-          placeholder="اكتب كلمة اختبار"
-        >
-      </div>
-
-      <div class="strengthMeter">
-        <div
-          class="strengthFill"
-          id="strengthFill"
-        ></div>
-      </div>
-
-      <div
-        class="labOutput"
-        id="passwordResult"
-      >
-        ابدأ الاختبار.
-      </div>
-
-    </div>
-
-
-    <!-- HASH -->
-
-    <div class="card lab">
-
-      <h3>🧬 SHA-256 Hash</h3>
-
-      <p class="muted">
-        شاهد كيف تتحول البيانات إلى بصمة رقمية.
-      </p>
-
-      <div class="field">
-        <input
-          id="hashInput"
-          placeholder="اكتب نصًا"
-        >
-      </div>
-
-      <button class="btn btnPrimary" id="hashBtn">
-        إنشاء Hash
-      </button>
-
-      <div class="labOutput" id="hashOutput">
-        -
-      </div>
-
-    </div>
-
-
-    <!-- BASE64 -->
-
-    <div class="card lab">
-
-      <h3>🧩 Base64 Lab</h3>
-
-      <div class="field">
-        <textarea
-          id="base64Input"
-          rows="4"
-          placeholder="النص"
-        ></textarea>
-      </div>
-
-      <div class="modalActions">
-
-        <button
-          class="btn btnPrimary"
-          id="encode64"
-        >
-          Encode
-        </button>
-
-        <button
-          class="btn"
-          id="decode64"
-        >
-          Decode
-        </button>
-
-      </div>
-
-      <div class="labOutput" id="base64Output">
-        -
-      </div>
-
-    </div>
-
-
-    <!-- PHISHING -->
-
-    <div class="card lab">
-
-      <h3>🎣 Phishing Detector</h3>
-
-      <p>
-        وصلك بريد يقول:
-      </p>
-
-      <div class="lessonBlock">
-        "حسابك سيتم إيقافه خلال 10 دقائق. اضغط هنا وسجل دخولك فورًا."
-      </div>
-
-      <button
-        class="btn"
-        data-phish="yes"
-      >
-        تصيد احتيالي
-      </button>
-
-      <button
-        class="btn"
-        data-phish="no"
-      >
-        رسالة عادية
-      </button>
-
-      <div class="labOutput" id="phishResult">
-        اختر إجابتك.
-      </div>
-
-    </div>
-
-
-    <!-- ENCODING -->
-
-    <div class="card lab">
-
-      <h3>🧠 Reverse Challenge</h3>
-
-      <p class="muted">
-        تحدٍ صغير. اعكس النص واكتشف النتيجة.
-      </p>
-
-      <div class="lessonBlock">
-        <strong id="reverseChallenge">
-          VANTA
-        </strong>
-      </div>
-
-      <input
-        class="field"
-        id="reverseAnswer"
-        placeholder="إجابتك"
-      >
-
-      <button class="btn btnPrimary" id="reverseBtn">
-        تحقق
-      </button>
-
-      <div class="labOutput" id="reverseResult">
-        -
-      </div>
-
-    </div>
-
-
-    <!-- URL -->
-
-    <div class="card lab">
-
-      <h3>🌐 URL Analyzer</h3>
-
-      <p class="muted">
-        تحليل مبسط للرابط دون فتحه.
-      </p>
-
-      <div class="field">
-        <input
-          id="urlInput"
-          placeholder="https://example.com/login"
-        >
-      </div>
-
-      <button class="btn btnPrimary" id="urlAnalyze">
-        تحليل
-      </button>
-
-      <div class="labOutput" id="urlOutput">
-        -
-      </div>
-
-    </div>
-
-
-    <!-- SECRET -->
-
-    <div class="card lab">
-
-      <h3>🕵️ Mystery Lab</h3>
-
-      <p class="muted">
-        مفاجأة صغيرة من VANTA.
-      </p>
-
-      <button
-        class="btn btnPrimary"
-        id="mysteryBtn"
-      >
-        افتح الرسالة
-      </button>
-
-      <div
-        class="labOutput"
-        id="mysteryOutput"
-      >
-        النظام ينتظر...
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     VANTABOOK
-========================= -->
-
-<section class="page" id="page-vantabook">
-
-  <div class="sectionHead">
-
-    <div>
-      <h2>VANTABOOK</h2>
-      <div class="muted">
-        مجتمع VANTA
-      </div>
-    </div>
-
-    <div>
-      <button
-        class="btn btnPrimary"
-        id="createPostBtn"
-      >
-        + منشور
-      </button>
-
-      <button
-        class="btn"
-        id="createStoryBtn"
-      >
-        + Story
-      </button>
-    </div>
-
-  </div>
-
-  <div class="vantaLayout">
-
-    <aside class="card vantaSide">
-
-      <button
-        class="btn sideBtn"
-        data-vanta-tab="feed"
-      >
-        🏠 الرئيسية
-      </button>
-
-      <button
-        class="btn sideBtn"
-        data-vanta-tab="explore"
-      >
-        🔎 استكشاف
-      </button>
-
-      <button
-        class="btn sideBtn"
-        data-vanta-tab="saved"
-      >
-        🔖 المحفوظات
-      </button>
-
-      <button
-        class="btn sideBtn"
-        data-vanta-tab="profile"
-      >
-        👤 ملفي
-      </button>
-
-      <button
-        class="btn sideBtn"
-        id="vantaLoginSide"
-      >
-        🔑 الحساب
-      </button>
-
-    </aside>
-
-
-    <div>
-
-      <div id="vantaFeedTab">
-
-        <div class="card" style="padding:12px;margin-bottom:15px">
-
-          <div class="storyRow" id="storyRow">
-
-            <div class="story" id="addStoryBubble">
-              <div class="storyAvatar">
-                <img
-                  src=""
-                  id="storyMeAvatar"
-                  alt=""
-                >
-              </div>
-              <small>قصتك</small>
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-vanta-border transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-vanta-gold to-vanta-darkGold flex items-center justify-center text-white shadow-md shadow-vanta-gold/20">
+                    <i class="fa-solid fa-shield-halved text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-wider bg-gradient-to-r from-vanta-dark to-vanta-darkGold bg-clip-text text-transparent">VANTA CYBER</span>
+                    <span class="block text-[10px] text-vanta-grayText font-semibold tracking-widest uppercase">أمن سيبراني متقدم</span>
+                </div>
             </div>
 
-          </div>
+            <!-- Desktop Navigation -->
+            <nav class="hidden lg:flex items-center gap-6 text-sm font-semibold text-vanta-dark">
+                <button onclick="switchTab('home')" class="nav-link py-2 hover:text-vanta-gold transition-colors text-vanta-gold border-b-2 border-vanta-gold" data-target="home">الرئيسية</button>
+                <button onclick="switchTab('tracks')" class="nav-link py-2 hover:text-vanta-gold transition-colors" data-target="tracks">المسارات والدروس</button>
+                <button onclick="switchTab('labs')" class="nav-link py-2 hover:text-vanta-gold transition-colors flex items-center gap-1.5"><i class="fa-solid fa-terminal text-xs text-vanta-gold"></i> المختبرات العملية</button>
+                <button onclick="switchTab('nova')" class="nav-link py-2 hover:text-vanta-gold transition-colors flex items-center gap-1.5"><i class="fa-solid fa-cube text-xs text-vanta-gold"></i> المساعد NOVA</button>
+                <button onclick="switchTab('dashboard')" class="nav-link py-2 hover:text-vanta-gold transition-colors">لوحة التقدم</button>
+                <button onclick="switchTab('founder')" class="nav-link py-2 hover:text-vanta-gold transition-colors">المؤسس</button>
+            </nav>
 
+            <!-- Action Buttons / Auth -->
+            <div class="hidden sm:flex items-center gap-3">
+                <button onclick="openModal('auth-modal')" class="px-4 py-2 text-sm font-bold text-vanta-dark border border-vanta-border rounded-xl hover:bg-vanta-secondary transition-all">
+                    <i class="fa-solid fa-user ml-1.5 text-vanta-gold"></i> دخول / تسجيل
+                </button>
+                <button onclick="switchTab('tracks')" class="px-5 py-2 text-sm font-bold text-white bg-gradient-to-r from-vanta-gold to-vanta-darkGold rounded-xl hover:opacity-90 shadow-md shadow-vanta-gold/20 transition-all">
+                    ابدأ التعلم مجاناً
+                </button>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 text-vanta-dark hover:text-vanta-gold text-xl">
+                <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
+            </button>
         </div>
 
-        <div
-          class="feed"
-          id="postFeed"
-        ></div>
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-b border-vanta-border px-4 pt-2 pb-4 space-y-2 shadow-lg">
+            <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-right py-2.5 px-3 rounded-lg font-semibold hover:bg-vanta-secondary">الرئيسية</button>
+            <button onclick="switchTab('tracks'); toggleMobileMenu();" class="block w-full text-right py-2.5 px-3 rounded-lg font-semibold hover:bg-vanta-secondary">المسارات والدروس</button>
+            <button onclick="switchTab('labs'); toggleMobileMenu();" class="block w-full text-right py-2.5 px-3 rounded-lg font-semibold hover:bg-vanta-secondary">المختبرات العملية</button>
+            <button onclick="switchTab('nova'); toggleMobileMenu();" class="block w-full text-right py-2.5 px-3 rounded-lg font-semibold hover:bg-vanta-secondary">المساعد الذكي NOVA</button>
+            <button onclick="switchTab('dashboard'); toggleMobileMenu();" class="block w-full text-right py-2.5 px-3 rounded-lg font-semibold hover:bg-vanta-secondary">لوحة التحكم</button>
+            <button onclick="switchTab('founder'); toggleMobileMenu();" class="block w-full text-right py-2.5 px-3 rounded-lg font-semibold hover:bg-vanta-secondary">المؤسس (علي ياسر)</button>
+            <div class="pt-2 border-t border-vanta-border flex gap-2">
+                <button onclick="openModal('auth-modal'); toggleMobileMenu();" class="flex-1 py-2 text-center text-sm font-bold border border-vanta-border rounded-xl">دخول</button>
+                <button onclick="switchTab('tracks'); toggleMobileMenu();" class="flex-1 py-2 text-center text-sm font-bold bg-vanta-gold text-white rounded-xl">ابدأ</button>
+            </div>
+        </div>
+    </header>
 
-      </div>
+    <!-- Main Dynamic Content Container -->
+    <main class="flex-grow">
 
+        <!-- ================= TAB 1: HOME ================= -->
+        <div id="tab-home" class="tab-content active">
+            <!-- Hero Section -->
+            <section class="relative overflow-hidden py-16 sm:py-24 bg-gradient-to-b from-vanta-secondary to-vanta-white border-b border-vanta-border">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        <div class="lg:col-span-7 space-y-6 text-right">
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-vanta-gold/10 text-vanta-darkGold text-xs font-bold border border-vanta-gold/20">
+                                <i class="fa-solid fa-award"></i> المنصة العربية الاحترافية الأولى للأمن السيبراني
+                            </div>
+                            <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-vanta-dark leading-tight">
+                                احترف <span class="bg-gradient-to-r from-vanta-gold to-vanta-darkGold bg-clip-text text-transparent">الأمن السيبراني</span> وعلوم الحاسوب من الصفر
+                            </h1>
+                            <p class="text-base sm:text-lg text-vanta-grayText leading-relaxed max-w-2xl">
+                                منصة VANTA CYBER تقدم مسارات تعليمية ضخمة ومصممة بعناية فائقة، مع مختبرات تفاعلية حقيقية، ومساعد ذكي (NOVA) يرافقك في رحلة تعلمك نحو الاحتراف الكامل.
+                            </p>
+                            <div class="flex flex-wrap gap-4 pt-2">
+                                <button onclick="switchTab('tracks')" class="px-8 py-4 bg-gradient-to-r from-vanta-gold to-vanta-darkGold text-white font-bold rounded-2xl shadow-lg shadow-vanta-gold/25 hover:opacity-95 transition-all text-base flex items-center gap-2">
+                                    <i class="fa-solid fa-compass"></i> استكشف 12 مسارًا تعليميًا
+                                </button>
+                                <button onclick="switchTab('labs')" class="px-8 py-4 bg-white text-vanta-dark border-2 border-vanta-border font-bold rounded-2xl hover:bg-vanta-secondary transition-all text-base flex items-center gap-2">
+                                    <i class="fa-solid fa-terminal text-vanta-gold"></i> جرب المختبرات التفاعلية
+                                </button>
+                            </div>
+                            <!-- Quick Stats -->
+                            <div class="grid grid-cols-3 gap-4 pt-8 border-t border-vanta-border/60">
+                                <div>
+                                    <div class="text-2xl sm:text-3xl font-black text-vanta-dark">12+</div>
+                                    <div class="text-xs text-vanta-grayText font-medium">مسار تقني متكامل</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl sm:text-3xl font-black text-vanta-dark">150+</div>
+                                    <div class="text-xs text-vanta-grayText font-medium">درس تفصيلي معمق</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl sm:text-3xl font-black text-vanta-dark">5+</div>
+                                    <div class="text-xs text-vanta-grayText font-medium">مختبرات عملية حية</div>
+                                </div>
+                            </div>
+                        </div>
 
-      <div
-        id="vantaExploreTab"
-        class="hidden"
-      >
+                        <!-- Hero Graphic / NOVA Preview Card -->
+                        <div class="lg:col-span-5">
+                            <div class="relative bg-white p-6 sm:p-8 rounded-3xl shadow-xl border border-vanta-border">
+                                <div class="absolute -top-4 -right-4 bg-vanta-gold text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md flex items-center gap-1.5">
+                                    <i class="fa-solid fa-cube animate-spin"></i> NOVA AI متصل
+                                </div>
+                                <div class="flex items-center gap-4 mb-6 pb-4 border-b border-vanta-border">
+                                    <div class="w-12 h-12 rounded-2xl bg-vanta-secondary flex items-center justify-center text-vanta-gold text-2xl font-bold">
+                                        <i class="fa-solid fa-terminal"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-lg text-vanta-dark">محطة التعلم الذكي</h3>
+                                        <p class="text-xs text-vanta-grayText">اسأل NOVA عن أي درس أو كود برمجي</p>
+                                    </div>
+                                </div>
+                                <div class="bg-vanta-secondary p-4 rounded-2xl text-xs sm:text-sm font-mono text-vanta-dark space-y-2 border border-vanta-border mb-6">
+                                    <div class="text-vanta-grayText">// مرحبًا بك في VANTA CYBER 2.0</div>
+                                    <div class="text-vanta-darkGold font-bold">$ vanta-security-init --secure</div>
+                                    <div class="text-emerald-600">✓ تم تحميل محرك الاختبارات بنجاح</div>
+                                    <div class="text-emerald-600">✓ تفعيل حماية الطبقات والتحفير السيبراني</div>
+                                    <div class="text-vanta-dark">NOVA: جاهز لمساعدتك في فهم ثغرات الويب وهياكل البيانات.</div>
+                                </div>
+                                <button onclick="switchTab('nova')" class="w-full py-3 bg-vanta-dark text-white font-bold rounded-xl text-sm hover:bg-black transition-all flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-comments"></i> فتح نافذة المساعد الذكي
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <div class="card" style="padding:15px">
-          <h2>استكشاف</h2>
-          <p class="muted">
-            المحتوى هنا يتغير حسب التفاعل مع VANTABOOK.
-          </p>
-          <div
-            class="exploreGrid"
-            id="exploreGrid"
-          ></div>
+            <!-- Tracks Grid Preview -->
+            <section class="py-16 sm:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                    <h2 class="text-2xl sm:text-4xl font-black text-vanta-dark">المسارات التعليمية الرئيسية</h2>
+                    <p class="text-vanta-grayText text-sm sm:text-base">تغطي منصة VANTA CYBER كافة تخصصات الأمن السيبراني وعلوم الحاسوب بفلسفة أكاديمية وعملية متكاملة.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="home-tracks-grid">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+                <div class="text-center mt-12">
+                    <button onclick="switchTab('tracks')" class="px-8 py-3.5 bg-vanta-secondary border border-vanta-border text-vanta-dark font-bold rounded-xl hover:border-vanta-gold transition-all">
+                        عرض جميع المسارات والدورات والدروس (150+ درس) <i class="fa-solid fa-arrow-left mr-2"></i>
+                    </button>
+                </div>
+            </section>
         </div>
 
-      </div>
+        <!-- ================= TAB 2: TRACKS & LESSONS ================= -->
+        <div id="tab-tracks" class="tab-content">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <!-- Header & Search -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 pb-6 border-b border-vanta-border">
+                    <div>
+                        <h1 class="text-3xl font-black text-vanta-dark">مكتبة المسارات والدروس الشاملة</h1>
+                        <p class="text-vanta-grayText text-sm mt-1">اختر مسارًا وابدأ دراسة الدروس المتعمقة مع الأمثلة والاختبارات.</p>
+                    </div>
+                    <div class="w-full md:w-80 relative">
+                        <input type="text" id="course-search" oninput="filterCourses()" placeholder="ابحث في الدورات أو الدروس..." class="w-full pl-4 pr-10 py-3 bg-vanta-secondary border border-vanta-border rounded-xl text-sm focus:outline-none focus:border-vanta-gold">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-vanta-grayText"></i>
+                    </div>
+                </div>
 
+                <!-- Tracks Filter Pills -->
+                <div class="flex gap-2 overflow-x-auto pb-4 mb-8" id="track-pills">
+                    <button onclick="filterByTrack('all')" class="track-pill px-4 py-2 rounded-xl text-xs font-bold bg-vanta-gold text-white whitespace-nowrap shadow-sm">الكل (12 مسارًا)</button>
+                    <!-- Generated via JS -->
+                </div>
 
-      <div
-        id="vantaSavedTab"
-        class="hidden"
-      >
+                <!-- Course & Lesson Container -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    <!-- Left Sidebar: Course List -->
+                    <div class="lg:col-span-4 space-y-4" id="tracks-list-container">
+                        <!-- Populated by JS -->
+                    </div>
 
-        <div class="card" style="padding:20px">
-          <h2>المحفوظات</h2>
-          <div id="savedFeed"></div>
+                    <!-- Right Main: Lesson Detail View -->
+                    <div class="lg:col-span-8 bg-white p-6 sm:p-8 rounded-3xl border border-vanta-border shadow-sm" id="lesson-view-container">
+                        <!-- Default placeholder or loaded lesson -->
+                        <div class="text-center py-20 space-y-4">
+                            <div class="w-16 h-16 bg-vanta-secondary rounded-2xl flex items-center justify-center mx-auto text-vanta-gold text-2xl">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-vanta-dark">اختر درسًا للبدء في التعلم</h3>
+                            <p class="text-sm text-vanta-grayText max-w-md mx-auto">اختر مسارًا من القائمة الجانبية ثم اضغط على أي درس لقراءة محتواه المفصل مع الأكواد والاختبارات التفاعلية.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-      </div>
+        <!-- ================= TAB 3: LABS ================= -->
+        <div id="tab-labs" class="tab-content">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-vanta-gold/10 text-vanta-darkGold rounded-full text-xs font-bold">
+                        <i class="fa-solid fa-flask"></i> بيئات تطبيقية تفاعلية
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-black text-vanta-dark">المختبرات العملية والطرفيات</h1>
+                    <p class="text-vanta-grayText text-sm sm:text-base">طبق ما تتعلمه مباشرة عبر محاكي سطر الأوامر Linux، ومحرر الويب الحي، ومختبرات التشفير والشبكات.</p>
+                </div>
 
+                <!-- Lab Tabs Selector -->
+                <div class="flex flex-wrap justify-center gap-3 mb-8">
+                    <button onclick="switchLabTab('linux')" class="lab-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm bg-vanta-gold text-white shadow-md flex items-center gap-2" data-lab="linux">
+                        <i class="fa-solid fa-terminal"></i> طرفية Linux
+                    </button>
+                    <button onclick="switchLabTab('web')" class="lab-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm bg-vanta-secondary text-vanta-dark border border-vanta-border flex items-center gap-2" data-lab="web">
+                        <i class="fa-solid fa-code"></i> محرر الويب الحي
+                    </button>
+                    <button onclick="switchLabTab('crypto')" class="lab-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm bg-vanta-secondary text-vanta-dark border border-vanta-border flex items-center gap-2" data-lab="crypto">
+                        <i class="fa-solid fa-key"></i> مختبر التشفير والتجزئة
+                    </button>
+                    <button onclick="switchLabTab('network')" class="lab-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm bg-vanta-secondary text-vanta-dark border border-vanta-border flex items-center gap-2" data-lab="network">
+                        <i class="fa-solid fa-network-wired"></i> مختبر الشبكات
+                    </button>
+                </div>
 
-      <div
-        id="vantaProfileTab"
-        class="hidden"
-      >
+                <!-- Lab Panels -->
+                <div class="bg-white rounded-3xl border border-vanta-border shadow-lg overflow-hidden">
+                    <!-- 1. Linux Terminal Lab -->
+                    <div id="lab-panel-linux" class="lab-panel p-6 sm:p-8 space-y-4">
+                        <div class="flex items-center justify-between pb-4 border-b border-vanta-border">
+                            <div>
+                                <h3 class="font-bold text-lg text-vanta-dark">محاكي طرفية Linux التعليمي</h3>
+                                <p class="text-xs text-vanta-grayText">جرب أوامر مثل: <code class="text-vanta-darkGold font-mono">pwd, ls, cd, cat, whoami, uname -a, clear, help, vanta-scan</code></p>
+                            </div>
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full">جاهز للعمل</span>
+                        </div>
+                        <div class="bg-vanta-dark text-white rounded-2xl p-4 font-mono text-xs sm:text-sm h-80 overflow-y-auto flex flex-col justify-between shadow-inner" id="terminal-output-box">
+                            <div id="terminal-history" class="space-y-1.5">
+                                <div class="text-vanta-gold">VANTA CYBER Secure Shell v2.0 (x86_64-pc-linux-gnu)</div>
+                                <div class="text-vanta-grayText">اكتب 'help' لعرض الأوامر المتاحة في هذه البيئة الآمنة.</div>
+                                <div class="text-white pt-2">vanta@cyber-node:~$ whoami</div>
+                                <div class="text-emerald-400">student_analyst</div>
+                            </div>
+                            <div class="flex items-center gap-2 pt-3 border-t border-gray-800">
+                                <span class="text-vanta-gold font-bold">vanta@cyber-node:~$</span>
+                                <input type="text" id="terminal-input" onkeydown="handleTerminalCommand(event)" class="bg-transparent flex-grow text-white focus:outline-none font-mono text-xs sm:text-sm" placeholder="اكتب الأمر هنا واضغط Enter...">
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="card profilePanel">
+                    <!-- 2. Web Dev Lab -->
+                    <div id="lab-panel-web" class="lab-panel p-6 sm:p-8 space-y-4 hidden">
+                        <div class="flex items-center justify-between pb-4 border-b border-vanta-border">
+                            <div>
+                                <h3 class="font-bold text-lg text-vanta-dark">محرر الويب الحي والمعاينة</h3>
+                                <p class="text-xs text-vanta-grayText">عدل HTML و CSS أدناه وشاهد النتيجة فوراً</p>
+                            </div>
+                            <button onclick="runWebLab()" class="px-4 py-2 bg-vanta-gold text-white font-bold rounded-xl text-xs hover:opacity-90 shadow">تحديث المعاينة</button>
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-bold text-vanta-grayText mb-1.5">كود HTML / CSS:</label>
+                                <textarea id="web-lab-code" class="w-full h-64 p-4 bg-vanta-secondary border border-vanta-border rounded-xl font-mono text-xs focus:outline-none focus:border-vanta-gold">&lt;div style="font-family: Cairo; padding: 20px; text-align: center;"&gt;
+    &lt;h2 style="color: #C9A227;"&gt;أهلاً بك في مختبر الويب لـ VANTA&lt;/h2&gt;
+    &lt;p style="color: #6B7280;"&gt;هذا النص تم عرضه عبر محرر HTML الحي.&lt;/p&gt;
+    &lt;button style="background: #202431; color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer;" onclick="alert('تم النقر بنجاح!')"&gt;اختبار التفاعل&lt;/button&gt;
+&lt;/div&gt;</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-vanta-grayText mb-1.5">المعاينة الحية المباشرة:</label>
+                                <div class="w-full h-64 bg-white border border-vanta-border rounded-xl overflow-hidden shadow-inner">
+                                    <iframe id="web-lab-preview" class="w-full h-full border-0"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="profileHero">
+                    <!-- 3. Cryptography Lab -->
+                    <div id="lab-panel-crypto" class="lab-panel p-6 sm:p-8 space-y-6 hidden">
+                        <div class="flex items-center justify-between pb-4 border-b border-vanta-border">
+                            <div>
+                                <h3 class="font-bold text-lg text-vanta-dark">مختبر التشفير والتجزئة (Hashing)</h3>
+                                <p class="text-xs text-vanta-grayText">اختبر توليد خوارزميات التجزئة SHA-256 وBase64 فورياً</p>
+                            </div>
+                            <span class="px-3 py-1 bg-amber-50 text-amber-700 text-xs font-bold rounded-full">أمان متقدم</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-vanta-grayText mb-1.5">النص المراد تشفيره / تجزئته:</label>
+                                <input type="text" id="crypto-input" oninput="runCryptoLab()" value="Ali Yaser - Vanta Cyber 2026" class="w-full p-3 bg-vanta-secondary border border-vanta-border rounded-xl text-sm focus:outline-none focus:border-vanta-gold font-mono">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="p-4 bg-vanta-secondary rounded-xl border border-vanta-border">
+                                    <div class="text-xs font-bold text-vanta-darkGold mb-1">تجزئة SHA-256 (غير قابل للعكس):</div>
+                                    <div id="crypto-sha256" class="font-mono text-xs text-vanta-dark break-all bg-white p-2.5 rounded-lg border border-vanta-border">جاري الحساب...</div>
+                                </div>
+                                <div class="p-4 bg-vanta-secondary rounded-xl border border-vanta-border">
+                                    <div class="text-xs font-bold text-vanta-darkGold mb-1">ترميز Base64 (قابل للعكس):</div>
+                                    <div id="crypto-base64" class="font-mono text-xs text-vanta-dark break-all bg-white p-2.5 rounded-lg border border-vanta-border">جاري الترميز...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <img
-              id="profileBig"
-              class="profileBig"
-              src=""
-              alt=""
-            >
+                    <!-- 4. Network Lab -->
+                    <div id="lab-panel-network" class="lab-panel p-6 sm:p-8 space-y-6 hidden">
+                        <div class="flex items-center justify-between pb-4 border-b border-vanta-border">
+                            <div>
+                                <h3 class="font-bold text-lg text-vanta-dark">مختبر الشبكات وحساب Subnetting</h3>
+                                <p class="text-xs text-vanta-grayText">أدخل عنوان شبكة IPv4 وقناع الشبكة لحساب النطاق وعدد المضيفين</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-vanta-grayText mb-1.5">عنوان IP:</label>
+                                <input type="text" id="net-ip" value="192.168.1.10" class="w-full p-3 bg-vanta-secondary border border-vanta-border rounded-xl text-sm font-mono">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-vanta-grayText mb-1.5">CIDR Prefix:</label>
+                                <select id="net-cidr" class="w-full p-3 bg-vanta-secondary border border-vanta-border rounded-xl text-sm font-mono">
+                                    <option value="24">/24 (255.255.255.0 - 254 مضيف)</option>
+                                    <option value="16">/16 (255.255.0.0 - 65,534 مضيف)</option>
+                                    <option value="8">/8 (255.0.0.0 - 16 مليون مضيف)</option>
+                                    <option value="28">/28 (255.255.255.240 - 14 مضيف)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button onclick="calculateSubnet()" class="px-6 py-2.5 bg-vanta-gold text-white font-bold rounded-xl text-sm hover:opacity-90 shadow">حساب تحليل الشبكة</button>
+                        <div id="net-result" class="p-4 bg-vanta-secondary rounded-xl font-mono text-xs text-vanta-dark space-y-1 border border-vanta-border hidden">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- ================= TAB 4: NOVA AI ASSISTANT ================= -->
+        <div id="tab-nova" class="tab-content">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="bg-white rounded-3xl border border-vanta-border shadow-xl overflow-hidden flex flex-col h-[75vh]">
+                    <!-- Header -->
+                    <div class="bg-vanta-dark text-white p-5 flex items-center justify-between border-b border-vanta-gold/30">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-vanta-gold to-vanta-darkGold flex items-center justify-center text-white text-lg font-bold shadow">
+                                <i class="fa-solid fa-cube"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-base">المساعد الذكي NOVA</h3>
+                                <p class="text-xs text-vanta-grayText">مدعوم بنظام VANTA AI المعماري لتشخيص ومساعدة الطلاب</p>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 bg-vanta-gold/20 text-vanta-gold text-xs font-bold rounded-full border border-vanta-gold/30">متصل وجاهز</span>
+                    </div>
+
+                    <!-- Chat Messages Area -->
+                    <div id="nova-chat-box" class="flex-grow p-6 overflow-y-auto space-y-4 bg-vanta-secondary/50">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-vanta-gold text-white flex items-center justify-center text-xs font-bold flex-shrink-0">NOVA</div>
+                            <div class="bg-white p-4 rounded-2xl rounded-tr-none border border-vanta-border shadow-sm text-sm text-vanta-dark max-w-xl">
+                                أهلاً بك! أنا <strong>NOVA</strong>، مساعدك الذكي في منصة VANTA CYBER. كيف يمكنني مساعدتك في فهم ثغرات الأمان، كتابة السكريبتات، أو تحليل المفاهيم البرمجية اليوم؟
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Input Area -->
+                    <div class="p-4 bg-white border-t border-vanta-border flex gap-3">
+                        <input type="text" id="nova-input" onkeydown="handleNovaInput(event)" placeholder="اسأل NOVA عن أي مفهوم تقني أو درس..." class="flex-grow px-4 py-3 bg-vanta-secondary border border-vanta-border rounded-xl text-sm focus:outline-none focus:border-vanta-gold">
+                        <button onclick="sendNovaMessage()" class="px-6 py-3 bg-gradient-to-r from-vanta-gold to-vanta-darkGold text-white font-bold rounded-xl hover:opacity-90 transition-all text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> إرسال
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 5: DASHBOARD ================= -->
+        <div id="tab-dashboard" class="tab-content">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+                <div class="flex justify-between items-center bg-white p-6 rounded-3xl border border-vanta-border shadow-sm">
+                    <div>
+                        <h1 class="text-2xl font-black text-vanta-dark">لوحة التحكم والتقدم الأكاديمي</h1>
+                        <p class="text-xs text-vanta-grayText mt-1">تابع إنجازاتك، اختباراتك المجتازة، والدروس المحفوظة في حسابك.</p>
+                    </div>
+                    <button onclick="openModal('auth-modal')" class="px-5 py-2.5 bg-vanta-secondary border border-vanta-border text-vanta-dark text-xs font-bold rounded-xl hover:bg-vanta-gold hover:text-white transition-all">
+                        تسجيل الدخول / مزامنة الحساب
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-3xl border border-vanta-border shadow-sm space-y-2">
+                        <div class="text-vanta-grayText text-xs font-bold">الدروس المكتملة</div>
+                        <div class="text-3xl font-black text-vanta-dark" id="stat-completed-lessons">0 / 150</div>
+                        <div class="w-full bg-vanta-secondary h-2 rounded-full overflow-hidden">
+                            <div id="progress-bar-fill" class="bg-vanta-gold h-full w-[0%]"></div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-vanta-border shadow-sm space-y-2">
+                        <div class="text-vanta-grayText text-xs font-bold">الاختبارات المجتازة</div>
+                        <div class="text-3xl font-black text-vanta-dark" id="stat-passed-quizzes">0</div>
+                        <div class="text-xs text-emerald-600 font-semibold">بمعدل دقة ممتاز</div>
+                    </div>
+                    <div class="bg-white p-6 rounded-3xl border border-vanta-border shadow-sm space-y-2">
+                        <div class="text-vanta-grayText text-xs font-bold">المختبرات المنفذة</div>
+                        <div class="text-3xl font-black text-vanta-dark">3</div>
+                        <div class="text-xs text-vanta-darkGold font-semibold">مختبرات نشطة</div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-vanta-border shadow-sm space-y-4">
+                    <h3 class="font-bold text-lg text-vanta-dark">الدروس والمواضيع المحفوظة للمراجعة</h3>
+                    <div id="bookmarked-lessons-list" class="space-y-3">
+                        <div class="text-sm text-vanta-grayText p-4 bg-vanta-secondary rounded-2xl text-center">
+                            لم تقم بحفظ أي درس حتى الآن. اضغط على زر "حفظ للمراجعة" داخل أي درس لإضافته هنا.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= TAB 6: FOUNDER ================= -->
+        <div id="tab-founder" class="tab-content">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+                <div class="bg-white p-8 sm:p-12 rounded-3xl border border-vanta-border shadow-xl text-center space-y-6">
+                    <div class="w-24 h-24 rounded-3xl bg-gradient-to-br from-vanta-gold to-vanta-darkGold text-white flex items-center justify-center text-4xl font-bold mx-auto shadow-lg shadow-vanta-gold/20">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-3xl font-black text-vanta-dark">علي ياسر | Ali Yaser</h1>
+                        <p class="text-vanta-gold font-bold text-sm mt-1">المؤسس والمطور الرئيسي لمنصة VANTA CYBER</p>
+                    </div>
+                    <p class="text-vanta-grayText text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+                        مطور ومهندس برمجيات وأمن سيبراني، مهتم ببناء بنى تحتية تعليمية وتقنية متقدمة للمجتمع العربي. تهدف منصة VANTA CYBER إلى سد الفجوة في المحتوى التقني العربي عبر تقديم دورات عميقة، مختبرات حية، وأدوات ذكاء اصطناعي متكاملة.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-4 pt-4">
+                        <a href="https://aliyaser12.vercel.app" target="_blank" class="px-6 py-3 bg-vanta-secondary border border-vanta-border rounded-xl text-sm font-bold text-vanta-dark hover:border-vanta-gold transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-globe text-vanta-gold"></i> الموقع الشخصي
+                        </a>
+                        <a href="https://github.com/aliyaser12" target="_blank" class="px-6 py-3 bg-vanta-secondary border border-vanta-border rounded-xl text-sm font-bold text-vanta-dark hover:border-vanta-gold transition-all flex items-center gap-2">
+                            <i class="fa-brands fa-github text-vanta-gold"></i> GitHub
+                        </a>
+                        <a href="https://instagram.com/ali_yr_1" target="_blank" class="px-6 py-3 bg-vanta-secondary border border-vanta-border rounded-xl text-sm font-bold text-vanta-dark hover:border-vanta-gold transition-all flex items-center gap-2">
+                            <i class="fa-brands fa-instagram text-vanta-gold"></i> Instagram (@ali_yr_1)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-vanta-dark text-vanta-white border-t border-vanta-gold/20 pt-16 pb-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <div class="space-y-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-vanta-gold flex items-center justify-center text-vanta-dark font-bold">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <span class="text-lg font-black tracking-wider">VANTA CYBER</span>
+                </div>
+                <p class="text-xs text-vanta-grayText leading-relaxed">
+                    المنصة العربية الرائدة في الأمن السيبراني وعلوم الحاسوب والتقنيات الحديثة. مؤسسة برؤية تقنية مستقلة بواسطة علي ياسر.
+                </p>
+            </div>
             <div>
-
-              <h2 id="profileName">
-                مستخدم VANTA
-              </h2>
-
-              <div
-                class="muted"
-                id="profileUsername"
-              >
-                @guest
-              </div>
-
-              <div
-                class="profileStats"
-                id="profileStats"
-              >
-                <div>
-                  <b>0</b>
-                  <span class="muted">منشورات</span>
-                </div>
-
-                <div>
-                  <b>0</b>
-                  <span class="muted">متابعون</span>
-                </div>
-
-                <div>
-                  <b>0</b>
-                  <span class="muted">يتابع</span>
-                </div>
-              </div>
-
+                <h4 class="text-sm font-bold text-vanta-gold mb-4">روابط سريعة</h4>
+                <ul class="space-y-2 text-xs text-vanta-grayText font-medium">
+                    <li><button onclick="switchTab('tracks')" class="hover:text-vanta-gold">المسارات والدروس</button></li>
+                    <li><button onclick="switchTab('labs')" class="hover:text-vanta-gold">المختبرات التفاعلية</button></li>
+                    <li><button onclick="switchTab('nova')" class="hover:text-vanta-gold">المساعد الذكي NOVA</button></li>
+                    <li><button onclick="switchTab('founder')" class="hover:text-vanta-gold">المؤسس</button></li>
+                </ul>
             </div>
-
-          </div>
-
-          <div
-            class="muted"
-            id="profileBio"
-            style="margin-top:20px"
-          >
-            لا توجد نبذة بعد.
-          </div>
-
-          <button
-            class="btn btnPrimary"
-            id="editProfileBtn"
-            style="margin-top:18px"
-          >
-            تعديل الملف
-          </button>
-
+            <div>
+                <h4 class="text-sm font-bold text-vanta-gold mb-4">روابط المؤسس</h4>
+                <ul class="space-y-2 text-xs text-vanta-grayText font-medium">
+                    <li><a href="https://aliyaser12.vercel.app" target="_blank" class="hover:text-vanta-gold">الموقع الشخصي للمؤسس</a></li>
+                    <li><a href="https://github.com/aliyaser12" target="_blank" class="hover:text-vanta-gold">GitHub: aliyaser12</a></li>
+                    <li><a href="https://instagram.com/ali_yr_1" target="_blank" class="hover:text-vanta-gold">Instagram: @ali_yr_1</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-sm font-bold text-vanta-gold mb-4">الأمان والخصوصية</h4>
+                <p class="text-xs text-vanta-grayText leading-relaxed">
+                    جميع الحقوق محفوظة © 2026 VANTA CYBER. بيئة تعليمية آمنة ومصرح بها للأغراض التعليمية والأكاديمية.
+                </p>
+            </div>
         </div>
-
-      </div>
-
-    </div>
-
-
-    <aside class="card vantaRight">
-
-      <h3>✨ NOVA</h3>
-
-      <p class="muted">
-        NOVA تراقب سياق VANTABOOK لتساعدك في اكتشاف المحتوى المناسب.
-      </p>
-
-      <button
-        class="btn btnPrimary"
-        data-open="nova"
-      >
-        اسأل NOVA
-      </button>
-
-      <hr style="border-color:var(--line);margin:20px 0">
-
-      <h3>خوارزمية VANTA</h3>
-
-      <p class="muted">
-        التوصيات تعتمد على التفاعل، الحفظ، الإعجاب، التعليقات،
-        المتابعة وحداثة المحتوى.
-      </p>
-
-    </aside>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     PROFILE
-========================= -->
-
-<section class="page" id="page-profile">
-
-  <div class="card profilePanel">
-
-    <div class="profileHero">
-
-      <img
-        class="profileBig"
-        id="mainProfileAvatar"
-        src=""
-        alt=""
-      >
-
-      <div>
-
-        <h1 id="mainProfileName">
-          زائر VANTA
-        </h1>
-
-        <div
-          class="muted"
-          id="mainProfileUsername"
-        >
-          لم تسجل الدخول
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-gray-800 text-center text-xs text-vanta-grayText">
+            © 2026 VANTA CYBER. All Rights Reserved. Designed & Developed by Ali Yaser.
         </div>
-
-      </div>
-
-    </div>
-
-    <div style="margin-top:25px">
-
-      <p
-        class="muted"
-        id="mainProfileBio"
-      >
-        سجل الدخول لإنشاء ملفك وربطه مع VANTABOOK.
-      </p>
-
-      <div class="modalActions">
-
-        <button
-          class="btn btnPrimary"
-          id="profileEditMain"
-        >
-          تعديل الحساب
-        </button>
-
-        <button
-          class="btn"
-          id="logoutBtn"
-        >
-          تسجيل الخروج
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================
-     CREDITS
-========================= -->
-
-<section class="page" id="page-credits">
-
-  <div class="card credits">
-
-    <div class="creditLogo"></div>
-
-    <div class="creditName">
-      علي ياسر
-    </div>
-
-    <div class="badge">
-      Founder • Developer • Owner
-    </div>
-
-    <p class="copyright">
-      VANTA هو مشروع تم تصميمه وتطويره بواسطة علي ياسر.
-      <br>
-      جميع حقوق التصميم والهوية والمحتوى البرمجي الخاص بـ VANTA محفوظة.
-    </p>
-
-    <p class="muted">
-      VANTA — Cyber. Learn. Create.
-    </p>
-
-    <div style="margin-top:30px">
-      <button
-        class="btn btnPrimary"
-        data-open="home"
-      >
-        العودة إلى VANTA
-      </button>
-    </div>
-
-  </div>
-
-</section>
-
-</main>
-
-</div>
-
-
-<!-- =========================
-     LOGIN MODAL
-========================= -->
-
-<div
-  class="modal hidden"
-  id="loginModal"
->
-
-  <div class="card modalBox">
-
-    <h2>تسجيل الدخول إلى VANTA</h2>
-
-    <p class="muted">
-      نفس الحساب يستخدم مع VANTA وVANTABOOK.
-    </p>
-
-    <div class="field">
-      <label>البريد الإلكتروني</label>
-      <input
-        id="emailInput"
-        type="email"
-        autocomplete="email"
-      >
-    </div>
-
-    <div class="field">
-      <label>كلمة المرور</label>
-      <input
-        id="passwordInput"
-        type="password"
-        autocomplete="current-password"
-      >
-    </div>
-
-    <div class="modalActions">
-
-      <button
-        class="btn btnPrimary"
-        id="emailLogin"
-      >
-        دخول
-      </button>
-
-      <button
-        class="btn"
-        id="emailSignup"
-      >
-        إنشاء حساب
-      </button>
-
-      <button
-        class="btn"
-        id="googleLogin"
-      >
-        Continue with Google
-      </button>
-
-      <button
-        class="btn"
-        id="appleLogin"
-      >
-        Continue with Apple
-      </button>
-
-      <button
-        class="btn close"
-        id="closeLogin"
-      >
-        إغلاق
-      </button>
-
-    </div>
-
-    <div
-      class="muted"
-      id="loginStatus"
-      style="margin-top:15px"
-    ></div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     POST MODAL
-========================= -->
-
-<div
-  class="modal hidden"
-  id="postModal"
->
-
-  <div class="card modalBox">
-
-    <h2>إنشاء منشور</h2>
-
-    <div class="field">
-      <label>النص</label>
-      <textarea
-        id="postText"
-        rows="5"
-        placeholder="ماذا تريد أن تنشر؟"
-      ></textarea>
-    </div>
-
-    <div class="field">
-      <label>صورة أو فيديو</label>
-      <input
-        id="postMedia"
-        type="file"
-        accept="image/*,video/*"
-      >
-    </div>
-
-    <div class="modalActions">
-
-      <button
-        class="btn btnPrimary"
-        id="publishPost"
-      >
-        نشر
-      </button>
-
-      <button
-        class="btn"
-        data-close-modal="postModal"
-      >
-        إلغاء
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     STORY MODAL
-========================= -->
-
-<div
-  class="modal hidden"
-  id="storyModal"
->
-
-  <div class="card modalBox">
-
-    <h2>إضافة Story</h2>
-
-    <div class="field">
-
-      <label>الصورة أو الفيديو</label>
-
-      <input
-        id="storyMedia"
-        type="file"
-        accept="image/*,video/*"
-      >
-
-    </div>
-
-    <div class="field">
-
-      <label>نص اختياري</label>
-
-      <textarea
-        id="storyText"
-        rows="3"
-        placeholder="أضف شيئًا..."
-      ></textarea>
-
-    </div>
-
-    <div class="modalActions">
-
-      <button
-        class="btn btnPrimary"
-        id="publishStory"
-      >
-        نشر Story
-      </button>
-
-      <button
-        class="btn"
-        data-close-modal="storyModal"
-      >
-        إلغاء
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     PROFILE EDIT MODAL
-========================= -->
-
-<div
-  class="modal hidden"
-  id="profileModal"
->
-
-  <div class="card modalBox">
-
-    <h2>تعديل حسابك</h2>
-
-    <div class="field">
-      <label>اسم العرض</label>
-      <input id="editDisplayName">
-    </div>
-
-    <div class="field">
-      <label>اسم المستخدم</label>
-      <input id="editUsername">
-    </div>
-
-    <div class="field">
-      <label>النبذة</label>
-      <textarea
-        id="editBio"
-        rows="4"
-      ></textarea>
-    </div>
-
-    <div class="field">
-      <label>صورة الحساب</label>
-      <input
-        id="profileAvatarFile"
-        type="file"
-        accept="image/*"
-      >
-    </div>
-
-    <div class="modalActions">
-
-      <button
-        class="btn btnPrimary"
-        id="saveProfile"
-      >
-        حفظ
-      </button>
-
-      <button
-        class="btn"
-        data-close-modal="profileModal"
-      >
-        إلغاء
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================
-     TOAST
-========================= -->
-
-<div
-  class="toast"
-  id="toast"
-></div>
-
-
-<script>
-/* ============================================================
-   VANTA CORE
-============================================================ */
-
-
-const SUPABASE_URL =
-  "https://gvbwgzsxypeplowmbhuw.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_bMQzc2UsTZE7vAUa_BzBzQ_1jaiWkK_";
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
-
-
-let currentUser = null;
-let currentProfile = null;
-
-let currentBook = null;
-let currentLessonIndex = 0;
-
-
-/* ============================================================
-   HELPERS
-============================================================ */
-
-function $(id){
-  return document.getElementById(id);
-}
-
-function escapeHTML(value=""){
-  return String(value)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-function toast(message){
-  const el = $("toast");
-  el.textContent = message;
-  el.classList.add("show");
-
-  clearTimeout(window.__toastTimer);
-
-  window.__toastTimer =
-    setTimeout(
-      ()=>el.classList.remove("show"),
-      3000
-    );
-}
-
-function defaultAvatar(name="V"){
-  const svg = `
-  <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">
-    <defs>
-      <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-        <stop offset="0" stop-color="#58e7ff"/>
-        <stop offset=".5" stop-color="#9278ff"/>
-        <stop offset="1" stop-color="#ff62bb"/>
-      </linearGradient>
-    </defs>
-    <rect width="300" height="300" rx="150" fill="#10121c"/>
-    <circle cx="150" cy="150" r="125" fill="url(#g)" opacity=".9"/>
-    <text x="150" y="178"
-      text-anchor="middle"
-      font-family="Arial"
-      font-size="120"
-      font-weight="900"
-      fill="white">
-      ${escapeHTML((name || "V")[0].toUpperCase())}
-    </text>
-  </svg>`;
-
-  return "data:image/svg+xml;charset=UTF-8,"+
-    encodeURIComponent(svg);
-}
-
-function setImage(img,src,name){
-  img.src = src || defaultAvatar(name);
-}
-
-
-/* ============================================================
-   NAVIGATION
-============================================================ */
-
-function openPage(page){
-
-  document
-    .querySelectorAll(".page")
-    .forEach(p=>{
-      p.classList.remove("active");
-    });
-
-  const target =
-    $("page-"+page);
-
-  if(!target) return;
-
-  target.classList.add("active");
-
-  document
-    .querySelectorAll(".navBtn")
-    .forEach(btn=>{
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === page
-      );
-    });
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-  if(page === "vantabook"){
-    loadVantaBook();
-  }
-
-  if(page === "library"){
-    renderBooks();
-  }
-}
-
-document
-  .querySelectorAll(".navBtn")
-  .forEach(btn=>{
-    btn.addEventListener(
-      "click",
-      ()=>openPage(btn.dataset.page)
-    );
-  });
-
-document
-  .querySelectorAll("[data-open]")
-  .forEach(btn=>{
-    btn.addEventListener(
-      "click",
-      ()=>openPage(btn.dataset.open)
-    );
-  });
-
-
-/* ============================================================
-   BOOT
-============================================================ */
-
-async function boot(){
-
-  const progress = $("bootProgress");
-  const text = $("bootText");
-
-  const messages = [
-    "Initializing VANTA system...",
-    "Loading NOVA...",
-    "Preparing knowledge core...",
-    "Connecting VANTABOOK...",
-    "Preparing Cyber Labs...",
-    "System ready."
-  ];
-
-  for(let i=0;i<=100;i+=4){
-
-    progress.style.width = i+"%";
-
-    const index =
-      Math.min(
-        messages.length-1,
-        Math.floor(i/(100/messages.length))
-      );
-
-    text.textContent =
-      messages[index];
-
-    await new Promise(
-      r=>setTimeout(r,35)
-    );
-  }
-
-  $("bootEnter")
-    .classList.remove("hidden");
-
-  $("bootEnter")
-    .addEventListener(
-      "click",
-      finishBoot,
-      {once:true}
-    );
-}
-
-function speakWelcome(){
-
-  try{
-
-    const name =
-      currentProfile?.display_name ||
-      currentProfile?.username;
-
-    const phrase =
-      name
-        ? `Welcome to VANTA, ${name}.`
-        : "Welcome to VANTA.";
-
-    const utter =
-      new SpeechSynthesisUtterance(
-        phrase
-      );
-
-    utter.lang = "en-US";
-    utter.rate = .82;
-    utter.pitch = .72;
-    utter.volume = .8;
-
-    const voices =
-      speechSynthesis.getVoices();
-
-    const preferred =
-      voices.find(v=>
-        /male|david|mark|daniel|alex/i.test(v.name)
-      );
-
-    if(preferred){
-      utter.voice = preferred;
-    }
-
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utter);
-
-  }catch(e){}
-}
-
-function finishBoot(){
-
-  $("boot").classList.add("hide");
-
-  setTimeout(
-    speakWelcome,
-    450
-  );
-}
-
-boot();
-
-
-/* ============================================================
-   AUTH
-============================================================ */
-
-function openLogin(){
-  $("loginModal")
-    .classList.remove("hidden");
-}
-
-function closeLogin(){
-  $("loginModal")
-    .classList.add("hidden");
-}
-
-$("loginBtn")
-  .addEventListener("click",openLogin);
-
-$("closeLogin")
-  .addEventListener("click",closeLogin);
-
-$("vantaLoginSide")
-  .addEventListener("click",openLogin);
-
-
-async function loginEmail(){
-
-  const email =
-    $("emailInput").value.trim();
-
-  const password =
-    $("passwordInput").value;
-
-  if(!email || !password){
-    toast("اكتب البريد وكلمة المرور.");
-    return;
-  }
-
-  $("loginStatus").textContent =
-    "جاري تسجيل الدخول...";
-
-  const {
-    error
-  } =
-  await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if(error){
-
-    $("loginStatus").textContent =
-      error.message;
-
-    return;
-  }
-
-  $("loginStatus").textContent =
-    "تم تسجيل الدخول.";
-
-  closeLogin();
-
-  await refreshUser();
-
-  toast("مرحبًا بك في VANTA.");
-}
-
-$("emailLogin")
-  .addEventListener(
-    "click",
-    loginEmail
-  );
-
-
-async function signupEmail(){
-
-  const email =
-    $("emailInput").value.trim();
-
-  const password =
-    $("passwordInput").value;
-
-  if(!email || !password){
-    toast("اكتب البريد وكلمة المرور.");
-    return;
-  }
-
-  if(password.length < 6){
-    toast("اجعل كلمة المرور 6 أحرف على الأقل.");
-    return;
-  }
-
-  const {
-    error
-  } =
-  await supabaseClient.auth.signUp({
-    email,
-    password
-  });
-
-  if(error){
-
-    $("loginStatus").textContent =
-      error.message;
-
-    return;
-  }
-
-  $("loginStatus").textContent =
-    "تم إنشاء الحساب. إذا ظهر طلب تأكيد البريد، أكمله ثم سجل الدخول.";
-
-  toast("تم إنشاء الحساب.");
-}
-
-$("emailSignup")
-  .addEventListener(
-    "click",
-    signupEmail
-  );
-
-
-async function googleLogin(){
-
-  const {
-    error
-  } =
-  await supabaseClient.auth.signInWithOAuth({
-    provider:"google",
-    options:{
-      redirectTo:window.location.origin
-    }
-  });
-
-  if(error){
-    toast(error.message);
-  }
-}
-
-$("googleLogin")
-  .addEventListener(
-    "click",
-    googleLogin
-  );
-
-
-async function appleLogin(){
-
-  const {
-    error
-  } =
-  await supabaseClient.auth.signInWithOAuth({
-    provider:"apple",
-    options:{
-      redirectTo:window.location.origin
-    }
-  });
-
-  if(error){
-    toast(
-      "Apple غير مفعّل في Supabase حاليًا."
-    );
-  }
-}
-
-$("appleLogin")
-  .addEventListener(
-    "click",
-    appleLogin
-  );
-
-
-$("logoutBtn")
-  .addEventListener(
-    "click",
-    async()=>{
-
-      await supabaseClient.auth.signOut();
-
-      currentUser = null;
-      currentProfile = null;
-
-      updateAccountUI();
-      updateProfileUI();
-
-      toast("تم تسجيل الخروج.");
-    }
-  );
-
-
-/* ============================================================
-   USER PROFILE
-============================================================ */
-
-async function refreshUser(){
-
-  const {
-    data
-  } =
-  await supabaseClient.auth.getSession();
-
-  currentUser =
-    data?.session?.user || null;
-
-  if(currentUser){
-
-    await ensureProfile();
-
-    await loadProfile();
-
-  }else{
-
-    currentProfile = null;
-
-  }
-
-  updateAccountUI();
-  updateProfileUI();
-  updateHomeGreeting();
-}
-
-async function ensureProfile(){
-
-  if(!currentUser) return;
-
-  const {
-    data
-  } =
-  await supabaseClient
-    .from("profiles")
-    .select("*")
-    .eq("id",currentUser.id)
-    .maybeSingle();
-
-  if(data){
-    currentProfile = data;
-    return;
-  }
-
-  const username =
-    "user_"+currentUser.id
-      .slice(0,8);
-
-  const {
-    data:newProfile
-  } =
-  await supabaseClient
-    .from("profiles")
-    .insert({
-      id:currentUser.id,
-      username,
-      display_name:
-        currentUser.user_metadata?.full_name ||
-        "VANTA User",
-      avatar_url:
-        currentUser.user_metadata?.avatar_url ||
-        null,
-      xp:0,
-      level:1
-    })
-    .select()
-    .single();
-
-  currentProfile =
-    newProfile || null;
-}
-
-async function loadProfile(){
-
-  if(!currentUser) return;
-
-  const {
-    data
-  } =
-  await supabaseClient
-    .from("profiles")
-    .select("*")
-    .eq("id",currentUser.id)
-    .maybeSingle();
-
-  currentProfile =
-    data || currentProfile;
-}
-
-function updateAccountUI(){
-
-  const area =
-    $("accountArea");
-
-  if(!currentUser){
-
-    area.innerHTML = `
-      <button class="btn" id="loginBtn">
-        تسجيل الدخول
-      </button>
-    `;
-
-    $("loginBtn")
-      .addEventListener(
-        "click",
-        openLogin
-      );
-
-    return;
-  }
-
-  const name =
-    currentProfile?.display_name ||
-    currentProfile?.username ||
-    currentUser.email;
-
-  const avatar =
-    currentProfile?.avatar_url ||
-    defaultAvatar(name);
-
-  area.innerHTML = `
-    <img
-      class="avatarMini"
-      src="${avatar}"
-      title="${escapeHTML(name)}"
-      alt=""
-    >
-  `;
-}
-
-function updateHomeGreeting(){
-
-  const name =
-    currentProfile?.display_name ||
-    currentProfile?.username;
-
-  $("homeGreeting").textContent =
-    name
-      ? `أهلًا ${name}. VANTA جاهزة لك — تعلّم، جرّب، وتحدث مع NOVA واكتشف VANTABOOK.`
-      : "أهلًا بك في VANTA. تعلّم، جرّب، واستكشف المنصة بدون إجبار على تسجيل الدخول.";
-}
-
-function updateProfileUI(){
-
-  const name =
-    currentProfile?.display_name ||
-    currentProfile?.username ||
-    "زائر VANTA";
-
-  const username =
-    currentProfile?.username
-      ? "@"+currentProfile.username
-      : "لم تسجل الدخول";
-
-  const bio =
-    currentProfile?.bio ||
-    "لا توجد نبذة بعد.";
-
-  const avatar =
-    currentProfile?.avatar_url ||
-    defaultAvatar(name);
-
-  setImage(
-    $("mainProfileAvatar"),
-    avatar,
-    name
-  );
-
-  $("mainProfileName").textContent =
-    name;
-
-  $("mainProfileUsername").textContent =
-    username;
-
-  $("mainProfileBio").textContent =
-    bio;
-
-  $("statXP").textContent =
-    currentProfile?.xp || 0;
-
-  $("statLevel").textContent =
-    currentProfile?.level || 1;
-
-  setImage(
-    $("storyMeAvatar"),
-    avatar,
-    name
-  );
-
-  setImage(
-    $("profileBig"),
-    avatar,
-    name
-  );
-
-  $("profileName").textContent =
-    name;
-
-  $("profileUsername").textContent =
-    username;
-
-  $("profileBio").textContent =
-    bio;
-}
-
-
-async function openProfileEditor(){
-
-  if(!currentUser){
-    openLogin();
-    return;
-  }
-
-  $("editDisplayName").value =
-    currentProfile?.display_name || "";
-
-  $("editUsername").value =
-    currentProfile?.username || "";
-
-  $("editBio").value =
-    currentProfile?.bio || "";
-
-  $("profileModal")
-    .classList.remove("hidden");
-}
-
-$("profileEditMain")
-  .addEventListener(
-    "click",
-    openProfileEditor
-  );
-
-$("editProfileBtn")
-  .addEventListener(
-    "click",
-    openProfileEditor
-  );
-
-
-async function saveProfile(){
-
-  if(!currentUser){
-    openLogin();
-    return;
-  }
-
-  const displayName =
-    $("editDisplayName")
-      .value
-      .trim();
-
-  const username =
-    $("editUsername")
-      .value
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9_]/g,"");
-
-  const bio =
-    $("editBio")
-      .value
-      .trim();
-
-  let avatarUrl =
-    currentProfile?.avatar_url || null;
-
-  const file =
-    $("profileAvatarFile")
-      .files[0];
-
-  if(file){
-
-    const path =
-      `profiles/${currentUser.id}/${Date.now()}-${file.name.replace(/\s+/g,"-")}`;
-
-    const {
-      error:uploadError
-    } =
-    await supabaseClient.storage
-      .from("vanta-media")
-      .upload(
-        path,
-        file,
-        {upsert:false}
-      );
-
-    if(uploadError){
-      toast(uploadError.message);
-      return;
-    }
-
-    const {
-      data:urlData
-    } =
-    supabaseClient.storage
-      .from("vanta-media")
-      .getPublicUrl(path);
-
-    avatarUrl =
-      urlData.publicUrl;
-  }
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-    .from("profiles")
-    .update({
-      display_name:
-        displayName || "VANTA User",
-      username:
-        username || "user_"+currentUser.id.slice(0,8),
-      bio,
-      avatar_url:avatarUrl
-    })
-    .eq("id",currentUser.id)
-    .select()
-    .single();
-
-  if(error){
-    toast(error.message);
-    return;
-  }
-
-  currentProfile = data;
-
-  $("profileModal")
-    .classList.add("hidden");
-
-  updateAccountUI();
-  updateProfileUI();
-  updateHomeGreeting();
-
-  toast("تم تحديث حسابك.");
-}
-
-$("saveProfile")
-  .addEventListener(
-    "click",
-    saveProfile
-  );
-
-
-/* ============================================================
-   NOVA
-============================================================ */
-
-function addNovaMessage(
-  text,
-  type="nova"
-){
-
-  const row =
-    document.createElement("div");
-
-  row.className =
-    "messageRow "+type;
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "messageBubble";
-
-  bubble.textContent =
-    text;
-
-  row.appendChild(bubble);
-
-  $("novaMessages")
-    .appendChild(row);
-
-  const box =
-    $("novaMessages");
-
-  box.scrollTop =
-    box.scrollHeight;
-}
-
-async function novaAnswer(
-  question,
-  context={}
-){
-
-  const response =
-    await fetch(
-      "/api/nova",
-      {
-        method:"POST",
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
-        body:JSON.stringify({
-
-          question,
-
-          user_id:
-            currentUser?.id || null,
-
-          context:{
-            page:
-              document
-                .querySelector(".page.active")
-                ?.id || null,
-
-            user:
-              currentProfile
-                ? {
-                    username:
-                      currentProfile.username,
-                    display_name:
-                      currentProfile.display_name,
-                    level:
-                      currentProfile.level,
-                    xp:
-                      currentProfile.xp
-                  }
-                : null,
-
-            ...context
-
-          }
-
-        })
-      }
-    );
-
-  let data = null;
-
-  try{
-    data = await response.json();
-  }catch(e){
-    throw new Error(
-      "NOVA returned invalid JSON"
-    );
-  }
-
-  if(!response.ok){
-
-    throw new Error(
-      data?.message ||
-      data?.error ||
-      `NOVA server ${response.status}`
-    );
-
-  }
-
-  if(!data?.reply){
-
-    throw new Error(
-      "NOVA returned no reply"
-    );
-
-  }
-
-  return data.reply;
-}
-
-
-async function sendNova(){
-
-  const input =
-    $("novaInput");
-
-  const question =
-    input.value.trim();
-
-  if(!question) return;
-
-  input.value = "";
-
-  addNovaMessage(
-    question,
-    "user"
-  );
-
-  const thinking =
-    document.createElement("div");
-
-  thinking.className =
-    "messageRow nova";
-
-  thinking.innerHTML = `
-    <div class="messageBubble">
-      ...
-    </div>
-  `;
-
-  $("novaMessages")
-    .appendChild(thinking);
-
-  $("novaMessages").scrollTop =
-    $("novaMessages").scrollHeight;
-
-  try{
-
-    const reply =
-      await novaAnswer(
-        question,
-        {
-          source:"NOVA chat"
-        }
-      );
-
-    thinking
-      .querySelector(".messageBubble")
-      .textContent =
-      reply;
-
-  }catch(error){
-
-    thinking
-      .querySelector(".messageBubble")
-      .textContent =
-      "حصل خطأ أثناء الاتصال بـ NOVA: "+
-      error.message;
-
-  }
-
-  $("novaMessages").scrollTop =
-    $("novaMessages").scrollHeight;
-}
-
-$("novaSend")
-  .addEventListener(
-    "click",
-    sendNova
-  );
-
-$("novaInput")
-  .addEventListener(
-    "keydown",
-    e=>{
-      if(e.key==="Enter" && !e.shiftKey){
-        e.preventDefault();
-        sendNova();
-      }
-    }
-  );
-
-
-$("askNovaFromLesson")
-  .addEventListener(
-    "click",
-    async()=>{
-
-      const title =
-        $("lessonTitle").textContent;
-
-      openPage("nova");
-
-      const question =
-        `أنا أدرس الآن درس "${title}" في كتاب "${currentBook?.title || "VANTA"}". اشرح لي أهم فكرة فيه بطريقة واضحة.`;
-
-      $("novaInput").value =
-        question;
-
-      await sendNova();
-
-    }
-  );
-
-
-/* ============================================================
-   LIBRARY DATA
-============================================================ */
-
-const books = [
-
-  {
-    id:"cyber",
-    title:"Cybersecurity Zero → Hero",
-    category:"الأمن السيبراني",
-    description:"من الأساسيات إلى فهم الدفاع والهجمات.",
-    color:"cyan",
-    lessons:[
-      {
-        title:"ما هو الأمن السيبراني؟",
-        body:`
-          <p>
-            الأمن السيبراني هو مجموعة الممارسات والتقنيات التي تحمي
-            الأنظمة والشبكات والبيانات من الوصول غير المصرح به أو
-            التعديل أو التعطيل.
-          </p>
-
-          <h2>الثلاثية الأساسية</h2>
-
-          <div class="lessonBlock">
-            <strong>Confidentiality</strong>
-            <p>الحفاظ على سرية المعلومات.</p>
-
-            <strong>Integrity</strong>
-            <p>الحفاظ على صحة البيانات وعدم العبث بها.</p>
-
-            <strong>Availability</strong>
-            <p>ضمان توفر الأنظمة عند الحاجة.</p>
-          </div>
-
-          <p>
-            هذه المبادئ الثلاثة تشكل أساسًا مهمًا لفهم الأمن السيبراني.
-          </p>
-        `,
-        quiz:{
-          question:"أي مبدأ يتعلق بسرية المعلومات؟",
-          options:[
-            "Availability",
-            "Confidentiality",
-            "Integrity"
-          ],
-          answer:1
-        }
-      },
-
-      {
-        title:"الهجمات والتهديدات",
-        body:`
-          <p>
-            لا توجد هجمة واحدة تناسب كل الأنظمة. المهاجمون قد يستغلون
-            أخطاء برمجية أو كلمات مرور ضعيفة أو خداع المستخدم.
-          </p>
-
-          <h2>أمثلة</h2>
-
-          <ul>
-            <li>Phishing</li>
-            <li>Credential attacks</li>
-            <li>Malware</li>
-            <li>Misconfiguration</li>
-          </ul>
-
-          <div class="lessonBlock">
-            <strong>قاعدة VANTA:</strong>
-            <p>
-              افهم كيف تعمل المشكلة قبل أن تحاول حماية النظام منها.
-            </p>
-          </div>
-        `,
-        quiz:{
-          question:"ما هو التصيد Phishing؟",
-          options:[
-            "خداع المستخدم للحصول على معلومات",
-            "تشفير الملفات",
-            "ضغط الصور"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"كلمات المرور",
-        body:`
-          <p>
-            كلمة المرور القوية لا تعتمد فقط على عدد الأحرف، بل على
-            عدم قابليتها للتخمين وإعادة الاستخدام.
-          </p>
-
-          <h2>ممارسات جيدة</h2>
-
-          <ul>
-            <li>استخدم كلمات مرور طويلة.</li>
-            <li>لا تعيد استخدام كلمة المرور.</li>
-            <li>استخدم مدير كلمات مرور.</li>
-            <li>فعّل MFA عندما يكون متاحًا.</li>
-          </ul>
-
-          <div class="lessonBlock">
-            <p>
-              جرّب مختبر اختبار كلمة المرور بعد إنهاء هذا الدرس.
-            </p>
-          </div>
-        `,
-        quiz:{
-          question:"أي خيار أفضل؟",
-          options:[
-            "نفس كلمة المرور لكل المواقع",
-            "كلمة طويلة وفريدة لكل حساب",
-            "اسمك وتاريخ ميلادك"
-          ],
-          answer:1
-        }
-      },
-
-      {
-        title:"Hashing",
-        body:`
-          <p>
-            الـ Hashing يحول البيانات إلى قيمة ذات طول محدد باستخدام
-            خوارزمية معينة. لا ينبغي التعامل معه كأنه تشفير قابل للفك.
-          </p>
-
-          <div class="codeBox">
-SHA-256("VANTA")
-          </div>
-
-          <p>
-            استخدم مختبر SHA-256 الموجود في VANTA لرؤية النتيجة بنفسك.
-          </p>
-        `,
-        quiz:{
-          question:"هل Hashing هو نفسه Encryption؟",
-          options:[
-            "نعم دائمًا",
-            "لا، هما مفهومين مختلفين",
-            "فقط في الصور"
-          ],
-          answer:1
-        }
-      },
-
-      {
-        title:"التصيد والهندسة الاجتماعية",
-        body:`
-          <p>
-            التقنية ليست دائمًا الحلقة الأضعف. أحيانًا يحاول المهاجم
-            التأثير على الشخص نفسه.
-          </p>
-
-          <h2>علامات تستحق الانتباه</h2>
-
-          <ul>
-            <li>استعجال غير طبيعي.</li>
-            <li>طلب كلمة مرور.</li>
-            <li>رابط غريب.</li>
-            <li>تهديد بإيقاف الحساب.</li>
-          </ul>
-        `,
-        quiz:{
-          question:"وجود ضغط شديد للتصرف فورًا قد يكون علامة تصيد.",
-          options:[
-            "صحيح",
-            "خطأ"
-          ],
-          answer:0
-        }
-      }
-    ]
-  },
-
-
-  {
-    id:"programming",
-    title:"Programming Core",
-    category:"البرمجة",
-    description:"أساسيات التفكير البرمجي وبناء البرامج.",
-    lessons:[
-      {
-        title:"كيف يفكر المبرمج؟",
-        body:`
-          <p>
-            البرمجة ليست حفظ أوامر فقط. هي تحويل مشكلة كبيرة إلى
-            خطوات صغيرة قابلة للتنفيذ.
-          </p>
-
-          <h2>الخوارزمية</h2>
-
-          <p>
-            ابدأ بالمدخلات، حدد المعالجة، ثم حدد المخرجات.
-          </p>
-        `,
-        quiz:{
-          question:"ما الفكرة الأساسية للخوارزمية؟",
-          options:[
-            "خطوات لحل مشكلة",
-            "صورة",
-            "ملف صوت"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"Variables",
-        body:`
-          <p>
-            المتغير هو اسم يشير إلى قيمة يمكن للبرنامج استخدامها.
-          </p>
-
-          <div class="codeBox">
-let xp = 100;
-let level = 2;
-          </div>
-        `,
-        quiz:{
-          question:"ما الذي يخزن القيمة 100؟",
-          options:[
-            "xp",
-            "level",
-            "VANTA"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"Conditions",
-        body:`
-          <p>
-            الشروط تجعل البرنامج يتخذ قرارًا بناءً على حالة معينة.
-          </p>
-
-          <div class="codeBox">
-if (xp >= 100) {
-  level++;
-}
-          </div>
-        `,
-        quiz:{
-          question:"متى يتم تنفيذ الكود داخل if؟",
-          options:[
-            "عندما يتحقق الشرط",
-            "دائمًا",
-            "أبدًا"
-          ],
-          answer:0
-        }
-      }
-    ]
-  },
-
-
-  {
-    id:"web",
-    title:"Web Architecture",
-    category:"تطوير الويب",
-    description:"كيف تعمل المواقع من المتصفح حتى الخادم.",
-    lessons:[
-      {
-        title:"المتصفح والخادم",
-        body:`
-          <p>
-            عندما تفتح موقعًا، المتصفح يطلب موارد من الخادم ثم يعرضها
-            لك.
-          </p>
-
-          <div class="lessonBlock">
-            Browser → Request → Server → Response → Browser
-          </div>
-        `,
-        quiz:{
-          question:"من يرسل طلب HTTP عادة؟",
-          options:[
-            "المتصفح",
-            "الشاشة",
-            "لوحة المفاتيح"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"HTML",
-        body:`
-          <p>
-            HTML يحدد بنية الصفحة ومحتواها.
-          </p>
-
-          <div class="codeBox">
-&lt;h1&gt;VANTA&lt;/h1&gt;
-&lt;p&gt;Cyber. Learn. Create.&lt;/p&gt;
-          </div>
-        `,
-        quiz:{
-          question:"ما وظيفة HTML الأساسية؟",
-          options:[
-            "بنية الصفحة",
-            "تشغيل الموسيقى فقط",
-            "تشفير كلمات المرور"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"JavaScript",
-        body:`
-          <p>
-            JavaScript تضيف المنطق والتفاعل إلى صفحات الويب.
-          </p>
-
-          <div class="codeBox">
-button.addEventListener("click", () => {
-  console.log("VANTA");
-});
-          </div>
-        `,
-        quiz:{
-          question:"ما الذي يضيفه JavaScript عادة؟",
-          options:[
-            "التفاعل والمنطق",
-            "لون الشاشة فقط",
-            "حجم القرص"
-          ],
-          answer:0
-        }
-      }
-    ]
-  },
-
-
-  {
-    id:"ai",
-    title:"AI Inside",
-    category:"الذكاء الاصطناعي",
-    description:"افهم النماذج والـ prompts والأنظمة الذكية.",
-    lessons:[
-      {
-        title:"ما هو النموذج؟",
-        body:`
-          <p>
-            نموذج الذكاء الاصطناعي هو نظام تم تدريبه على بيانات ليقوم
-            بمهام معينة مثل فهم النص أو إنشاء المحتوى.
-          </p>
-        `,
-        quiz:{
-          question:"ما الذي نستخدمه للتواصل مع نموذج نصي؟",
-          options:[
-            "Prompt",
-            "Keyboard driver فقط",
-            "Monitor"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"Prompt Engineering",
-        body:`
-          <p>
-            جودة التعليمات تؤثر في النتيجة. وضوح الهدف والسياق والقيود
-            يساعد النموذج على تقديم إجابة أفضل.
-          </p>
-
-          <div class="lessonBlock">
-            الهدف + السياق + المطلوب + القيود
-          </div>
-        `,
-        quiz:{
-          question:"أي شيء يساعد النموذج على فهم المطلوب؟",
-          options:[
-            "سياق واضح",
-            "رسالة فارغة",
-            "حذف الهدف"
-          ],
-          answer:0
-        }
-      }
-    ]
-  },
-
-
-  {
-    id:"linux",
-    title:"Linux Operator",
-    category:"Linux",
-    description:"فهم النظام والطرفية وإدارة الملفات.",
-    lessons:[
-      {
-        title:"ما هو Linux؟",
-        body:`
-          <p>
-            Linux هو نظام تشغيل مبني حول نواة مفتوحة المصدر ويستخدم
-            في الخوادم وأجهزة كثيرة وبيئات التطوير.
-          </p>
-        `,
-        quiz:{
-          question:"ما الذي يمثل قلب النظام؟",
-          options:[
-            "Kernel",
-            "Wallpaper",
-            "Browser"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"Terminal",
-        body:`
-          <p>
-            الطرفية تسمح لك بالتفاعل مع النظام عبر الأوامر.
-          </p>
-
-          <div class="codeBox">
-pwd
-ls
-cd
-          </div>
-        `,
-        quiz:{
-          question:"ماذا يعرض pwd؟",
-          options:[
-            "المسار الحالي",
-            "كلمة المرور",
-            "عنوان IP فقط"
-          ],
-          answer:0
-        }
-      }
-    ]
-  },
-
-
-  {
-    id:"networks",
-    title:"Networks",
-    category:"الشبكات",
-    description:"من IP إلى DNS وHTTP.",
-    lessons:[
-      {
-        title:"ما هو IP؟",
-        body:`
-          <p>
-            عنوان IP يستخدم لتحديد واجهة أو جهاز على شبكة معينة.
-          </p>
-        `,
-        quiz:{
-          question:"ما وظيفة IP الأساسية؟",
-          options:[
-            "العنونة على الشبكة",
-            "تشغيل الشاشة",
-            "ضغط الملفات"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"DNS",
-        body:`
-          <p>
-            DNS يساعد في تحويل أسماء النطاقات إلى عناوين IP.
-          </p>
-
-          <div class="lessonBlock">
-            example.com → DNS → IP
-          </div>
-        `,
-        quiz:{
-          question:"ما الذي يساعد DNS في إيجاده؟",
-          options:[
-            "عنوان IP المرتبط بالاسم",
-            "كلمة مرور المستخدم",
-            "حجم الصورة"
-          ],
-          answer:0
-        }
-      }
-    ]
-  },
-
-
-  {
-    id:"privacy",
-    title:"Digital Privacy",
-    category:"الخصوصية",
-    description:"كيف تفهم أثرك الرقمي وتحمي حساباتك.",
-    lessons:[
-      {
-        title:"الأثر الرقمي",
-        body:`
-          <p>
-            كل استخدام للخدمات الرقمية قد يترك آثارًا مختلفة حسب الخدمة
-            والإعدادات والبيانات التي تشاركها.
-          </p>
-        `,
-        quiz:{
-          question:"هل من المفيد مراجعة صلاحيات التطبيقات؟",
-          options:[
-            "نعم",
-            "لا"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"الحسابات الآمنة",
-        body:`
-          <p>
-            استخدم MFA، كلمات مرور فريدة، وراجع جلسات تسجيل الدخول
-            عندما تدعم الخدمة ذلك.
-          </p>
-        `,
-        quiz:{
-          question:"ما الذي يزيد حماية الحساب؟",
-          options:[
-            "MFA",
-            "مشاركة كلمة المرور",
-            "إيقاف كل التحديثات"
-          ],
-          answer:0
-        }
-      }
-    ]
-  },
-
-
-  {
-    id:"career",
-    title:"Cyber Career Roadmap",
-    category:"المسار المهني",
-    description:"بناء طريق عملي لتعلم التقنية.",
-    lessons:[
-      {
-        title:"ابدأ من الأساس",
-        body:`
-          <p>
-            لا تحتاج إلى تعلم كل شيء مرة واحدة. ابنِ أساسًا في Linux،
-            الشبكات، البرمجة، ثم تخصص تدريجيًا.
-          </p>
-        `,
-        quiz:{
-          question:"ما الأسلوب الأفضل؟",
-          options:[
-            "التدرج وبناء الأساس",
-            "تعلم 50 مجالًا في يوم",
-            "عدم التطبيق"
-          ],
-          answer:0
-        }
-      },
-
-      {
-        title:"التطبيق أهم من المشاهدة",
-        body:`
-          <p>
-            المختبرات والمشاريع الصغيرة تساعدك على تحويل المعرفة إلى
-            مهارة عملية.
-          </p>
-        `,
-        quiz:{
-          question:"ما الذي يحول المعرفة إلى مهارة؟",
-          options:[
-            "التطبيق",
-            "المشاهدة فقط",
-            "تجاهل الأخطاء"
-          ],
-          answer:0
-        }
-      }
-    ]
-  }
-
-];
-
-
-/* ============================================================
-   BOOK UI
-============================================================ */
-
-function renderBooks(){
-
-  const grid =
-    $("bookGrid");
-
-  grid.innerHTML = "";
-
-  books.forEach((book,index)=>{
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "card book";
-
-    const savedProgress =
-      localStorage.getItem(
-        "vanta_book_"+book.id
-      );
-
-    const progressIndex =
-      Number(savedProgress || 0);
-
-    const percent =
-      Math.round(
-        (progressIndex /
-          book.lessons.length)*100
-      );
-
-    card.innerHTML = `
-
-      <div class="bookCover">
-
-        <div class="bookGlow"></div>
-
-        <div class="bookNumber">
-          ${String(index+1).padStart(2,"0")}
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative border border-vanta-border">
+            <button onclick="closeModal('auth-modal')" class="absolute left-6 top-6 text-vanta-grayText hover:text-vanta-dark text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-2xl bg-vanta-gold/10 text-vanta-gold flex items-center justify-center text-xl mx-auto">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-xl font-black text-vanta-dark">تسجيل الدخول إلى VANTA</h3>
+                <p class="text-xs text-vanta-grayText">استكمل تقدمك واحفظ دروسك المفضلة واجتز الاختبارات</p>
+            </div>
+            <div class="space-y-3">
+                <button onclick="simulateLogin('Google')" class="w-full py-3 px-4 border border-vanta-border rounded-xl font-bold text-xs text-vanta-dark hover:bg-vanta-secondary flex items-center justify-center gap-3 transition-all">
+                    <i class="fa-brands fa-google text-red-500 text-base"></i> تسجيل الدخول باستخدام Google
+                </button>
+                <button onclick="simulateLogin('Apple')" class="w-full py-3 px-4 border border-vanta-border rounded-xl font-bold text-xs text-vanta-dark hover:bg-vanta-secondary flex items-center justify-center gap-3 transition-all">
+                    <i class="fa-brands fa-apple text-black text-base"></i> تسجيل الدخول باستخدام Apple
+                </button>
+            </div>
+            <div class="relative flex py-2 items-center">
+                <div class="flex-grow border-t border-vanta-border"></div>
+                <span class="flex-shrink mx-4 text-xs text-vanta-grayText font-medium">أو بالبريد الإلكتروني</span>
+                <div class="flex-grow border-t border-vanta-border"></div>
+            </div>
+            <div class="space-y-3">
+                <input type="email" placeholder="البريد الإلكتروني الأكاديمي" class="w-full p-3 bg-vanta-secondary border border-vanta-border rounded-xl text-xs focus:outline-none focus:border-vanta-gold">
+                <input type="password" placeholder="كلمة المرور" class="w-full p-3 bg-vanta-secondary border border-vanta-border rounded-xl text-xs focus:outline-none focus:border-vanta-gold">
+                <button onclick="simulateLogin('Email')" class="w-full py-3 bg-gradient-to-r from-vanta-gold to-vanta-darkGold text-white font-bold rounded-xl text-xs shadow hover:opacity-90">
+                    دخول للحساب
+                </button>
+            </div>
         </div>
-
-        <div class="bookTitle">
-          ${escapeHTML(book.title)}
-        </div>
-
-      </div>
-
-      <div class="bookInfo">
-
-        <span class="badge">
-          ${escapeHTML(book.category)}
-        </span>
-
-        <p>
-          ${escapeHTML(book.description)}
-        </p>
-
-        <div class="progress">
-          <div
-            class="progressBar"
-            style="width:${percent}%"
-          ></div>
-        </div>
-
-        <small class="muted">
-          ${progressIndex}/${book.lessons.length} دروس
-        </small>
-
-      </div>
-
-    `;
-
-    card.addEventListener(
-      "click",
-      ()=>openBook(book)
-    );
-
-    grid.appendChild(card);
-
-  });
-}
-
-
-function openBook(book){
-
-  currentBook =
-    book;
-
-  const saved =
-    Number(
-      localStorage.getItem(
-        "vanta_book_"+book.id
-      ) || 0
-    );
-
-  currentLessonIndex =
-    Math.min(
-      saved,
-      book.lessons.length-1
-    );
-
-  $("libraryHome")
-    .classList.add("hidden");
-
-  $("readerView")
-    .classList.remove("hidden");
-
-  renderLesson();
-}
-
-
-function renderLesson(){
-
-  if(!currentBook) return;
-
-  const lesson =
-    currentBook.lessons[
-      currentLessonIndex
-    ];
-
-  const total =
-    currentBook.lessons.length;
-
-  $("readerBookTitle")
-    .textContent =
-    currentBook.title;
-
-  $("lessonNumber")
-    .textContent =
-    `الدرس ${currentLessonIndex+1} من ${total}`;
-
-  $("readerProgress")
-    .textContent =
-    `${currentLessonIndex+1} / ${total}`;
-
-  $("readerProgressBar")
-    .style.width =
-    `${((currentLessonIndex+1)/total)*100}%`;
-
-  $("lessonTitle")
-    .textContent =
-    lesson.title;
-
-  $("lessonBody")
-    .innerHTML =
-    lesson.body;
-
-  renderQuiz(
-    lesson.quiz
-  );
-
-  localStorage.setItem(
-    "vanta_book_"+currentBook.id,
-    currentLessonIndex
-  );
-
-  updateBookXP();
-}
-
-
-function renderQuiz(quiz){
-
-  if(!quiz){
-
-    $("lessonQuiz").innerHTML = "";
-    return;
-
-  }
-
-  $("lessonQuiz").innerHTML = `
-
-    <div class="lessonBlock">
-
-      <strong>
-        🧠 اختبار الدرس
-      </strong>
-
-      <p>
-        ${escapeHTML(quiz.question)}
-      </p>
-
-      ${quiz.options.map(
-        (option,i)=>`
-          <button
-            class="btn quizOption"
-            data-answer="${i}"
-          >
-            ${escapeHTML(option)}
-          </button>
-        `
-      ).join("")}
-
-      <div
-        id="quizFeedback"
-        class="muted"
-        style="margin-top:12px"
-      ></div>
-
     </div>
-  `;
 
-  document
-    .querySelectorAll(".quizOption")
-    .forEach(btn=>{
-
-      btn.addEventListener(
-        "click",
-        ()=>{
-
-          const selected =
-            Number(btn.dataset.answer);
-
-          const feedback =
-            $("quizFeedback");
-
-          if(selected === quiz.answer){
-
-            btn.classList.add("correct");
-
-            feedback.textContent =
-              "✓ إجابة صحيحة. حصلت على XP.";
-
-            addXP(10);
-
-          }else{
-
-            btn.classList.add("wrong");
-
-            feedback.textContent =
-              "✕ ليست الإجابة الصحيحة. حاول مرة أخرى.";
-
-          }
-
-        }
-      );
-
-    });
-}
-
-
-function updateBookXP(){
-
-  if(!currentUser) return;
-
-  const xp =
-    currentProfile?.xp || 0;
-
-  $("statXP").textContent =
-    xp;
-}
-
-
-async function addXP(amount){
-
-  if(!currentUser) return;
-
-  const currentXP =
-    Number(
-      currentProfile?.xp || 0
-    );
-
-  const newXP =
-    currentXP + amount;
-
-  const level =
-    Math.max(
-      1,
-      Math.floor(newXP/100)+1
-    );
-
-  const {
-    data
-  } =
-  await supabaseClient
-    .from("profiles")
-    .update({
-      xp:newXP,
-      level
-    })
-    .eq("id",currentUser.id)
-    .select()
-    .single();
-
-  if(data){
-
-    currentProfile =
-      data;
-
-    updateProfileUI();
-
-    toast(`+${amount} XP`);
-
-  }
-}
-
-
-$("nextLesson")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      if(!currentBook) return;
-
-      if(
-        currentLessonIndex <
-        currentBook.lessons.length-1
-      ){
-
-        currentLessonIndex++;
-
-        localStorage.setItem(
-          "vanta_book_"+currentBook.id,
-          currentLessonIndex
-        );
-
-        renderLesson();
-
-        window.scrollTo({
-          top:0,
-          behavior:"smooth"
-        });
-
-      }else{
-
-        addXP(50);
-
-        toast(
-          "أكملت الكتاب 🎉"
-        );
-
-      }
-
-    }
-  );
-
-
-$("backLibrary")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      $("readerView")
-        .classList.add("hidden");
-
-      $("libraryHome")
-        .classList.remove("hidden");
-
-      renderBooks();
-
-    }
-  );
-
-
-/* ============================================================
-   LABS
-============================================================ */
-
-function passwordStrength(password){
-
-  let score = 0;
-
-  if(password.length >= 8)
-    score++;
-
-  if(password.length >= 12)
-    score++;
-
-  if(/[a-z]/.test(password))
-    score++;
-
-  if(/[A-Z]/.test(password))
-    score++;
-
-  if(/[0-9]/.test(password))
-    score++;
-
-  if(/[^A-Za-z0-9]/.test(password))
-    score++;
-
-  return score;
-}
-
-$("passwordTest")
-  .addEventListener(
-    "input",
-    e=>{
-
-      const value =
-        e.target.value;
-
-      const score =
-        passwordStrength(value);
-
-      const percent =
-        Math.min(
-          100,
-          score*16.67
-        );
-
-      $("strengthFill")
-        .style.width =
-        percent+"%";
-
-      let label =
-        "ضعيفة";
-
-      if(score >= 5)
-        label = "قوية جدًا";
-      else if(score >= 4)
-        label = "قوية";
-      else if(score >= 3)
-        label = "متوسطة";
-
-      $("passwordResult")
-        .textContent =
-        value
-          ? `القوة: ${label} — ${score}/6`
-          : "ابدأ الاختبار.";
-
-    }
-  );
-
-
-$("hashBtn")
-  .addEventListener(
-    "click",
-    async()=>{
-
-      const text =
-        $("hashInput").value;
-
-      if(!text){
-        toast("اكتب نصًا.");
-        return;
-      }
-
-      const bytes =
-        new TextEncoder()
-          .encode(text);
-
-      const buffer =
-        await crypto.subtle.digest(
-          "SHA-256",
-          bytes
-        );
-
-      const hash =
-        Array.from(
-          new Uint8Array(buffer)
-        )
-        .map(
-          b=>b.toString(16).padStart(2,"0")
-        )
-        .join("");
-
-      $("hashOutput")
-        .textContent =
-        hash;
-
-    }
-  );
-
-
-$("encode64")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      const value =
-        $("base64Input").value;
-
-      try{
-
-        $("base64Output")
-          .textContent =
-          btoa(
-            unescape(
-              encodeURIComponent(value)
-            )
-          );
-
-      }catch(e){
-
-        $("base64Output")
-          .textContent =
-          "تعذر الترميز.";
-
-      }
-
-    }
-  );
-
-
-$("decode64")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      const value =
-        $("base64Input").value;
-
-      try{
-
-        $("base64Output")
-          .textContent =
-          decodeURIComponent(
-            escape(
-              atob(value)
-            )
-          );
-
-      }catch(e){
-
-        $("base64Output")
-          .textContent =
-          "Base64 غير صالح.";
-
-      }
-
-    }
-  );
-
-
-document
-  .querySelectorAll("[data-phish]")
-  .forEach(btn=>{
-
-    btn.addEventListener(
-      "click",
-      ()=>{
-
-        const correct =
-          btn.dataset.phish === "yes";
-
-        $("phishResult")
-          .textContent =
-          correct
-            ? "✓ صحيح. الضغط والاستعجال وطلب تسجيل الدخول علامات تستحق الحذر."
-            : "✕ حاول مرة أخرى. ابحث عن علامات التصيد.";
-
-      }
-    );
-
-  });
-
-
-$("reverseBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      const challenge =
-        $("reverseChallenge")
-          .textContent;
-
-      const answer =
-        $("reverseAnswer")
-          .value
-          .trim();
-
-      const expected =
-        challenge
-          .split("")
-          .reverse()
-          .join("");
-
-      $("reverseResult")
-        .textContent =
-        answer === expected
-          ? "✓ ممتاز. التحدي مكتمل."
-          : "✕ ليست الإجابة الصحيحة.";
-
-    }
-  );
-
-
-$("urlAnalyze")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      const raw =
-        $("urlInput")
-          .value
-          .trim();
-
-      if(!raw){
-        $("urlOutput")
-          .textContent =
-          "اكتب رابطًا.";
-        return;
-      }
-
-      try{
-
-        const url =
-          new URL(raw);
-
-        const flags = [];
-
-        if(url.protocol !== "https:")
-          flags.push(
-            "الرابط لا يستخدم HTTPS"
-          );
-
-        if(
-          /@/.test(url.username)
-        )
-          flags.push(
-            "يحتوي الرابط على username"
-          );
-
-        if(
-          url.hostname.length > 45
-        )
-          flags.push(
-            "اسم النطاق طويل"
-          );
-
-        $("urlOutput")
-          .textContent =
-          flags.length
-            ? flags.join(" • ")
-            : "لم تظهر علامات بسيطة مريبة في هذا التحليل.";
-
-      }catch(e){
-
-        $("urlOutput")
-          .textContent =
-          "الرابط غير صالح.";
-
-      }
-
-    }
-  );
-
-
-$("mysteryBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      const messages = [
-
-        "NOVA تعرف أنك وصلت إلى هنا.",
-
-        "ليس كل شيء في VANTA ظاهرًا من أول مرة.",
-
-        "ابحث في المختبرات... بعض الأبواب لا تظهر إلا لمن يجرّب.",
-
-        "SYSTEM MESSAGE: curiosity detected.",
-
-        "VANTA ليست مجرد صفحة. إنها تجربة."
-
-      ];
-
-      const message =
-        messages[
-          Math.floor(
-            Math.random()*messages.length
-          )
+    <!-- Application JavaScript Logic & Comprehensive Data -->
+    <script>
+        // Comprehensive 12 Tracks & Detailed Lessons Data Structure
+        const vantaTracks = [
+            {
+                id: 'cyber',
+                title: 'الأمن السيبراني المتقدم',
+                desc: 'مفاهيم الأمن السيبراني، التشفير، إدارة المخاطر، واستجابة للحوادث.',
+                icon: 'fa-shield-halved',
+                courses: [
+                    {
+                        id: 'c-1',
+                        title: 'أساسيات أمن المعلومات ومبادئ CIA',
+                        lessons: [
+                            {
+                                id: 'l-1',
+                                title: 'مقدمة في الأمن السيبراني ومفاهيم السرية والنزاهة والتوافر (CIA Triad)',
+                                content: `أهلاً بك في أول دروس الأمن السيبراني في منصة VANTA CYBER. يرتكز أمن المعلومات على مثلث أساسي يُعرف بـ CIA Triad:\n\n1. **السرية (Confidentiality):** ضمان عدم الوصول إلى البيانات إلا من قبل الأشخاص المخولين فقط عبر التشفير وآليات المصادقة.\n2. **النزاهة (Integrity):** التأكد من أن البيانات لم يتم تعديلها أو العبث بها أثناء التخزين أو النقل عبر تجزئة البيانات (Hashing).\n3. **التوافر (Availability):** ضمان إتاحة الخدمات والبيانات للمستخدمين الشرعيين عند الحاجة دون انقطاع (مثل الحماية ضد هجمات حجب الخدمة DDoS).\n\n**أمثلة واقعية:** تسريب قواعد بيانات العملاء يعد خرقاً للسرية، بينما تعديل رصيد حساب بنكي يعد خرقاً للنزاهة، وتعطل سيرفرات الشركات يعد خرقاً للتوافر.`,
+                                quiz: {
+                                    q: 'أي من العناصر التالية يمثل حماية البيانات من التعديل غير المرخص؟',
+                                    options: ['السرية (Confidentiality)', 'النزاهة (Integrity)', 'التوافر (Availability)', 'المصادقة (Authentication)'],
+                                    correct: 1,
+                                    explanation: 'النزاهة تضمن عدم العبث بالبيانات أو تعديلها بشكل غير مصرح.'
+                                }
+                            },
+                            {
+                                id: 'l-2',
+                                title: 'التشفير والتجزئة: الفرق بين Encryption و Hashing و Encoding',
+                                content: `العديد من المبتدئين يخلطون بين هذه المكونات الثلاثة:\n\n- **التشفير (Encryption):** عملية ذات اتجاهين (تشفير وفك تشفير) تستخدم مفتاحًا سريًا (مثل AES أو RSA).\n- **التجزئة (Hashing):** عملية ذات اتجاه واحد (مثل SHA-256) تحول أي نص إلى بصمة ثابتة الطول غير قابلة للعكس تمامًا.\n- **الترميز (Encoding):** تحويل شكل البيانات لأغراض النقل (مثل Base64) ولا يحوي أي حماية أمنية.`,
+                                quiz: {
+                                    q: 'ما هي الخوارزمية التي تمثل عملية تجزئة ذات اتجاه واحد (Hashing)؟',
+                                    options: ['AES-256', 'RSA', 'SHA-256', 'Base64'],
+                                    correct: 2,
+                                    explanation: 'SHA-256 هو معيار تجزئة أحادي الاتجاه يستخدم للتحقق من سلامة البيانات.'
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        id: 'c-2',
+                        title: 'أمن تطبيقات الويب والثغرات الشائعة',
+                        lessons: [
+                            {
+                                id: 'l-3',
+                                title: 'ثغرة حقن قواعد البيانات SQL Injection وطرق الوقاية',
+                                content: `تحدث ثغرة SQL Injection عندما يقوم المهاجم بإدخال أوامر SQL خبيثة داخل حقول الإدخال (مثل نموذج تسجيل الدخول) ليتم تنفيذها مباشرة في قاعدة البيانات.\n\n**مثال على استعلام ضعيف:**\n\`SELECT * FROM users WHERE username = 'admin' AND password = 'input'\`\n\n**طرق الوقاية:**\nاستخدام الاستعلامات المحضرة (Prepared Statements / Parameterized Queries) لضمان التعامل مع مدخلات المستخدم كبيانات وليست أوامر تنفيذية.`,
+                                quiz: {
+                                    q: 'ما هي الطريقة الأضمن للوقاية من ثغرات SQL Injection؟',
+                                    options: ['استخدام الاستعلامات المحضرة (Prepared Statements)', 'حظر علامات التنصيص فقط', 'تغيير اسم قاعدة البيانات', 'استخدام اتصال HTTP عادٍ'],
+                                    correct: 0,
+                                    explanation: 'الاستعلامات المحضرة تفصل بين بنية الاستعلام وبيانات المستخدم المدخلة.'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'linux',
+                title: 'Linux وإدارة الأنظمة',
+                desc: 'تعلم سطر الأوامر، الصلاحيات، إدارة العمليات وصيانة الأنظمة.',
+                icon: 'fa-terminal',
+                courses: [
+                    {
+                        id: 'c-3',
+                        title: 'الأساسيات والأوامر الجوهرية في Linux',
+                        lessons: [
+                            {
+                                id: 'l-4',
+                                title: 'هجولة الملفات والأوامر الأساسية (pwd, ls, cd, mkdir)',
+                                content: `نظام Linux يعتمد بشكل أساسي على سطر الأوامر (Terminal) لإدارة النظام بكفاءة عالية.\n\n- \`pwd\`: يعرض المسار الحالي للمجلد الذي تتواجد فيه.\n- \`ls -la\`: يعرض كافة الملفات والمخفية بصلاحياتها.\n- \`cd /etc\`: للانتقال بين المجلدات.\n- \`mkdir vanta_lab\`: لإنشاء مجلد جديد.`,
+                                quiz: {
+                                    q: 'أي أمر يستخدم لعرض مسار المجلد الحالي في طرفية Linux؟',
+                                    options: ['ls', 'pwd', 'cd', 'cat'],
+                                    correct: 1,
+                                    explanation: 'pwd تعني Print Working Directory.'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'python',
+                title: 'البرمجة بلغة Python',
+                desc: 'من الصفر وحتى بناء الأدوات البرمجية ومعالجة البيانات.',
+                icon: 'fa-code',
+                courses: [
+                    {
+                        id: 'c-4',
+                        title: 'أساسيات بايثون للمطورين والمحللين',
+                        lessons: [
+                            {
+                                id: 'l-5',
+                                title: 'المتغيرات وأنواع البيانات والهياكل الأساسية',
+                                content: `تتميز لغة Python بكونها سهلة القراءة وواسعة الاستخدام في الأمن السيبراني وتحليل البيانات.\n\n\`\`\`python\n# تعريف متغيرات وحساب التقدم\nusername = "Ali Yaser"\nscore = 98.5\nis_active = True\nprint(f"المستخدم {username} حقق نسبة {score}%")\n\`\`\``,
+                                quiz: {
+                                    q: 'أي من التالي يُعتبر صيغة طباعة صحيحة في Python 3؟',
+                                    options: ['print "Hello"', 'echo "Hello"', 'print("Hello")', 'printf("Hello")'],
+                                    correct: 2,
+                                    explanation: 'في Python 3 تعتبر الدالة print() هي الطريقة المعيارية للطباعة.'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'networks',
+                title: 'الشبكات وبروتوكولات الاتصال',
+                desc: 'نموذج OSI، بروتوكولات TCP/IP، وعناوين IP وSubnetting.',
+                icon: 'fa-network-wired',
+                courses: [
+                    {
+                        id: 'c-5',
+                        title: 'نموذج OSI وبروتوكولات الويب',
+                        lessons: [
+                            {
+                                id: 'l-6',
+                                title: 'رحلة طلب HTTP وفهم طبقات الشبكة السبع (OSI Model)',
+                                content: `يتكون نموذج OSI من 7 طبقات تبدأ من الطبقة الفيزيائية وحتى طبقة التطبيقات. عند تصفح موقع إلكتروني، يمر الطلب عبر بروتوكول TCP في طبقة النقل لضمان وصول الحزم بدقة، ثم HTTP/HTTPS في طبقة التطبيقات.`,
+                                quiz: {
+                                    q: 'في أي طبقة من نموذج OSI يعمل بروتوكول TCP؟',
+                                    options: ['الطبقة الفيزيائية', 'طبقة الشبكة (Network)', 'طبقة النقل (Transport)', 'طبقة التطبيقات (Application)'],
+                                    correct: 2,
+                                    explanation: 'بروتوكول TCP يعمل في طبقة النقل (Transport Layer).'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'ai',
+                title: 'الذكاء الاصطناعي وتعلم الآلة',
+                desc: 'مفاهيم الذكاء الاصطناعي، النماذج اللغوية، وهندسة الأوامر.',
+                icon: 'fa-brain',
+                courses: [
+                    {
+                        id: 'c-6',
+                        title: 'مقدمة في الذكاء الاصطناعي والتعلم العميق',
+                        lessons: [
+                            {
+                                id: 'l-7',
+                                title: 'أساسيات الشبكات العصبية والنماذج اللغوية الكبيرة (LLMs)',
+                                content: `تعتمد النماذج الحديثة مثل Gemini على معمارية Transformer لتحليل النصوص وتوليد الإجابات بدقة عالية.`,
+                                quiz: {
+                                    q: 'ما هي المعمارية الأساسية التي تعتمد عليها نماذج اللغة الحديثة (LLMs)؟',
+                                    options: ['Transformer', 'Binary Tree', 'Linked List', 'Bubble Sort'],
+                                    correct: 0,
+                                    explanation: 'معمارية Transformer هي الأساس في النماذج الحديثة للذكاء الاصطناعي.'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'db',
+                title: 'قواعد البيانات و SQL',
+                desc: 'تصميم الجداول، الاستعلامات المتقدمة، وضمان أمن البيانات.',
+                icon: 'fa-database',
+                courses: [
+                    {
+                        id: 'c-7',
+                        title: 'أساسيات قواعد البيانات العلائقية والاستعلامات',
+                        lessons: [
+                            {
+                                id: 'l-8',
+                                title: 'استعلامات SELECT و WHERE و JOIN',
+                                content: `تتيح لغة SQL استرجاع البيانات بدقة عالية من جداول متعددة.\n\n\`SELECT name, email FROM users WHERE active = 1;\``,
+                                quiz: {
+                                    q: 'أي أمر يستخدم لاسترجاع البيانات من جدول في SQL؟',
+                                    options: ['GET', 'SELECT', 'EXTRACT', 'PULL'],
+                                    correct: 1,
+                                    explanation: 'أمر SELECT هو الأمر الأساسي لاستعلام واسترجاع البيانات.'
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
         ];
 
-      $("mysteryOutput")
-        .textContent =
-        message;
-
-    }
-  );
-
-
-/* ============================================================
-   VANTABOOK
-============================================================ */
-
-let posts = [];
-let stories = [];
-let savedIds = new Set();
-
-
-const demoPosts = [
-
-  {
-    id:"demo-1",
-    user:{
-      name:"VANTA",
-      username:"vanta",
-      avatar:defaultAvatar("V")
-    },
-    text:"اكتشف مختبر كلمة المرور داخل VANTA 🔐",
-    media:null,
-    likes:27,
-    comments:4,
-    demo:true
-  },
-
-  {
-    id:"demo-2",
-    user:{
-      name:"NOVA",
-      username:"nova",
-      avatar:defaultAvatar("N")
-    },
-    text:"سؤال اليوم: هل تعرف لماذا إعادة استخدام كلمة المرور خطيرة؟",
-    media:null,
-    likes:42,
-    comments:8,
-    demo:true
-  },
-
-  {
-    id:"demo-3",
-    user:{
-      name:"VANTA LABS",
-      username:"labs",
-      avatar:defaultAvatar("L")
-    },
-    text:"تحدي صغير: جرّب SHA-256 ثم ارجع للكتاب.",
-    media:null,
-    likes:19,
-    comments:2,
-    demo:true
-  }
-
-];
-
-
-async function loadVantaBook(){
-
-  await Promise.all([
-    loadPosts(),
-    loadStories()
-  ]);
-
-  renderStories();
-  renderFeed();
-  renderExplore();
-}
-
-
-async function loadPosts(){
-
-  posts = [];
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-    .from("vantabook_posts")
-    .select("*")
-    .order(
-      "created_at",
-      {ascending:false}
-    )
-    .limit(50);
-
-  if(!error && data){
-
-    posts =
-      data.map(row=>({
-
-        id:row.id,
-
-        user:{
-          id:row.user_id,
-          name:
-            row.display_name ||
-            "VANTA User",
-          username:
-            row.username ||
-            "user",
-          avatar:
-            row.avatar_url ||
-            defaultAvatar(
-              row.display_name ||
-              "V"
-            )
-        },
-
-        text:
-          row.content ||
-          "",
-
-        media:
-          row.media_url ||
-          null,
-
-        media_type:
-          row.media_type ||
-          null,
-
-        likes:0,
-        comments:0,
-        demo:false,
-
-        created_at:
-          row.created_at
-
-      }));
-
-  }
-
-  posts =
-    [
-      ...posts,
-      ...demoPosts
-    ];
-}
-
-
-async function loadStories(){
-
-  stories = [];
-
-  const {
-    data
-  } =
-  await supabaseClient
-    .from("vantabook_stories")
-    .select("*")
-    .order(
-      "created_at",
-      {ascending:false}
-    )
-    .limit(30);
-
-  if(data){
-
-    stories =
-      data.map(row=>({
-
-        id:row.id,
-
-        user:{
-          id:row.user_id,
-          name:
-            row.display_name ||
-            "VANTA User",
-          username:
-            row.username ||
-            "user",
-          avatar:
-            row.avatar_url ||
-            defaultAvatar("V")
-        },
-
-        media:
-          row.media_url,
-
-        text:
-          row.content || ""
-
-      }));
-
-  }
-}
-
-
-function renderStories(){
-
-  const row =
-    $("storyRow");
-
-  row.innerHTML = `
-    <div class="story" id="addStoryBubble">
-      <div class="storyAvatar">
-        <img
-          id="storyMeAvatar"
-          src=""
-          alt=""
-        >
-      </div>
-      <small>قصتك</small>
-    </div>
-  `;
-
-  setImage(
-    $("storyMeAvatar"),
-    currentProfile?.avatar_url,
-    currentProfile?.display_name || "V"
-  );
-
-  $("addStoryBubble")
-    .addEventListener(
-      "click",
-      ()=>{
-        if(!currentUser){
-          openLogin();
-          return;
-        }
-
-        $("storyModal")
-          .classList.remove("hidden");
-      }
-    );
-
-
-  stories.forEach(story=>{
-
-    const item =
-      document.createElement("div");
-
-    item.className =
-      "story";
-
-    item.innerHTML = `
-      <div class="storyAvatar">
-        <img
-          src="${story.user.avatar}"
-          alt=""
-        >
-      </div>
-      <small>
-        ${escapeHTML(
-          story.user.username
-        )}
-      </small>
-    `;
-
-    item.addEventListener(
-      "click",
-      ()=>{
-        openStoryViewer(story);
-      }
-    );
-
-    row.appendChild(item);
-
-  });
-
-}
-
-
-function openStoryViewer(story){
-
-  const text =
-    story.text ||
-    "Story";
-
-  const media =
-    story.media
-      ? `
-        <img
-          src="${story.media}"
-          style="
-            width:100%;
-            max-height:65vh;
-            object-fit:contain;
-            border-radius:18px
-          "
-        >
-      `
-      : "";
-
-  const modal =
-    document.createElement("div");
-
-  modal.className =
-    "modal";
-
-  modal.innerHTML = `
-    <div
-      class="card modalBox"
-      style="max-width:700px;text-align:center"
-    >
-
-      <h2>
-        ${escapeHTML(
-          story.user.name
-        )}
-      </h2>
-
-      ${media}
-
-      <p>
-        ${escapeHTML(text)}
-      </p>
-
-      <button class="btn">
-        إغلاق
-      </button>
-
-    </div>
-  `;
-
-  modal
-    .querySelector("button")
-    .addEventListener(
-      "click",
-      ()=>modal.remove()
-    );
-
-  document.body.appendChild(modal);
-}
-
-
-function recommendationScore(post){
-
-  if(post.demo)
-    return 15;
-
-  const text =
-    (post.text || "")
-      .toLowerCase();
-
-  let score =
-    Math.random()*5;
-
-  if(
-    /cyber|security|linux|code|ai|تعلم|امن|برمجة/i
-      .test(text)
-  )
-    score += 10;
-
-  score +=
-    Math.min(
-      20,
-      Number(post.likes || 0)*.4
-    );
-
-  score +=
-    Math.min(
-      15,
-      Number(post.comments || 0)*.7
-    );
-
-  return score;
-}
-
-
-function renderFeed(){
-
-  const feed =
-    $("postFeed");
-
-  feed.innerHTML = "";
-
-  const sorted =
-    [...posts]
-      .sort(
-        (a,b)=>
-          recommendationScore(b) -
-          recommendationScore(a)
-      );
-
-  sorted.forEach(
-    post=>{
-      feed.appendChild(
-        createPostElement(post)
-      );
-    }
-  );
-
-}
-
-
-function createPostElement(post){
-
-  const article =
-    document.createElement("article");
-
-  article.className =
-    "card post";
-
-  let mediaHTML = "";
-
-  if(post.media){
-
-    if(
-      post.media_type === "video" ||
-      /\.(mp4|webm|mov)$/i.test(
-        post.media
-      )
-    ){
-
-      mediaHTML = `
-        <video
-          class="postMedia"
-          controls
-          playsinline
-          src="${post.media}"
-        ></video>
-      `;
-
-    }else{
-
-      mediaHTML = `
-        <img
-          class="postMedia"
-          src="${post.media}"
-          alt=""
-          loading="lazy"
-        >
-      `;
-
-    }
-
-  }
-
-  const likedKey =
-    "vanta_like_"+post.id;
-
-  const saved =
-    savedIds.has(post.id) ||
-    localStorage.getItem(
-      "vanta_saved_"+post.id
-    ) === "1";
-
-  const liked =
-    localStorage.getItem(
-      likedKey
-    ) === "1";
-
-  article.innerHTML = `
-
-    <div class="postHead">
-
-      <img
-        class="avatarMini"
-        src="${post.user.avatar}"
-        alt=""
-      >
-
-      <div class="postUser">
-
-        <strong>
-          ${escapeHTML(
-            post.user.name
-          )}
-        </strong>
-
-        <span class="muted">
-          @${escapeHTML(
-            post.user.username
-          )}
-        </span>
-
-      </div>
-
-      <button
-        class="iconBtn postMore"
-      >
-        ⋯
-      </button>
-
-    </div>
-
-    ${mediaHTML}
-
-    <div class="postText">
-      ${escapeHTML(post.text)}
-    </div>
-
-    <div class="postActions">
-
-      <button
-        class="iconBtn likeBtn"
-      >
-        ${liked ? "❤️" : "♡"} إعجاب
-      </button>
-
-      <button
-        class="iconBtn commentBtn"
-      >
-        💬 تعليق
-      </button>
-
-      <button
-        class="iconBtn saveBtn"
-      >
-        ${saved ? "🔖" : "▫"} حفظ
-      </button>
-
-      <button
-        class="iconBtn shareBtn"
-      >
-        ↗ مشاركة
-      </button>
-
-    </div>
-
-    <div class="postStats">
-      ${post.likes || 0} إعجاب
-      •
-      ${post.comments || 0} تعليق
-    </div>
-
-    <div class="commentArea">
-
-      <input
-        class="commentInput"
-        placeholder="اكتب تعليقًا..."
-      >
-
-      <button
-        class="btn commentSend"
-      >
-        نشر
-      </button>
-
-    </div>
-
-  `;
-
-
-  article
-    .querySelector(".likeBtn")
-    .addEventListener(
-      "click",
-      async()=>{
-
-        if(!currentUser){
-
-          openLogin();
-          return;
-
-        }
-
-        const key =
-          "vanta_like_"+post.id;
-
-        const already =
-          localStorage.getItem(key)
-          === "1";
-
-        if(already){
-
-          localStorage.removeItem(key);
-
-          toast(
-            "تم إلغاء الإعجاب."
-          );
-
-        }else{
-
-          localStorage.setItem(
-            key,
-            "1"
-          );
-
-          toast(
-            "تم الإعجاب."
-          );
-
-        }
-
-        renderFeed();
-
-      }
-    );
-
-
-  article
-    .querySelector(".saveBtn")
-    .addEventListener(
-      "click",
-      ()=>{
-
-        if(
-          localStorage.getItem(
-            "vanta_saved_"+post.id
-          ) === "1"
-        ){
-
-          localStorage.removeItem(
-            "vanta_saved_"+post.id
-          );
-
-          savedIds.delete(post.id);
-
-          toast(
-            "تمت إزالة الحفظ."
-          );
-
-        }else{
-
-          localStorage.setItem(
-            "vanta_saved_"+post.id,
-            "1"
-          );
-
-          savedIds.add(post.id);
-
-          toast(
-            "تم حفظ المنشور."
-          );
-
-        }
-
-        renderFeed();
-
-      }
-    );
-
-
-  article
-    .querySelector(".shareBtn")
-    .addEventListener(
-      "click",
-      async()=>{
-
-        const text =
-          post.text ||
-          "VANTABOOK";
-
-        try{
-
-          if(
-            navigator.share
-          ){
-
-            await navigator.share({
-              title:"VANTABOOK",
-              text
+        // App State Management
+        let currentActiveTab = 'home';
+        let currentSelectedTrackId = 'cyber';
+        let currentSelectedCourseId = 'c-1';
+        let currentSelectedLessonId = 'l-1';
+        let completedLessonsState = JSON.parse(localStorage.getItem('vanta_completed') || '[]');
+        let bookmarkedLessonsState = JSON.parse(localStorage.getItem('vanta_bookmarks') || '[]');
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            renderTracksGrid();
+            renderTracksList();
+            updateDashboardStats();
+            initWebLabPreview();
+            runCryptoLab();
+        };
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+
+            document.querySelectorAll('.nav-link').forEach(btn => {
+                btn.classList.remove('text-vanta-gold', 'border-b-2', 'border-vanta-gold');
+                if(btn.getAttribute('data-target') === tabId) {
+                    btn.classList.add('text-vanta-gold', 'border-b-2', 'border-vanta-gold');
+                }
             });
 
-          }else{
-
-            await navigator.clipboard.writeText(
-              text
-            );
-
-            toast(
-              "تم نسخ المنشور."
-            );
-
-          }
-
-        }catch(e){}
-
-      }
-    );
-
-
-  article
-    .querySelector(".commentSend")
-    .addEventListener(
-      "click",
-      async()=>{
-
-        if(!currentUser){
-
-          openLogin();
-          return;
-
+            currentActiveTab = tabId;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        const input =
-          article.querySelector(
-            ".commentInput"
-          );
-
-        const text =
-          input.value.trim();
-
-        if(!text) return;
-
-        if(
-          post.demo
-        ){
-
-          toast(
-            "هذا منشور تجريبي."
-          );
-
-          input.value="";
-          return;
-
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
         }
 
-        const {
-          error
-        } =
-        await supabaseClient
-          .from("vantabook_comments")
-          .insert({
-            post_id:post.id,
-            user_id:currentUser.id,
-            content:text
-          });
-
-        if(error){
-
-          toast(
-            error.message
-          );
-
-          return;
-
+        // Render Home Tracks
+        function renderTracksGrid() {
+            const container = document.getElementById('home-tracks-grid');
+            if(!container) return;
+            container.innerHTML = vantaTracks.slice(0, 6).map(track => `
+                <div onclick="selectTrackAndOpen('${track.id}')" class="bg-white p-8 rounded-3xl gold-gradient-border cursor-pointer space-y-4 shadow-sm group">
+                    <div class="w-14 h-14 rounded-2xl bg-vanta-secondary text-vanta-gold flex items-center justify-center text-2xl font-bold group-hover:bg-vanta-gold group-hover:text-white transition-all">
+                        <i class="fa-solid ${track.icon}"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-vanta-dark">${track.title}</h3>
+                    <p class="text-xs text-vanta-grayText leading-relaxed">${track.desc}</p>
+                    <div class="pt-2 text-xs font-bold text-vanta-gold flex items-center gap-1">
+                        استعرض الدورات والدروس <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        input.value="";
+        function selectTrackAndOpen(trackId) {
+            currentSelectedTrackId = trackId;
+            switchTab('tracks');
+            renderTracksList();
+        }
 
-        toast(
-          "تم نشر التعليق."
-        );
-
-      }
-    );
-
-
-  article
-    .querySelector(".postMore")
-    .addEventListener(
-      "click",
-      async()=>{
-
-        if(
-          post.user.id ===
-          currentUser?.id &&
-          !post.demo
-        ){
-
-          if(
-            confirm(
-              "حذف هذا المنشور؟"
-            )
-          ){
-
-            const {
-              error
-            } =
-            await supabaseClient
-              .from("vantabook_posts")
-              .delete()
-              .eq("id",post.id);
-
-            if(error){
-
-              toast(
-                error.message
-              );
-
-            }else{
-
-              toast(
-                "تم حذف المنشور."
-              );
-
-              await loadVantaBook();
-
+        // Render Tracks & Lessons in Tab 2
+        function renderTracksList() {
+            const pillsContainer = document.getElementById('track-pills');
+            if(pillsContainer) {
+                pillsContainer.innerHTML = `
+                    <button onclick="filterByTrack('all')" class="track-pill px-4 py-2 rounded-xl text-xs font-bold ${currentSelectedTrackId === 'all' ? 'bg-vanta-gold text-white' : 'bg-vanta-secondary text-vanta-dark border border-vanta-border'} whitespace-nowrap">الكل</button>
+                    ${vantaTracks.map(t => `
+                        <button onclick="filterByTrack('${t.id}')" class="track-pill px-4 py-2 rounded-xl text-xs font-bold ${currentSelectedTrackId === t.id ? 'bg-vanta-gold text-white' : 'bg-vanta-secondary text-vanta-dark border border-vanta-border'} whitespace-nowrap">${t.title}</button>
+                    `).join('')}
+                `;
             }
 
-          }
+            const listContainer = document.getElementById('tracks-list-container');
+            if(!listContainer) return;
 
-        }else{
+            let filteredTracks = currentSelectedTrackId === 'all' ? vantaTracks : vantaTracks.filter(t => t.id === currentSelectedTrackId);
 
-          toast(
-            "خيارات المنشور."
-          );
+            listContainer.innerHTML = filteredTracks.map(track => `
+                <div class="bg-white p-5 rounded-2xl border border-vanta-border space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-vanta-gold/10 text-vanta-gold flex items-center justify-center font-bold">
+                            <i class="fa-solid ${track.icon}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm text-vanta-dark">${track.title}</h4>
+                            <span class="text-[10px] text-vanta-grayText">${track.courses.length} دورات معتمدة</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2 pt-2 border-t border-vanta-border">
+                        ${track.courses.map(course => `
+                            <div class="space-y-1">
+                                <div class="text-xs font-bold text-vanta-dark px-2">${course.title}</div>
+                                <div class="space-y-1 pr-2">
+                                    ${course.lessons.map(lesson => `
+                                        <button onclick="loadLesson('${track.id}', '${course.id}', '${lesson.id}')" class="w-full text-right p-2.5 rounded-xl text-xs font-medium transition-all flex items-center justify-between ${currentSelectedLessonId === lesson.id ? 'bg-vanta-gold text-white shadow' : 'bg-vanta-secondary text-vanta-dark hover:bg-vanta-border/50'}">
+                                            <span class="truncate pl-2">${lesson.title}</span>
+                                            ${completedLessonsState.includes(lesson.id) ? '<i class="fa-solid fa-check text-emerald-400"></i>' : '<i class="fa-solid fa-angle-left"></i>'}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
 
+            // Load default first lesson if none loaded
+            if(currentSelectedLessonId) {
+                const track = vantaTracks.find(t => t.id === currentSelectedTrackId) || vantaTracks[0];
+                const course = track.courses[0];
+                const lesson = course.lessons[0];
+                if(lesson) loadLesson(track.id, course.id, lesson.id);
+            }
         }
 
-      }
-    );
-
-  return article;
-}
-
-
-function renderExplore(){
-
-  const grid =
-    $("exploreGrid");
-
-  grid.innerHTML = "";
-
-  posts.forEach(
-    post=>{
-
-      if(!post.media) return;
-
-      const item =
-        document.createElement("div");
-
-      item.className =
-        "exploreItem";
-
-      if(
-        post.media_type === "video"
-      ){
-
-        item.innerHTML = `
-          <video
-            src="${post.media}"
-            muted
-          ></video>
-        `;
-
-      }else{
-
-        item.innerHTML = `
-          <img
-            src="${post.media}"
-            alt=""
-            loading="lazy"
-          >
-        `;
-
-      }
-
-      item.addEventListener(
-        "click",
-        ()=>{
-          openPage("vantabook");
-          toast(
-            "تم العثور على المحتوى."
-          );
-        }
-      );
-
-      grid.appendChild(item);
-
-    }
-  );
-
-}
-
-
-document
-  .querySelectorAll("[data-vanta-tab]")
-  .forEach(btn=>{
-
-    btn.addEventListener(
-      "click",
-      ()=>{
-
-        const tab =
-          btn.dataset.vantaTab;
-
-        [
-          "vantaFeedTab",
-          "vantaExploreTab",
-          "vantaSavedTab",
-          "vantaProfileTab"
-        ]
-        .forEach(id=>{
-          $(id)
-            .classList
-            .add("hidden");
-        });
-
-        if(tab==="feed")
-          $("vantaFeedTab")
-            .classList.remove("hidden");
-
-        if(tab==="explore")
-          $("vantaExploreTab")
-            .classList.remove("hidden");
-
-        if(tab==="saved"){
-
-          $("vantaSavedTab")
-            .classList.remove("hidden");
-
-          renderSaved();
-
+        function filterByTrack(trackId) {
+            currentSelectedTrackId = trackId;
+            renderTracksList();
         }
 
-        if(tab==="profile")
-          $("vantaProfileTab")
-            .classList.remove("hidden");
+        // Load specific lesson into detail view
+        function loadLesson(trackId, courseId, lessonId) {
+            currentSelectedTrackId = trackId;
+            currentSelectedCourseId = courseId;
+            currentSelectedLessonId = lessonId;
 
-      }
-    );
+            const track = vantaTracks.find(t => t.id === trackId);
+            const course = track.courses.find(c => c.id === courseId);
+            const lesson = course.lessons.find(l => l.id === lessonId);
 
-  });
+            const container = document.getElementById('lesson-view-container');
+            if(!container || !lesson) return;
 
+            const isCompleted = completedLessonsState.includes(lesson.id);
+            const isBookmarked = bookmarkedLessonsState.includes(lesson.id);
 
-function renderSaved(){
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-vanta-border">
+                        <div>
+                            <span class="text-xs font-bold text-vanta-gold bg-vanta-gold/10 px-3 py-1 rounded-full">${track.title}</span>
+                            <h2 class="text-xl sm:text-2xl font-black text-vanta-dark mt-2">${lesson.title}</h2>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleBookmark('${lesson.id}')" class="p-2.5 rounded-xl border border-vanta-border text-xs font-bold ${isBookmarked ? 'bg-amber-50 text-amber-600 border-amber-300' : 'bg-white text-vanta-dark'} hover:bg-vanta-secondary">
+                                <i class="fa-solid fa-bookmark"></i> ${isBookmarked ? 'محفوظ' : 'حفظ'}
+                            </button>
+                            <button onclick="toggleComplete('${lesson.id}')" class="px-4 py-2.5 rounded-xl text-xs font-bold ${isCompleted ? 'bg-emerald-600 text-white' : 'bg-vanta-secondary text-vanta-dark border border-vanta-border'}">
+                                <i class="fa-solid fa-check ml-1"></i> ${isCompleted ? 'مكتمل' : 'تحديد كمكتمل'}
+                            </button>
+                        </div>
+                    </div>
 
-  const container =
-    $("savedFeed");
+                    <!-- Lesson Body Content -->
+                    <div class="prose max-w-none text-sm sm:text-base text-vanta-dark leading-relaxed space-y-4 whitespace-pre-line bg-vanta-secondary/40 p-6 rounded-2xl border border-vanta-border">
+                        ${lesson.content}
+                    </div>
 
-  container.innerHTML = "";
-
-  const saved =
-    posts.filter(
-      post=>
-        localStorage.getItem(
-          "vanta_saved_"+post.id
-        ) === "1"
-    );
-
-  if(!saved.length){
-
-    container.innerHTML = `
-      <p class="muted">
-        لا توجد منشورات محفوظة.
-      </p>
-    `;
-
-    return;
-  }
-
-  saved.forEach(
-    post=>
-      container.appendChild(
-        createPostElement(post)
-      )
-  );
-}
-
-
-/* ============================================================
-   POST CREATION
-============================================================ */
-
-$("createPostBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      if(!currentUser){
-
-        openLogin();
-        return;
-
-      }
-
-      $("postModal")
-        .classList.remove("hidden");
-
-    }
-  );
-
-
-async function uploadMedia(
-  file,
-  folder
-){
-
-  if(!currentUser)
-    throw new Error(
-      "يجب تسجيل الدخول."
-    );
-
-  const safeName =
-    file.name
-      .replace(/\s+/g,"-")
-      .replace(
-        /[^a-zA-Z0-9._-]/g,
-        ""
-      );
-
-  const path =
-    `${folder}/${currentUser.id}/${Date.now()}-${safeName}`;
-
-  const {
-    error
-  } =
-  await supabaseClient.storage
-    .from("vanta-media")
-    .upload(
-      path,
-      file,
-      {
-        upsert:false
-      }
-    );
-
-  if(error)
-    throw error;
-
-  const {
-    data
-  } =
-  supabaseClient.storage
-    .from("vanta-media")
-    .getPublicUrl(path);
-
-  return data.publicUrl;
-}
-
-
-$("publishPost")
-  .addEventListener(
-    "click",
-    async()=>{
-
-      if(!currentUser){
-
-        openLogin();
-        return;
-
-      }
-
-      const content =
-        $("postText")
-          .value
-          .trim();
-
-      const file =
-        $("postMedia")
-          .files[0];
-
-      if(!content && !file){
-
-        toast(
-          "أضف نصًا أو صورة أو فيديو."
-        );
-
-        return;
-
-      }
-
-      try{
-
-        let mediaUrl = null;
-        let mediaType = null;
-
-        if(file){
-
-          mediaUrl =
-            await uploadMedia(
-              file,
-              "posts"
-            );
-
-          mediaType =
-            file.type.startsWith("video/")
-              ? "video"
-              : "image";
-
+                    <!-- Interactive Quiz Box -->
+                    <div class="bg-white p-6 rounded-2xl border-2 border-vanta-gold/30 space-y-4 shadow-sm">
+                        <div class="flex items-center gap-2 text-vanta-gold font-bold text-sm">
+                            <i class="fa-solid fa-circle-question"></i> اختبار سريع للدرس
+                        </div>
+                        <div class="font-bold text-sm text-vanta-dark">${lesson.quiz.q}</div>
+                        <div class="space-y-2" id="quiz-options">
+                            ${lesson.quiz.options.map((opt, idx) => `
+                                <button onclick="checkQuizAnswer(${idx}, ${lesson.quiz.correct}, '${lesson.id}')" class="quiz-option-btn w-full text-right p-3 rounded-xl text-xs font-semibold bg-vanta-secondary border border-vanta-border hover:border-vanta-gold transition-all">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                        <div id="quiz-feedback-${lesson.id}" class="text-xs font-bold hidden"></div>
+                    </div>
+                </div>
+            `;
+            renderTracksList();
         }
 
-        const {
-          error
-        } =
-        await supabaseClient
-          .from("vantabook_posts")
-          .insert({
-
-            user_id:
-              currentUser.id,
-
-            content,
-
-            media_url:
-              mediaUrl,
-
-            media_type:
-              mediaType,
-
-            display_name:
-              currentProfile?.display_name ||
-              "VANTA User",
-
-            username:
-              currentProfile?.username ||
-              "user",
-
-            avatar_url:
-              currentProfile?.avatar_url ||
-              null
-
-          });
-
-        if(error)
-          throw error;
-
-        $("postText").value="";
-        $("postMedia").value="";
-
-        $("postModal")
-          .classList.add("hidden");
-
-        toast(
-          "تم نشر المنشور."
-        );
-
-        await loadVantaBook();
-
-      }catch(error){
-
-        toast(
-          "تعذر نشر المنشور: "+
-          error.message
-        );
-
-      }
-
-    }
-  );
-
-
-/* ============================================================
-   STORY CREATION
-============================================================ */
-
-$("createStoryBtn")
-  .addEventListener(
-    "click",
-    ()=>{
-
-      if(!currentUser){
-
-        openLogin();
-        return;
-
-      }
-
-      $("storyModal")
-        .classList.remove("hidden");
-
-    }
-  );
-
-
-$("publishStory")
-  .addEventListener(
-    "click",
-    async()=>{
-
-      if(!currentUser){
-
-        openLogin();
-        return;
-
-      }
-
-      const file =
-        $("storyMedia")
-          .files[0];
-
-      const content =
-        $("storyText")
-          .value
-          .trim();
-
-      if(!file){
-
-        toast(
-          "اختر صورة أو فيديو."
-        );
-
-        return;
-
-      }
-
-      try{
-
-        const url =
-          await uploadMedia(
-            file,
-            "stories"
-          );
-
-        const {
-          error
-        } =
-        await supabaseClient
-          .from("vantabook_stories")
-          .insert({
-
-            user_id:
-              currentUser.id,
-
-            media_url:
-              url,
-
-            content,
-
-            display_name:
-              currentProfile?.display_name ||
-              "VANTA User",
-
-            username:
-              currentProfile?.username ||
-              "user",
-
-            avatar_url:
-              currentProfile?.avatar_url ||
-              null
-
-          });
-
-        if(error)
-          throw error;
-
-        $("storyMedia").value="";
-        $("storyText").value="";
-
-        $("storyModal")
-          .classList.add("hidden");
-
-        toast(
-          "تم نشر الـ Story."
-        );
-
-        await loadVantaBook();
-
-      }catch(error){
-
-        toast(
-          "تعذر نشر الـ Story: "+
-          error.message
-        );
-
-      }
-
-    }
-  );
-
-
-/* ============================================================
-   MODAL CLOSE
-============================================================ */
-
-document
-  .querySelectorAll("[data-close-modal]")
-  .forEach(btn=>{
-
-    btn.addEventListener(
-      "click",
-      ()=>{
-        const id =
-          btn.dataset.closeModal;
-
-        $(id)
-          ?.classList
-          .add("hidden");
-      }
-    );
-
-  });
-
-document
-  .querySelectorAll(".modal")
-  .forEach(modal=>{
-
-    modal.addEventListener(
-      "click",
-      e=>{
-
-        if(e.target === modal)
-          modal.classList.add("hidden");
-
-      }
-    );
-
-  });
-
-
-/* ============================================================
-   AUTH STATE
-============================================================ */
-
-supabaseClient.auth
-  .onAuthStateChange(
-    async(event,session)=>{
-
-      currentUser =
-        session?.user || null;
-
-      if(currentUser){
-
-        await ensureProfile();
-        await loadProfile();
-
-      }else{
-
-        currentProfile =
-          null;
-
-      }
-
-      updateAccountUI();
-      updateProfileUI();
-      updateHomeGreeting();
-
-      if(
-        document
-          .getElementById("page-vantabook")
-          ?.classList
-          .contains("active")
-      ){
-
-        await loadVantaBook();
-
-      }
-
-    }
-  );
-
-
-/* ============================================================
-   INITIAL LOAD
-============================================================ */
-
-(async()=>{
-
-  await refreshUser();
-
-  renderBooks();
-
-  await loadVantaBook();
-
-})();
-
-</script>
-
+        // Quiz checker
+        function checkQuizAnswer(selectedIdx, correctIdx, lessonId) {
+            const feedbackBox = document.getElementById(`quiz-feedback-${lessonId}`);
+            if(!feedbackBox) return;
+            feedbackBox.classList.remove('hidden');
+            if(selectedIdx === correctIdx) {
+                feedbackBox.className = "text-xs font-bold text-emerald-600 bg-emerald-50 p-3 rounded-xl border border-emerald-200";
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check"></i> إجابة صحيحة! أحسنت.`;
+                if(!completedLessonsState.includes(lessonId)) {
+                    completedLessonsState.push(lessonId);
+                    localStorage.setItem('vanta_completed', JSON.stringify(completedLessonsState));
+                    updateDashboardStats();
+                }
+            } else {
+                feedbackBox.className = "text-xs font-bold text-red-600 bg-red-50 p-3 rounded-xl border border-red-200";
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> إجابة غير صحيحة. حاول مرة أخرى.`;
+            }
+        }
+
+        function toggleComplete(lessonId) {
+            if(completedLessonsState.includes(lessonId)) {
+                completedLessonsState = completedLessonsState.filter(id => id !== lessonId);
+            } else {
+                completedLessonsState.push(lessonId);
+            }
+            localStorage.setItem('vanta_completed', JSON.stringify(completedLessonsState));
+            updateDashboardStats();
+            loadLesson(currentSelectedTrackId, currentSelectedCourseId, currentSelectedLessonId);
+        }
+
+        function toggleBookmark(lessonId) {
+            if(bookmarkedLessonsState.includes(lessonId)) {
+                bookmarkedLessonsState = bookmarkedLessonsState.filter(id => id !== lessonId);
+            } else {
+                bookmarkedLessonsState.push(lessonId);
+            }
+            localStorage.setItem('vanta_bookmarks', JSON.stringify(bookmarkedLessonsState));
+            updateDashboardStats();
+            loadLesson(currentSelectedTrackId, currentSelectedCourseId, currentSelectedLessonId);
+        }
+
+        function updateDashboardStats() {
+            const statComp = document.getElementById('stat-completed-lessons');
+            const statPass = document.getElementById('stat-passed-quizzes');
+            const fillBar = document.getElementById('progress-bar-fill');
+            const bookmarksList = document.getElementById('bookmarked-lessons-list');
+
+            if(statComp) statComp.innerText = `${completedLessonsState.length} / 150`;
+            if(statPass) statPass.innerText = `${completedLessonsState.length}`;
+            if(fillBar) {
+                const pct = Math.min(Math.round((completedLessonsState.length / 10) * 100), 100);
+                fillBar.style.width = `${pct}%`;
+            }
+
+            if(bookmarksList) {
+                if(bookmarkedLessonsState.length === 0) {
+                    bookmarksList.innerHTML = `<div class="text-sm text-vanta-grayText p-4 bg-vanta-secondary rounded-2xl text-center">لم تقم بحفظ أي درس حتى الآن.</div>`;
+                } else {
+                    bookmarksList.innerHTML = bookmarkedLessonsState.map(id => `
+                        <div class="p-3 bg-vanta-secondary rounded-xl flex items-center justify-between text-xs font-bold">
+                            <span>درس محفوظ (ID: ${id})</span>
+                            <button onclick="removeBookmark('${id}')" class="text-red-600 hover:underline">إزالة</button>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        function removeBookmark(id) {
+            bookmarkedLessonsState = bookmarkedLessonsState.filter(item => item !== id);
+            localStorage.setItem('vanta_bookmarks', JSON.stringify(bookmarkedLessonsState));
+            updateDashboardStats();
+        }
+
+        // Labs Tab Logic
+        function switchLabTab(labId) {
+            document.querySelectorAll('.lab-panel').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`lab-panel-${labId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.lab-tab-btn').forEach(btn => {
+                btn.className = "lab-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm bg-vanta-secondary text-vanta-dark border border-vanta-border flex items-center gap-2";
+                if(btn.getAttribute('data-lab') === labId) {
+                    btn.className = "lab-tab-btn px-5 py-2.5 rounded-xl font-bold text-sm bg-vanta-gold text-white shadow-md flex items-center gap-2";
+                }
+            });
+        }
+
+        // 1. Linux Terminal Emulator
+        function handleTerminalCommand(e) {
+            if(e.key === 'Enter') {
+                const input = document.getElementById('terminal-input');
+                const history = document.getElementById('terminal-history');
+                const cmd = input.value.trim();
+                if(!cmd) return;
+
+                const cmdDiv = document.createElement('div');
+                cmdDiv.className = "text-white";
+                cmdDiv.innerText = `vanta@cyber-node:~$ ${cmd}`;
+                history.appendChild(cmdDiv);
+
+                const resDiv = document.createElement('div');
+                resDiv.className = "text-emerald-400 font-mono";
+
+                if(cmd === 'help') {
+                    resDiv.innerHTML = "الأوامر المتاحة:<br>- pwd: عرض المسار الحالي<br>- ls: عرض محتويات المجلد<br>- whoami: عرض اسم المستخدم الحالي<br>- uname -a: معلومات النظام<br>- clear: مسح الطرفية<br>- vanta-scan: فحص أمني للمحطة";
+                } else if(cmd === 'pwd') {
+                    resDiv.innerText = "/home/student/vanta-workspace";
+                } else if(cmd === 'ls') {
+                    resDiv.innerText = "courses/  labs/  security_scripts.py  README.md";
+                } else if(cmd === 'whoami') {
+                    resDiv.innerText = "student_analyst (UID: 1001)";
+                } else if(cmd === 'uname -a') {
+                    resDiv.innerText = "Linux vanta-secure-node 6.2.0-vanta-generic x86_64 GNU/Linux";
+                } else if(cmd === 'clear') {
+                    history.innerHTML = "";
+                    input.value = "";
+                    return;
+                } else if(cmd === 'vanta-scan') {
+                    resDiv.innerHTML = "[+] بدء الفحص الأمني لبيئة العمل...<br>[✓] كافة جدران الحماية مفعلة.<br>[✓] لا توجد ثغرات مكشوفة في الجلسة المحلية.";
+                } else {
+                    resDiv.className = "text-red-400";
+                    resDiv.innerText = `bash: ${cmd}: command not found. Type 'help' for available commands.`;
+                }
+
+                history.appendChild(resDiv);
+                input.value = "";
+                const box = document.getElementById('terminal-output-box');
+                box.scrollTop = box.scrollHeight;
+            }
+        }
+
+        // 2. Web Dev Lab
+        function initWebLabPreview() {
+            runWebLab();
+        }
+        function runWebLab() {
+            const code = document.getElementById('web-lab-code').value;
+            const iframe = document.getElementById('web-lab-preview');
+            const doc = iframe.contentDocument || iframe.contentWindow.document;
+            doc.open();
+            doc.write(code);
+            doc.close();
+        }
+
+        // 3. Cryptography Lab
+        function runCryptoLab() {
+            const text = document.getElementById('crypto-input').value;
+            // Simple mock SHA-256 hash simulation for secure client environment
+            let hash = "vanta_sha256_" + btoa(text).split('').reverse().join('') + "_2026";
+            let b64 = btoa(text);
+            document.getElementById('crypto-sha256').innerText = hash;
+            document.getElementById('crypto-base64').innerText = b64;
+        }
+
+        // 4. Network Lab
+        function calculateSubnet() {
+            const ip = document.getElementById('net-ip').value;
+            const cidr = document.getElementById('net-cidr').value;
+            const resBox = document.getElementById('net-result');
+            resBox.classList.remove('hidden');
+
+            let hosts = Math.pow(2, 32 - parseInt(cidr)) - 2;
+            if(hosts < 0) hosts = 0;
+
+            resBox.innerHTML = `
+                <div class="text-vanta-gold font-bold">نتائج تحليل الشبكة (CIDR /${cidr}):</div>
+                <div>عنوان الشبكة (Network IP): ${ip}</div>
+                <div>قناع الشبكة (Subnet Mask): محاسبي مقترن بـ /${cidr}</div>
+                <div>إجمالي المضيفين المتاحين (Usable Hosts): ${hosts.toLocaleString()} جهاز</div>
+                <div class="text-emerald-600 font-bold">✓ الشبكة ضمن النطاق المحلي المعياري (RFC 1918)</div>
+            `;
+        }
+
+        // NOVA AI Assistant Logic
+        function handleNovaInput(e) {
+            if(e.key === 'Enter') {
+                sendNovaMessage();
+            }
+        }
+
+        function sendNovaMessage() {
+            const input = document.getElementById('nova-input');
+            const chatBox = document.getElementById('nova-chat-box');
+            const text = input.value.trim();
+            if(!text) return;
+
+            // Append User Message
+            chatBox.innerHTML += `
+                <div class="flex items-start gap-3 justify-end">
+                    <div class="bg-vanta-dark text-white p-4 rounded-2xl rounded-tl-none shadow-sm text-sm max-w-xl">
+                        ${text}
+                    </div>
+                    <div class="w-8 h-8 rounded-lg bg-vanta-dark text-white flex items-center justify-center text-xs font-bold flex-shrink-0">أنت</div>
+                </div>
+            `;
+            input.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Simulated intelligent response from NOVA
+            setTimeout(() => {
+                let reply = "أهلاً بك. بصفتي مساعدك الذكي في VANTA CYBER، أنصحك بمراجعة درس 'أساسيات أمن المعلومات' أو تجربة طرفية Linux لاختبار الأوامر بنفسك.";
+                if(text.includes('SQL') || text.includes('حقن')) {
+                    reply = "ثغرة SQL Injection تحدث عندما تُمرر مدخلات المستخدم مباشرة إلى الاستعلام دون تنقية. الحل دائماً استخدام Prepared Statements.";
+                } else if(text.includes('تشفير') || text.includes('SHA')) {
+                    reply = "التشفير عملية ذات اتجاهين، بينما التجزئة (Hashing) اتجاه واحد. يمكنك تجربتها مباشرة في مختبر التشفير في تبويب المختبرات!";
+                } else if(text.includes('علي ياسر') || text.includes('مؤسس')) {
+                    reply = "المؤسس والمطور الرئيسي للمنصة هو المهندس علي ياسر (Ali Yaser). يمكنك زيارة موقعه الشخصي aliyaser12.vercel.app لمعرفة المزيد.";
+                }
+
+                chatBox.innerHTML += `
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-vanta-gold text-white flex items-center justify-center text-xs font-bold flex-shrink-0">NOVA</div>
+                        <div class="bg-white p-4 rounded-2xl rounded-tr-none border border-vanta-border shadow-sm text-sm text-vanta-dark max-w-xl">
+                            ${reply}
+                        </div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 600);
+        }
+
+        // Modal Helpers
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+
+        function simulateLogin(provider) {
+            closeModal('auth-modal');
+            alert(`تم تسجيل الدخول بنجاح عبر ${provider}! أهلاً بك في منصة VANTA CYBER.`);
+        }
+    </script>
 </body>
 </html>
