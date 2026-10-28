@@ -3,749 +3,565 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#101b24">
-<meta name="description" content="VANTA CYBER — منصة تعليم الأمن السيبراني والبرمجة والتدريب العملي">
-<title>VANTA CYBER — تعلّم الأمن السيبراني</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f7f5">
+<title>VANTA CYBER | علي ياسر</title>
 <style>
-:root{--bg:#101b24;--panel:#182832;--panel2:#203640;--line:#344952;--text:#f2f6f6;--muted:#a9b8bd;--green:#b9f34b;--green2:#d8ff83;--red:#ff7777;--radius:15px;--nav:246px}
+:root{--bg:#f7f7f5;--panel:#fff;--text:#171717;--muted:#737373;--line:#e8e7e2;--gold:#b89551;--soft:#f0ece3;--shadow:0 12px 40px #18181808}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--text);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-size:15px;line-height:1.75}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;line-height:1.8}
 button,input,textarea,select{font:inherit}
 button,a{ -webkit-tap-highlight-color:transparent}
-button{cursor:pointer}
 a{color:inherit;text-decoration:none}
-button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--green);outline-offset:3px}
-button:disabled{opacity:.55;cursor:not-allowed}
-img,svg{max-width:100%}
-.wrap{width:min(1180px,100%);margin:auto;padding:24px}
-.muted{color:var(--muted)}
-.small{font-size:13px}
-.green{color:var(--green)}
-.eyebrow{font-size:12px;color:var(--green);font-weight:700;letter-spacing:.5px}
-h1,h2,h3,p{margin-top:0}
-h1{font-size:clamp(27px,4vw,43px);line-height:1.3;margin-bottom:14px}
-h2{font-size:23px;line-height:1.45}
-h3{font-size:17px}
-button,.btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:10px 15px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .15s,border-color .15s}
-button:hover,.btn:hover{border-color:var(--green)}
-.btn.primary,button.primary{background:var(--green);color:#152019;border-color:var(--green);font-weight:700}
-.btn.ghost,button.ghost{background:transparent}
-.btn.danger,button.danger{color:var(--red)}
-.icon-btn{width:42px;height:42px;padding:0;font-size:20px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px}
-.brand-mark{width:38px;height:38px;border-radius:10px;background:var(--green);color:#14202a;display:grid;place-items:center;font-weight:900;font-size:22px}
-.layout{min-height:100vh}
-.sidebar{position:fixed;inset:0 auto 0 0;width:var(--nav);background:#14222b;border-left:1px solid var(--line);padding:22px 16px;display:flex;flex-direction:column;z-index:30;overflow:auto}
-.sidebar .brand{padding:0 7px 25px}
-.nav-label{font-size:11px;color:#879ba2;font-weight:700;margin:18px 10px 7px}
-.nav-link{width:100%;justify-content:flex-start;text-align:right;background:transparent;border-color:transparent;color:#c7d2d6;margin:2px 0;padding:9px 11px;white-space:normal}
-.nav-link.active{background:#293c43;color:var(--green);border-color:#3b5158}
-.nav-link .ni{width:24px;text-align:center}
-.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding-top:15px}
-.main{margin-left:var(--nav);min-width:0}
-.topbar{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 26px;background:rgba(16,27,36,.96);position:sticky;top:0;z-index:20}
-.search{max-width:440px;flex:1;position:relative}
-.search input{width:100%;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:10px 40px 10px 12px;border-radius:9px;min-width:0}
-.search span{position:absolute;right:13px;top:6px;color:var(--muted);font-size:20px}
-.top-actions{display:flex;align-items:center;gap:8px;margin-right:auto}
-.avatar{border-radius:50%;width:40px;height:40px;background:var(--green);color:#16212a;font-weight:700;display:grid;place-items:center;border:0}
-.mobile-brand,.mobile-menu{display:none}
-.page{display:none;min-width:0}
-.page.active{display:block;animation:appear .18s ease}
-@keyframes appear{from{opacity:.65;transform:translateY(4px)}to{opacity:1;transform:none}}
-.hero{background:linear-gradient(125deg,#213942,#182a34 65%,#263d3e);border:1px solid #38514f;border-radius:19px;padding:clamp(23px,4vw,42px);display:grid;grid-template-columns:minmax(0,1.3fr) minmax(150px,.7fr);align-items:center;gap:15px;overflow:hidden;position:relative}
-.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #7b9d5c35;border-radius:50%;left:-100px;top:-120px;pointer-events:none}
-.hero p{max-width:560px;color:#c2d0d1}
-.hero-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
-.mascot{width:100%;max-width:225px;margin:auto;filter:drop-shadow(0 16px 15px #0005)}
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:17px 0 32px}
-.stat,.card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);min-width:0}
-.stat{padding:15px 17px}
-.stat strong{font-size:25px;display:block;color:var(--green)}
-.stat span{font-size:12px;color:var(--muted)}
-.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:27px 0 14px}
-.section-head h2{margin:0}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.card{padding:17px;display:flex;flex-direction:column;gap:9px;transition:border-color .15s,transform .15s}
-.card:hover{border-color:#718d81;transform:translateY(-2px)}
-.card h3{margin:0;overflow-wrap:anywhere}
-.card p{margin:0;color:var(--muted);font-size:13px;overflow-wrap:anywhere}
-.card .bottom{margin-top:auto;padding-top:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.card-symbol{height:43px;width:43px;border-radius:11px;background:#2b4145;color:var(--green);display:grid;place-items:center;font-size:22px}
-.pill{display:inline-flex;padding:3px 9px;border-radius:20px;background:#293b40;color:#c6d5d4;font-size:11px}
-.pill.green-bg{background:#34472a;color:var(--green)}
-.progress{height:7px;background:#34464d;border-radius:10px;overflow:hidden}
-.progress span{display:block;height:100%;background:var(--green);border-radius:10px;transition:width .2s}
-.progress-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px}
-.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0}
-.toolbar input,.toolbar select{width:auto;min-width:150px}
-.field{width:100%;background:#111f28;border:1px solid var(--line);border-radius:9px;padding:11px 12px;color:var(--text);min-width:0}
-.field:focus{border-color:var(--green);outline:none}
-.form-stack{display:grid;gap:13px}
-.form-stack label{display:grid;gap:5px;color:#d4dfe0;font-size:13px}
-.auth-wrap{max-width:510px;margin:32px auto}
-.auth-card{padding:clamp(20px,5vw,35px)}
-.google-btn{background:#fff;color:#222;border-color:#ddd;width:100%;margin:9px 0}
-.google-g{font-weight:800;color:#4285f4;font-size:18px}
-.separator{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:12px 0}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #b8955180;outline-offset:3px}
+.wrap{width:min(1160px,92%);margin:auto}
+header{height:76px;position:sticky;top:0;z-index:20;background:#ffffffed;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.head{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:1px}
+.logo{width:39px;height:39px;border-radius:13px;background:#171717;color:#d7b66d;display:grid;place-items:center;font-weight:900}
+nav{display:flex;align-items:center;gap:20px;font-size:14px}
+nav a,.navbtn{color:#4b4b4b;background:none;border:0;padding:8px 0}
+nav a:hover,.navbtn:hover{color:var(--gold)}
+.head-actions{display:flex;align-items:center;gap:8px}
+.iconbtn{width:42px;height:42px;border:1px solid var(--line);background:white;border-radius:50%;display:grid;place-items:center}
+.menu-panel{position:absolute;left:4%;top:67px;width:min(310px,92vw);padding:12px;background:white;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);display:none}
+.menu-panel.open{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.menu-panel a{padding:9px;border-radius:9px;font-size:14px}
+.menu-panel a:hover{background:var(--soft)}
+main{min-height:72vh}
+.page{display:none;padding:36px 0 64px}
+.page.active{display:block}
+.hero{padding:58px 0 38px;display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center}
+.eyebrow{color:#98753a;font-size:12px;font-weight:800;letter-spacing:2px}
+h1{font-size:clamp(34px,5vw,58px);line-height:1.25;letter-spacing:-1.4px;margin:12px 0}
+h2{font-size:clamp(25px,3vw,35px);line-height:1.4;margin:0 0 14px}
+h3{line-height:1.5;margin:0 0 8px}
+p{color:var(--muted);margin:8px 0 18px}
+.hero p{max-width:620px;font-size:17px}
+.hero-art{min-height:280px;border-radius:28px;background:linear-gradient(140deg,#191919,#353128);display:grid;place-items:center;position:relative;overflow:hidden;color:#d7b66d}
+.orbit{width:180px;height:180px;border:1px solid #d7b66d80;border-radius:50%;display:grid;place-items:center;transform:rotate(-24deg)}
+.orbit:before{content:"";position:absolute;width:235px;height:76px;border:1px solid #d7b66d90;border-radius:50%;transform:rotate(35deg)}
+.core{width:82px;height:82px;border:1px solid #d7b66d;border-radius:25px;display:grid;place-items:center;font-size:28px;font-weight:900;box-shadow:0 0 55px #d7b66d25}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.btn{border:1px solid var(--text);background:var(--text);color:white;padding:11px 18px;border-radius:11px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:9px}
+.btn.secondary{background:white;color:var(--text);border-color:var(--line)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:#171717}
+.btn:disabled{opacity:.6;cursor:wait}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:24px 0 18px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:21px;min-width:0;box-shadow:var(--shadow)}
+.card p{font-size:14px}
+.card-icon{width:43px;height:43px;border-radius:13px;background:var(--soft);display:grid;place-items:center;margin-bottom:15px;color:#81612b}
+.card .btn{margin-top:8px}
+.pill{display:inline-block;padding:4px 10px;border-radius:30px;background:var(--soft);font-size:12px;color:#775b2b}
+.search{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:white;margin:8px 0 20px}
+.stack{display:grid;gap:12px}
+.rowitem{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.lesson-content{white-space:normal;overflow-wrap:anywhere}
+.lesson-content pre{direction:ltr;text-align:left;white-space:pre;overflow:auto;max-width:100%;padding:16px;background:#191919;color:#f7f7f7;border-radius:12px}
+.lesson-content li{margin:8px 0}
+.form-card{max-width:510px;margin:20px auto}
+.field{display:grid;gap:6px;margin:13px 0}
+.field input,.field textarea,.field select{width:100%;min-width:0;border:1px solid var(--line);border-radius:10px;padding:12px;background:white}
+.google-btn{width:100%;background:#fff;border:1px solid #dadce0;color:#202124;border-radius:11px;min-height:48px;display:flex;align-items:center;justify-content:center;gap:12px;font-weight:650}
+.google-btn svg{width:20px;height:20px;flex-shrink:0}
+.separator{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;margin:18px 0}
 .separator:before,.separator:after{content:"";height:1px;background:var(--line);flex:1}
-.notice{padding:12px 14px;background:#25383e;border:1px solid var(--line);border-radius:10px;font-size:13px;margin:12px 0;overflow-wrap:anywhere}
-.notice.error{border-color:#824b4b;color:#ffb7b7}
-.notice.success{border-color:#5c783b;color:#d6f9a0}
-.room-layout{display:grid;grid-template-columns:minmax(0,1fr) 275px;gap:17px;align-items:start}
-.room-main,.room-tasks{padding:20px}
-.room-tasks{position:sticky;top:90px}
-.task-link{width:100%;justify-content:flex-start;text-align:right;margin:4px 0;background:transparent}
-.task-link.active{border-color:var(--green);color:var(--green)}
-.answer-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.answer-form input{flex:1;min-width:130px}
-.codebox{background:#0b141b;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:13px 0;direction:ltr;text-align:left}
-.codebox pre{padding:14px;overflow:auto;white-space:pre;max-width:100%;margin:0;font:13px/1.8 ui-monospace,monospace}
-.code-head{display:flex;justify-content:space-between;align-items:center;padding:7px 11px;background:#1b2b33;font-size:12px}
-.quiz-option{display:flex;align-items:flex-start;gap:10px;border:1px solid var(--line);border-radius:9px;padding:12px;margin:8px 0;cursor:pointer}
-.quiz-option input{margin-top:7px;accent-color:var(--green)}
-.setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:17px 0;border-bottom:1px solid var(--line)}
-.setting-row:last-child{border-bottom:0}
-.setting-row p{margin:2px 0 0;color:var(--muted);font-size:12px}
-.switch{accent-color:var(--green);width:19px;height:19px}
-.chat-shell{height:min(68vh,680px);min-height:380px;display:flex;flex-direction:column}
-.chat-messages{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
-.message{padding:12px 14px;border-radius:12px;max-width:88%;overflow-wrap:anywhere;white-space:pre-wrap}
-.message.user{align-self:flex-start;background:#334a45}
-.message.bot{align-self:flex-end;background:#203640;border:1px solid var(--line)}
-.chat-input{padding:13px;border-top:1px solid var(--line);display:flex;gap:8px}
-.chat-input textarea{resize:vertical;min-height:45px;max-height:120px;flex:1;min-width:0}
-.empty{padding:30px;text-align:center;color:var(--muted)}
-footer{border-top:1px solid var(--line);padding:22px 25px;margin-top:35px;color:var(--muted);font-size:12px}
-.toast{position:fixed;bottom:22px;right:50%;transform:translateX(50%);z-index:100;background:#f0f7e7;color:#17231b;padding:10px 17px;border-radius:10px;box-shadow:0 8px 30px #0004;max-width:90%;display:none}
-.toast.show{display:block}
-.overlay{display:none;position:fixed;inset:0;background:#0008;z-index:25}
-.menu-pop{position:absolute;top:57px;left:20px;background:var(--panel);border:1px solid var(--line);padding:9px;border-radius:12px;width:225px;box-shadow:0 12px 30px #0005;z-index:40}
-.menu-pop button{width:100%;justify-content:flex-start;background:transparent;border-color:transparent;text-align:right}
-.hidden{display:none!important}
-@media(min-width:1200px){.wrap{padding:30px}}
-@media(max-width:1000px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.room-layout{grid-template-columns:minmax(0,1fr) 235px}}
-@media(max-width:760px){
-:root{--nav:0px}
-.sidebar{transform:translateX(-105%);transition:transform .2s;width:275px;left:auto;right:0;border-left:0;border-right:1px solid var(--line)}
-.sidebar.open{transform:translateX(0)}
-.overlay.open{display:block}
-.main{margin:0}
-.topbar{height:62px;padding:0 13px;gap:8px}
-.mobile-menu{display:inline-flex}
-.mobile-brand{display:flex;font-size:13px}
-.mobile-brand .brand-mark{width:32px;height:32px}
-.desktop-brand{display:none}
-.topbar .search{max-width:none}
-.top-actions{gap:5px}
-.top-actions .desktop-only{display:none}
-.wrap{padding:17px 14px}
-.hero{grid-template-columns:minmax(0,1fr) 110px;padding:21px 17px}
-.mascot{width:110px}
-.stats{gap:8px;margin-bottom:25px}
-.stat{padding:11px}
-.stat strong{font-size:21px}
-.stat span{font-size:11px}
-.grid{gap:10px}
-.card{padding:13px}
-.room-layout{grid-template-columns:minmax(0,1fr)}
-.room-tasks{position:static;order:-1}
-.room-tasks .task-list{display:flex;gap:6px;overflow:auto}
-.room-tasks .task-link{min-width:max-content;width:auto}
-.auth-wrap{margin:12px auto}
-}
-@media(max-width:440px){
-.hero{grid-template-columns:minmax(0,1fr) 82px;gap:5px}
-.mascot{width:88px}
-.hero .hero-actions .btn{padding:9px 10px;font-size:12px}
-.grid,.grid.two{grid-template-columns:minmax(0,1fr)}
-.stats{grid-template-columns:repeat(3,minmax(0,1fr))}
-.section-head{align-items:flex-start}
-.topbar .search input{padding-right:33px;font-size:12px}
-.topbar .search span{right:10px}
-.topbar .avatar{width:36px;height:36px}
-}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.status{padding:12px;border-radius:10px;background:var(--soft);color:#514329;font-size:14px;overflow-wrap:anywhere}
+.socials{display:flex;gap:10px;flex-wrap:wrap}
+.social{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);background:white;border-radius:12px;padding:10px 13px;font-size:14px;font-weight:700}
+.social svg{width:23px;height:23px;flex-shrink:0}
+.social:hover{border-color:var(--gold);transform:translateY(-1px)}
+footer{border-top:1px solid var(--line);padding:30px 0 22px;background:white}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.foot p{font-size:13px;margin:5px 0}
+.notice{padding:14px;border:1px solid var(--line);border-radius:12px;background:white;font-size:14px;color:var(--muted)}
+.hide{display:none!important}
+@media(max-width:850px){nav{display:none}.hero{grid-template-columns:1fr;padding-top:36px}.hero-art{min-height:210px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:540px){.grid{grid-template-columns:1fr}.page{padding:25px 0 45px}.card{padding:18px}.hero-art{min-height:190px}header{height:66px}.section-head{align-items:start;flex-direction:column}.brand{font-size:14px}.head-actions{gap:5px}.iconbtn{width:39px;height:39px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<div class="layout">
-<aside class="sidebar" id="sidebar">
-  <a class="brand desktop-brand" href="#home"><span class="brand-mark">V</span><span>VANTA <span class="green">CYBER</span></span></a>
-  <div class="nav-label">مساحة التعلم</div>
-  <button class="nav-link active" data-go="home"><span class="ni">⌂</span> الرئيسية</button>
-  <button class="nav-link" data-go="paths"><span class="ni">▤</span> المسارات التعليمية</button>
-  <button class="nav-link" data-go="rooms"><span class="ni">▦</span> غرف التدريب</button>
-  <button class="nav-link" data-go="labs"><span class="ni">⌘</span> المختبرات العملية</button>
-  <button class="nav-link" data-go="quizzes"><span class="ni">✓</span> الاختبارات</button>
-  <div class="nav-label">مساعدتك وحسابك</div>
-  <button class="nav-link" data-go="nova"><span class="ni">✳</span> NOVA</button>
-  <button class="nav-link" data-go="profile"><span class="ni">◉</span> ملفي الشخصي</button>
-  <button class="nav-link" data-go="settings"><span class="ni">⚙</span> الإعدادات</button>
-  <button class="nav-link" data-go="support"><span class="ni">?</span> الدعم الفني</button>
-  <div class="side-bottom">
-    <button class="nav-link" data-go="founder"><span class="ni">◇</span> عن المؤسس</button>
-    <button class="nav-link" data-go="about"><span class="ni">ⓘ</span> حول المنصة</button>
-    <p class="small muted" style="padding:8px">© 2026 VANTA CYBER</p>
+<header>
+ <div class="wrap head">
+  <a href="#home" class="brand" aria-label="VANTA CYBER الرئيسية"><span class="logo">V</span><span>VANTA <span style="color:#b89551">CYBER</span></span></a>
+  <nav aria-label="التنقل الرئيسي">
+   <a href="#home">الرئيسية</a><a href="#courses">المناهج</a><a href="#labs">المختبرات</a><a href="#quizzes">الاختبارات</a><a href="#nova">NOVA</a>
+  </nav>
+  <div class="head-actions">
+   <button class="iconbtn" id="profileToggle" aria-label="الحساب" title="الحساب">♙</button>
+   <button class="iconbtn" id="menuToggle" aria-label="القائمة" title="القائمة">⋮</button>
   </div>
-</aside>
-<div class="overlay" id="overlay"></div>
-<main class="main">
-<header class="topbar">
-  <button class="icon-btn mobile-menu" id="menuBtn" aria-label="فتح القائمة">☰</button>
-  <a href="#home" class="brand mobile-brand"><span class="brand-mark">V</span>VANTA</a>
-  <div class="search"><span>⌕</span><input id="globalSearch" placeholder="ابحث عن مسار أو غرفة..." aria-label="البحث"></div>
-  <div class="top-actions">
-    <button class="icon-btn desktop-only" data-go="settings" aria-label="الإعدادات">⚙</button>
-    <button class="avatar" id="avatarBtn" aria-label="الحساب">ع</button>
+  <div class="menu-panel" id="menuPanel">
+   <a href="#home">الرئيسية</a><a href="#courses">المناهج التعليمية</a>
+   <a href="#labs">المختبرات</a><a href="#quizzes">الاختبارات</a>
+   <a href="#nova">NOVA</a><a href="#profile">ملفي الشخصي</a>
+   <a href="#settings">الإعدادات</a><a href="#support">الدعم الفني</a>
+   <a href="#founder">عن المؤسس</a><a href="#about">حول المنصة</a>
   </div>
-  <div class="menu-pop hidden" id="accountMenu">
-    <div id="accountSummary" class="small muted" style="padding:8px">زائر</div>
-    <button data-go="profile">◉ ملفي الشخصي</button>
-    <button data-go="settings">⚙ الإعدادات</button>
-    <button data-go="auth" id="accountAuth">تسجيل الدخول</button>
-    <button id="signOutBtn" class="hidden">تسجيل الخروج</button>
+  <div class="menu-panel" id="profilePanel" style="left:4%;width:min(260px,92vw);grid-template-columns:1fr">
+   <a href="#login" id="profileLogin">تسجيل الدخول</a>
+   <a href="#register">إنشاء حساب</a><a href="#profile">ملفي الشخصي</a>
+   <button class="navbtn" id="logoutBtn" style="text-align:right;display:none">تسجيل الخروج</button>
   </div>
+ </div>
 </header>
 
+<main class="wrap">
 <section class="page active" id="page-home">
-<div class="wrap">
-  <section class="hero">
-    <div>
-      <div class="eyebrow">VANTA CYBER • LEARN BY DOING</div>
-      <h1>تعلّم الأمن السيبراني<br> <span class="green">بالتجربة والممارسة</span></h1>
-      <p>ابدأ من الأساسيات، تعلّم خطوة بخطوة، وطبّق ما تتعلمه في غرف ومختبرات تعليمية آمنة.</p>
-      <div class="hero-actions">
-        <button class="primary" data-go="paths">استكشف المسارات ←</button>
-        <button class="ghost" data-go="rooms">ابدأ التدريب</button>
-      </div>
-    </div>
-    <!-- شخصية أصلية مرسومة بـ SVG لـ VANTA -->
-    <svg class="mascot" viewBox="0 0 240 260" role="img" aria-label="شخصية VANTA التقنية الطائرة">
-      <defs>
-        <linearGradient id="cape" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d8ff83"/><stop offset="1" stop-color="#78b82b"/></linearGradient>
-        <linearGradient id="suit" x1="0" y1="0" x2="0.8" y2="1"><stop stop-color="#425b64"/><stop offset="1" stop-color="#1b2b35"/></linearGradient>
-      </defs>
-      <circle cx="120" cy="125" r="104" fill="#b9f34b" opacity=".06"/>
-      <circle cx="120" cy="125" r="80" fill="none" stroke="#b9f34b" stroke-opacity=".18" stroke-dasharray="4 9"/>
-      <path d="M95 100 Q45 93 20 31 Q65 50 105 46 Q83 18 85 7 Q130 46 139 82 L142 159 Q103 179 67 219 Q80 158 95 100Z" fill="url(#cape)" stroke="#d8ff83" stroke-width="2"/>
-      <path d="M104 92 Q73 62 41 61 Q62 100 98 116Z" fill="#9ddc48"/>
-      <path d="M102 111 Q76 125 75 166 L100 184 L145 181 L165 153 L147 104Z" fill="url(#suit)" stroke="#68838a" stroke-width="2"/>
-      <path d="M104 119 L82 147 L66 166 L77 174 L108 154Z" fill="#344c56"/>
-      <path d="M143 118 L172 133 L189 117 L198 127 L177 151 L143 147Z" fill="#344c56"/>
-      <circle cx="126" cy="85" r="32" fill="#d7e0df" stroke="#70888b" stroke-width="3"/>
-      <path d="M96 84 Q99 50 128 51 Q151 53 158 79 L146 72 L108 73Z" fill="#293c45"/>
-      <rect x="104" y="80" width="44" height="15" rx="7" fill="#17242c"/>
-      <path d="M111 87 H122 M130 87 H141" stroke="#b9f34b" stroke-width="3" stroke-linecap="round"/>
-      <path d="M104 183 L96 215 L111 215 L126 184 M141 183 L153 213 L168 208 L159 174" fill="#243741" stroke="#617980" stroke-width="3"/>
-      <path d="M91 214 L113 214 L116 226 L87 226Z M151 211 L171 207 L180 219 L155 224Z" fill="#b9f34b"/>
-      <path d="M108 113 L126 127 L145 112" fill="none" stroke="#b9f34b" stroke-width="3"/>
-      <circle cx="190" cy="55" r="4" fill="#b9f34b"/><circle cx="48" cy="186" r="3" fill="#b9f34b"/>
-    </svg>
-  </section>
-
-  <div class="stats">
-    <div class="stat"><strong id="statDone">0</strong><span>غرف مكتملة</span></div>
-    <div class="stat"><strong id="statPoints">0</strong><span>نقاط التعلم</span></div>
-    <div class="stat"><strong id="statPaths">10</strong><span>مسارات تعليمية</span></div>
+ <div class="hero">
+  <div><span class="eyebrow">LEARN • BUILD • DEFEND</span>
+   <h1>تعلم التقنية<br>وابنِ مهاراتك بثقة</h1>
+   <p>VANTA CYBER منصة تعليمية عربية للحاسوب والبرمجة والشبكات والأمن السيبراني، مع دروس ومختبرات واختبارات منظمة.</p>
+   <div class="actions"><a class="btn gold" href="#courses">استكشف المناهج ←</a><a class="btn secondary" href="#labs">ابدأ مختبرًا</a></div>
   </div>
-
-  <div class="section-head"><h2>تابع تعلّمك</h2><button class="ghost" data-go="profile">عرض التقدم</button></div>
-  <div class="panel" style="padding:17px">
-    <div class="progress-row"><span>تقدمك في المنصة</span><span id="overallText">0%</span></div>
-    <div class="progress"><span id="overallBar" style="width:0%"></span></div>
-    <p class="muted small" style="margin:10px 0 0">يُحفظ التقدم على هذا الجهاز. مزامنته بين الأجهزة تتطلب قاعدة بيانات وحسابًا مفعّلًا.</p>
-  </div>
-
-  <div class="section-head"><h2>ابدأ من هنا</h2><button class="ghost" data-go="paths">كل المسارات ←</button></div>
-  <div class="grid" id="homePaths"></div>
-
-  <div class="section-head"><h2>غرف تدريب مقترحة</h2><button class="ghost" data-go="rooms">كل الغرف ←</button></div>
-  <div class="grid" id="homeRooms"></div>
-
-  <div class="section-head"><h2>تعرّف على NOVA</h2></div>
-  <div class="card" style="flex-direction:row;align-items:center;gap:18px">
-    <div class="card-symbol">✳</div>
-    <div style="flex:1;min-width:0"><h3>NOVA — مساعدك التعليمي</h3><p>اسأل عن المفاهيم والبرمجة والأخطاء، واطلب أمثلة وتمارين تعليمية.</p></div>
-    <button class="primary" data-go="nova">افتح NOVA</button>
-  </div>
-</div>
+  <div class="hero-art" aria-label="شعار تقني مجرد"><div class="orbit"><div class="core">V</div></div></div>
+ </div>
+ <div class="section-head"><div><span class="eyebrow">LEARNING PATHS</span><h2>ابدأ من هنا</h2></div><a href="#courses">عرض جميع المناهج ←</a></div>
+ <div class="grid">
+  <article class="card"><div class="card-icon">⌘</div><h3>البرمجة وتطوير الويب</h3><p>ابدأ بأساسيات Python وHTML وCSS وJavaScript.</p><a class="btn secondary" href="#courses">استكشاف</a></article>
+  <article class="card"><div class="card-icon">⌁</div><h3>الشبكات وLinux</h3><p>تعلم عناوين IP والأوامر ومفاهيم الشبكات.</p><a class="btn secondary" href="#courses">استكشاف</a></article>
+  <article class="card"><div class="card-icon">◇</div><h3>الأمن السيبراني</h3><p>مبادئ الحماية والتشفير والتحليل الدفاعي.</p><a class="btn secondary" href="#courses">استكشاف</a></article>
+ </div>
+ <div class="section-head"><div><span class="eyebrow">PRACTICE</span><h2>تعلم بالتطبيق</h2></div></div>
+ <div class="grid">
+  <article class="card"><h3>مختبرات عملية</h3><p>تمارين تفاعلية تعمل داخل المتصفح.</p><a class="btn secondary" href="#labs">فتح المختبرات</a></article>
+  <article class="card"><h3>اختبارات قصيرة</h3><p>اختبر فهمك وشاهد نتيجتك والتفسير.</p><a class="btn secondary" href="#quizzes">ابدأ الاختبار</a></article>
+  <article class="card"><h3>المساعد NOVA</h3><p>واجهة مساعدة تعليمية لمفاهيم البرمجة والتقنية.</p><a class="btn secondary" href="#nova">افتح NOVA</a></article>
+ </div>
 </section>
 
-<section class="page" id="page-paths"><div class="wrap">
-  <div class="eyebrow">LEARNING PATHS</div><h1>المسارات التعليمية</h1>
-  <p class="muted">اختر مسارًا وابدأ من الأساسيات. كل مسار يضم غرفًا ومهامًا متدرجة.</p>
-  <div class="toolbar"><input class="field" id="pathSearch" placeholder="ابحث في المسارات..." style="flex:1"><select class="field" id="pathLevel"><option value="all">كل المستويات</option><option>مبتدئ</option><option>متوسط</option></select></div>
-  <div class="grid" id="allPaths"></div>
-</div></section>
+<section class="page" id="page-courses">
+ <span class="eyebrow">CURRICULUM</span><h2>المناهج التعليمية</h2><p>اختر مسارًا لعرض الدروس والبدء بالتعلم.</p>
+ <input id="courseSearch" class="search" placeholder="ابحث عن مسار..." aria-label="البحث في المناهج">
+ <div class="grid" id="courseGrid"></div>
+</section>
 
-<section class="page" id="page-path"><div class="wrap">
-  <button class="ghost" data-go="paths">← العودة إلى المسارات</button>
-  <div id="pathDetail" style="margin-top:20px"></div>
-</div></section>
+<section class="page" id="page-course">
+ <a href="#courses">← العودة إلى المناهج</a><div id="courseDetails" style="margin-top:20px"></div>
+</section>
 
-<section class="page" id="page-rooms"><div class="wrap">
-  <div class="eyebrow">TRAINING ROOMS</div><h1>غرف التدريب</h1>
-  <p class="muted">كل غرفة تتضمن شرحًا ومهامًا وأسئلة مراجعة. أكمل المهام لتسجيل تقدمك.</p>
-  <div class="toolbar"><input id="roomSearch" class="field" style="flex:1" placeholder="ابحث عن غرفة..."><select id="roomFilter" class="field"><option value="all">كل المستويات</option><option>مبتدئ</option><option>متوسط</option></select></div>
-  <div class="grid" id="allRooms"></div>
-</div></section>
+<section class="page" id="page-lesson">
+ <a href="#courses">← العودة إلى المناهج</a><div id="lessonDetails" class="card lesson-content" style="margin-top:20px"></div>
+</section>
 
-<section class="page" id="page-room"><div class="wrap">
-  <button class="ghost" data-go="rooms">← جميع الغرف</button>
-  <div id="roomDetail" style="margin-top:20px"></div>
-</div></section>
+<section class="page" id="page-labs">
+ <span class="eyebrow">PRACTICE LABS</span><h2>المختبرات العملية</h2><p>تمارين آمنة تعمل محليًا في المتصفح.</p>
+ <div class="grid">
+  <article class="card"><div class="card-icon">▤</div><h3>فاحص قوة كلمة المرور</h3><p>تقييم محلي دون إرسال كلمة المرور إلى خادم.</p><a href="#lab-password" class="btn secondary">فتح المختبر</a></article>
+  <article class="card"><div class="card-icon">⌁</div><h3>تمرين عناوين IP</h3><p>تعرف على عنوان IP الخاص وعنوان الشبكة.</p><a href="#lab-ip" class="btn secondary">فتح المختبر</a></article>
+  <article class="card"><div class="card-icon">⌘</div><h3>تمرين Python</h3><p>اقرأ مثالًا بسيطًا وتدرب على فهمه.</p><a href="#lab-python" class="btn secondary">فتح المختبر</a></article>
+  <article class="card"><div class="card-icon">◎</div><h3>التصيد الإلكتروني</h3><p>تدرب على تمييز علامات الرسائل المشبوهة.</p><a href="#lab-phishing" class="btn secondary">فتح المختبر</a></article>
+ </div>
+</section>
 
-<section class="page" id="page-labs"><div class="wrap">
-  <div class="eyebrow">PRACTICAL LABS</div><h1>المختبرات العملية</h1>
-  <p class="muted">تمارين آمنة تعمل داخل المتصفح أو بيئة تعليمية محلية.</p>
-  <div class="grid" id="labCards"></div>
-  <div class="section-head"><h2>فاحص قوة كلمة المرور</h2></div>
-  <div class="panel" style="padding:20px">
-    <label for="passwordCheck">اكتب كلمة تجريبية — لا تستخدم كلمة مرورك الحقيقية</label>
-    <input id="passwordCheck" class="field" type="password" autocomplete="off" placeholder="كلمة مرور تجريبية" style="margin:10px 0">
-    <div class="progress"><span id="passBar" style="width:0%"></span></div>
-    <p id="passResult" class="muted small" style="margin:9px 0 0">تظهر نتيجة التقييم محليًا ولا تُرسل إلى خادم.</p>
-  </div>
-  <div class="section-head"><h2>تمرين عناوين IP</h2></div>
-  <div class="panel" style="padding:20px">
-    <p>عنوان IP: <code dir="ltr">192.168.1.25/24</code></p>
-    <p>ما عنوان الشبكة لهذا الجهاز؟</p>
-    <div class="toolbar"><input id="ipAnswer" class="field" placeholder="مثال: 192.168.1.0" style="flex:1"><button class="primary" id="checkIP">تحقق</button></div>
-    <p id="ipResult" class="small muted"></p>
-  </div>
-</div></section>
+<section class="page" id="page-lab-password">
+ <span class="eyebrow">LOCAL LAB</span><h2>فاحص قوة كلمة المرور</h2>
+ <div class="card"><p>لا تستخدم كلمة مرورك الحقيقية هنا. الفحص يجري محليًا داخل الصفحة.</p>
+  <div class="field"><label for="pwInput">كلمة تجريبية</label><input id="pwInput" type="password" autocomplete="off" placeholder="اكتب كلمة تجريبية"></div>
+  <button class="btn gold" id="checkPw">فحص القوة</button><p id="pwResult" class="status" aria-live="polite">النتيجة ستظهر هنا.</p>
+ </div>
+</section>
 
-<section class="page" id="page-quizzes"><div class="wrap">
-  <div class="eyebrow">KNOWLEDGE CHECK</div><h1>الاختبارات</h1>
-  <p class="muted">أجب عن الأسئلة ثم أرسل إجاباتك لاحتساب الدرجة وشرح الإجابات.</p>
-  <div id="quizArea"></div>
-</div></section>
+<section class="page" id="page-lab-ip">
+ <span class="eyebrow">NETWORK LAB</span><h2>تمرين عناوين IP</h2>
+ <div class="card"><p>أي عنوان مما يلي يقع ضمن نطاق IPv4 الخاص؟</p>
+  <div class="stack" id="ipOptions"></div><p id="ipResult" aria-live="polite"></p>
+ </div>
+</section>
 
-<section class="page" id="page-nova"><div class="wrap">
-  <div class="eyebrow">YOUR LEARNING ASSISTANT</div><h1>NOVA <span class="green">✳</span></h1>
-  <p class="muted">مساعدك لفهم الدروس والبرمجة ومفاهيم الأمن السيبراني.</p>
-  <div class="panel chat-shell">
-    <div class="chat-messages" id="chatMessages">
-      <div class="message bot">مرحبًا، أنا NOVA. أستطيع مساعدتك في فهم الدروس وكتابة أمثلة برمجية وشرح الأخطاء. ما الموضوع الذي تريد دراسته؟</div>
-    </div>
-    <div class="chat-input">
-      <textarea id="novaInput" class="field" rows="1" placeholder="اكتب سؤالك هنا..." aria-label="رسالة إلى NOVA"></textarea>
-      <button class="primary" id="novaSend">إرسال ↑</button>
-    </div>
-  </div>
-  <p class="small muted" style="margin-top:10px">يتطلب الرد الذكي إعداد واجهة API في <code dir="ltr">/api/nova.js</code>. لا تُدخل كلمات مرور أو معلومات خاصة.</p>
-</div></section>
+<section class="page" id="page-lab-python">
+ <span class="eyebrow">PYTHON LAB</span><h2>افهم كود Python</h2>
+ <div class="card lesson-content"><p>ما الذي يطبعه المثال التالي؟</p><pre>name = "Ali"
+print("Hello", name)</pre>
+  <div class="stack" id="pyOptions"></div><p id="pyResult" aria-live="polite"></p>
+ </div>
+</section>
 
-<section class="page" id="page-profile"><div class="wrap">
-  <div class="eyebrow">YOUR PROFILE</div><h1>ملفي الشخصي</h1>
-  <div class="panel" style="padding:22px">
-    <div style="display:flex;align-items:center;gap:15px;flex-wrap:wrap"><div class="avatar" style="width:62px;height:62px;font-size:25px" id="profileAvatar">ز</div><div><h2 id="profileName" style="margin:0">زائر</h2><p class="muted small" id="profileEmail" style="margin:0">سجّل الدخول لحسابك</p></div><button class="primary" data-go="auth" id="profileAuth" style="margin-right:auto">تسجيل الدخول</button></div>
-    <hr style="border:0;border-top:1px solid var(--line);margin:22px 0">
-    <div class="grid two">
-      <div class="stat"><strong id="profileCompleted">0</strong><span>غرف مكتملة</span></div>
-      <div class="stat"><strong id="profileScore">0</strong><span>نقاط التعلم</span></div>
-    </div>
-    <h3 style="margin-top:22px">تقدم الغرف</h3><div id="profileProgress" class="grid two"></div>
-    <h3 style="margin-top:22px">نتائج الاختبارات</h3><div id="profileScores" class="muted small">لم تُسجّل نتائج بعد.</div>
-  </div>
-</div></section>
+<section class="page" id="page-lab-phishing">
+ <span class="eyebrow">SECURITY AWARENESS</span><h2>اكتشف علامات التصيد</h2>
+ <div class="card"><p>وصلتك رسالة تدّعي أن حسابك سيتوقف خلال دقائق، وتطلب منك إدخال كلمة المرور عبر رابط غريب. ما التصرف الأنسب؟</p>
+  <div class="stack" id="phishingOptions"></div><p id="phishingResult" aria-live="polite"></p>
+ </div>
+</section>
 
-<section class="page" id="page-settings"><div class="wrap">
-  <div class="eyebrow">PREFERENCES</div><h1>الإعدادات</h1>
-  <div class="panel" style="padding:20px">
-    <h3>المظهر</h3>
-    <div class="setting-row"><div><strong>الوضع الداكن</strong><p>تغيير ألوان الواجهة على هذا الجهاز.</p></div><input id="themeToggle" class="switch" type="checkbox" checked aria-label="الوضع الداكن"></div>
-    <div class="setting-row"><div><strong>تقليل الحركة</strong><p>تقليل انتقالات الواجهة.</p></div><input id="motionToggle" class="switch" type="checkbox" aria-label="تقليل الحركة"></div>
-    <h3 style="margin-top:24px">الحساب</h3>
-    <div class="setting-row"><div><strong>إدارة الحساب</strong><p>تسجيل الدخول أو تعديل معلومات الحساب.</p></div><button data-go="auth">فتح الحساب</button></div>
-    <div class="setting-row"><div><strong>تصدير التقدم</strong><p>تنزيل نسخة من تقدمك المحفوظ محليًا.</p></div><button id="exportData">تصدير JSON</button></div>
-    <div class="setting-row"><div><strong>إعادة ضبط التقدم المحلي</strong><p>يمسح تقدم التعلم المحفوظ على هذا الجهاز.</p></div><button class="danger" id="resetData">إعادة الضبط</button></div>
-    <div class="notice">ملاحظة: إعدادات هذه النسخة والتقدم محفوظة محليًا. إدارة جلسات الحساب وحذف الحساب من الخادم تتطلب تفعيل خدمة المصادقة وقاعدة البيانات.</div>
-  </div>
-</div></section>
+<section class="page" id="page-quizzes">
+ <span class="eyebrow">KNOWLEDGE CHECK</span><h2>الاختبارات</h2><p>اختبار أساسيات التقنية والأمن السيبراني.</p>
+ <div class="grid">
+  <article class="card"><h3>أساسيات الأمن السيبراني</h3><p>5 أسئلة مع التصحيح وشرح الإجابات.</p><a href="#quiz-basics" class="btn gold">بدء الاختبار</a></article>
+ </div>
+</section>
 
-<section class="page" id="page-auth"><div class="wrap">
-  <div class="auth-wrap">
-    <div class="panel auth-card">
-      <div class="brand" style="margin-bottom:22px"><span class="brand-mark">V</span><span>VANTA <span class="green">CYBER</span></span></div>
-      <h1 id="authHeading" style="font-size:28px">مرحبًا بعودتك</h1>
-      <p class="muted" id="authSubtitle">سجّل الدخول لمتابعة تقدمك التعليمي.</p>
-      <div id="authNotice" class="hidden notice"></div>
-      <button id="googleSignIn" class="google-btn"><span class="google-g">G</span> المتابعة باستخدام Google</button>
-      <div class="separator">أو باستخدام البريد الإلكتروني</div>
-      <form class="form-stack" id="authForm">
-        <label>البريد الإلكتروني<input class="field" type="email" id="authEmail" required autocomplete="email" placeholder="name@example.com"></label>
-        <label>كلمة المرور<input class="field" type="password" id="authPassword" required minlength="6" autocomplete="current-password" placeholder="6 أحرف على الأقل"></label>
-        <label id="confirmWrap" class="hidden">تأكيد كلمة المرور<input class="field" type="password" id="authConfirm" minlength="6" autocomplete="new-password"></label>
-        <button class="primary" id="authSubmit" type="submit">تسجيل الدخول</button>
-      </form>
-      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:15px">
-        <button class="ghost small" id="toggleAuth">إنشاء حساب جديد</button>
-        <button class="ghost small" id="forgotPassword">نسيت كلمة المرور؟</button>
-      </div>
-      <p class="muted small" style="margin-top:18px">باستخدامك الحساب، أنت مسؤول عن حماية بيانات الدخول الخاصة بك.</p>
-    </div>
-  </div>
-</div></section>
+<section class="page" id="page-quiz-basics">
+ <span class="eyebrow">QUIZ</span><h2>اختبار أساسيات الأمن السيبراني</h2>
+ <div id="quizForm" class="stack"></div><button id="submitQuiz" class="btn gold" style="margin-top:18px">تصحيح الإجابات</button>
+ <div id="quizResult" class="notice" style="margin-top:15px" aria-live="polite">أجب عن الأسئلة ثم اضغط على التصحيح.</div>
+ <button id="retryQuiz" class="btn secondary" style="margin-top:12px">إعادة المحاولة</button>
+</section>
 
-<section class="page" id="page-support"><div class="wrap">
-  <div class="eyebrow">SUPPORT</div><h1>الدعم الفني</h1>
-  <p class="muted">تواصل بشأن الموقع أو أرسل استفسارك عبر WhatsApp.</p>
-  <div class="grid two">
-    <div class="card"><div class="card-symbol">☏</div><h3>WhatsApp</h3><p>التواصل الفني مباشرة.</p><div class="bottom"><a class="btn primary" href="https://wa.me/966565283204" target="_blank" rel="noopener noreferrer">فتح WhatsApp ↗</a></div></div>
-    <div class="card"><div class="card-symbol">◎</div><h3>Instagram</h3><p>حساب علي ياسر.</p><div class="bottom"><a class="btn" href="https://www.instagram.com/ali_yr_1/" target="_blank" rel="noopener noreferrer">فتح Instagram ↗</a></div></div>
-  </div>
-  <div class="section-head"><h2>الأسئلة الشائعة</h2></div>
-  <details class="card"><summary>هل يحفظ الموقع تقدمي؟</summary><p>تحفظ هذه النسخة تقدمك محليًا على الجهاز. المزامنة بين الأجهزة تحتاج قاعدة بيانات.</p></details>
-  <details class="card" style="margin-top:10px"><summary>لماذا لا ترد NOVA؟</summary><p>تحتاج NOVA إلى نشر API صالح في Vercel وتوفير مفتاح النموذج في متغيرات البيئة.</p></details>
-</div></section>
+<section class="page" id="page-nova">
+ <span class="eyebrow">YOUR LEARNING COMPANION</span><h2>NOVA</h2>
+ <div class="card"><p>اسأل NOVA عن أساسيات البرمجة والشبكات والأمن السيبراني.</p>
+  <div class="field"><label for="novaInput">سؤالك</label><textarea id="novaInput" rows="3" placeholder="مثال: ما الفرق بين التشفير والتجزئة؟"></textarea></div>
+  <button class="btn gold" id="novaAsk">إرسال السؤال</button>
+  <div id="novaAnswer" class="status" style="margin-top:15px" aria-live="polite">هذه الواجهة تتضمن ردودًا تعليمية محلية تجريبية، وليست اتصالًا بنموذج ذكاء اصطناعي مباشر.</div>
+ </div>
+</section>
 
-<section class="page" id="page-founder"><div class="wrap">
-  <div class="eyebrow">THE FOUNDER</div><h1>عن المؤسس</h1>
-  <div class="panel" style="padding:clamp(20px,5vw,36px)">
-    <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
-      <div class="brand-mark" style="width:78px;height:78px;font-size:40px;border-radius:20px">AY</div>
-      <div><h2 style="margin:0">علي ياسر | Ali Yaser</h2><p class="green" style="margin:3px 0">المؤسس والمطور</p></div>
-    </div>
-    <p style="margin-top:22px">أسست VANTA CYBER لتكون مساحة تعليمية منظمة لتعلّم الحاسوب والبرمجة والأمن السيبراني عبر الشرح والممارسة والاختبارات.</p>
-    <p>تجمع المنصة بين المحتوى التعليمي والمختبرات العملية والمساعد التعليمي NOVA، مع هدف تقديم تجربة واضحة للمتعلمين من مختلف المستويات.</p>
-    <a class="btn" href="https://www.instagram.com/ali_yr_1/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
-  </div>
-</div></section>
+<section class="page" id="page-login">
+ <div class="card form-card"><span class="eyebrow">WELCOME BACK</span><h2>تسجيل الدخول</h2><p>سجّل الدخول لمتابعة رحلتك التعليمية.</p>
+  <button class="google-btn" id="googleLogin" type="button">
+   <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4 1.9-6.9 1.9-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20 20 0 0 0 24 44z"/><path fill="#FBBC05" d="M12.6 27.5a12 12 0 0 1 0-7v-5.3H5.8a20 20 0 0 0 0 17.6z"/><path fill="#EA4335" d="M24 12.1c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 6.1 29.5 4 24 4A20 20 0 0 0 5.8 15.2l6.8 5.3C14.2 15.7 18.7 12.1 24 12.1z"/></svg>
+   المتابعة باستخدام Google
+  </button>
+  <div class="separator">أو باستخدام البريد الإلكتروني</div>
+  <form id="loginForm"><div class="field"><label for="loginEmail">البريد الإلكتروني</label><input id="loginEmail" type="email" required autocomplete="email"></div>
+   <div class="field"><label for="loginPassword">كلمة المرور</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+   <button class="btn" type="submit" style="width:100%">تسجيل الدخول</button>
+  </form>
+  <p>ليس لديك حساب؟ <a href="#register" style="color:#98753a">إنشاء حساب</a></p>
+  <div id="loginStatus" class="notice" aria-live="polite">يلزم إعداد Firebase لتفعيل الحسابات الحقيقية.</div>
+ </div>
+</section>
 
-<section class="page" id="page-about"><div class="wrap">
-  <div class="eyebrow">ABOUT VANTA</div><h1>حول المنصة</h1>
-  <div class="panel" style="padding:25px">
-    <h2>VANTA CYBER</h2>
-    <p>منصة تعليمية للحاسوب والبرمجة والأمن السيبراني، تركز على المسارات المتدرجة والتطبيق العملي والاختبارات.</p>
-    <p><strong>المساعد التعليمي:</strong> NOVA</p>
-    <p><strong>المؤسس والمطور:</strong> علي ياسر | Ali Yaser</p>
-    <p><strong>الإصدار:</strong> 1.0 — نسخة أولية قابلة للتطوير</p>
-    <p><strong>Instagram:</strong> <a class="green" href="https://www.instagram.com/ali_yr_1/" target="_blank" rel="noopener noreferrer">ali_yr_1</a></p>
-    <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
-    <strong>© 2026 VANTA CYBER. جميع الحقوق محفوظة.</strong>
-    <p class="muted">تطوير وإدارة علي ياسر | Ali Yaser</p>
-  </div>
-</div></section>
+<section class="page" id="page-register">
+ <div class="card form-card"><span class="eyebrow">CREATE ACCOUNT</span><h2>إنشاء حساب</h2>
+  <button class="google-btn" id="googleRegister" type="button">
+   <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.8 6.1-15z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.1c-1.8 1.2-4 1.9-6.9 1.9-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20 20 0 0 0 24 44z"/><path fill="#FBBC05" d="M12.6 27.5a12 12 0 0 1 0-7v-5.3H5.8a20 20 0 0 0 0 17.6z"/><path fill="#EA4335" d="M24 12.1c3 0 5.7 1 7.8 3.1l5.8-5.8C34.1 6.1 29.5 4 24 4A20 20 0 0 0 5.8 15.2l6.8 5.3C14.2 15.7 18.7 12.1 24 12.1z"/></svg>
+   إنشاء حساب باستخدام Google
+  </button>
+  <div class="separator">أو باستخدام البريد الإلكتروني</div>
+  <form id="registerForm">
+   <div class="field"><label for="registerName">الاسم</label><input id="registerName" required autocomplete="name"></div>
+   <div class="field"><label for="registerEmail">البريد الإلكتروني</label><input id="registerEmail" type="email" required autocomplete="email"></div>
+   <div class="field"><label for="registerPassword">كلمة المرور (8 أحرف على الأقل)</label><input id="registerPassword" type="password" minlength="8" required autocomplete="new-password"></div>
+   <button class="btn" type="submit" style="width:100%">إنشاء الحساب</button>
+  </form>
+  <p><a href="#login" style="color:#98753a">لديك حساب؟ سجّل الدخول</a></p>
+  <div id="registerStatus" class="notice" aria-live="polite">يلزم إعداد Firebase لتفعيل الحسابات الحقيقية.</div>
+ </div>
+</section>
 
-<footer>
-  <div>© 2026 VANTA CYBER. جميع الحقوق محفوظة.</div>
-  <div>تطوير وإدارة علي ياسر | Ali Yaser</div>
-  <div style="display:flex;gap:15px;flex-wrap:wrap;margin-top:8px">
-    <a href="https://www.instagram.com/ali_yr_1/" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a href="https://wa.me/966565283204" target="_blank" rel="noopener noreferrer">الدعم عبر WhatsApp</a>
-    <a href="#about">حول المنصة</a>
-  </div>
-</footer>
+<section class="page" id="page-profile">
+ <span class="eyebrow">YOUR PROFILE</span><h2>ملفي الشخصي</h2>
+ <div class="card"><h3 id="profileName">زائر VANTA</h3><p id="profileEmail">لم يتم تسجيل الدخول.</p>
+  <p>الدروس المكتملة: <strong id="completedCount">0</strong></p>
+  <p>نتائج الاختبارات المحفوظة على هذا الجهاز: <strong id="scoreCount">0</strong></p>
+  <a href="#login" class="btn secondary" id="profileSignIn">تسجيل الدخول</a>
+ </div>
+</section>
+
+<section class="page" id="page-settings">
+ <span class="eyebrow">PREFERENCES</span><h2>الإعدادات</h2>
+ <div class="grid">
+  <div class="card"><h3>المظهر</h3><p>تغيير سمة الصفحة الحالية.</p><select id="themeSelect" class="search"><option value="light">فاتح</option><option value="dark">داكن</option><option value="system">حسب الجهاز</option></select></div>
+  <div class="card"><h3>إمكانية الوصول</h3><p>الواجهة تدعم التنقل بلوحة المفاتيح وتقليل الحركة.</p><label><input id="largeText" type="checkbox"> تكبير النص</label></div>
+  <div class="card"><h3>التقدم التعليمي</h3><p>يُحفظ التقدم المحلي في هذا المتصفح.</p><button class="btn secondary" id="exportData">تصدير بياناتي</button></div>
+ </div>
+</section>
+
+<section class="page" id="page-support">
+ <span class="eyebrow">SUPPORT</span><h2>الدعم الفني</h2>
+ <div class="grid">
+  <div class="card"><h3>كيف أبدأ؟</h3><p>افتح المناهج واختر المسار المناسب ثم ابدأ بالدرس الأول.</p></div>
+  <div class="card"><h3>كيف أتواصل؟</h3><p>استخدم WhatsApp أو Instagram من الروابط التالية.</p><div class="socials">
+   <a class="social" href="https://wa.me/966565283204" target="_blank" rel="noopener noreferrer" aria-label="تواصل عبر واتساب">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M16 .7A15.2 15.2 0 0 0 3 23.8L1 31l7.4-1.9A15.2 15.2 0 1 0 16 .7z"/><path fill="#fff" d="M23.8 19.7c-.4-.2-2.4-1.2-2.8-1.3-.4-.1-.7-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1-2-2.3-2.2-2.7-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.6.1-.3 0-.5 0-.7l-1.3-3c-.3-.8-.7-.7-.9-.7h-.8c-.3 0-.7.1-1 .5-.4.4-1.4 1.4-1.4 3.4s1.4 3.9 1.6 4.2c.2.3 2.8 4.3 6.8 6 1 .4 1.8.7 2.4.8 1 .3 1.9.2 2.6.1.8-.1 2.4-1 2.7-2 .3-1 .3-1.8.2-2-.1-.1-.4-.2-.8-.4z"/></svg>
+    WhatsApp
+   </a>
+   <a class="social" href="https://www.instagram.com/ali_yr_1/" target="_blank" rel="noopener noreferrer" aria-label="Instagram علي ياسر">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="ig" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#feda75"/><stop offset=".45" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="url(#ig)" stroke-width="2.4"/><circle cx="12" cy="12" r="4.4" fill="none" stroke="#d62976" stroke-width="2"/><circle cx="18" cy="6.5" r="1.3" fill="#d62976"/></svg>
+    Instagram
+   </a>
+  </div></div>
+  <div class="card"><h3>تابع المحتوى</h3><p>حساب TikTok الخاص بالمؤسس.</p><div class="socials">
+   <a class="social" href="https://www.tiktok.com/@aliyaser" target="_blank" rel="noopener noreferrer" aria-label="TikTok علي ياسر">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#25F4EE" d="M12.5 2h4c.2 2.3 1.5 4.2 4.1 4.7v4.1a10 10 0 0 1-4.1-1.3v6.1a6.7 6.7 0 1 1-6.7-6.7c.5 0 .9 0 1.3.1v4.2a2.8 2.8 0 1 0 1.4 2.4z"/><path fill="#FE2C55" d="M10.8 8.9v4.2a2.8 2.8 0 1 0 1.4 2.4V2h4c.1 1.2.5 2.2 1.2 3.1.8.9 1.9 1.5 3.2 1.7v4.1a10 10 0 0 1-4.1-1.3v6.1a6.7 6.7 0 1 1-6.7-6.7c.4 0 .7 0 1 .1z"/><path fill="#111" d="M12.2 2h3.1c.2 2.3 1.5 4.2 4.1 4.7v2.7a10 10 0 0 1-4.1-1.3v6.1a6.7 6.7 0 1 1-6.7-6.7c.5 0 .9 0 1.3.1v3.1a2.8 2.8 0 1 0 1.4 2.4z"/></svg>
+    TikTok
+   </a>
+  </div></div>
+ </div>
+ <div class="card" style="margin-top:16px"><h3>نموذج التواصل</h3><p>النموذج يفتح تطبيق البريد برسالة جاهزة، ولا يرسل البيانات إلى خادم.</p>
+  <form id="supportForm"><div class="field"><label for="supportSubject">الموضوع</label><input id="supportSubject" required></div><div class="field"><label for="supportMessage">الرسالة</label><textarea id="supportMessage" rows="4" required></textarea></div><button class="btn gold" type="submit">فتح البريد لإرسال الرسالة</button></form>
+ </div>
+</section>
+
+<section class="page" id="page-founder">
+ <span class="eyebrow">FOUNDER & DEVELOPER</span><h2>عن المؤسس</h2>
+ <div class="card"><div class="logo" style="width:58px;height:58px;font-size:23px">V</div><h3 style="margin-top:15px">علي ياسر | Ali Yaser</h3><p>مؤسس ومطور VANTA CYBER، منصة تعليمية تهدف إلى تنظيم تعلم الحاسوب والبرمجة والشبكات والأمن السيبراني باللغة العربية.</p><p>تطوير وإدارة علي ياسر | Ali Yaser</p><div class="socials">
+  <a class="social" href="https://www.instagram.com/ali_yr_1/" target="_blank" rel="noopener noreferrer">
+   <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="#d62976" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#d62976" stroke-width="2"/><circle cx="18" cy="6.5" r="1.3" fill="#d62976"/></svg>Instagram
+  </a>
+  <a class="social" href="https://www.tiktok.com/@aliyaser" target="_blank" rel="noopener noreferrer">
+   <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#25F4EE" d="M12.5 2h4c.2 2.3 1.5 4.2 4.1 4.7v4.1a10 10 0 0 1-4.1-1.3v6.1a6.7 6.7 0 1 1-6.7-6.7c.5 0 .9 0 1.3.1v4.2a2.8 2.8 0 1 0 1.4 2.4z"/><path fill="#111" d="M12.2 2h3.1c.2 2.3 1.5 4.2 4.1 4.7v2.7a10 10 0 0 1-4.1-1.3v6.1a6.7 6.7 0 1 1-6.7-6.7c.5 0 .9 0 1.3.1v3.1a2.8 2.8 0 1 0 1.4 2.4z"/></svg>TikTok
+  </a>
+ </div></div>
+</section>
+
+<section class="page" id="page-about">
+ <span class="eyebrow">ABOUT VANTA</span><h2>حول المنصة</h2>
+ <div class="card"><h3>VANTA CYBER</h3><p>منصة تعليمية عربية للحاسوب والبرمجة والشبكات والأمن السيبراني، تضم مسارات تعلم ومختبرات واختبارات ومساعدًا تعليميًا باسم NOVA.</p><p>المؤسس والمطور: علي ياسر | Ali Yaser</p><p>الإصدار: 1.0</p><p><strong>© 2026 VANTA CYBER. جميع الحقوق محفوظة.</strong></p><p>تطوير وإدارة علي ياسر | Ali Yaser</p></div>
+</section>
 </main>
-</div>
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script>
-/* ضع بيانات Supabase العامة هنا. لا تضع أي مفتاح سري في الواجهة. */
-const SUPABASE_URL = "";
-const SUPABASE_ANON_KEY = "";
-const supabase = (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase)
-  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-  : null;
+<footer><div class="wrap">
+ <div class="foot"><div><a class="brand" href="#home"><span class="logo">V</span><span>VANTA CYBER</span></a><p>تعلم التقنية بطريقة منظمة.</p></div>
+  <div class="socials">
+   <a class="social" href="https://www.instagram.com/ali_yr_1/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="#d62976" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#d62976" stroke-width="2"/><circle cx="18" cy="6.5" r="1.3" fill="#d62976"/></svg>
+   </a>
+   <a class="social" href="https://wa.me/966565283204" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#25D366" d="M16 .7A15.2 15.2 0 0 0 3 23.8L1 31l7.4-1.9A15.2 15.2 0 1 0 16 .7z"/><path fill="#fff" d="M23.8 19.7c-.4-.2-2.4-1.2-2.8-1.3-.4-.1-.7-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.3-.5.3-.9.1-.4-.2-1.7-.6-3.3-2-1.2-1-2-2.3-2.2-2.7-.2-.4 0-.6.2-.8l.6-.7c.2-.2.3-.4.4-.6.1-.3 0-.5 0-.7l-1.3-3c-.3-.8-.7-.7-.9-.7h-.8c-.3 0-.7.1-1 .5-.4.4-1.4 1.4-1.4 3.4s1.4 3.9 1.6 4.2c.2.3 2.8 4.3 6.8 6 1 .4 1.8.7 2.4.8 1 .3 1.9.2 2.6.1.8-.1 2.4-1 2.7-2 .3-1 .3-1.8.2-2-.1-.1-.4-.2-.8-.4z"/></svg>
+   </a>
+   <a class="social" href="https://www.tiktok.com/@aliyaser" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#25F4EE" d="M12.5 2h4c.2 2.3 1.5 4.2 4.1 4.7v4.1a10 10 0 0 1-4.1-1.3v6.1a6.7 6.7 0 1 1-6.7-6.7c.5 0 .9 0 1.3.1v4.2a2.8 2.8 0 1 0 1.4 2.4z"/><path fill="#111" d="M12.2 2h3.1c.2 2.3 1.5 4.2 4.1 4.7v2.7a10 10 0 0 1-4.1-1.3v6.1a6.7 6.7 0 1 1-6.7-6.7c.5 0 .9 0 1.3.1v3.1a2.8 2.8 0 1 0 1.4 2.4z"/></svg>
+   </a>
+  </div>
+ </div>
+ <div style="border-top:1px solid #eee;margin-top:22px;padding-top:15px"><p>© 2026 VANTA CYBER. جميع الحقوق محفوظة.</p><p>تطوير وإدارة علي ياسر | Ali Yaser</p></div>
+</div></footer>
 
-const paths = [
- {id:"computer",name:"أساسيات الحاسوب",level:"مبتدئ",icon:"▣",desc:"مكونات الحاسوب وأنظمة التشغيل والملفات ومبادئ التقنية.",rooms:["computer-basics"]},
- {id:"python",name:"البرمجة باستخدام Python",level:"مبتدئ",icon:"⌘",desc:"المتغيرات والشروط والحلقات والدوال وتمارين البرمجة.",rooms:["python-basics"]},
- {id:"web",name:"تطوير الويب",level:"مبتدئ",icon:"⌘",desc:"HTML وCSS وJavaScript لبناء صفحات تفاعلية.",rooms:["web-basics"]},
- {id:"network",name:"أساسيات الشبكات",level:"مبتدئ",icon:"⌁",desc:"IP وDNS وTCP وUDP وأساسيات الاتصال.",rooms:["network-basics"]},
- {id:"linux",name:"Linux",level:"مبتدئ",icon:"⌁",desc:"الأوامر والملفات والصلاحيات وإدارة النظام.",rooms:["linux-basics"]},
- {id:"cyber",name:"مدخل إلى الأمن السيبراني",level:"مبتدئ",icon:"⬡",desc:"مبادئ الأمن والتهديدات والدفاع وممارسات الحماية.",rooms:["cyber-basics"]},
- {id:"websec",name:"أمن تطبيقات الويب",level:"متوسط",icon:"◈",desc:"فهم الثغرات الشائعة وطرق الوقاية منها في بيئة آمنة.",rooms:["web-security"]},
- {id:"netsec",name:"أمن الشبكات",level:"متوسط",icon:"⌁",desc:"مراقبة الشبكات ومبادئ الدفاع وتحليل الحوادث.",rooms:["network-defense"]},
- {id:"crypto",name:"التشفير والتجزئة",level:"متوسط",icon:"⌑",desc:"مفاهيم التشفير والتجزئة والتحقق من سلامة البيانات.",rooms:["crypto-basics"]},
- {id:"defense",name:"التحليل الأمني والدفاع الرقمي",level:"متوسط",icon:"⬡",desc:"السجلات والتنبيهات والاستجابة للحوادث ومبادئ التحليل.",rooms:["defense-basics"]}
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+import {
+ getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult,
+ onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+ updateProfile, sendEmailVerification, signOut
+} from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+
+/* ضع إعدادات مشروع Firebase هنا لتفعيل الحسابات الحقيقية. */
+const firebaseConfig = {
+ apiKey: "YOUR_FIREBASE_API_KEY",
+ authDomain: "YOUR_PROJECT.firebaseapp.com",
+ projectId: "YOUR_PROJECT_ID",
+ appId: "YOUR_FIREBASE_APP_ID"
+};
+let auth = null;
+let firebaseReady = false;
+try {
+ if (firebaseConfig.apiKey !== "YOUR_FIREBASE_API_KEY" &&
+     firebaseConfig.projectId !== "YOUR_PROJECT_ID") {
+   const app = initializeApp(firebaseConfig);
+   auth = getAuth(app);
+   firebaseReady = true;
+ }
+} catch (error) {
+ console.error("Firebase initialization failed:", error.code || error.message);
+}
+const provider = new GoogleAuthProvider();
+const $ = id => document.getElementById(id);
+const routes = ["home","courses","course","lesson","labs","lab-password","lab-ip","lab-python","lab-phishing","quizzes","quiz-basics","nova","login","register","profile","settings","support","founder","about"];
+let currentUser = null;
+let currentCourse = null;
+let currentLesson = null;
+let quizQuestions = [
+ {q:"ما الهدف الأساسي من الأمن السيبراني؟",a:["حماية الأنظمة والبيانات","زيادة حجم الشاشة","تغيير لون الموقع"],correct:0,why:"يركز الأمن السيبراني على حماية الأنظمة والشبكات والبيانات."},
+ {q:"ما وظيفة HTML؟",a:["تنسيق ألوان النظام فقط","بناء هيكل صفحة الويب","تخزين كلمات المرور"],correct:1,why:"تحدد HTML بنية المحتوى في صفحات الويب."},
+ {q:"أي مما يلي كلمة مرور أقوى عادةً؟",a:["12345678","password","عبارة طويلة وفريدة"],correct:2,why:"الطول والتفرد وتجنب الأنماط الشائعة يزيدان صعوبة التخمين."},
+ {q:"ما هو عنوان IP؟",a:["معرّف شبكي لجهاز أو واجهة","نوع من الصور","لغة برمجة"],correct:0,why:"تستخدم عناوين IP في تحديد واجهات الأجهزة على الشبكات."},
+ {q:"ماذا تفعل عند استلام رابط تسجيل دخول مشبوه؟",a:["تدخل كلمة المرور فورًا","تتحقق من المصدر ولا تفتح الرابط المشبوه","ترسل الرابط للجميع"],correct:1,why:"تحقق من المصدر واستخدم الموقع الرسمي بدل الروابط غير الموثوقة."}
 ];
-const rooms = [
- {id:"computer-basics",path:"computer",name:"التعرّف على الحاسوب",level:"مبتدئ",mins:10,desc:"تعرف على مكونات الحاسوب ونظام التشغيل والملفات.",tasks:[
-  {title:"مكونات الحاسوب",body:"يتكون الحاسوب من المعالج CPU والذاكرة RAM والتخزين ووحدات الإدخال والإخراج. ينفذ المعالج التعليمات، وتحتفظ RAM مؤقتًا بالبيانات المستخدمة."},
-  {title:"نظام التشغيل",body:"يدير نظام التشغيل موارد الجهاز ويتيح تشغيل البرامج وإدارة الملفات والمستخدمين. أمثلة: Windows وLinux وmacOS."},
-  {title:"مراجعة الدرس",body:"تذكّر الفرق بين RAM والتخزين الدائم. الذاكرة RAM مؤقتة، أما SSD/HDD فيحفظ البيانات بعد إيقاف التشغيل."}
+const courses = [
+ {id:"computer",name:"أساسيات الحاسوب",desc:"مكونات الحاسوب وأنظمة التشغيل والملفات والذاكرة.",lessons:[
+  ["مكونات الحاسوب","تعرف على المعالج والذاكرة والتخزين وأجهزة الإدخال والإخراج.","المعالج ينفذ التعليمات، والذاكرة RAM تحتفظ مؤقتًا بالبيانات أثناء التشغيل، بينما يخزن SSD أو HDD الملفات بصورة دائمة.","قارن بين RAM والتخزين الدائم.","الذاكرة RAM مؤقتة وسريعة، أما SSD/HDD فيحتفظان بالملفات بعد إيقاف التشغيل."],
+  ["أنظمة التشغيل","نظام التشغيل يدير موارد الجهاز ويتيح تشغيل التطبيقات.","من أمثلة أنظمة التشغيل Windows وLinux وmacOS. تشمل وظائفه إدارة الملفات والذاكرة والعمليات والأجهزة.","اذكر وظيفتين لنظام التشغيل.","إدارة الموارد والملفات والعمليات والأجهزة."]
  ]},
- {id:"python-basics",path:"python",name:"أول برنامج Python",level:"مبتدئ",mins:15,desc:"تعرّف على الطباعة والمتغيرات وأنواع البيانات.",tasks:[
-  {title:"الطباعة",body:"تُستخدم print() لعرض معلومات في المخرجات.",code:'print("Hello, VANTA!")'},
-  {title:"المتغيرات",body:"المتغير اسم يشير إلى قيمة. Python تحدد نوع القيمة أثناء التشغيل.",code:'name = "Ali"\nage = 18\nprint(name, age)'},
-  {title:"تمرين قصير",body:"اكتب متغيرًا باسم score بقيمة 10 ثم اطبع قيمته.",code:'score = 10\nprint(score)'}
+ {id:"python",name:"Python",desc:"المتغيرات والأنواع والشروط والحلقات والدوال.",lessons:[
+  ["المتغيرات والطباعة","المتغير اسم يشير إلى قيمة يمكن استخدامها في البرنامج.","<pre>name = \"Ali\"\nage = 18\nprint(name)\nprint(age)</pre>تستخدم print لعرض القيم، وتُنشأ المتغيرات عند إسناد قيمة لها.","ما ناتج print(2 + 3)؟","الناتج 5."],
+  ["الشروط","تسمح if بتنفيذ تعليمات بناءً على شرط.","<pre>score = 80\nif score >= 50:\n    print(\"Passed\")\nelse:\n    print(\"Try again\")</pre>تحدد المسافات البادئة كتلة التعليمات في Python.","متى ينفذ فرع else؟","عندما لا يتحقق شرط if."]
  ]},
- {id:"web-basics",path:"web",name:"بناء صفحة HTML",level:"مبتدئ",mins:15,desc:"تعرف على هيكل HTML والعناوين والفقرات والروابط.",tasks:[
-  {title:"هيكل الصفحة",body:"HTML تصف بنية المحتوى. يبدأ المستند بـ doctype ويحتوي html وhead وbody.",code:'<!doctype html>\n<html lang="ar">\n<head><meta charset="UTF-8"><title>صفحتي</title></head>\n<body><h1>مرحبًا</h1></body>\n</html>'},
-  {title:"العناصر",body:"استخدم h1 للعناوين الرئيسية وp للفقرات وa للروابط. يجب أن تكون الروابط واضحة ويمكن الوصول إليها."},
-  {title:"CSS",body:"تتحكم CSS في ألوان الصفحة وتخطيطها والمسافات وحجم النص. افصل العرض عن المحتوى قدر الإمكان."}
+ {id:"web",name:"HTML وCSS وJavaScript",desc:"بناء صفحات الويب وتنسيقها وإضافة التفاعل.",lessons:[
+  ["هيكل HTML","HTML تصف هيكل ومحتوى صفحة الويب.","<pre>&lt;h1&gt;مرحبًا&lt;/h1&gt;\n&lt;p&gt;هذه صفحة ويب&lt;/p&gt;</pre>استخدم العناصر الدلالية مثل main وnav وarticle لتحسين تنظيم المحتوى.","ما دور عنصر h1؟","عنوان رئيسي للصفحة أو للقسم."],
+  ["تنسيق CSS","تتحكم CSS بالألوان والمسافات والتخطيط والاستجابة.","<pre>body {\n  font-family: Arial, sans-serif;\n  line-height: 1.7;\n}</pre>تساعد قواعد التخطيط المرن والشبكات في تصميم صفحات تتكيف مع أحجام الشاشات.","ما وظيفة CSS؟","تنسيق مظهر الصفحة وتخطيطها."]
  ]},
- {id:"network-basics",path:"network",name:"مقدمة إلى الشبكات",level:"مبتدئ",mins:12,desc:"افهم IP والشبكة المحلية وDNS بصورة مبسطة.",tasks:[
-  {title:"ما عنوان IP؟",body:"عنوان IP معرّف منطقي لواجهة الشبكة. في IPv4 يتكون من أربعة أعداد من 0 إلى 255."},
-  {title:"الشبكة الفرعية",body:"تحدد البادئة مثل /24 عدد بتات الشبكة. في 192.168.1.25/24 يكون عنوان الشبكة 192.168.1.0."},
-  {title:"DNS",body:"يساعد DNS على تحويل أسماء النطاقات إلى سجلات يمكن استخدامها للوصول إلى الخدمات."}
+ {id:"network",name:"أساسيات الشبكات",desc:"IP وDNS وTCP/UDP والموجهات.",lessons:[
+  ["عناوين IP","يستخدم عنوان IP لتحديد واجهة على شبكة IP.","من نطاقات IPv4 الخاصة 10.0.0.0/8 و172.16.0.0/12 و192.168.0.0/16. أما DNS فيترجم أسماء النطاقات إلى سجلات عناوين.","هل 192.168.1.5 عنوان خاص؟","نعم، يقع ضمن 192.168.0.0/16."],
+  ["DNS وTCP","DNS خدمة لحل أسماء النطاقات، وTCP يوفر نقلًا موثوقًا قائمًا على الاتصال.","يستخدم TCP تأكيد الاستلام وترتيب البيانات. أما UDP فيقلل متطلبات الاتصال ويستخدم في حالات تحتاج زمن استجابة منخفضًا.","ما وظيفة DNS؟","حل أسماء النطاقات إلى سجلاتها."]
  ]},
- {id:"linux-basics",path:"linux",name:"أساسيات Linux",level:"مبتدئ",mins:12,desc:"تعرف على المسارات والملفات والأوامر الشائعة.",tasks:[
-  {title:"التنقل",body:"pwd يعرض المسار الحالي وls يعرض الملفات وcd يغيّر المجلد. هذه أوامر تعريفية ضمن بيئة تعليمية."},
-  {title:"الملفات",body:"تساعد أدوات مثل cat وless على قراءة الملفات النصية. تحقق من المسار قبل التعامل مع أي ملف."},
-  {title:"الصلاحيات",body:"تعبر صلاحيات القراءة والكتابة والتنفيذ عن العمليات المسموح بها للمالك والمجموعة والآخرين."}
+ {id:"linux",name:"Linux",desc:"نظام الملفات والأوامر والصلاحيات.",lessons:[
+  ["الأوامر الأساسية","تساعد الأوامر الطرفية على التنقل وإدارة الملفات.","<pre>pwd\nls\ncd Documents\nmkdir practice</pre>يعرض pwd المسار الحالي، ويعرض ls محتويات المجلد، وينشئ mkdir مجلدًا.","ما وظيفة pwd؟","عرض مسار العمل الحالي."],
+  ["الصلاحيات","تحدد الصلاحيات من يستطيع قراءة الملفات أو تعديلها أو تنفيذها.","في أنظمة Unix توجد صلاحيات القراءة والكتابة والتنفيذ، ويمكن عرضها بواسطة ls -l.","لماذا لا ينبغي تشغيل أوامر مجهولة بصلاحيات مرتفعة؟","لأنها قد تغير النظام أو تكشف بياناته."]
  ]},
- {id:"cyber-basics",path:"cyber",name:"مبادئ الأمن السيبراني",level:"مبتدئ",mins:15,desc:"مبادئ السرية والسلامة والتوافر والتهديدات الرقمية.",tasks:[
-  {title:"مثلث CIA",body:"السرية تحد من الوصول غير المصرح به، والسلامة تحمي من التغيير غير المصرح، والتوافر يضمن إمكانية استخدام الخدمة عند الحاجة."},
-  {title:"التصيد",body:"قد تحاول رسائل التصيد دفع المستخدم لإدخال بياناته في صفحة مزيفة. تحقق من النطاق والمرسل ولا تفتح المرفقات المشبوهة."},
-  {title:"الدفاع الأساسي",body:"استخدم كلمات مرور فريدة، والمصادقة متعددة العوامل، والتحديثات الأمنية والنسخ الاحتياطية."}
+ {id:"cyber",name:"الأمن السيبراني",desc:"مبادئ السرية والسلامة والتوافر وإدارة المخاطر.",lessons:[
+  ["مبادئ الأمن","تُعرف السرية والسلامة والتوافر بثلاثية CIA.","السرية تمنع الوصول غير المصرح به، والسلامة تحافظ على دقة البيانات، والتوافر يضمن إمكانية الوصول عند الحاجة.","ما المقصود بسرية البيانات؟","منع الاطلاع غير المصرح به."],
+  ["إدارة المخاطر","تحدد إدارة المخاطر الأصول والتهديدات ونقاط الضعف والضوابط المناسبة.","ابدأ بحصر الأصول، ثم قيّم احتمال الخطر وأثره، واختر ضوابط تقلله وتابع فعاليتها.","هل يمكن إزالة كل المخاطر؟","لا، لكن يمكن خفضها إلى مستوى مقبول."]
  ]},
- {id:"web-security",path:"websec",name:"أساسيات أمن الويب",level:"متوسط",mins:18,desc:"التعرّف على التحقق من المدخلات ومبادئ أمن تطبيقات الويب.",tasks:[
-  {title:"التحقق من المدخلات",body:"يجب أن تتحقق التطبيقات من البيانات على الخادم وتستخدم الاستعلامات المعلّمة وتشفير المخرجات بحسب السياق."},
-  {title:"إدارة الجلسات",body:"تحتاج الجلسات إلى رموز عشوائية آمنة وخصائص cookies مناسبة، مع انتهاء صلاحية وتسجيل خروج صحيح."},
-  {title:"مبدأ أقل صلاحية",body:"امنح كل حساب أقل الصلاحيات اللازمة لإنجاز مهمته، وراجع الصلاحيات دوريًا."}
+ {id:"websec",name:"أمن تطبيقات الويب",desc:"التحقق من المدخلات والجلسات ومبادئ OWASP.",lessons:[
+  ["التحقق من المدخلات","يجب التحقق من المدخلات على الخادم وعدم الوثوق بالمتصفح وحده.","استخدم الاستعلامات المجهزة في قواعد البيانات، واهرب المخرجات حسب سياقها، وطبّق صلاحيات الخادم.","لماذا لا يكفي التحقق في المتصفح؟","يمكن تجاوز تحقق العميل؛ الخادم هو المرجع الأمني."],
+  ["إدارة الجلسات","الجلسة تربط طلبات المستخدم المصادق عليه بهويته.","استخدم HTTPS وملفات تعريف آمنة مثل HttpOnly وSecure وSameSite، وجدّد معرّف الجلسة عند تغير حالة المصادقة.","ما فائدة HttpOnly؟","تقليل وصول JavaScript إلى ملف تعريف الجلسة."]
  ]},
- {id:"network-defense",path:"netsec",name:"الدفاع عن الشبكات",level:"متوسط",mins:18,desc:"مبادئ تقسيم الشبكات ومراقبتها وحمايتها.",tasks:[
-  {title:"تقسيم الشبكة",body:"يساعد التقسيم على الحد من الحركة غير الضرورية وتقليل أثر الحوادث. يجب توثيق قواعد الاتصال."},
-  {title:"المراقبة",body:"قد تساعد السجلات والتنبيهات في اكتشاف أنماط غير معتادة. راعِ السياق قبل اعتبار التنبيه حادثًا مؤكدًا."},
-  {title:"الاستجابة",body:"تتضمن الاستجابة التوثيق والتقييم والاحتواء والتعافي وفق خطة المؤسسة."}
+ {id:"crypto",name:"التشفير والتجزئة",desc:"الفرق بين التشفير والتجزئة والمفاتيح.",lessons:[
+  ["التشفير","يحوّل التشفير النص إلى صيغة لا تُقرأ دون المفتاح المناسب.","التشفير المتماثل يستخدم مفتاحًا سريًا مشتركًا، وغير المتماثل يستخدم مفتاحًا عامًا وآخر خاصًا.","هل يمكن فك التشفير دون المفتاح الصحيح؟","يعتمد ذلك على الخوارزمية والمفاتيح؛ التصميم السليم يجعل ذلك غير عملي."],
+  ["التجزئة","تنتج دالة التجزئة قيمة ثابتة الطول من بيانات الإدخال.","تستخدم التجزئة للتحقق من سلامة البيانات. تخزين كلمات المرور يتطلب خوارزميات مخصصة بطيئة مع salt، وليس تجزئة سريعة عادية.","هل التجزئة هي نفسها التشفير؟","لا؛ التجزئة مصممة لتكون أحادية الاتجاه."]
  ]},
- {id:"crypto-basics",path:"crypto",name:"التشفير والتجزئة",level:"متوسط",mins:15,desc:"الفرق بين التشفير والتجزئة والتحقق من السلامة.",tasks:[
-  {title:"التشفير",body:"يحوّل التشفير البيانات إلى صيغة لا يمكن قراءتها دون المفتاح المناسب. تعتمد قوته على الخوارزمية وإدارة المفاتيح."},
-  {title:"التجزئة",body:"تنتج دالة التجزئة قيمة ثابتة الطول. التجزئة ليست تشفيرًا قابلًا للعكس، وتُستخدم للتحقق من السلامة."},
-  {title:"كلمات المرور",body:"تخزن كلمات المرور باستخدام خوارزميات مخصصة مثل Argon2id أو bcrypt مع إعدادات مناسبة، وليس كنص واضح."}
+ {id:"defense",name:"التحليل الأمني والدفاع الرقمي",desc:"السجلات والتنبيهات والاستجابة للحوادث.",lessons:[
+  ["قراءة السجلات","تساعد السجلات على فهم أحداث الأنظمة وتحديد النشاط غير المعتاد.","اربط الطوابع الزمنية والمصدر ونوع الحدث، وراجع السياق قبل اعتبار حدث واحد دليلًا على اختراق.","لماذا نربط أحداثًا متعددة؟","لتحليل السياق وتقليل الإنذارات الكاذبة."],
+  ["الاستجابة للحوادث","تشمل الاستجابة التحضير والكشف والاحتواء والمعالجة والتعافي والتعلم.","وثّق القرارات واحفظ الأدلة وفق السياسات، وحدد نطاق الحادث قبل تنفيذ إجراءات المعالجة.","ما فائدة التوثيق؟","يدعم التحقيق والتواصل والتعلم بعد الحادث."]
  ]},
- {id:"defense-basics",path:"defense",name:"مقدمة في التحليل الدفاعي",level:"متوسط",mins:20,desc:"مبادئ قراءة السجلات وفهم التنبيهات الأمنية.",tasks:[
-  {title:"السجلات",body:"تسجل السجلات أحداثًا مثل الدخول وتغييرات الإعدادات. احمِ السجلات من العبث وحدد مدة احتفاظ مناسبة."},
-  {title:"التحقق من التنبيه",body:"قارن الوقت والمصدر والحساب والحدث مع السجلات الأخرى قبل الوصول إلى استنتاج."},
-  {title:"التوثيق",body:"سجّل ما لوحظ ومتى حدث والإجراءات المتخذة، مع فصل الحقائق عن الافتراضات."}
+ {id:"netsec",name:"أمن الشبكات",desc:"التقسيم والجدران النارية والتحديثات والمراقبة.",lessons:[
+  ["تقسيم الشبكات","يقلل تقسيم الشبكة من نطاق انتشار الحوادث ويحد الاتصالات غير الضرورية.","ضع الأنظمة بحسب الحاجة، واسمح بالاتصالات المطلوبة فقط، وراجع القواعد دوريًا.","ما مبدأ أقل صلاحية؟","منح الحد الأدنى من الصلاحيات اللازمة لأداء المهمة."],
+  ["المراقبة والتحديث","تقلل التحديثات الأمنية من التعرض للثغرات المعروفة.","ضع جردًا للأصول، واختبر التحديثات، وراقب السجلات والتنبيهات، وحدد مسؤوليات واضحة.","لماذا نحدث الأنظمة؟","لإصلاح أخطاء وثغرات وتحسين الاستقرار."]
  ]}
 ];
-const labs = [
- {id:"password",name:"فاحص قوة كلمة المرور",icon:"▣",desc:"تقييم محلي توضيحي دون إرسال النص إلى الخادم."},
- {id:"phishing",name:"تمييز رسائل التصيد",icon:"✉",desc:"تعلم مؤشرات الروابط والرسائل المضللة."},
- {id:"ip",name:"تمارين عناوين IP",icon:"⌁",desc:"تدرب على عناوين الشبكة والبادئات."},
- {id:"linux",name:"أوامر Linux التعليمية",icon:"⌘",desc:"تعرف على الأوامر الأساسية وأدوارها."},
- {id:"python",name:"تمرين Python",icon:"{} ",desc:"تدرب على المتغيرات والطباعة."},
- {id:"hash",name:"التشفير والتجزئة",icon:"⌑",desc:"افهم الفرق بين التشفير والتجزئة."}
-];
-const quizQuestions = [
- {q:"ما الغرض الأساسي من نظام التشغيل؟",opts:["إدارة موارد الجهاز والبرامج","زيادة سرعة الإنترنت دائمًا","استبدال المعالج"],answer:0,explain:"يدير نظام التشغيل موارد الحاسوب ويتيح تشغيل التطبيقات."},
- {q:"أي عبارة تصف التجزئة بشكل صحيح؟",opts:["تشفير يمكن عكسه دائمًا","إنتاج قيمة ملخصة للبيانات","تسجيل الدخول بحساب Google"],answer:1,explain:"تنتج دالة التجزئة ملخصًا ثابت الطول، ولا تعادل التشفير القابل للعكس."},
- {q:"ماذا يعني مبدأ أقل صلاحية؟",opts:["إعطاء الجميع صلاحيات المدير","منح أقل صلاحيات ضرورية","إيقاف جميع الحسابات"],answer:1,explain:"يقلل مبدأ أقل صلاحية من مخاطر الوصول غير الضروري."},
- {q:"ما الاستخدام الشائع لـ DNS؟",opts:["تحويل أسماء النطاقات إلى سجلات مثل عناوين IP","زيادة سعة الذاكرة","تشفير الملفات تلقائيًا"],answer:0,explain:"يساعد DNS في العثور على معلومات مرتبطة بأسماء النطاقات."}
-];
-
-const STORE_KEY="vanta-learning-v1";
-const SETTINGS_KEY="vanta-settings-v1";
-let state=loadState();
-let currentUser=null;
-let isSignup=false;
-let activeRoom=null;
-let activeTask=0;
-let lastQuiz=null;
-
-function loadState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{completed:[],scores:[],points:0}}catch{return {completed:[],scores:[],points:0}}}
-function saveState(){localStorage.setItem(STORE_KEY,JSON.stringify(state));updateStats()}
-function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),3000)}
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function nav(name){location.hash=name}
-function showPage(name){
- const valid=["home","paths","path","rooms","room","labs","quizzes","nova","profile","settings","auth","support","founder","about"];
- if(!valid.includes(name))name="home";
- document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+name));
- document.querySelectorAll(".nav-link[data-go]").forEach(b=>b.classList.toggle("active",b.dataset.go===name||(name==="path"&&b.dataset.go==="paths")||(name==="room"&&b.dataset.go==="rooms")));
- document.getElementById("sidebar").classList.remove("open");document.getElementById("overlay").classList.remove("open");document.getElementById("accountMenu").classList.add("hidden");
- window.scrollTo({top:0,behavior:"instant"});
- if(name==="paths")renderPaths();if(name==="rooms")renderRooms();if(name==="labs")renderLabs();if(name==="quizzes")renderQuiz();if(name==="profile")renderProfile();
+function safe(text){return String(text).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function navigate(){
+ let route=location.hash.slice(1)||"home";
+ let [page,arg]=route.split("/");
+ if(!routes.includes(page))page="home";
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+page));
+ $("menuPanel").classList.remove("open");$("profilePanel").classList.remove("open");
+ if(page==="course")renderCourse(arg);
+ if(page==="lesson")renderLesson(arg);
+ if(page==="profile")renderProfile();
+ window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
 }
-window.addEventListener("hashchange",()=>showPage(location.hash.slice(1).split("?")[0]||"home"));
-document.addEventListener("click",e=>{
- const go=e.target.closest("[data-go]");
- if(go){nav(go.dataset.go);return}
- const p=e.target.closest("[data-path]");if(p){openPath(p.dataset.path);return}
- const r=e.target.closest("[data-room]");if(r){openRoom(r.dataset.room);return}
-});
-document.getElementById("menuBtn").onclick=()=>{document.getElementById("sidebar").classList.toggle("open");document.getElementById("overlay").classList.toggle("open")};
-document.getElementById("overlay").onclick=()=>{document.getElementById("sidebar").classList.remove("open");document.getElementById("overlay").classList.remove("open")};
-document.getElementById("avatarBtn").onclick=()=>document.getElementById("accountMenu").classList.toggle("hidden");
-document.addEventListener("click",e=>{if(!e.target.closest("#avatarBtn")&&!e.target.closest("#accountMenu"))document.getElementById("accountMenu").classList.add("hidden")});
-
-function pathCard(p){return `<article class="card"><div class="card-symbol">${esc(p.icon)}</div><div><span class="pill">${esc(p.level)}</span></div><h3>${esc(p.name)}</h3><p>${esc(p.desc)}</p><div class="bottom"><span class="small muted">${p.rooms.length} غرفة</span><button data-path="${esc(p.id)}">عرض المسار ←</button></div></article>`}
-function roomCard(r){const done=state.completed.includes(r.id);return `<article class="card"><div class="card-symbol">${done?"✓":"▦"}</div><div><span class="pill">${esc(r.level)}</span> <span class="pill">${r.mins} دقيقة</span></div><h3>${esc(r.name)}</h3><p>${esc(r.desc)}</p><div class="bottom"><span class="small ${done?"green":"muted"}">${done?"مكتملة":"غير مكتملة"}</span><button data-room="${esc(r.id)}">${done?"مراجعة":"ابدأ الغرفة"} ←</button></div></article>`}
-function renderHome(){document.getElementById("homePaths").innerHTML=paths.slice(0,3).map(pathCard).join("");document.getElementById("homeRooms").innerHTML=rooms.slice(0,3).map(roomCard).join("");updateStats()}
-function renderPaths(){
- const q=(document.getElementById("pathSearch").value||"").trim().toLowerCase(),lvl=document.getElementById("pathLevel").value;
- document.getElementById("allPaths").innerHTML=paths.filter(p=>(lvl==="all"||p.level===lvl)&&(`${p.name} ${p.desc}`.toLowerCase().includes(q))).map(pathCard).join("")||'<div class="empty">لا توجد نتائج مطابقة.</div>';
+window.addEventListener("hashchange",navigate);
+$("menuToggle").addEventListener("click",()=>{$("profilePanel").classList.remove("open");$("menuPanel").classList.toggle("open")});
+$("profileToggle").addEventListener("click",()=>{$("menuPanel").classList.remove("open");$("profilePanel").classList.toggle("open")});
+document.addEventListener("click",e=>{if(!e.target.closest(".head")){$("menuPanel").classList.remove("open");$("profilePanel").classList.remove("open")}});
+function renderCourses(filter=""){
+ $("courseGrid").innerHTML=courses.filter(c=>(c.name+" "+c.desc).toLowerCase().includes(filter.toLowerCase())).map(c=>`<article class="card"><span class="pill">${c.lessons.length} دروس تمهيدية</span><h3 style="margin-top:12px">${safe(c.name)}</h3><p>${safe(c.desc)}</p><a class="btn secondary" href="#course/${c.id}">فتح المسار</a></article>`).join("");
 }
-function openPath(id){
- const p=paths.find(x=>x.id===id);if(!p)return;
- document.getElementById("pathDetail").innerHTML=`<div class="hero"><div><span class="pill">${esc(p.level)}</span><h1 style="margin-top:12px">${esc(p.name)}</h1><p>${esc(p.desc)}</p><button class="primary" onclick="document.getElementById('pathRooms').scrollIntoView({behavior:'smooth'})">ابدأ المسار ↓</button></div><div class="card-symbol" style="width:100px;height:100px;font-size:48px">${esc(p.icon)}</div></div><div class="section-head"><h2>غرف هذا المسار</h2><span class="muted small">${p.rooms.length} غرفة</span></div><div class="grid" id="pathRooms">${p.rooms.map(id=>rooms.find(r=>r.id===id)).filter(Boolean).map(roomCard).join("")}</div>`;
- nav("path");
+$("courseSearch").addEventListener("input",e=>renderCourses(e.target.value));
+function renderCourse(id){
+ const c=courses.find(x=>x.id===id);if(!c){$("courseDetails").innerHTML="<p>المسار غير موجود.</p>";return}
+ currentCourse=c;
+ $("courseDetails").innerHTML=`<span class="eyebrow">LEARNING PATH</span><h2>${safe(c.name)}</h2><p>${safe(c.desc)}</p><div class="stack">${c.lessons.map((l,i)=>`<article class="card"><div class="rowitem"><div><span class="pill">الدرس ${i+1}</span><h3 style="margin-top:8px">${safe(l[0])}</h3><p>${safe(l[1])}</p></div><a class="btn secondary" href="#lesson/${c.id}-${i}">فتح الدرس</a></div></article>`).join("")}</div>`;
 }
-function renderRooms(){
- const q=(document.getElementById("roomSearch").value||"").trim().toLowerCase(),lvl=document.getElementById("roomFilter").value;
- document.getElementById("allRooms").innerHTML=rooms.filter(r=>(lvl==="all"||r.level===lvl)&&(`${r.name} ${r.desc}`.toLowerCase().includes(q))).map(roomCard).join("")||'<div class="empty">لا توجد غرف مطابقة.</div>';
-}
-function openRoom(id){
- activeRoom=rooms.find(r=>r.id===id);activeTask=0;if(!activeRoom)return;
- renderRoomDetail();nav("room");
-}
-function renderRoomDetail(){
- const r=activeRoom;if(!r)return;
- const done=state.completed.includes(r.id);
- document.getElementById("roomDetail").innerHTML=`
- <div class="eyebrow">TRAINING ROOM</div><h1>${esc(r.name)}</h1><p class="muted">${esc(r.desc)}</p>
- <div class="progress-row"><span>مهام الغرفة</span><span id="roomProgressText">${done?r.tasks.length:r.tasks.filter((_,i)=>i<activeTask).length} / ${r.tasks.length}</span></div>
- <div class="progress"><span id="roomProgressBar" style="width:${done?100:Math.round(activeTask/r.tasks.length*100)}%"></span></div>
- <div class="room-layout" style="margin-top:18px">
-  <div class="panel room-main" id="taskContent"></div>
-  <aside class="panel room-tasks"><h3>مهام الغرفة</h3><div class="task-list">${r.tasks.map((t,i)=>`<button class="task-link ${i===activeTask?"active":""}" data-task="${i}">${i+1}. ${esc(t.title)} ${done?"✓":""}</button>`).join("")}</div><p class="small muted" style="margin-top:14px">أكمل قراءة المهام ثم أنهِ الغرفة لتسجيلها.</p></aside>
- </div>`;
- document.querySelectorAll("[data-task]").forEach(b=>b.onclick=()=>{activeTask=Number(b.dataset.task);renderRoomDetail()});
- const t=r.tasks[activeTask];
- document.getElementById("taskContent").innerHTML=`<span class="eyebrow">TASK ${activeTask+1}</span><h2 style="margin-top:8px">${esc(t.title)}</h2><p>${esc(t.body)}</p>${t.code?`<div class="codebox"><div class="code-head"><span>Example</span><button data-copy-code>نسخ الكود</button></div><pre id="taskCode">${esc(t.code)}</pre></div>`:""}<div class="notice">مراجعة: اكتب ملخصًا قصيرًا لما تعلمته، ثم انتقل للمهمة التالية.</div><div class="bottom"><button ${activeTask===0?"disabled":""} id="prevTask">المهمة السابقة</button><button class="primary" id="nextTask">${activeTask===r.tasks.length-1?"إنهاء الغرفة":"المهمة التالية ←"}</button></div><div id="roomFeedback" class="small muted" style="margin-top:12px"></div>`;
- document.getElementById("prevTask").onclick=()=>{if(activeTask>0){activeTask--;renderRoomDetail()}};
- document.getElementById("nextTask").onclick=()=>{
-   if(activeTask<r.tasks.length-1){activeTask++;renderRoomDetail()}
-   else if(!state.completed.includes(r.id)){state.completed.push(r.id);state.points+=10;saveState();renderRoomDetail();toast("اكتملت الغرفة وأُضيفت 10 نقاط")}
-   else{toast("هذه الغرفة مسجلة كمكتملة")}
- };
- const copy=document.querySelector("[data-copy-code]");if(copy)copy.onclick=()=>navigator.clipboard?.writeText(t.code).then(()=>toast("تم نسخ الكود")).catch(()=>toast("تعذر النسخ في هذا المتصفح"));
-}
-function renderLabs(){
- document.getElementById("labCards").innerHTML=labs.map(l=>`<article class="card"><div class="card-symbol">${esc(l.icon)}</div><h3>${esc(l.name)}</h3><p>${esc(l.desc)}</p><div class="bottom"><button data-lab="${l.id}">عرض التمرين</button></div></article>`).join("");
- document.querySelectorAll("[data-lab]").forEach(b=>b.onclick=()=>{
-  if(b.dataset.lab==="password")document.getElementById("passwordCheck").focus();
-  else if(b.dataset.lab==="ip")document.getElementById("ipAnswer").focus();
-  else toast(({phishing:"تحقق من اسم النطاق والمرسل واللغة المستعجلة قبل الضغط على أي رابط.",linux:"pwd يعرض المسار الحالي، وls يعرض محتويات المجلد.",python:"جرّب: name = 'Ali' ثم print(name).",hash:"التشفير قابل للعكس بالمفتاح، أما التجزئة فليست عملية فك تشفير."})[b.dataset.lab]||"اختر أحد التمارين أدناه.");
- });
-}
-document.getElementById("passwordCheck").addEventListener("input",e=>{
- const p=e.target.value;let n=0;
- if(p.length>=12)n++;if(/[a-z]/.test(p)&&/[A-Z]/.test(p))n++;if(/\d/.test(p))n++;if(/[^a-zA-Z0-9]/.test(p))n++;
- const width=p.length?Math.max(8,n*25):0;document.getElementById("passBar").style.width=width+"%";
- document.getElementById("passResult").textContent=!p?"تظهر نتيجة التقييم محليًا ولا تُرسل إلى خادم.":p.length<8?"ضعيفة: اجعلها أطول واستخدم كلمة مرور فريدة.":n>=3&&p.length>=12?"أفضل وفق المؤشرات البسيطة، لكن هذا الفحص ليس ضمانًا للأمان.":"متوسطة: زد الطول والتنوع وتجنب المعلومات المتوقعة.";
-});
-document.getElementById("checkIP").onclick=()=>{
- const val=document.getElementById("ipAnswer").value.trim();
- document.getElementById("ipResult").textContent=val==="192.168.1.0"?"صحيح. البادئة /24 تعني أن أول 24 بتًا تمثل الشبكة.":"راجع البادئة /24: أول ثلاثة مقاطع من IPv4 تمثل الشبكة في هذا المثال.";
-};
-function renderQuiz(){
- const root=document.getElementById("quizArea");
- root.innerHTML=`<form class="panel" style="padding:22px" id="quizForm"><div class="progress-row"><span>اختبار مبادئ الحاسوب والأمن</span><span>${quizQuestions.length} أسئلة</span></div>${quizQuestions.map((q,i)=>`<fieldset style="border:0;border-bottom:1px solid var(--line);padding:18px 0;margin:0;min-width:0"><legend style="font-weight:700;margin-bottom:8px">${i+1}. ${esc(q.q)}</legend>${q.opts.map((o,j)=>`<label class="quiz-option"><input type="radio" name="q${i}" value="${j}" required><span>${esc(o)}</span></label>`).join("")}<div id="explain${i}" class="small muted hidden" style="margin-top:8px"></div></fieldset>`).join("")}<button class="primary" style="margin-top:20px" type="submit">إرسال الإجابات</button><div id="quizResult" class="notice hidden" style="margin-top:14px"></div></form>`;
- document.getElementById("quizForm").onsubmit=e=>{
-  e.preventDefault();let score=0;
-  quizQuestions.forEach((q,i)=>{const chosen=document.querySelector(`input[name="q${i}"]:checked`);const correct=chosen&&Number(chosen.value)===q.answer;if(correct)score++;const el=document.getElementById("explain"+i);el.classList.remove("hidden");el.textContent=(correct?"إجابة صحيحة. ":"الإجابة الصحيحة: "+q.opts[q.answer]+". ")+q.explain});
-  const pct=Math.round(score/quizQuestions.length*100);const res=document.getElementById("quizResult");res.classList.remove("hidden");res.textContent=`نتيجتك ${score} من ${quizQuestions.length} (${pct}%). يمكنك تغيير الإجابات وإعادة الإرسال.`;
-  state.scores.push({date:new Date().toISOString(),score,total:quizQuestions.length,pct});state.points+=score;saveState();renderProfile();
- };
-}
-function updateStats(){
- const done=state.completed.length;document.getElementById("statDone").textContent=done;document.getElementById("statPoints").textContent=state.points;
- const pct=Math.round(done/rooms.length*100);document.getElementById("overallText").textContent=pct+"%";document.getElementById("overallBar").style.width=pct+"%";
+function renderLesson(key){
+ const [id,idxs]=String(key||"").split("-");const c=courses.find(x=>x.id===id);const idx=Number(idxs);
+ if(!c||!Number.isInteger(idx)||!c.lessons[idx]){$("lessonDetails").innerHTML="<p>الدرس غير موجود.</p>";return}
+ const l=c.lessons[idx];currentLesson={c,idx};
+ const completed=JSON.parse(localStorage.getItem("vantaCompleted")||"[]");
+ $("lessonDetails").innerHTML=`<span class="pill">${safe(c.name)} · الدرس ${idx+1}</span><h2 style="margin-top:14px">${safe(l[0])}</h2><p>${safe(l[1])}</p><h3>الشرح</h3><div>${l[2]}</div><h3 style="margin-top:20px">سؤال مراجعة</h3><p>${safe(l[3])}</p><details><summary>عرض الإجابة</summary><p>${safe(l[4])}</p></details><div class="actions"><button class="btn gold" id="markComplete">${completed.includes(key)?"تم إكمال الدرس ✓":"تحديد الدرس كمكتمل"}</button>${idx>0?`<a class="btn secondary" href="#lesson/${c.id}-${idx-1}">الدرس السابق</a>`:""}${idx<c.lessons.length-1?`<a class="btn secondary" href="#lesson/${c.id}-${idx+1}">الدرس التالي</a>`:`<a class="btn secondary" href="#courses">العودة للمناهج</a>`}</div>`;
+ $("markComplete").addEventListener("click",()=>{let done=JSON.parse(localStorage.getItem("vantaCompleted")||"[]");if(!done.includes(key))done.push(key);localStorage.setItem("vantaCompleted",JSON.stringify(done));renderLesson(key)});
 }
 function renderProfile(){
- const name=currentUser?.user_metadata?.full_name||currentUser?.email?.split("@")[0]||"زائر";
- document.getElementById("profileName").textContent=name;document.getElementById("profileEmail").textContent=currentUser?.email||"التقدم محفوظ محليًا على هذا الجهاز";
- document.getElementById("profileAvatar").textContent=name.slice(0,1).toUpperCase();document.getElementById("profileCompleted").textContent=state.completed.length;document.getElementById("profileScore").textContent=state.points;
- document.getElementById("profileAuth").classList.toggle("hidden",!!currentUser);
- document.getElementById("profileProgress").innerHTML=rooms.map(r=>`<div class="card"><h3>${esc(r.name)}</h3><span class="small ${state.completed.includes(r.id)?"green":"muted"}">${state.completed.includes(r.id)?"مكتملة":"لم تكتمل"}</span><button data-room="${r.id}">فتح الغرفة</button></div>`).join("");
- document.getElementById("profileScores").textContent=state.scores.length?state.scores.map(s=>`${s.score}/${s.total} (${s.pct}%) — ${new Date(s.date).toLocaleDateString("ar")}`).join(" | "):"لم تُسجّل نتائج بعد.";
+ $("profileName").textContent=currentUser?.displayName||currentUser?.email||"زائر VANTA";
+ $("profileEmail").textContent=currentUser?.email||"لم يتم تسجيل الدخول.";
+ $("completedCount").textContent=JSON.parse(localStorage.getItem("vantaCompleted")||"[]").length;
+ $("scoreCount").textContent=JSON.parse(localStorage.getItem("vantaScores")||"[]").length;
+ $("profileSignIn").classList.toggle("hide",!!currentUser);
+ $("profileLogin").classList.toggle("hide",!!currentUser);
+ $("logoutBtn").style.display=currentUser?"block":"none";
 }
-function applySettings(){
- let s={};try{s=JSON.parse(localStorage.getItem(SETTINGS_KEY))||{}}catch{}
- document.getElementById("themeToggle").checked=s.dark!==false;
- document.getElementById("motionToggle").checked=!!s.reduceMotion;
- applyTheme(s.dark!==false,!!s.reduceMotion);
+function authMessage(text){$("loginStatus").textContent=text;$("registerStatus").textContent=text}
+function showAuthError(error){
+ const messages={
+ "auth/invalid-credential":"بيانات الدخول غير صحيحة.",
+ "auth/email-already-in-use":"هذا البريد مسجل بالفعل.",
+ "auth/weak-password":"كلمة المرور ضعيفة.",
+ "auth/invalid-email":"صيغة البريد الإلكتروني غير صحيحة.",
+ "auth/popup-closed-by-user":"تم إغلاق نافذة تسجيل الدخول.",
+ "auth/operation-not-allowed":"طريقة الدخول غير مفعّلة في إعدادات المصادقة."
+ };
+ return messages[error.code]||"تعذر إتمام العملية. تحقق من إعدادات تسجيل الدخول وحاول مجددًا.";
 }
-function applyTheme(dark,reduce){
- if(!dark){document.documentElement.style.setProperty("--bg","#f2f5f5");document.documentElement.style.setProperty("--panel","#ffffff");document.documentElement.style.setProperty("--panel2","#e6eded");document.documentElement.style.setProperty("--line","#cbd5d8");document.documentElement.style.setProperty("--text","#17252d");document.documentElement.style.setProperty("--muted","#52666d");document.querySelector(".sidebar").style.background="#e7eeee";document.querySelector(".topbar").style.background="#f2f5f5"}
- else{["--bg","--panel","--panel2","--line","--text","--muted"].forEach((v,i)=>document.documentElement.style.removeProperty(v));document.querySelector(".sidebar").style.background="";document.querySelector(".topbar").style.background=""}
- document.body.style.scrollBehavior=reduce?"auto":"smooth";
+async function googleSignIn(){
+ if(!firebaseReady){alert("لتفعيل Google، أدخل إعدادات Firebase الصحيحة وفعّل Google ضمن Authentication.");return}
+ try{await signInWithRedirect(auth,provider)}catch(e){alert(showAuthError(e))}
 }
-document.getElementById("themeToggle").onchange=e=>{let s={dark:e.target.checked,reduceMotion:document.getElementById("motionToggle").checked};localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));applyTheme(s.dark,s.reduceMotion)};
-document.getElementById("motionToggle").onchange=e=>{let s={dark:document.getElementById("themeToggle").checked,reduceMotion:e.target.checked};localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));applyTheme(s.dark,s.reduceMotion)};
-document.getElementById("exportData").onclick=()=>{
- const blob=new Blob([JSON.stringify({state,settings:JSON.parse(localStorage.getItem(SETTINGS_KEY)||"{}")},null,2)],{type:"application/json"});
- const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="vanta-learning-progress.json";a.click();URL.revokeObjectURL(url);
-};
-document.getElementById("resetData").onclick=()=>{if(confirm("هل تريد مسح تقدم التعلم ونتائج الاختبارات المحفوظة على هذا الجهاز؟")){state={completed:[],scores:[],points:0};saveState();renderHome();renderProfile();toast("تمت إعادة ضبط التقدم المحلي")}};
-function authNotice(msg,type=""){const el=document.getElementById("authNotice");el.textContent=msg;el.className="notice "+type}
-function setAuthMode(signup){
- isSignup=signup;document.getElementById("authHeading").textContent=signup?"إنشاء حساب جديد":"مرحبًا بعودتك";document.getElementById("authSubtitle").textContent=signup?"أنشئ حسابك لحفظ التقدم على حسابك.":"سجّل الدخول لمتابعة تقدمك التعليمي.";
- document.getElementById("authSubmit").textContent=signup?"إنشاء الحساب":"تسجيل الدخول";document.getElementById("confirmWrap").classList.toggle("hidden",!signup);document.getElementById("authConfirm").required=signup;document.getElementById("authPassword").autocomplete=signup?"new-password":"current-password";document.getElementById("toggleAuth").textContent=signup?"لديك حساب؟ تسجيل الدخول":"إنشاء حساب جديد";
- document.getElementById("forgotPassword").classList.toggle("hidden",signup);authNotice("");
-}
-document.getElementById("toggleAuth").onclick=()=>setAuthMode(!isSignup);
-document.getElementById("authForm").onsubmit=async e=>{
+$("googleLogin").addEventListener("click",googleSignIn);
+$("googleRegister").addEventListener("click",googleSignIn);
+$("loginForm").addEventListener("submit",async e=>{
  e.preventDefault();
- const email=document.getElementById("authEmail").value.trim(),password=document.getElementById("authPassword").value;
- if(isSignup&&password!==document.getElementById("authConfirm").value){authNotice("كلمتا المرور غير متطابقتين.","error");return}
- if(!supabase){authNotice("المصادقة غير مهيأة بعد. أضف SUPABASE_URL وSUPABASE_ANON_KEY في إعدادات الواجهة ثم فعّل مزود البريد في Supabase.","error");return}
- const btn=document.getElementById("authSubmit");btn.disabled=true;btn.textContent="جارٍ المعالجة...";
- try{
-  const result=isSignup?await supabase.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}}):await supabase.auth.signInWithPassword({email,password});
-  if(result.error)throw result.error;
-  if(isSignup&&!result.data.session)authNotice("تم إرسال رسالة تحقق إلى بريدك إذا كان التسجيل متاحًا. تحقق من البريد لإكمال التسجيل.","success");
-  else{currentUser=result.data.user;updateAccountUI();authNotice("تم تسجيل الدخول.","success");toast("تم تسجيل الدخول");setTimeout(()=>nav("profile"),500)}
- }catch(err){authNotice(err.message||"تعذر إكمال المصادقة.","error")}
- finally{btn.disabled=false;btn.textContent=isSignup?"إنشاء الحساب":"تسجيل الدخول"}
-};
-document.getElementById("googleSignIn").onclick=async()=>{
- if(!supabase){authNotice("Google OAuth غير مهيأ. أضف بيانات Supabase وفعّل Google من Authentication → Providers، ثم أضف عنوان موقعك إلى Redirect URLs.","error");return}
- try{
-  const {error}=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.origin+location.pathname}});
-  if(error)throw error;
- }catch(err){authNotice(err.message||"تعذر بدء تسجيل Google.","error")}
-};
-document.getElementById("forgotPassword").onclick=async()=>{
- const email=document.getElementById("authEmail").value.trim();
- if(!email){authNotice("أدخل بريدك الإلكتروني أولًا.","error");return}
- if(!supabase){authNotice("استعادة كلمة المرور تحتاج إعداد Supabase.","error");return}
- try{const {error}=await supabase.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});if(error)throw error;authNotice("إذا كان البريد مسجلًا، فستصل رسالة استعادة حسب إعدادات الخدمة.","success")}
- catch(err){authNotice(err.message||"تعذرت عملية الاستعادة.","error")}
-};
-async function updateAccountUI(){
- const name=currentUser?.user_metadata?.full_name||currentUser?.email?.split("@")[0]||"علي";
- document.getElementById("avatarBtn").textContent=name.slice(0,1).toUpperCase();document.getElementById("accountSummary").textContent=currentUser?.email||"زائر";
- document.getElementById("accountAuth").classList.toggle("hidden",!!currentUser);document.getElementById("signOutBtn").classList.toggle("hidden",!currentUser);renderProfile();
-}
-document.getElementById("signOutBtn").onclick=async()=>{
- if(supabase)await supabase.auth.signOut();currentUser=null;updateAccountUI();toast("تم تسجيل الخروج");nav("home");
-};
-if(supabase){
- supabase.auth.getSession().then(({data})=>{currentUser=data.session?.user||null;updateAccountUI()});
- supabase.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;updateAccountUI()});
-}
-async function sendNova(){
- const input=document.getElementById("novaInput"),textValue=input.value.trim();if(!textValue)return;
- const messages=document.getElementById("chatMessages");const u=document.createElement("div");u.className="message user";u.textContent=textValue;messages.appendChild(u);input.value="";
- const pending=document.createElement("div");pending.className="message bot";pending.textContent="NOVA تكتب...";messages.appendChild(pending);messages.scrollTop=messages.scrollHeight;
- try{
-  const res=await fetch("/api/nova.js",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:textValue})});
-  if(!res.ok)throw new Error("تعذر الاتصال بالخدمة ("+res.status+")");
-  const data=await res.json();const answer=data.reply||data.response||data.text;
-  if(!answer)throw new Error("وصل رد غير متوقع من الخدمة");
-  pending.textContent=answer;
- }catch(err){pending.textContent="تعذر الاتصال بـ NOVA الآن. تحقق من نشر /api/nova.js وإعداد متغيرات البيئة على Vercel. التفاصيل: "+err.message}
- messages.scrollTop=messages.scrollHeight;
-}
-document.getElementById("novaSend").onclick=sendNova;
-document.getElementById("novaInput").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendNova()}});
-document.getElementById("pathSearch").addEventListener("input",renderPaths);
-document.getElementById("pathLevel").addEventListener("change",renderPaths);
-document.getElementById("roomSearch").addEventListener("input",renderRooms);
-document.getElementById("roomFilter").addEventListener("change",renderRooms);
-document.getElementById("globalSearch").addEventListener("keydown",e=>{
- if(e.key!=="Enter")return;
- const q=e.target.value.trim().toLowerCase();if(!q)return;
- const p=paths.find(x=>(x.name+" "+x.desc).toLowerCase().includes(q));
- if(p){openPath(p.id);return}
- const r=rooms.find(x=>(x.name+" "+x.desc).toLowerCase().includes(q));
- if(r){openRoom(r.id);return}
- nav("paths");document.getElementById("pathSearch").value=q;renderPaths();
+ if(!firebaseReady){$("loginStatus").textContent="أدخل إعدادات Firebase لتفعيل تسجيل الدخول الحقيقي.";return}
+ try{await signInWithEmailAndPassword(auth,$("loginEmail").value,$("loginPassword").value);location.hash="#profile"}
+ catch(err){$("loginStatus").textContent=showAuthError(err)}
 });
-renderHome();renderPaths();renderRooms();renderLabs();renderQuiz();renderProfile();applySettings();setAuthMode(false);showPage(location.hash.slice(1)||"home");
+$("registerForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(!firebaseReady){$("registerStatus").textContent="أدخل إعدادات Firebase لتفعيل إنشاء الحساب الحقيقي.";return}
+ try{
+  const cred=await createUserWithEmailAndPassword(auth,$("registerEmail").value,$("registerPassword").value);
+  await updateProfile(cred.user,{displayName:$("registerName").value.trim()});
+  await sendEmailVerification(cred.user);
+  $("registerStatus").textContent="تم إنشاء الحساب. تحقق من بريدك الإلكتروني لتأكيده.";
+ }catch(err){$("registerStatus").textContent=showAuthError(err)}
+});
+$("logoutBtn").addEventListener("click",async()=>{if(auth&&currentUser){await signOut(auth)}else{currentUser=null;renderProfile()}location.hash="#home"});
+if(firebaseReady){
+ onAuthStateChanged(auth,user=>{currentUser=user;renderProfile()});
+ getRedirectResult(auth).catch(e=>alert(showAuthError(e)));
+}
+function renderOptions(container,items,correct,output,explain){
+ $(container).innerHTML=items.map((v,i)=>`<button class="btn secondary" style="justify-content:flex-start" data-choice="${i}">${safe(v)}</button>`).join("");
+ $(container).querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{
+  $(container).querySelectorAll("button").forEach(x=>x.disabled=true);
+  const ok=Number(b.dataset.choice)===correct;
+  $(output).textContent=(ok?"إجابة صحيحة. ":"ليست الإجابة الصحيحة. ")+explain;
+ }));
+}
+renderOptions("ipOptions",["192.168.1.5","8.8.8.8","1.1.1.1"],0,"ipResult","العنوان 192.168.1.5 ضمن نطاق IPv4 الخاص.");
+renderOptions("pyOptions",["Hello Ali","Ali فقط","سيحدث خطأ دائمًا"],0,"pyResult","تطبع الدالة Hello ثم اسم Ali.");
+renderOptions("phishingOptions",["أضغط الرابط فورًا","أرسل كلمة المرور","أتحقق من المصدر وأفتح الموقع الرسمي يدويًا"],2,"phishingResult","تجنب الروابط المشبوهة ولا تدخل بياناتك قبل التحقق.");
+$("checkPw").addEventListener("click",()=>{
+ const v=$("pwInput").value;let score=0;
+ if(v.length>=12)score++;if(/[a-z]/.test(v)&&/[A-Z]/.test(v))score++;
+ if(/\d/.test(v))score++;if(/[^a-zA-Z0-9]/.test(v))score++;
+ if(!v){$("pwResult").textContent="أدخل كلمة تجريبية أولًا.";return}
+ const labels=["ضعيفة","تحتاج إلى تحسين","متوسطة","جيدة","أقوى نسبيًا"];
+ $("pwResult").textContent="التقييم: "+labels[score]+". هذا فحص مبسط وليس ضمانًا لأمان كلمة المرور.";
+});
+function renderQuiz(){
+ $("quizForm").innerHTML=quizQuestions.map((q,i)=>`<article class="card"><h3>${i+1}. ${safe(q.q)}</h3>${q.a.map((a,j)=>`<label style="display:flex;gap:8px;align-items:start;margin:8px 0"><input type="radio" name="q${i}" value="${j}"><span>${safe(a)}</span></label>`).join("")}<div id="explain${i}" class="notice hide"></div></article>`).join("");
+}
+renderQuiz();
+$("submitQuiz").addEventListener("click",()=>{
+ let score=0;
+ quizQuestions.forEach((q,i)=>{
+  const selected=document.querySelector(`input[name="q${i}"]:checked`);
+  const ok=selected&&Number(selected.value)===q.correct;if(ok)score++;
+  const el=$("explain"+i);el.classList.remove("hide");
+  el.textContent=(ok?"صحيح. ":"الإجابة الصحيحة: "+q.a[q.correct]+". ")+q.why;
+ });
+ $("quizResult").textContent=`نتيجتك ${score} من ${quizQuestions.length}.`;
+ let scores=JSON.parse(localStorage.getItem("vantaScores")||"[]");scores.push({score,total:quizQuestions.length,date:new Date().toISOString()});localStorage.setItem("vantaScores",JSON.stringify(scores));renderProfile();
+});
+$("retryQuiz").addEventListener("click",()=>{renderQuiz();$("quizResult").textContent="أجب عن الأسئلة ثم اضغط على التصحيح."});
+$("novaAsk").addEventListener("click",()=>{
+ const q=$("novaInput").value.trim();if(!q){$("novaAnswer").textContent="اكتب سؤالك أولًا.";return}
+ let answer="أستطيع مساعدتك في أساسيات الحاسوب والبرمجة والشبكات والأمن السيبراني. حدّد المصطلح أو أرسل مثالًا صغيرًا لأشرحه خطوة بخطوة.";
+ if(/تجزئة|hash|هاش/i.test(q))answer="التجزئة تحول البيانات إلى بصمة ثابتة الطول. تُستخدم لفحص سلامة البيانات، وهي ليست تشفيرًا قابلًا للفك. تخزين كلمات المرور يحتاج خوارزمية مخصصة مع salt.";
+ else if(/تشفير|encrypt/i.test(q))answer="التشفير يحوّل البيانات إلى صيغة غير مقروءة دون المفتاح المناسب. التشفير المتماثل يستخدم مفتاحًا مشتركًا، وغير المتماثل يستخدم مفتاحًا عامًا وخاصًا.";
+ else if(/python|بايثون/i.test(q))answer="Python لغة برمجة سهلة القراءة. ابدأ بالمتغيرات والطباعة والشروط والحلقات والدوال. مثال: print(2 + 3) يطبع 5.";
+ else if(/ip|شبك/i.test(q))answer="عنوان IP يعرّف واجهة على شبكة. نطاقات IPv4 الخاصة هي 10.0.0.0/8 و172.16.0.0/12 و192.168.0.0/16.";
+ $("novaAnswer").textContent=answer+" — هذه إجابة محلية تجريبية وليست اتصالًا مباشرًا بنموذج ذكاء اصطناعي.";
+});
+$("themeSelect").addEventListener("change",()=>{
+ const v=$("themeSelect").value;localStorage.setItem("vantaTheme",v);applyTheme(v);
+});
+function applyTheme(v){
+ const dark=v==="dark"||(v==="system"&&matchMedia("(prefers-color-scheme: dark)").matches);
+ document.documentElement.style.setProperty("--bg",dark?"#171717":"#f7f7f5");
+ document.documentElement.style.setProperty("--panel",dark?"#222":"#fff");
+ document.documentElement.style.setProperty("--text",dark?"#f5f5f5":"#171717");
+ document.documentElement.style.setProperty("--muted",dark?"#c0c0c0":"#737373");
+ document.documentElement.style.setProperty("--line",dark?"#3b3b3b":"#e8e7e2");
+ document.querySelector("header").style.background=dark?"#171717ed":"#ffffffed";
+ document.querySelector("footer").style.background=dark?"#202020":"#fff";
+ document.querySelectorAll(".card,.search,.field input,.field textarea,.field select,.iconbtn,.social,.google-btn").forEach(el=>{
+  el.style.background=dark?"#222":"";
+  el.style.color=dark?"#f5f5f5":"";
+ });
+}
+$("largeText").addEventListener("change",e=>document.body.style.fontSize=e.target.checked?"18px":"");
+$("exportData").addEventListener("click",()=>{
+ const data={completed:JSON.parse(localStorage.getItem("vantaCompleted")||"[]"),scores:JSON.parse(localStorage.getItem("vantaScores")||"[]"),theme:localStorage.getItem("vantaTheme")||"system"};
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="vanta-learning-data.json";a.click();URL.revokeObjectURL(url);
+});
+$("supportForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const subject=encodeURIComponent("VANTA CYBER — "+$("supportSubject").value);
+ const body=encodeURIComponent($("supportMessage").value);
+ location.href=`mailto:?subject=${subject}&body=${body}`;
+});
+renderCourses();
+const savedTheme=localStorage.getItem("vantaTheme")||"system";$("themeSelect").value=savedTheme;applyTheme(savedTheme);
+navigate();
 </script>
 </body>
 </html>
