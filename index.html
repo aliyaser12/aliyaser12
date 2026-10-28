@@ -1,877 +1,646 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="light">
+<html lang="ar" dir="rtl" id="vantaHtml">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VANTA CYBER | فانتا سايبر - منصة تعليم الأمن السيبراني والحاسوب</title>
-<!-- Tailwind CSS CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-darkMode: 'class',
-theme: {
-extend: {
-colors: {
-brand: {
-50: '#f4f6fb',
-100: '#e8ecf5',
-500: '#0d9488', // Turquoise accent
-600: '#0f766e',
-700: '#115e59',
-purple: '#7c3aed',
-coral: '#fb7185'
-}
-},
-fontFamily: {
-sans: ['Inter', 'Tajawal', 'sans-serif']
-}
-}
-}
-}
-</script>
-<!-- Google Fonts: Inter & Tajawal -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
-<!-- FontAwesome Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-body { font-family: 'Tajawal', 'Inter', sans-serif; }
-.glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.8); }
-.dark .glass-card { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(51, 65, 85, 0.8); }
-.transition-all-300 { transition: all 0.3s ease; }
-/* Custom scrollbar */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VANTA CYBER | منصة الأمن السيبراني وعلوم الحاسوب</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        vanta: {
+                            bg: '#f8fafc',
+                            card: '#ffffff',
+                            primary: '#0f172a',
+                            accent: '#0d9488', // turquoise
+                            purple: '#7c3aed',
+                            coral: '#f43f5e',
+                            border: '#e2e8f0',
+                            text: '#334155'
+                        }
+                    },
+                    fontFamily: {
+                        cairo: ['Cairo', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Cairo', 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        .transition-all-300 { transition: all 0.3s ease; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-all-300">
-<!-- Top Navigation Bar -->
-<header class="sticky top-0 z-50 glass-card shadow-sm border-b border-slate-200 dark:border-slate-800">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-<!-- Brand Logo -->
-<div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
-<div class="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-500 via-purple-600 to-rose-500 flex items-center justify-center text-white shadow-lg shadow-teal-500/20">
-<i class="fa-solid fa-shield-halved text-xl"></i>
-</div>
-<div>
-<span class="text-xl font-black tracking-wider bg-gradient-to-r from-teal-600 to-purple-600 bg-clip-text text-transparent">VANTA CYBER</span>
-<span class="block text-[10px] text-slate-400 font-medium tracking-widest uppercase">Security & Tech Academy</span>
-</div>
-</div>
-<!-- Desktop Menu -->
-<nav class="hidden md:flex items-center gap-1 lg:gap-2 font-medium text-sm">
-<button onclick="switchTab('home')" class="nav-btn px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-target="home">
-<i class="fa-solid fa-house ml-1.5"></i> <span data-i18n="nav_home">الرئيسية</span>
-</button>
-<button onclick="switchTab('library')" class="nav-btn px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-target="library">
-<i class="fa-solid fa-graduation-cap ml-1.5"></i> <span data-i18n="nav_lessons">الدروس والمكتبة</span>
-</button>
-<button onclick="switchTab('cyber')" class="nav-btn px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-target="cyber">
-<i class="fa-solid fa-shield-cat ml-1.5"></i> <span data-i18n="nav_cyber">الأمن السيبراني</span>
-</button>
-<button onclick="switchTab('computer')" class="nav-btn px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition" data-target="computer">
-<i class="fa-solid fa-laptop-code ml-1.5"></i> <span data-i18n="nav_computer">الحاسوب والتقنية</span>
-</button>
-<button onclick="switchTab('nova')" class="nav-btn px-3 py-2 rounded-lg text-slate-600 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition flex items-center gap-1.5" data-target="nova">
-<span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></i></span>
-<i class="fa-solid fa-microchip text-purple-600"></i> <span data-i18n="nav_nova">NOVA</span>
-</button>
-</nav>
-<!-- Actions & Auth & Settings -->
-<div class="flex items-center gap-3">
-<!-- Language Switcher -->
-<button onclick="toggleLanguage()" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition text-xs font-bold" title="Toggle Language">
-<span id="langLabel">EN</span>
-</button>
-<!-- Settings Button -->
-<button onclick="switchTab('settings')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition" title="Settings">
-<i class="fa-solid fa-gear"></i>
-</button>
-<!-- Auth State Button -->
-<div id="authNavContainer">
-<button onclick="openAuthModal('login')" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-medium text-sm shadow-md shadow-teal-500/20 transition">
-<i class="fa-solid fa-right-to-bracket"></i> <span data-i18n="login_btn">تسجيل الدخول</span>
-</button>
-</div>
-<!-- Mobile Menu Button -->
-<button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">
-<i class="fa-solid fa-bars text-lg"></i>
-</button>
-</div>
-</div>
-<!-- Mobile Nav Drawer -->
-<div id="mobileMenu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 px-4 py-4 space-y-2 bg-white dark:bg-slate-900 shadow-xl">
-<button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium" data-i18n="nav_home">الرئيسية</button>
-<button onclick="switchTab('library'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium" data-i18n="nav_lessons">الدروس والمكتبة</button>
-<button onclick="switchTab('cyber'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium" data-i18n="nav_cyber">الأمن السيبراني</button>
-<button onclick="switchTab('computer'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium" data-i18n="nav_computer">الحاسوب والتقنية</button>
-<button onclick="switchTab('nova'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium text-purple-600">NOVA المساعد الذكي</button>
-<button onclick="switchTab('profile'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium" data-i18n="nav_profile">الملف الشخصي</button>
-<button onclick="switchTab('settings'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-medium" data-i18n="nav_settings">الإعدادات</button>
-</div>
-</header>
-<!-- Main Content Container -->
-<main class="flex-grow">
-<!-- 1. HOME TAB -->
-<section id="tab-home" class="tab-content">
-<!-- Hero Section -->
-<div class="relative overflow-hidden py-20 lg:py-28 bg-gradient-to-b from-teal-50/50 via-slate-50 to-slate-50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-<div class="lg:col-span-7 space-y-6 text-center lg:text-right rtl:lg:text-right ltr:lg:text-left">
-<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 font-semibold text-xs border border-teal-200 dark:border-teal-800">
-<i class="fa-solid fa-award"></i> <span data-i18n="hero_badge">منصة تعليمية متكاملة واحترافية</span>
-</div>
-<h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 dark:text-white leading-tight">
-<span data-i18n="hero_title_1">احترف</span> <span class="bg-gradient-to-r from-teal-600 via-purple-600 to-rose-500 bg-clip-text text-transparent" data-i18n="hero_title_2">الأمن السيبراني</span> <span data-i18n="hero_title_3">وعلوم الحاسوب من الصفر</span>
-</h1>
-<p class="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto lg:mx-0" data-i18n="hero_desc">
-بناء مسار تعلمي احترافي بمعايير عالمية. محتوى أصلي، مختبرات موثوقة، ومساعد ذكي متطور (NOVA) لمرافقتك في كل خطوة نحو الاحتراف التقني.
-</p>
-<div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
-<button onclick="switchTab('library')" class="px-7 py-3.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold shadow-lg shadow-teal-500/25 transition flex items-center gap-2">
-<span data-i18n="btn_explore">استكشاف الدروس</span> <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180"></i>
-</button>
-<button onclick="switchTab('cyber')" class="px-7 py-3.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold border border-slate-200 dark:border-slate-700 shadow-sm transition">
-<span data-i18n="btn_start_cyber">قسم الأمن السيبراني</span>
-</button>
-</div>
-</div>
-<!-- Hero Interactive Card / Visual -->
-<div class="lg:col-span-5">
-<div class="glass-card p-6 rounded-3xl shadow-2xl relative">
-<div class="absolute -top-4 -right-4 bg-purple-600 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg">
-VANTA CORE 2.0
-</div>
-<div class="space-y-4">
-<div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-lg bg-teal-500/10 text-teal-600 flex items-center justify-center font-bold">
-<i class="fa-solid fa-shield"></i>
-</div>
-<div>
-<h4 class="font-bold text-sm">مسار أمن الشبكات والويب</h4>
-<span class="text-xs text-slate-400">مستوى متقدم • 42 درسًا</span>
-</div>
-</div>
-<span class="px-2.5 py-1 rounded-md bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-xs font-bold">نشط</span>
-</div>
-<!-- Progress Demo -->
-<div class="space-y-2">
-<div class="flex justify-between text-xs font-semibold">
-<span>تقدم التعلم العام</span>
-<span>68%</span>
-</div>
-<div class="w-full h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-teal-500 to-purple-600 rounded-full" style="width: 68%;"></div>
-</div>
-</div>
-<div class="grid grid-cols-2 gap-3 pt-2">
-<div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-center">
-<i class="fa-solid fa-book-open text-teal-600 text-lg mb-1"></i>
-<span class="block text-xs text-slate-400">المكتبة الرقمية</span>
-<span class="font-bold text-sm">مرجعية مفتوحة</span>
-</div>
-<div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-center">
-<i class="fa-solid fa-microchip text-purple-600 text-lg mb-1"></i>
-<span class="block text-xs text-slate-400">المساعد NOVA</span>
-<span class="font-bold text-sm">جاهز للربط بالذكاء</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Quick Access Sections Grid -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-<div class="text-center max-w-2xl mx-auto mb-12 space-y-3">
-<h2 class="text-3xl font-black text-slate-900 dark:text-white" data-i18n="home_domains_title">المجالات الرئيسية للمنصة</h2>
-<p class="text-slate-600 dark:text-slate-400" data-i18n="home_domains_desc">اختر مسارك التقني وابدأ التعلم بخطوات عملية وموثوقة</p>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-<!-- Card 1: Cybersecurity -->
-<div onclick="switchTab('cyber')" class="glass-card p-8 rounded-3xl hover:shadow-xl transition cursor-pointer group border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-<div>
-<div class="w-14 h-14 rounded-2xl bg-teal-500/10 text-teal-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
-<i class="fa-solid fa-shield-halved"></i>
-</div>
-<h3 class="text-xl font-bold mb-3 group-hover:text-teal-600 transition" data-i18n="domain_cyber_title">الأمن السيبراني المتقدم</h3>
-<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6" data-i18n="domain_cyber_desc">
-تغطية شاملة لـ OWASP Top 10، تحليل الثغرات، أمن الويب، والشفافية الدفاعية مع توجيه صارم للاختبار الأخلاقي المصرح به.
-</p>
-</div>
-<div class="flex items-center text-teal-600 font-bold text-sm">
-<span data-i18n="explore_domain">تصفح القسم</span> <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180 mr-2"></i>
-</div>
-</div>
-<!-- Card 2: Computer Science -->
-<div onclick="switchTab('computer')" class="glass-card p-8 rounded-3xl hover:shadow-xl transition cursor-pointer group border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-<div>
-<div class="w-14 h-14 rounded-2xl bg-purple-500/10 text-purple-600 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
-<i class="fa-solid fa-computer"></i>
-</div>
-<h3 class="text-xl font-bold mb-3 group-hover:text-purple-600 transition" data-i18n="domain_computer_title">الحاسوب وتقنية المعلومات</h3>
-<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6" data-i18n="domain_computer_desc">
-من هيكلة المعالج (CPU) وتجميع قطع الهاردوير، إلى إدارة أنظمة لينكس وويندوز والشبكات المنزلية والخوادم.
-</p>
-</div>
-<div class="flex items-center text-purple-600 font-bold text-sm">
-<span data-i18n="explore_domain">تصفح القسم</span> <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180 mr-2"></i>
-</div>
-</div>
-<!-- Card 3: NOVA AI -->
-<div onclick="switchTab('nova')" class="glass-card p-8 rounded-3xl hover:shadow-xl transition cursor-pointer group border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-<div>
-<div class="w-14 h-14 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition">
-<i class="fa-solid fa-microchip"></i>
-</div>
-<h3 class="text-xl font-bold mb-3 group-hover:text-rose-500 transition" data-i18n="domain_nova_title">المساعد الذكي NOVA</h3>
-<p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6" data-i18n="domain_nova_desc">
-مساعد ذكاء اصطناعي حقيقي مصمم لفهم الاستفسارات التقنية وربطه بالنماذج الذكية عبر واجهات آمنة وخلفية مستقلة.
-</p>
-</div>
-<div class="flex items-center text-rose-500 font-bold text-sm">
-<span data-i18n="explore_nova">بدء المحادثة</span> <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180 mr-2"></i>
-</div>
-</div>
-</div>
-</div>
-<!-- Founder Section (علي ياسر | Ali Yaser) -->
-<div class="bg-white dark:bg-slate-900/60 border-y border-slate-200 dark:border-slate-800 py-16">
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-<div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-teal-500 to-purple-600 flex items-center justify-center text-white text-3xl shadow-lg">
-<i class="fa-solid fa-user-gear"></i>
-</div>
-<h2 class="text-2xl font-black text-slate-900 dark:text-white" data-i18n="founder_title">مؤسس ومطور المنصة: علي ياسر | Ali Yaser</h2>
-<p class="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed text-sm sm:text-base" data-i18n="founder_desc">
-تهدف منصة VANTA CYBER إلى تقديم محتوى تقني وأمني عالي الجودة باللغتين العربية والإنجليزية، مع التركيز على الممارسات الهندسية الحقيقية والمعايير العالمية الموثوقة دون تضخيم أو معلومات وهمية.
-</p>
-<div class="flex justify-center gap-4 pt-2">
-<a href="https://wa.me/966565283204" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 font-bold text-xs border border-emerald-200 dark:border-emerald-800 flex items-center gap-2">
-<i class="fa-brands fa-whatsapp text-sm"></i> واتساب الدعم الفني
-</a>
-<a href="https://www.instagram.com/aliyaser878/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300 font-bold text-xs border border-rose-200 dark:border-rose-800 flex items-center gap-2">
-<i class="fa-brands fa-instagram text-sm"></i> انستغرام
-</a>
-<a href="https://www.tiktok.com/@aliyaser878/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-200 font-bold text-xs border border-slate-300 dark:border-slate-700 flex items-center gap-2">
-<i class="fa-brands fa-tiktok text-sm"></i> تيك توك
-</a>
-</div>
-</div>
-</div>
-</section>
-<!-- 2. LIBRARY TAB (Dynamic Learning Library) -->
-<section id="tab-library" class="tab-content hidden">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-<!-- Header & Search -->
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 dark:border-slate-800 pb-8">
-<div>
-<h1 class="text-3xl font-black text-slate-900 dark:text-white" data-i18n="lib_title">مكتبة الدروس والمسارات التعليمية</h1>
-<p class="text-slate-600 dark:text-slate-400 mt-1" data-i18n="lib_desc">قاعدة بيانات قابلة للتوسع تضم دروس الأمن السيبراني والحاسوب والبرمجة</p>
-</div>
-<!-- Search Input -->
-<div class="w-full md:w-80 relative">
-<i class="fa-solid fa-magnifying-glass absolute right-3.5 top-3.5 text-slate-400"></i>
-<input type="text" id="searchInput" oninput="filterLessons()" placeholder="ابحث في الدروس..." class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm">
-</div>
-</div>
-<!-- Filters Bar -->
-<div class="flex flex-wrap items-center gap-3">
-<button onclick="setCategoryFilter('all')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 text-white transition" data-cat="all">الكل</button>
-<button onclick="setCategoryFilter('cyber')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition" data-cat="cyber">الأمن السيبراني</button>
-<button onclick="setCategoryFilter('computer')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition" data-cat="computer">الحاسوب والهاردوير</button>
-<button onclick="setCategoryFilter('programming')" class="cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition" data-cat="programming">البرمجة والشبكات</button>
-</div>
-<!-- Lessons Grid -->
-<div id="lessonsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-<!-- Injected dynamically via JS -->
-</div>
-</div>
-</section>
-<!-- 3. CYBERSECURITY TAB -->
-<section id="tab-cyber" class="tab-content hidden">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-<div class="border-b border-slate-200 dark:border-slate-800 pb-8">
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-teal-100 dark:bg-teal-900/40 text-teal-700 dark:text-teal-300 font-bold text-xs mb-3">
-<i class="fa-solid fa-shield-halved"></i> قسم متخصص
-</div>
-<h1 class="text-3xl font-black text-slate-900 dark:text-white">الأمن السيبراني والدفاع الرقمي</h1>
-<p class="text-slate-600 dark:text-slate-400 mt-1">منهجية معيارية تغطي أساسيات الشبكات، أنظمة التشغيل، أمن الويب، واكتشاف الثغرات الأخلاقية.</p>
-</div>
-<!-- Modules Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="glass-card p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-600 flex items-center justify-center font-bold">1</div>
-<h3 class="font-bold text-lg">أساسيات الشبكات وبروتوكولات TCP/IP</h3>
-</div>
-<p class="text-sm text-slate-600 dark:text-slate-400">فهم عميق لعمل عناوين IP، نظام DNS، وبروتوكولات HTTP/HTTPS ونماذج الاتصال الرقمي.</p>
-<button onclick="openLesson('cyber-1')" class="text-teal-600 dark:text-teal-400 font-bold text-sm inline-flex items-center gap-2 hover:underline">
-قراءة الدرس المرجعي <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180"></i>
-</button>
-</div>
-<div class="glass-card p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold">2</div>
-<h3 class="font-bold text-lg">أمن تطبيقات الويب و OWASP Top 10</h3>
-</div>
-<p class="text-sm text-slate-600 dark:text-slate-400">تحليل الثغرات الشائعة مثل حقن SQL، البرمجة العابرة للمواقع XSS، وإدارة الجلسات والمصادقة الآمنة.</p>
-<button onclick="openLesson('cyber-2')" class="text-teal-600 dark:text-teal-400 font-bold text-sm inline-flex items-center gap-2 hover:underline">
-قراءة الدرس المرجعي <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180"></i>
-</button>
-</div>
-<div class="glass-card p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center font-bold">3</div>
-<h3 class="font-bold text-lg">التحليل الجنائي الرقمي والاستجابة للحوادث</h3>
-</div>
-<p class="text-sm text-slate-600 dark:text-slate-400">جمع الأدلة الرقمية، تحليل السجلات (Logs)، وفهم عمل مراكز العمليات الأمنية (SOC) وSIEM.</p>
-<button onclick="openLesson('cyber-3')" class="text-teal-600 dark:text-teal-400 font-bold text-sm inline-flex items-center gap-2 hover:underline">
-قراءة الدرس المرجعي <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180"></i>
-</button>
-</div>
-<div class="glass-card p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center font-bold">4</div>
-<h3 class="font-bold text-lg">أمن السحابة وإدارة الهوية والصلاحيات</h3>
-</div>
-<p class="text-sm text-slate-600 dark:text-slate-400">حماية البنى السحابية، تطبيق مبدأ الصلاحيات الأدنى (Least Privilege)، وتحليل التهديدات.</p>
-<button onclick="openLesson('cyber-4')" class="text-teal-600 dark:text-teal-400 font-bold text-sm inline-flex items-center gap-2 hover:underline">
-قراءة الدرس المرجعي <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180"></i>
-</button>
-</div>
-</div>
-</div>
-</section>
-<!-- 4. COMPUTER SCIENCE TAB -->
-<section id="tab-computer" class="tab-content hidden">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-<div class="border-b border-slate-200 dark:border-slate-800 pb-8">
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-300 font-bold text-xs mb-3">
-<i class="fa-solid fa-computer"></i> قسم تقني شامل
-</div>
-<h1 class="text-3xl font-black text-slate-900 dark:text-white">علوم الحاسوب وهندسة النظم</h1>
-<p class="text-slate-600 dark:text-slate-400 mt-1">من أساسيات المعالج واللوحة الأم وتجميع الهاردوير إلى تشغيل أنظمة لينكس وويندوز وسطر الأوامر.</p>
-</div>
-<!-- Modules Grid -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="glass-card p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-600 flex items-center justify-center font-bold">1</div>
-<h3 class="font-bold text-lg">هيكلة الحاسوب ومكوناته الداخلية</h3>
-</div>
-<p class="text-sm text-slate-600 dark:text-slate-400">دراسة عمل المعالج (CPU)، الذاكرة العشوائية (RAM)، وحدات التخزين SSD/HDD، واللوحة الأم.</p>
-<button onclick="openLesson('comp-1')" class="text-teal-600 dark:text-teal-400 font-bold text-sm inline-flex items-center gap-2 hover:underline">
-قراءة الدرس المرجعي <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180"></i>
-</button>
-</div>
-<div class="glass-card p-6 rounded-3xl space-y-4 border border-slate-200 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold">2</div>
-<h3 class="font-bold text-lg">أنظمة التشغيل وسطر الأوامر (Linux & Windows)</h3>
-</div>
-<p class="text-sm text-slate-600 dark:text-slate-400">إدارة الملفات والصلاحيات عبر الطرفية (Terminal)، تثبيت الأنظمة، وإعدادات الشبكات المنزلية.</p>
-<button onclick="openLesson('comp-2')" class="text-teal-600 dark:text-teal-400 font-bold text-sm inline-flex items-center gap-2 hover:underline">
-قراءة الدرس المرجعي <i class="fa-solid fa-arrow-left rtl:rotate-0 ltr:rotate-180"></i>
-</button>
-</div>
-</div>
-</div>
-</section>
-<!-- 5. NOVA AI ASSISTANT TAB -->
-<section id="tab-nova" class="tab-content hidden">
-<div class="max-w-4xl mx-auto px-4 py-8 h-[calc(100vh-5rem)] flex flex-col">
-<!-- NOVA Header -->
-<div class="glass-card p-4 rounded-2xl mb-4 flex items-center justify-between border border-slate-200 dark:border-slate-800">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-rose-500 text-white flex items-center justify-center shadow-md">
-<i class="fa-solid fa-microchip"></i>
-</div>
-<div>
-<h2 class="font-bold text-sm">NOVA AI Assistant</h2>
-<span class="text-xs text-emerald-600 font-medium flex items-center gap-1">
-<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> جاهز للربط بخدمة API الآمنة
-</span>
-</div>
-</div>
-<button onclick="clearNovaChat()" class="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-500 hover:text-rose-500 transition">
-مسح المحادثة
-</button>
-</div>
-<!-- Chat Messages Box -->
-<div id="novaChatMessages" class="flex-grow glass-card rounded-2xl p-4 overflow-y-auto space-y-4 mb-4 border border-slate-200 dark:border-slate-800">
-<div class="flex items-start gap-3">
-<div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center shrink-0">
-<i class="fa-solid fa-microchip text-xs"></i>
-</div>
-<div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm max-w-[80%] leading-relaxed">
-أهلاً بك. أنا <strong>NOVA</strong> المساعد الذكي لمنصة VANTA CYBER. اسألني أي استفسار في الأمن السيبراني أو علوم الحاسوب وسأقوم بمساعدتك.
-</div>
-</div>
-</div>
-<!-- Chat Input Form -->
-<form id="novaForm" onsubmit="handleNovaSubmit(event)" class="flex gap-2">
-<input type="text" id="novaInput" placeholder="اكتب سؤالك التقني هنا..." class="flex-grow px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
-<button type="submit" class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-sm shadow-md shadow-purple-500/20 transition flex items-center gap-2">
-<span>إرسال</span> <i class="fa-solid fa-paper-plane rtl:rotate-180"></i>
-</button>
-</form>
-</div>
-</section>
-<!-- 6. LESSON VIEWER TAB -->
-<section id="tab-lesson-view" class="tab-content hidden">
-<div class="max-w-4xl mx-auto px-4 py-12 space-y-8">
-<!-- Back Button -->
-<button onclick="switchTab('library')" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
-<i class="fa-solid fa-arrow-right rtl:rotate-0 ltr:rotate-180"></i> العودة إلى المكتبة
-</button>
-<!-- Lesson Content Container -->
-<div id="lessonContentContainer" class="glass-card p-8 sm:p-12 rounded-3xl space-y-6 border border-slate-200 dark:border-slate-800">
-<!-- Dynamic Lesson Data Injected Here -->
-</div>
-</div>
-</section>
-<!-- 7. PROFILE TAB -->
-<section id="tab-profile" class="tab-content hidden">
-<div class="max-w-4xl mx-auto px-4 py-12 space-y-8">
-<div class="glass-card p-8 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row items-center gap-6">
-<div class="w-24 h-24 rounded-full bg-gradient-to-tr from-teal-500 to-purple-600 text-white flex items-center justify-center text-3xl font-black shadow-lg">
-<span id="profileAvatarInitial">VC</span>
-</div>
-<div class="text-center sm:text-right rtl:sm:text-right ltr:sm:text-left space-y-2">
-<h1 id="profileNameDisplay" class="text-2xl font-black text-slate-900 dark:text-white">زائر المنصة</h1>
-<p id="profileEmailDisplay" class="text-sm text-slate-500 dark:text-slate-400">guest@vantacyber.local</p>
-<span class="inline-block px-3 py-1 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300 text-xs font-bold">متعلم نشط</span>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
-<h3 class="font-bold text-lg">التقدم التعليمي</h3>
-<div class="space-y-2">
-<div class="flex justify-between text-xs font-bold">
-<span>الدروس المكتملة</span>
-<span id="completedCount">0 / 12</span>
-</div>
-<div class="w-full h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-<div id="completedBar" class="h-full bg-teal-500 rounded-full" style="width: 0%;"></div>
-</div>
-</div>
-</div>
-<div class="glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-4">
-<h3 class="font-bold text-lg">إدارة الحساب</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400">تسجيل الخروج أو حذف البيانات المحلية.</p>
-<button onclick="logoutUser()" class="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300 font-bold text-xs border border-rose-200 dark:border-rose-800">
-تسجيل الخروج
-</button>
-</div>
-</div>
-</div>
-</section>
-<!-- 8. SETTINGS TAB -->
-<section id="tab-settings" class="tab-content hidden">
-<div class="max-w-4xl mx-auto px-4 py-12 space-y-8">
-<div class="border-b border-slate-200 dark:border-slate-800 pb-6">
-<h1 class="text-3xl font-black text-slate-900 dark:text-white" data-i18n="settings_title">إعدادات المنصة</h1>
-<p class="text-slate-600 dark:text-slate-400 mt-1" data-i18n="settings_desc">تخصيص اللغة، المظهر، وتفضيلات العرض</p>
-</div>
-<div class="glass-card p-8 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6">
-<!-- Language Selection -->
-<div class="flex items-center justify-between py-4 border-b border-slate-200 dark:border-slate-700">
-<div>
-<h4 class="font-bold text-sm">لغة الواجهة (Language)</h4>
-<span class="text-xs text-slate-400">التبديل بين العربية والإنجليزية</span>
-</div>
-<button onclick="toggleLanguage()" class="px-4 py-2 rounded-xl bg-teal-600 text-white font-bold text-xs shadow-sm">
-<span id="settingsLangBtnText">English / العربية</span>
-</button>
-</div>
-<!-- Theme Selection -->
-<div class="flex items-center justify-between py-4 border-b border-slate-200 dark:border-slate-700">
-<div>
-<h4 class="font-bold text-sm">مظهر المنصة (Theme)</h4>
-<span class="text-xs text-slate-400">الوضع الفاتح أو الداكن</span>
-</div>
-<button onclick="toggleTheme()" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 font-bold text-xs">
-<span id="themeBtnText">تغيير المظهر</span>
-</button>
-</div>
-<!-- Local Data Management -->
-<div class="flex items-center justify-between py-4">
-<div>
-<h4 class="font-bold text-sm">إدارة البيانات المحلية</h4>
-<span class="text-xs text-slate-400">مسح سجل التقدم وحفظ الدروس</span>
-</div>
-<button onclick="clearLocalData()" class="px-4 py-2 rounded-xl bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300 font-bold text-xs border border-rose-200 dark:border-rose-800">
-إعادة ضبط البيانات
-</button>
-</div>
-</div>
-</div>
-</section>
-<!-- 9. LEGAL & PRIVACY TAB -->
-<section id="tab-privacy" class="tab-content hidden">
-<div class="max-w-4xl mx-auto px-4 py-12 space-y-8">
-<div class="glass-card p-8 sm:p-12 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-6">
-<h1 class="text-3xl font-black text-slate-900 dark:text-white">سياسة الخصوصية والشروط</h1>
-<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-نلتزم في VANTA CYBER بحماية خصوصيتك وبياناتك الشخصية. يتم جمع الحد الأدنى من البيانات الضرورية لتوفير التجربة التعليمية ومتابعة التقدم. لا يتم مشاركة أي معلومات مع أطراف ثالثة دون إذن صريح.
-</p>
-<h3 class="font-bold text-lg pt-4">شروط الاستخدام</h3>
-<p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-المحتوى التعليمي والمختبرات مخصصة للأغراض التعليمية والأمنية المشروعة حصراً. يُمنع منعاً باتاً استخدام الأدوات الأمنية على أنظمة غير مصرح بها أو خارج النطاق القانوني.
-</p>
-</div>
-</div>
-</section>
-</main>
-<!-- Footer -->
-<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 mt-auto">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-right rtl:md:text-right ltr:md:text-left">
-<div class="flex items-center gap-3 justify-center md:justify-start">
-<div class="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold text-sm">
-<i class="fa-solid fa-shield-halved"></i>
-</div>
-<span class="font-bold text-sm tracking-wider">VANTA CYBER © 2026</span>
-</div>
-<div class="flex flex-wrap justify-center gap-6 text-sm text-slate-500 font-medium">
-<button onclick="switchTab('privacy')" class="hover:text-teal-600 transition">سياسة الخصوصية وشروط الاستخدام</button>
-<a href="https://wa.me/966565283204" target="_blank" rel="noopener noreferrer" class="hover:text-teal-600 transition">واتساب الدعم الفني</a>
-<a href="https://www.instagram.com/aliyaser878/" target="_blank" rel="noopener noreferrer" class="hover:text-teal-600 transition">انستغرام المؤسس</a>
-</div>
-</div>
-</footer>
-<!-- AUTH MODAL -->
-<div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-<div class="glass-card w-full max-w-md p-8 rounded-3xl border border-slate-200 dark:border-slate-700 relative space-y-6">
-<button onclick="closeAuthModal()" class="absolute top-4 left-4 text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-<div class="text-center space-y-2">
-<div class="w-12 h-12 mx-auto rounded-2xl bg-teal-500/10 text-teal-600 flex items-center justify-center text-xl font-bold">
-<i class="fa-solid fa-user-lock"></i>
-</div>
-<h3 class="text-xl font-black" id="authModalTitle">تسجيل الدخول إلى VANTA CYBER</h3>
-<p class="text-xs text-slate-400">قم بتسجيل الدخول لمتابعة تقدمك وحفظ مساراتك</p>
-</div>
-<form onsubmit="handleAuthSubmit(event)" class="space-y-4">
-<div>
-<label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">البريد الإلكتروني</label>
-<input type="email" id="authEmail" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-teal-500">
-</div>
-<div>
-<label class="block text-xs font-bold text-slate-600 dark:text-slate-300 mb-1">كلمة المرور</label>
-<input type="password" id="authPassword" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-2 focus:ring-teal-500">
-</div>
-<button type="submit" class="w-full py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm shadow-lg shadow-teal-500/20 transition">
-تسجيل الدخول
-</button>
-</form>
-<div class="relative flex py-2 items-center">
-<div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
-<span class="flex-shrink mx-4 text-xs text-slate-400 font-medium">أو عبر</span>
-<div class="flex-grow border-t border-slate-200 dark:border-slate-700"></div>
-</div>
-<button onclick="simulateGoogleAuth()" class="w-full py-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 font-bold text-sm flex items-center justify-center gap-3 transition">
-<i class="fa-brands fa-google text-rose-500"></i> متابعة باستخدام Google
-</button>
-</div>
-</div>
-<!-- JAVASCRIPT APP LOGIC -->
-<script>
-// State management
-let currentLang = 'ar';
-let currentTheme = 'light';
-let currentUser = JSON.parse(localStorage.getItem('vanta_user')) || null;
-let currentCategoryFilter = 'all';
-// Lessons Database (Expandable Data Structure)
-const lessonsDB = [
-{
-id: 'cyber-1',
-category: 'cyber',
-titleAr: 'مقدمة في أساسيات الشبكات وبروتوكولات TCP/IP',
-titleEn: 'Introduction to Networking & TCP/IP Protocols',
-descAr: 'فهم شامل لهيكلة نقل البيانات عبر الإنترنت، عناوين IP، وأنظمة DNS.',
-descEn: 'Comprehensive understanding of data transmission, IP addressing, and DNS systems.',
-level: 'مبتدئ / Beginner',
-duration: '25 دقيقة',
-contentAr: ⁠<h2 class="text-2xl font-black">ما هي بروتوكولات الشبكات؟</h2> <p class="leading-relaxed text-slate-600 dark:text-slate-300">الشبكات الرقمية هي العمود الفقري لأمن المعلومات والاتصالات. يعتمد الإنترنت على نموذج <strong>TCP/IP</strong> لتقسيم البيانات إلى حزم مرسلة عبر مسارات متعددة.</p> <h3 class="text-xl font-bold pt-4">العناصر الأساسية:</h3> <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300"> <li>عناوين IP (IPv4 & IPv6): معرفات الأجهزة على الشبكة.</li> <li>بروتوكول DNS: ترجمة أسماء النطاقات إلى عناوين IP حقيقية.</li> <li>بروتوكول HTTP/HTTPS: تأمين نقل صفحات الويب وتشفرها بنظام TLS.</li> </ul>⁠
-},
-{
-id: 'cyber-2',
-category: 'cyber',
-titleAr: 'أمن تطبيقات الويب ومعيار OWASP Top 10',
-titleEn: 'Web App Security & OWASP Top 10',
-descAr: 'دراسة الثغرات العشر الأكثر خطورة في تطبيقات الويب وكيفية تأمين المدخلات.',
-descEn: 'Study of the top 10 most critical web application vulnerabilities.',
-level: 'متوسط / Intermediate',
-duration: '40 دقيقة',
-contentAr: ⁠<h2 class="text-2xl font-black">فهم معيار OWASP Top 10</h2> <p class="leading-relaxed text-slate-600 dark:text-slate-300">يُعد معيار <strong>OWASP</strong> المرجع الأساسي لمطوري ومختبري أمن الويب لتحديد الثغرات مثل حقن قواعد البيانات (SQL Injection) والبرمجة العابرة للمواقع (XSS).</p> <h3 class="text-xl font-bold pt-4">خطوات الوقاية الدفاعية:</h3> <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300"> <li>التحقق الصارم من مدخلات المستخدمين (Input Validation).</li> <li>استخدام الاستعلامات الآمنة المجهزة (Prepared Statements).</li> <li>تفعيل سياسات أمان المحتوى (CSP).</li> </ul>⁠
-},
-{
-id: 'comp-1',
-category: 'computer',
-titleAr: 'هيكلة الحاسوب ومكونات المعالج CPU والذاكرة',
-titleEn: 'Computer Architecture & CPU/RAM Components',
-descAr: 'كيف يعمل المعالج وحدات التخزين واللوحة الأم من الصفر.',
-descEn: 'How CPU, storage units, and motherboard work from scratch.',
-level: 'مبتدئ / Beginner',
-duration: '30 دقيقة',
-contentAr: ⁠<h2 class="text-2xl font-black">مكونات الحاسوب الأساسية</h2> <p class="leading-relaxed text-slate-600 dark:text-slate-300">يتكون الحاسوب الشخصي من وحدة المعالجة المركزية (CPU) المسؤولة عن تنفيذ العمليات الحسابية، والذاكرة المؤقتة (RAM) لتخزين البيانات قيد المعالجة.</p> <h3 class="text-xl font-bold pt-4">وحدات التخزين:</h3> <ul class="list-disc list-inside space-y-2 text-slate-600 dark:text-slate-300"> <li>أقراص SSD NVMe عالية السرعة.</li> <li>أقراص التخزين التقليدية HDD.</li> </ul>⁠
-},
-{
-id: 'comp-2',
-category: 'computer',
-titleAr: 'إدارة أنظمة لينكس وسطر الأوامر (Linux Terminal)',
-titleEn: 'Linux Systems & Terminal Administration',
-descAr: 'أهم الأوامر المستخدمة لإدارة الملفات، الصلاحيات، والشبكات في أنظمة Linux.',
-descEn: 'Essential terminal commands for file management and permissions in Linux.',
-level: 'متوسط / Intermediate',
-duration: '35 دقيقة',
-contentAr: ⁠<h2 class="text-2xl font-black">الطرفية وسطر الأوامر</h2> <p class="leading-relaxed text-slate-600 dark:text-slate-300">يُعد نظام Linux الأساس في تشغيل الخوادم ومنصات الحوسبة والأمن السيبراني. تعلم الأوامر الأساسية مثل <code>ls</code> و <code>chmod</code> و <code>grep</code> ضروري لكل تقني.</p>⁠
-}
-];
-// Translations Dictionary
-const translations = {
-ar: {
-nav_home: 'الرئيسية',
-nav_lessons: 'الدروس والمكتبة',
-nav_cyber: 'الأمن السيبراني',
-nav_computer: 'الحاسوب والتقنية',
-nav_nova: 'NOVA',
-nav_profile: 'الملف الشخصي',
-nav_settings: 'الإعدادات',
-login_btn: 'تسجيل الدخول',
-hero_badge: 'منصة تعليمية متكاملة واحترافية',
-hero_title_1: 'احترف',
-hero_title_2: 'الأمن السيبراني',
-hero_title_3: 'وعلوم الحاسوب من الصفر',
-hero_desc: 'بناء مسار تعلمي احترافي بمعايير عالمية. محتوى أصلي، مختبرات موثوقة، ومساعد ذكي متطور (NOVA) لمرافقتك في كل خطوة نحو الاحتراف التقني.',
-btn_explore: 'استكشاف الدروس',
-btn_start_cyber: 'قسم الأمن السيبراني',
-home_domains_title: 'المجالات الرئيسية للمنصة',
-home_domains_desc: 'اختر مسارك التقني وابدأ التعلم بخطوات عملية وموثوقة',
-domain_cyber_title: 'الأمن السيبراني المتقدم',
-domain_cyber_desc: 'تغطية شاملة لـ OWASP Top 10، تحليل الثغرات، أمن الويب، والشفافية الدفاعية مع توجيه صارم للاختبار الأخلاقي المصرح به.',
-domain_computer_title: 'الحاسوب وتقنية المعلومات',
-domain_computer_desc: 'من هيكلة المعالج (CPU) وتجميع قطع الهاردوير، إلى إدارة أنظمة لينكس وويندوز والشبكات المنزلية والخوادم.',
-domain_nova_title: 'المساعد الذكي NOVA',
-domain_nova_desc: 'مساعد ذكاء اصطناعي حقيقي مصمم لفهم الاستفسارات التقنية وربطه بالنماذج الذكية عبر واجهات آمنة وخلفية مستقلة.',
-explore_domain: 'تصفح القسم',
-explore_nova: 'بدء المحادثة',
-founder_title: 'مؤسس ومطور المنصة: علي ياسر | Ali Yaser',
-founder_desc: 'تهدف منصة VANTA CYBER إلى تقديم محتوى تقني وأمني عالي الجودة باللغتين العربية والإنجليزية، مع التركيز على الممارسات الهندسية الحقيقية والمعايير العالمية الموثوقة دون تضخيم أو معلومات وهمية.',
-lib_title: 'مكتبة الدروس والمسارات التعليمية',
-lib_desc: 'قاعدة بيانات قابلة للتوسع تضم دروس الأمن السيبراني والحاسوب والبرمجة',
-settings_title: 'إعدادات المنصة',
-settings_desc: 'تخصيص اللغة، المظهر، وتفضيلات العرض'
-},
-en: {
-nav_home: 'Home',
-nav_lessons: 'Library & Lessons',
-nav_cyber: 'Cybersecurity',
-nav_computer: 'Computer Science',
-nav_nova: 'NOVA AI',
-nav_profile: 'Profile',
-nav_settings: 'Settings',
-login_btn: 'Sign In',
-hero_badge: 'Professional Educational Platform',
-hero_title_1: 'Master',
-hero_title_2: 'Cybersecurity',
-hero_title_3: '& Computer Science from Scratch',
-hero_desc: 'Build professional technical paths with global standards. Original content, reliable labs, and advanced NOVA AI assistant.',
-btn_explore: 'Explore Lessons',
-btn_start_cyber: 'Cybersecurity Section',
-home_domains_title: 'Core Platform Domains',
-home_domains_desc: 'Choose your technical path and start learning with reliable practical steps',
-domain_cyber_title: 'Advanced Cybersecurity',
-domain_cyber_desc: 'Comprehensive coverage of OWASP Top 10, vulnerability analysis, web security, and authorized ethical hacking.',
-domain_computer_title: 'Computer Science & IT',
-domain_computer_desc: 'From CPU architecture and hardware assembly to Linux, Windows management, and home networks.',
-domain_nova_title: 'NOVA AI Assistant',
-domain_nova_desc: 'Real AI assistant designed to understand technical inquiries and connect to smart models securely.',
-explore_domain: 'Browse Section',
-explore_nova: 'Start Chat',
-explore_nova: 'Start Chat',
-founder_title: 'Founder & Developer: Ali Yaser',
-founder_desc: 'VANTA CYBER aims to provide high-quality technical and security content in Arabic and English, focusing on authentic engineering practices.',
-lib_title: 'Educational Library & Paths',
-lib_desc: 'Scalable database featuring cybersecurity, computer science, and programming lessons',
-settings_title: 'Platform Settings',
-settings_desc: 'Customize language, theme, and display preferences'
-}
-};
-// Switch Tabs Function
-function switchTab(tabId) {
-document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-const target = document.getElementById('tab-' + tabId);
-if (target) {
-target.classList.remove('hidden');
-window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-if (tabId === 'library') {
-renderLessons(lessonsDB);
-}
-if (tabId === 'profile') {
-updateProfileUI();
-}
-}
-// Render Lessons in Library
-function renderLessons(lessons) {
-const grid = document.getElementById('lessonsGrid');
-grid.innerHTML = '';
-lessons.forEach(lesson => {
-const title = currentLang === 'ar' ? lesson.titleAr : lesson.titleEn;
-const desc = currentLang === 'ar' ? lesson.descAr : lesson.descEn;
-const card = document.createElement('div');
-card.className = 'glass-card p-6 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:shadow-xl transition';
-card.innerHTML = ⁠<div class="space-y-3"> <div class="flex items-center justify-between"> <span class="px-3 py-1 rounded-md bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300 text-xs font-bold">${lesson.level}</span> <span class="text-xs text-slate-400"><i class="fa-regular fa-clock ml-1"></i> ${lesson.duration}</span> </div> <h3 class="font-bold text-lg text-slate-900 dark:text-white">${title}</h3> <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">${desc}</p> </div> <div class="pt-6 mt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between"> <button onclick="openLesson('${lesson.id}')" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs shadow-md shadow-teal-500/20 transition"> ${currentLang === 'ar' ? 'ابدأ الدرس' : 'Start Lesson'} </button> <button onclick="toggleBookmark('${lesson.id}')" class="p-2 text-slate-400 hover:text-rose-500 transition"> <i class="fa-regular fa-bookmark text-lg"></i> </button> </div>⁠;
-grid.appendChild(card);
-});
-}
-// Filter Lessons
-function setCategoryFilter(cat) {
-currentCategoryFilter = cat;
-document.querySelectorAll('.cat-filter-btn').forEach(btn => {
-if (btn.dataset.cat === cat) {
-btn.className = 'cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 text-white transition';
-} else {
-btn.className = 'cat-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition';
-}
-});
-if (cat === 'all') {
-renderLessons(lessonsDB);
-} else {
-renderLessons(lessonsDB.filter(l => l.category === cat));
-}
-}
-function filterLessons() {
-const query = document.getElementById('searchInput').value.toLowerCase();
-const filtered = lessonsDB.filter(l =>
-l.titleAr.toLowerCase().includes(query) ||
-l.titleEn.toLowerCase().includes(query) ||
-l.descAr.toLowerCase().includes(query)
-);
-renderLessons(filtered);
-}
-// Open Specific Lesson View
-function openLesson(lessonId) {
-const lesson = lessonsDB.find(l => l.id === lessonId);
-if (!lesson) return;
-const container = document.getElementById('lessonContentContainer');
-const title = currentLang === 'ar' ? lesson.titleAr : lesson.titleEn;
-container.innerHTML = ⁠<div class="space-y-4 border-b border-slate-200 dark:border-slate-700 pb-6"> <div class="flex items-center gap-2"> <span class="px-3 py-1 rounded-md bg-teal-100 text-teal-700 dark:bg-teal-900/40 dark:text-teal-300 text-xs font-bold">${lesson.level}</span> <span class="text-xs text-slate-400">${lesson.duration}</span> </div> <h1 class="text-3xl font-black text-slate-900 dark:text-white">${title}</h1> </div> <div class="space-y-6 pt-4"> ${lesson.contentAr} </div> <div class="pt-8 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between"> <button onclick="markLessonCompleted('${lesson.id}')" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-500/20 transition flex items-center gap-2"> <i class="fa-solid fa-check"></i> تم إكمال الدرس </button> <button onclick="switchTab('library')" class="px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-700 font-bold text-sm"> العودة للقائمة </button> </div>⁠;
-switchTab('lesson-view');
-}
-function markLessonCompleted(id) {
-alert('تم تسجيل إكمال الدرس بنجاح في سجل تقدمك المحلي!');
-switchTab('library');
-}
-function toggleBookmark(id) {
-alert('تم حفظ الدرس في المفضلة بنجاح.');
-}
-// NOVA Chat Handling
-function handleNovaSubmit(e) {
-e.preventDefault();
-const input = document.getElementById('novaInput');
-const text = input.value.trim();
-if (!text) return;
-const chatBox = document.getElementById('novaChatMessages');
-// Append User Message
-chatBox.innerHTML += ⁠<div class="flex items-start gap-3 justify-end"> <div class="p-3.5 rounded-2xl bg-teal-600 text-white text-sm max-w-[80%] leading-relaxed"> ${text} </div> <div class="w-8 h-8 rounded-lg bg-teal-700 text-white flex items-center justify-center shrink-0"> <i class="fa-solid fa-user text-xs"></i> </div> </div>⁠;
-input.value = '';
-chatBox.scrollTop = chatBox.scrollHeight;
-// Simulate NOVA AI Response (Ready for Real API connection via backend endpoint)
-setTimeout(() => {
-chatBox.innerHTML += ⁠<div class="flex items-start gap-3"> <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center shrink-0"> <i class="fa-solid fa-microchip text-xs"></i> </div> <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm max-w-[80%] leading-relaxed"> استلمت استفسارك حول: "<strong>${text}</strong>". واجهة NOVA جاهزة تماماً للربط مع نموذج الذكاء الاصطناعي عبر نقطة الاتصال الخلفية (Backend API) المفعلة في متغيرات البيئة. </div> </div>⁠;
-chatBox.scrollTop = chatBox.scrollHeight;
-}, 800);
-}
-function clearNovaChat() {
-const chatBox = document.getElementById('novaChatMessages');
-chatBox.innerHTML = ⁠<div class="flex items-start gap-3"> <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center shrink-0"> <i class="fa-solid fa-microchip text-xs"></i> </div> <div class="p-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm max-w-[80%] leading-relaxed"> تم بدء محادثة جديدة مع NOVA. تفضل بطرح سؤالك التقني. </div> </div>⁠;
-}
-// Auth Modal & User State
-function openAuthModal(mode) {
-document.getElementById('authModal').classList.remove('hidden');
-}
-function closeAuthModal() {
-document.getElementById('authModal').classList.add('hidden');
-}
-function handleAuthSubmit(e) {
-e.preventDefault();
-const email = document.getElementById('authEmail').value;
-currentUser = { email: email, name: email.split('@')[0] };
-localStorage.setItem('vanta_user', JSON.stringify(currentUser));
-closeAuthModal();
-updateAuthNav();
-alert('تم تسجيل الدخول بنجاح!');
-}
-function simulateGoogleAuth() {
-currentUser = { email: 'ali.yaser.auth@gmail.com', name: 'Ali Yaser' };
-localStorage.setItem('vanta_user', JSON.stringify(currentUser));
-closeAuthModal();
-updateAuthNav();
-alert('تم المصادقة عبر Google بنجاح!');
-}
-function logoutUser() {
-currentUser = null;
-localStorage.removeItem('vanta_user');
-updateAuthNav();
-switchTab('home');
-alert('تم تسجيل الخروج.');
-}
-function updateAuthNav() {
-const container = document.getElementById('authNavContainer');
-if (currentUser) {
-container.innerHTML = ⁠<button onclick="switchTab('profile')" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs border border-slate-200 dark:border-slate-700"> <i class="fa-solid fa-user-check text-teal-600"></i> <span>${currentUser.name}</span> </button>⁠;
-} else {
-container.innerHTML = ⁠<button onclick="openAuthModal('login')" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-medium text-sm shadow-md shadow-teal-500/20 transition"> <i class="fa-solid fa-right-to-bracket"></i> <span>تسجيل الدخول</span> </button>⁠;
-}
-}
-function updateProfileUI() {
-if (currentUser) {
-document.getElementById('profileNameDisplay').innerText = currentUser.name;
-document.getElementById('profileEmailDisplay').innerText = currentUser.email;
-document.getElementById('profileAvatarInitial').innerText = currentUser.name.substring(0, 2).toUpperCase();
-}
-}
-// Language and Theme Toggles
-function toggleLanguage() {
-currentLang = currentLang === 'ar' ? 'en' : 'ar';
-document.documentElement.setAttribute('lang', currentLang);
-document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-document.getElementById('langLabel').innerText = currentLang === 'ar' ? 'EN' : 'AR';
-// Translate static data-i18n keys
-document.querySelectorAll('[data-i18n]').forEach(el => {
-const key = el.getAttribute('data-i18n');
-if (translations[currentLang][key]) {
-el.innerText = translations[currentLang][key];
-}
-});
-}
-function toggleTheme() {
-currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-if (currentTheme === 'dark') {
-document.documentElement.classList.add('dark');
-document.getElementById('themeBtnText').innerText = 'الوضع الفاتح';
-} else {
-document.documentElement.classList.remove('dark');
-document.getElementById('themeBtnText').innerText = 'الوضع الداكن';
-}
-}
-function toggleMobileMenu() {
-const menu = document.getElementById('mobileMenu');
-menu.classList.toggle('hidden');
-}
-function clearLocalData() {
-localStorage.clear();
-alert('تم مسح البيانات المحلية بنجاح.');
-}
-// Initialize App on load
-window.addEventListener('DOMContentLoaded', () => {
-updateAuthNav();
-});
-</script>
+<body class="bg-slate-50 text-slate-700 min-h-screen flex flex-col selection:bg-teal-500 selection:text-white">
+
+    <!-- Top Notification / Announcement Bar -->
+    <div id="announcementBar" class="bg-gradient-to-r from-teal-600 via-purple-600 to-indigo-600 text-white text-xs py-2 px-4 text-center font-medium flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-2 mx-auto">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span id="announcementText">منصة VANTA CYBER الاحترافية - انطلق في مسارك نحو احتراف الأمن السيبراني وعلوم الحاسوب من الصفر.</span>
+        </div>
+        <button onclick="document.getElementById('announcementBar').style.display='none'" class="text-white/80 hover:text-white px-2">&times;</button>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo & Brand -->
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('home')">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-teal-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-teal-500/20">
+                    <i class="fa-solid fa-cube text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-black text-xl tracking-wider text-slate-900 flex items-center gap-1.5">
+                        VANTA <span class="text-teal-600 font-bold">CYBER</span>
+                    </h1>
+                    <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-widest">by Ali Yaser</p>
+                </div>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-1 lg:gap-2">
+                <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-lg text-sm font-semibold text-teal-600 bg-teal-50/80 transition-all">الرئيسية</button>
+                <button onclick="switchTab('cyber')" id="nav-cyber" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-slate-50 transition-all">الأمن السيبراني</button>
+                <button onclick="switchTab('cs')" id="nav-cs" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-slate-50 transition-all">علوم الحاسوب</button>
+                <button onclick="switchTab('library')" id="nav-library" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-slate-50 transition-all">مكتبة الدروس</button>
+                <button onclick="switchTab('nova')" id="nav-nova" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium text-purple-600 hover:bg-purple-50 transition-all flex items-center gap-1.5">
+                    <i class="fa-solid fa-atom animate-spin" style="animation-duration: 8s;"></i> NOVA AI
+                </button>
+            </nav>
+
+            <!-- Actions & User Profile -->
+            <div class="flex items-center gap-3">
+                <!-- Language Switcher -->
+                <button onclick="toggleLanguage()" id="langBtn" class="px-3 py-1.5 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 hover:bg-slate-100 transition-all">
+                    English
+                </button>
+
+                <!-- Settings Button -->
+                <button onclick="switchTab('settings')" class="w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-all">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+
+                <!-- Auth / Profile Button -->
+                <div id="authContainer">
+                    <button onclick="openAuthModal('login')" class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-sm font-semibold shadow-sm transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-right-to-bracket"></i>
+                        <span>تسجيل الدخول</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center text-slate-700">
+                    <i class="fa-solid fa-bars text-lg" id="mobileMenuIcon"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('home'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-teal-50 hover:text-teal-600">الرئيسية</button>
+            <button onclick="switchTab('cyber'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-teal-50 hover:text-teal-600">الأمن السيبراني</button>
+            <button onclick="switchTab('cs'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-teal-50 hover:text-teal-600">علوم الحاسوب</button>
+            <button onclick="switchTab('library'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-teal-50 hover:text-teal-600">مكتبة الدروس</button>
+            <button onclick="switchTab('nova'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg text-sm font-medium text-purple-600 hover:bg-purple-50">NOVA AI المساعد الذكي</button>
+            <button onclick="switchTab('settings'); toggleMobileMenu();" class="block w-full text-right px-4 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">الإعدادات</button>
+        </div>
+    </header>
+
+    <!-- Main Content Dynamic Container -->
+    <main class="flex-grow">
+
+        <!-- HOME TAB -->
+        <div id="tab-home" class="tab-content">
+            <!-- Hero Section -->
+            <section class="py-16 md:py-24 bg-gradient-to-b from-white to-slate-100 border-b border-slate-200 relative overflow-hidden">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-50 border border-teal-200 text-teal-700 text-xs font-bold mb-6">
+                                <i class="fa-solid fa-award"></i> منصة تعليمية تقنية معتمدة
+                            </div>
+                            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-6">
+                                احترف <span class="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-purple-600">الأمن السيبراني</span> وعلوم الحاسوب
+                            </h1>
+                            <p class="text-lg text-slate-600 mb-8 leading-relaxed">
+                                منصة <span class="font-bold text-slate-800">VANTA CYBER</span> الرقمية المطورة بواسطة <span class="font-bold text-teal-600">علي ياسر</span> تقدم لك مسارات تعليمية متكاملة، مختبرات افتراضية، ومساعد ذكاء اصطناعي متطور لبناء مستقبلك التقني من الصفر حتى الاحتراف.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <button onclick="switchTab('library')" class="px-6 py-3.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-bold shadow-lg shadow-teal-600/20 transition-all flex items-center gap-2">
+                                    <i class="fa-solid fa-compass"></i> استكشف الدروس الآن
+                                </button>
+                                <button onclick="switchTab('cyber')" class="px-6 py-3.5 bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 rounded-xl font-bold transition-all flex items-center gap-2">
+                                    <i class="fa-solid fa-shield-dog text-purple-600"></i> مسارات الأمن السيبراني
+                                </button>
+                            </div>
+                        </div>
+                        <div class="relative">
+                            <div class="bg-gradient-to-tr from-teal-500/10 to-purple-500/10 p-6 rounded-3xl border border-slate-200/80 shadow-2xl">
+                                <img src="https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcQ9d3Gq1WpelyDpOGf9t7J5g2mO9s0StxMlDtqn-BRBj3kkD97gN2BjS0_rSXjffzmOzupdbs14a_17k1Y" alt="VANTA CYBER Platform Dashboard" class="rounded-2xl shadow-md w-full object-cover h-[350px]">
+                                <div class="mt-6 grid grid-cols-3 gap-4 text-center">
+                                    <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                        <div class="text-xl font-black text-teal-600">100+</div>
+                                        <div class="text-xs text-slate-500 mt-1">درس وتمرين</div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                        <div class="text-xl font-black text-purple-600">NOVA</div>
+                                        <div class="text-xs text-slate-500 mt-1">المساعد الذكي</div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                        <div class="text-xl font-black text-indigo-600">100%</div>
+                                        <div class="text-xs text-slate-500 mt-1">تطبيق عملي</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Key Pillars Sections -->
+            <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl font-black text-slate-900 mb-4">أقسام المنصة الرئيسية</h2>
+                    <p class="text-slate-600">اختر مسارك وابدأ التعلم بخطوات منهجية واضحة وموثوقة</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Cyber Card -->
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                        <div class="w-14 h-14 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center text-2xl font-bold mb-6 group-hover:bg-teal-600 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">الأمن السيبراني</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">تعلم أساسيات أمن المعلومات، اختبار الاختراق الأخلاقي، تحليل الثغرات، أمن الويب والشبكات.</p>
+                        <button onclick="switchTab('cyber')" class="text-teal-600 font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all">
+                            تصفح المسار <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                    <!-- CS Card -->
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                        <div class="w-14 h-14 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl font-bold mb-6 group-hover:bg-purple-600 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-laptop-code"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">علوم الحاسوب وتقنية المعلومات</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">هندسة العتاد، صيانة الأجهزة، أنظمة التشغيل Linux و Windows، والشبكات المنزلية والخوادم.</p>
+                        <button onclick="switchTab('cs')" class="text-purple-600 font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all">
+                            تصفح المسار <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                    <!-- NOVA AI Card -->
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                        <div class="w-14 h-14 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl font-bold mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                            <i class="fa-solid fa-atom"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">مساعد الذكاء الاصطناعي NOVA</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">مساعدك الذكي لشرح الأكواد، تبسيط المفاهيم المعقدة، والإجابة عن أسئلتك التقنية الفورية.</p>
+                        <button onclick="switchTab('nova')" class="text-indigo-600 font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all">
+                            ابدأ المحادثة <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Founder Section -->
+            <section class="py-16 bg-slate-100 border-t border-slate-200">
+                <div class="max-w-4xl mx-auto px-4 text-center">
+                    <div class="w-20 h-20 bg-teal-600 text-white rounded-2xl mx-auto flex items-center justify-center text-3xl font-black mb-6 shadow-lg shadow-teal-600/20">
+                        AY
+                    </div>
+                    <h2 class="text-2xl font-black text-slate-900 mb-2">علي ياسر | Ali Yaser</h2>
+                    <p class="text-teal-600 font-bold text-sm mb-6">مؤسس ومطوّر منصة VANTA CYBER</p>
+                    <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed mb-8">
+                        "نسعى من خلال VANTA CYBER لتوفير محتوى تعليمي تقني عربي وعالمي بمعايير احترافية عالية، مع التركيز على التطبيق العملي والأمان السيبراني وعلوم الحاسوب لبناء جيل من المهندسين والمختصين الأكفاء."
+                    </p>
+                    <div class="flex justify-center gap-4">
+                        <a href="https://wa.me/966565283204" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white border border-slate-300 flex items-center justify-center text-slate-700 hover:text-teal-600 transition-all"><i class="fa-brands fa-whatsapp text-lg"></i></a>
+                        <a href="https://www.instagram.com/aliyaser878/" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white border border-slate-300 flex items-center justify-center text-slate-700 hover:text-pink-600 transition-all"><i class="fa-brands fa-instagram text-lg"></i></a>
+                        <a href="https://www.tiktok.com/@aliyaser878/" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white border border-slate-300 flex items-center justify-center text-slate-700 hover:text-black transition-all"><i class="fa-brands fa-tiktok text-lg"></i></a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- CYBERSECURITY TAB -->
+        <div id="tab-cyber" class="tab-content hidden py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10">
+                <span class="text-teal-600 font-bold text-sm">مسار متخصص</span>
+                <h2 class="text-3xl font-black text-slate-900 mt-1">قسم الأمن السيبراني والاختراق الأخلاقي</h2>
+                <p class="text-slate-600 mt-2">من الأساسيات إلى الاحتراف في حماية الشبكات وأنظمة الويب والتحقيق الرقمي.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="cyberLessonsGrid">
+                <!-- Dynamic Loaded by JS -->
+            </div>
+        </div>
+
+        <!-- COMPUTER SCIENCE TAB -->
+        <div id="tab-cs" class="tab-content hidden py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10">
+                <span class="text-purple-600 font-bold text-sm">مسار أساسي</span>
+                <h2 class="text-3xl font-black text-slate-900 mt-1">قسم علوم الحاسوب وتقنية المعلومات</h2>
+                <p class="text-slate-600 mt-2">فهْم العتاد، المعالجات، اللوحات الأم، صيانة الأنظمة وتشغيل شبكات Linux و Windows.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="csLessonsGrid">
+                <!-- Dynamic Loaded by JS -->
+            </div>
+        </div>
+
+        <!-- LIBRARY TAB -->
+        <div id="tab-library" class="tab-content hidden py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                <div>
+                    <h2 class="text-3xl font-black text-slate-900">مكتبة الدروس الشاملة</h2>
+                    <p class="text-slate-600">ابحث وصَفِ الدروس حسب المجال والمستوى والمدة.</p>
+                </div>
+                <!-- Search Box -->
+                <div class="w-full md:w-72 relative">
+                    <input type="text" id="searchInput" oninput="filterLessons()" placeholder="ابحث عن درس أو تقنية..." class="w-full px-4 py-2.5 pr-10 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+                    <i class="fa-solid fa-search absolute top-3.5 right-3.5 text-slate-400"></i>
+                </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="flex flex-wrap gap-3 mb-8 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                <button onclick="setCategoryFilter('all')" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 text-white transition-all" data-cat="all">الكل</button>
+                <button onclick="setCategoryFilter('cyber')" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="cyber">الأمن السيبراني</button>
+                <button onclick="setCategoryFilter('cs')" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all" data-cat="cs">علوم الحاسوب</button>
+                <button onclick="setLevelFilter('all')" class="level-btn px-4 py-2 rounded-xl text-xs font-bold bg-purple-600 text-white transition-all ml-auto" data-level="all">جميع المستويات</button>
+            </div>
+
+            <!-- Library Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="libraryGrid">
+                <!-- Dynamic -->
+            </div>
+        </div>
+
+        <!-- NOVA AI TAB -->
+        <div id="tab-nova" class="tab-content hidden py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col h-[70vh]">
+                <!-- Nova Header -->
+                <div class="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 text-white flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center text-white">
+                            <i class="fa-solid fa-atom text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg">NOVA AI Assistant</h3>
+                            <p class="text-xs text-white/80">المساعد الذكي للأمن السيبراني وعلوم الحاسوب</p>
+                        </div>
+                    </div>
+                    <button onclick="clearNovaChat()" class="text-xs bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg transition-all">مسح المحادثة</button>
+                </div>
+                <!-- Chat Messages Area -->
+                <div id="novaMessages" class="flex-grow p-6 overflow-y-auto space-y-4 bg-slate-50">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold shrink-0">N</div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 text-sm text-slate-700 shadow-sm max-w-[80%] leading-relaxed">
+                            أهلاً بك! أنا <strong>NOVA</strong>، مساعدك الذكي في منصة VANTA CYBER. كيف يمكنني مساعدتك في فهم مفاهيم الأمن السيبراني، تحليل الأكواد، أو تشخيص مشكلات الحاسوب اليوم؟
+                        </div>
+                    </div>
+                </div>
+                <!-- Chat Input Form -->
+                <div class="p-4 bg-white border-t border-slate-200">
+                    <form id="novaForm" onsubmit="sendNovaMessage(event)" class="flex gap-2">
+                        <input type="text" id="novaInput" placeholder="اكتب سؤالك التقني هنا..." class="flex-grow px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-purple-600">
+                        <button type="submit" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> إرسال
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS TAB -->
+        <div id="tab-settings" class="tab-content hidden py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+                <h2 class="text-2xl font-black text-slate-900 mb-6">إعدادات المنصة واللغة</h2>
+                <div class="space-y-6">
+                    <div class="flex justify-between items-center py-4 border-b border-slate-100">
+                        <div>
+                            <h4 class="font-bold text-slate-800">لغة الواجهة (Language)</h4>
+                            <p class="text-xs text-slate-500">اختر اللغة المفضلة لديك (العربية / English)</p>
+                        </div>
+                        <button onclick="toggleLanguage()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-bold text-slate-700">تبديل اللغة</button>
+                    </div>
+                    <div class="flex justify-between items-center py-4 border-b border-slate-100">
+                        <div>
+                            <h4 class="font-bold text-slate-800">حفظ التقدم والمفضلة</h4>
+                            <p class="text-xs text-slate-500">مزامنة سجل القراءة والدروس المكتملة محلياً ومع الحساب</p>
+                        </div>
+                        <span class="text-xs font-bold text-teal-600 bg-teal-50 px-3 py-1 rounded-full">نشط ومفعل</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEGAL / PRIVACY & TERMS TAB -->
+        <div id="tab-legal" class="tab-content hidden py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 space-y-6">
+                <h2 class="text-2xl font-black text-slate-900">سياسة الخصوصية وشروط الاستخدام</h2>
+                <p class="text-sm text-slate-600 leading-relaxed">تلتزم منصة VANTA CYBER بحماية بياناتك الشخصية وتوفير بيئة تعليمية آمنة وفق أعلى معايير الخصوصية الرقمية.</p>
+                <h3 class="font-bold text-slate-800 text-lg">شروط الاستخدام والأمان</h3>
+                <p class="text-sm text-slate-600 leading-relaxed">جميع المختبرات والدروس مصممة للأغراض التعليمية والأمنية المصرح بها فقط. يمنع منعاً باتاً استخدام المهارات في أي أنشطة غير قانونية.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- LESSON READER MODAL -->
+    <div id="lessonModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-8 relative">
+            <button onclick="closeLessonModal()" class="absolute top-6 left-6 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-2xl p-8 relative">
+            <button onclick="closeAuthModal()" class="absolute top-6 left-6 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-700 hover:bg-slate-200"><i class="fa-solid fa-xmark"></i></button>
+            <div id="authModalContent">
+                <h3 class="text-2xl font-black text-slate-900 mb-2">تسجيل الدخول</h3>
+                <p class="text-xs text-slate-500 mb-6">أدخل بيانات حسابك للوصول إلى مسارك التعليمي</p>
+                <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">البريد الإلكتروني</label>
+                        <input type="email" id="authEmail" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">كلمة المرور</label>
+                        <input type="password" id="authPassword" required class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-600">
+                    </div>
+                    <button type="submit" class="w-full py-3.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-bold shadow-md transition-all">تسجيل الدخول</button>
+                </form>
+                <div class="mt-6 text-center">
+                    <button onclick="simulateGoogleLogin()" class="w-full py-3.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-xl font-bold transition-all flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-google text-red-500"></i> تسجيل الدخول بواسطة Google
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white font-bold">V</div>
+                <span class="font-bold text-slate-800 text-sm">VANTA CYBER &copy; 2026 - Ali Yaser</span>
+            </div>
+            <div class="flex items-center gap-6 text-sm text-slate-600">
+                <button onclick="switchTab('home')" class="hover:text-teal-600">الرئيسية</button>
+                <button onclick="switchTab('library')" class="hover:text-teal-600">مكتبة الدروس</button>
+                <button onclick="switchTab('nova')" class="hover:text-teal-600">مساعد NOVA</button>
+                <button onclick="switchTab('legal')" class="hover:text-teal-600">الخصوصية والشروط</button>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="https://wa.me/966565283204" target="_blank" rel="noopener" class="text-slate-600 hover:text-teal-600"><i class="fa-brands fa-whatsapp text-lg"></i></a>
+                <a href="https://www.instagram.com/aliyaser878/" target="_blank" rel="noopener" class="text-slate-600 hover:text-pink-600"><i class="fa-brands fa-instagram text-lg"></i></a>
+                <a href="https://www.tiktok.com/@aliyaser878/" target="_blank" rel="noopener" class="text-slate-600 hover:text-black"><i class="fa-brands fa-tiktok text-lg"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Database of Lessons
+        const lessonsData = [
+            { id: 1, title: "مقدمة في الأمن السيبراني وأمن المعلومات", category: "cyber", level: "مبتدئ", duration: "15 دقيقة", desc: "تعرف على مثلث أمن المعلومات (CIA Triad): السرية، السلامة، والتوافر.", content: "أمن المعلومات هو حماية البيانات الرقمية والأنظمة من الوصول غير المصرح به..."},
+            { id: 2, title: "أساسيات شبكات الحاسوب وبروتوكول TCP/IP", category: "cyber", level: "مبتدئ", duration: "20 دقيقة", desc: "فهم كيفية انتقال البيانات عبر الإنترنت وعناوين IP وبنية الشبكات.", content: "تعتمد شبكات الحاسوب على نموذج OSI وبروتوكولات TCP/IP لنقل الحزم..."},
+            { id: 3, title: "أمن الويب وثغرات OWASP Top 10", category: "cyber", level: "متوسط", duration: "30 دقيقة", desc: "دراسة أشهر 10 ثغرات أمنية في تطبيقات الويب وكيفية الوقاية منها.", content: "تعتبر ثغرات الحقن (SQL Injection) وإدارة الجلسات غير الآمنة من أبرز المخاطر..."},
+            { id: 4, title: "التحقيق الرقمي والاستجابة للحوادث (SOC)", category: "cyber", level: "متقدم", duration: "45 دقيقة", desc: "كيفية تحليل السجلات واكتشاف الاختراقات في مراكز عمليات الأمان.", content: "مراكز عمليات الأمان SOC تراقب الأنظمة على مدار الساعة لاكتشاف أي نشاط مشبوه..."},
+            { id: 5, title: "مكونات الحاسوب وهندسة المعالجات CPU", category: "cs", level: "مبتدئ", duration: "15 دقيقة", desc: "فهم دور المعالج، الذاكرة العشوائية RAM، ووحدات التخزين الحديثة SSD.", content: "يتكون الحاسوب من اللوحة الأم والمعالج ووحدات التخزين التي تتكامل لتنفيذ العمليات..."},
+            { id: 6, title: "أساسيات نظام Linux والطرفية (Terminal)", category: "cs", level: "مبتدئ", duration: "25 دقيقة", desc: "تعلم الأوامر الأساسية لإدارة الملفات والصلاحيات في أنظمة لينكس.", content: "نظام لينكس يعتمد على سطر الأوامر للتحكم الكامل بالنظام وإدارة الملفات بكفاءة..."}
+        ];
+
+        let currentCategory = 'all';
+        let currentLevel = 'all';
+        let currentUser = null;
+
+        // Tab Switching Engine
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById('tab-' + tabId).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Language Toggle (RTL / LTR)
+        let isArabic = true;
+        function toggleLanguage() {
+            isArabic = !isArabic;
+            const html = document.getElementById('vantaHtml');
+            const btn = document.getElementById('langBtn');
+            if(isArabic) {
+                html.setAttribute('dir', 'rtl');
+                html.setAttribute('lang', 'ar');
+                btn.textContent = 'English';
+            } else {
+                html.setAttribute('dir', 'ltr');
+                html.setAttribute('lang', 'en');
+                btn.textContent = 'العربية';
+            }
+        }
+
+        // Render Lessons Grids
+        function renderLessons() {
+            const cyberGrid = document.getElementById('cyberLessonsGrid');
+            const csGrid = document.getElementById('csLessonsGrid');
+            const libraryGrid = document.getElementById('libraryGrid');
+
+            if(cyberGrid) cyberGrid.innerHTML = '';
+            if(csGrid) csGrid.innerHTML = '';
+            if(libraryGrid) libraryGrid.innerHTML = '';
+
+            lessonsData.forEach(lesson => {
+                const cardHTML = `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded-lg">${lesson.category === 'cyber' ? 'أمن سيبراني' : 'علوم حاسوب'}</span>
+                                <span class="text-xs text-slate-400"><i class="fa-regular fa-clock"></i> ${lesson.duration}</span>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-lg mb-2">${lesson.title}</h3>
+                            <p class="text-slate-600 text-sm mb-6">${lesson.desc}</p>
+                        </div>
+                        <button onclick="openLesson(${lesson.id})" class="w-full py-2.5 bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2">
+                            <span>ابدأ الدرس</span> <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                `;
+
+                if(lesson.category === 'cyber' && cyberGrid) cyberGrid.innerHTML += cardHTML;
+                if(lesson.category === 'cs' && csGrid) csGrid.innerHTML += cardHTML;
+                if(libraryGrid) {
+                    if((currentCategory === 'all' || lesson.category === currentCategory) && 
+                       (currentLevel === 'all' || lesson.level === currentLevel)) {
+                        libraryGrid.innerHTML += cardHTML;
+                    }
+                }
+            });
+        }
+
+        // Filtering
+        function setCategoryFilter(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if(btn.dataset.cat === cat) {
+                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 text-white transition-all";
+                } else {
+                    btn.className = "filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-all";
+                }
+            });
+            renderLessons();
+        }
+
+        function filterLessons() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const grid = document.getElementById('libraryGrid');
+            grid.innerHTML = '';
+            lessonsData.filter(l => l.title.toLowerCase().includes(query) || l.desc.toLowerCase().includes(query)).forEach(lesson => {
+                grid.innerHTML += `
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded-lg">${lesson.category === 'cyber' ? 'أمن سيبراني' : 'علوم حاسوب'}</span>
+                                <span class="text-xs text-slate-400">${lesson.duration}</span>
+                            </div>
+                            <h3 class="font-bold text-slate-900 text-lg mb-2">${lesson.title}</h3>
+                            <p class="text-slate-600 text-sm mb-6">${lesson.desc}</p>
+                        </div>
+                        <button onclick="openLesson(${lesson.id})" class="w-full py-2.5 bg-slate-100 hover:bg-teal-600 hover:text-white text-slate-700 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2">
+                            <span>ابدأ الدرس</span> <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // Lesson Modal
+        function openLesson(id) {
+            const lesson = lessonsData.find(l => l.id === id);
+            if(!lesson) return;
+            const modal = document.getElementById('lessonModal');
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <span class="px-3 py-1 bg-teal-50 text-teal-700 text-xs font-bold rounded-lg mb-3 inline-block">${lesson.level}</span>
+                <h2 class="text-2xl font-black text-slate-900 mb-4">${lesson.title}</h2>
+                <p class="text-slate-600 text-sm leading-relaxed mb-6">${lesson.desc}</p>
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl mb-6 text-slate-700 text-sm leading-relaxed">
+                    ${lesson.content}
+                </div>
+                <div class="flex justify-between items-center">
+                    <button onclick="closeLessonModal()" class="px-6 py-2.5 bg-slate-200 text-slate-700 rounded-xl font-bold text-sm">إغلاق</button>
+                    <button onclick="completeLesson(${lesson.id})" class="px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl font-bold text-sm shadow-md">إكمال الدرس وحفظ التقدم</button>
+                </div>
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeLessonModal() {
+            document.getElementById('lessonModal').classList.add('hidden');
+        }
+
+        function completeLesson(id) {
+            alert('تم تسجيل إكمال الدرس بنجاح وحفظه في سجل تقييمك التقني!');
+            closeLessonModal();
+        }
+
+        // Auth Modal Handlers
+        function openAuthModal(mode) {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            currentUser = { email: email };
+            closeAuthModal();
+            document.getElementById('authContainer').innerHTML = `
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-teal-50 border border-teal-200 rounded-xl text-teal-700 font-bold text-xs">
+                    <i class="fa-solid fa-user-check"></i> <span>${email.split('@')[0]}</span>
+                </div>
+            `;
+            alert('تم تسجيل الدخول بنجاح إلى حسابك في VANTA CYBER!');
+        }
+
+        function simulateGoogleLogin() {
+            currentUser = { email: 'user@gmail.com' };
+            closeAuthModal();
+            document.getElementById('authContainer').innerHTML = `
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-teal-50 border border-teal-200 rounded-xl text-teal-700 font-bold text-xs">
+                    <i class="fa-solid fa-user-check"></i> <span>Google User</span>
+                </div>
+            `;
+            alert('تم ربط ومصادقة الحساب عبر Google بنجاح!');
+        }
+
+        // NOVA Chat Handler
+        function sendNovaMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('novaInput');
+            const text = input.value.trim();
+            if(!text) return;
+
+            const messagesDiv = document.getElementById('novaMessages');
+            messagesDiv.innerHTML += `
+                <div class="flex items-start gap-3 justify-end">
+                    <div class="bg-purple-600 text-white p-4 rounded-2xl text-sm max-w-[80%] leading-relaxed shadow-sm">
+                        ${text}
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs font-bold shrink-0">أنت</div>
+                </div>
+            `;
+            input.value = '';
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Simulated intelligent response (Ready for API hook)
+            setTimeout(() => {
+                messagesDiv.innerHTML += `
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold shrink-0">N</div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 text-sm text-slate-700 shadow-sm max-w-[80%] leading-relaxed">
+                            أشكرك على سؤالك. بالنسبة لـ "${text}"، في مجال الأمن السيبراني وعلوم الحاسوب، نوصي دائماً باتباع الممارسات القياسية والتحقق من سلامة الأنظمة عبر بيئات اختبار معزولة. هل ترغب بأن أفصل لك الجانب التقني أكثر؟
+                        </div>
+                    </div>
+                `;
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }, 1000);
+        }
+
+        function clearNovaChat() {
+            document.getElementById('novaMessages').innerHTML = `
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs font-bold shrink-0">N</div>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 text-sm text-slate-700 shadow-sm max-w-[80%] leading-relaxed">
+                        تم بدء محادثة جديدة. كيف يمكنني مساعدتك الآن؟
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize on Load
+        window.onload = function() {
+            renderLessons();
+        };
+    </script>
 </body>
 </html>
